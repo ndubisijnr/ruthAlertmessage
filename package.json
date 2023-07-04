@@ -1,0 +1,16 @@
+{
+  "name": "ruthly",
+  "version": "1.0.0",
+  "description": "simple alert message for simple applcations",
+  "main": "ruthly.js",
+  "scripts": {
+    "test": "echo \" no test specified\""
+  },
+  "keywords": [
+    "alert",
+    "messgage",
+    "popup"
+  ],
+  "author": "ndubisijnr",
+  "license": "ISC"
+}
