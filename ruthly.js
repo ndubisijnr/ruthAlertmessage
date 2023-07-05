@@ -7,8 +7,7 @@ const errorImg = error
 const successImg = success
 
 
- const RuthdoAlert = (...props) => {
-
+ export const RuthdoAlert = (...props) => {
    
             const element1 = document.createElement('div')
             const rootElement = document.getElementById('app')
@@ -93,6 +92,5 @@ const successImg = success
 
 }
 
-export default RuthdoAlert
 
 
