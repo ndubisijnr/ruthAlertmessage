@@ -16,7 +16,7 @@ export const Ruth = ({...props}, ...style) => {
     //let styles = style[0] coming soon
 
 
-    const isAuthDismissal = properties?.dismiss
+    const isAuthDismissal = properties.dismiss
 
     const rootElement = document.getElementById('app') //finds a element id named app
 
@@ -28,7 +28,7 @@ export const Ruth = ({...props}, ...style) => {
 
         rootDiv.setAttribute('id', 'ruthly-div')  // set root div element id
 
-        if(properties?.icon === 'success'){ // set root element based on icon specifications
+        if(properties.icon === 'success'){ // set root element based on icon specifications
             rootDiv.setAttribute('style',
             'width:362px;\n' +
             'min-height: 78px;\n' +
@@ -104,7 +104,7 @@ export const Ruth = ({...props}, ...style) => {
         
         // assigning paragraph text 
 
-        elementP.textContent = properties?.title
+        elementP.textContent = properties.title
 
 
 
@@ -120,9 +120,9 @@ export const Ruth = ({...props}, ...style) => {
 
         // sets icon image based on specifications
 
-        if(properties?.icon === 'success'){ 
+        if(properties.icon === 'success'){ 
             elementType.setAttribute( 'src', successImg)
-        }else if(properties?.icon === 'error'){
+        }else if(properties.icon === 'error'){
             elementType.setAttribute( 'src',  errorImg)
         }else{
             elementType.setAttribute( 'src', null)
@@ -135,7 +135,7 @@ export const Ruth = ({...props}, ...style) => {
 
         const removeElement = document.getElementById('ruthly-div') // getting the id of the parent element
 
-        const timeOut = properties?.timeout // auto modal dismissal timeout
+        const timeOut = properties.timeout // auto modal dismissal timeout
 
         // on click modal dismissal events
         elementClose.addEventListener('click', () => {
@@ -155,9 +155,16 @@ export const Ruth = ({...props}, ...style) => {
         if(!isAuthDismissal){
             //do nothing
         }else{
-            setTimeout(() => {
-                autoDismissal()
-            },timeOut ? timeOut : 3000)
+            if(timeOut){
+                setTimeout(() => {
+                    autoDismissal()
+                },timeOut) 
+            }else{
+                setTimeout(() => {
+                    autoDismissal()
+                },3000)
+            }
+            
         }
 
 
