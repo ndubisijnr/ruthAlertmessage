@@ -21,15 +21,15 @@ Install ruthly with npm
 ## Usage/Examples
 
 ```javascript
-import RuthdoAlert from 'ruthly'
+import Ruth from 'ruthly'
 
 //success 
-RuthdoAlert({title:'Ruth at your service', icon:'success'})
+Ruth.vex({title:'Ruth at your service', icon:'success'})
 
 //error 
-RuthdoAlert({title:'oops something is not right', icon:'error'})
+Ruth.vex({title:'oops something is not right', icon:'error'})
 
 //adding auto dismissal timeout 
-RuthdoAlert({title:'oops something is not right', icon:'error',2000})
+Ruth.vex({title:'oops something is not right', icon:'error', timeout:2000})
 ```
 
