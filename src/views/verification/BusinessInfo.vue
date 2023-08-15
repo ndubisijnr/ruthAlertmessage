@@ -67,7 +67,7 @@
 
 <script>
 import Layout from './Layout.vue';
-import OnBoardingInput from '../../components/inputs/OnBoardingInput.vue';
+import OnBoardingInput from '../../components/Inputs/OnBoardingInput.vue';
 import OnBoardingButton from '../../components/Buttons/OnBoardingButton.vue';
 export default {
     name:"BusinessInfo",
