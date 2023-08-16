@@ -6,7 +6,7 @@
       <div style="margin: 2rem;">
           <div class="inner_wrapper">
               <div class="logo_area">
-                  <img src="../../assets/SignUp/EmailVerification/Logo.svg" />
+                <img src="../../assets/TravelYakataLogo.svg" />
               </div>
               
               <slot name="children"></slot>
