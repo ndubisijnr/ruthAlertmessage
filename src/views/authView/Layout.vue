@@ -8,7 +8,7 @@
 
                 <div class="select_account_type">
                     <div class="logo_area">
-                        <img src="../../assets/../assets/SignUp/EmailVerification/Logo.svg" />
+                        <img src="../../assets/TravelYakataLogo.svg" />
                     </div>
 
                     <slot name="sub-child"></slot>
