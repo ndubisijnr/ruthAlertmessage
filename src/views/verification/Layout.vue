@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import VerificationSkipModal from '../../components/modals/verificationSkipModal.vue';
+import VerificationSkipModal from '../../components/modals/VerificationSkipModal.vue';
 import storeUtils from "../../utils/storeUtils"
 
 export default {
