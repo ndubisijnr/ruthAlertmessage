@@ -26,7 +26,7 @@
         </div>
     </template>
     <template v-slot:children>
-      <section class="page_wrapper_inner_div">
+      <div class="page_wrapper_inner_div">
          <div>
             <div>
               <router-link to="/login"><p class="login">Already have an account? <span class="log_in"> Log In</span></p></router-link>
@@ -134,10 +134,10 @@
 
               </div>
 
-              <on-boarding-button @click="handleClick" :id="'login'" btnWidth="100%" text-node="Sign Up" :disabled="!agreed_condition"></on-boarding-button>
+              <on-boarding-button border="none" @click="handleClick" :id="'login'" btnWidth="100%" text-node="Sign Up" :disabled="!agreed_condition"></on-boarding-button>
             </div>
         </div>
-      </section>
+      </div>
     </template>
   </layout>
 </template>
@@ -251,14 +251,16 @@ a{
 
 @media (max-width: 1024px) {
   .page_wrapper_inner_div{
-    width:90%;
-    /* margin:2.50rem 5.5rem; */
+    width:100%;
+    height: auto;
+    padding: 1rem;
+    margin:0;
 }
 }
 
 
 .domain_account_h{
-    color: var(--black-text-01, #1D1E2C);
+    color:  #1D1E2C;
     /* Headings/48px/bold */
     font-family: 'Product Sans';
     font-size: 3rem;
@@ -271,8 +273,13 @@ a{
 .domain_account{
     display: block;
     width: 27.4375rem;
-
 }
+@media (max-width: 1024px) {
+  .domain_account{
+    width: 100%;
+  }
+}
+
 
 .experence{
     display: flex;
@@ -386,6 +393,12 @@ a{
   gap: 0.53em;
 }
 
+@media (max-width: 1024px) {
+  .terms_and_conditions{
+    width: 100%;
+  }
+}
+
 
 
 .password_checker {
@@ -424,8 +437,8 @@ a{
 }
 
 .terms_conditions{
-  color: var(--black-text-03, #444854);
-  font-family: Product Sans;
+  color:  #444854;
+  font-family: 'Product Sans';
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;

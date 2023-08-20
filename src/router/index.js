@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import authRoutes from "./routes/authRoute";
 import verificationRoutes from "./routes/verificationRoutes"
+import dashboardRoute from "./routes/dashboardRoute";
+import bookingRoute from "./routes/bookingRoute";
 
 const baseRoute = []
 
-const routes = baseRoute.concat(authRoutes,verificationRoutes)
+const routes = baseRoute.concat(authRoutes,verificationRoutes,dashboardRoute,bookingRoute)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

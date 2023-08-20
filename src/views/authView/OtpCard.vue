@@ -1,13 +1,13 @@
 <template>
     <layout-with-bg>
         <template v-slot:children>
-            <section class="card_wrapper">
+            <div class="card_wrapper">
                 <div class="card">
                     <div class="inner_card">
                         <div class="card_head">
                             <h3 class="almost_done">Almost done!</h3>
                             <p class="code_sent">We have sent a code via Email. <br />
-                                Enter 4-digit code sent to <span class="email_sent_to">feleomoloa@travelio</span></p>
+                                Enter 4-digit code sent to <span class="email_sent_to">{{ getEmail }}</span></p>
                         </div>
                         <div class="card_body">
                             <div class="otp-div">
@@ -15,22 +15,23 @@
                                 <input type="text" maxlength="1" class="otp" />
                                 <input type="text" maxlength="1" class="otp" />
                                 <input type="text" maxlength="1" class="otp" />
+                                <input type="text" maxlength="1" class="otp" />
                             </div>
                         </div>
                         <div class="card_bottom">
-                            <on-boarding-button @click="handleSubmit" textNode="Verify Code" :btnWidth="'100%'" />
-                            <p class="resend_code">Resend code {{timerCount > 0 ? `in ${timerCount} seconds` : 'now?'}} <button @click="resendOtp"  class="resend"  :class="{'disabledBtn':timerCount > 0}" :disabled="timerCount > 0">Resend code</button></p>
+                            <on-boarding-button :loading="loading" @click="handleSubmit" textNode="Verify Code" btn-width="100%" />
+                            <p class="resend_code">Resend code {{timerCount > 0 ? `in ${timerCount} seconds` : 'now?'}} <button @click="resendOtp"  class="resend"  :class="{'disabledBtn':timerCount > 0 || loading}" :disabled="timerCount > 0 || loading">Resend code</button></p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </template>
     </layout-with-bg>
   
 </template>
 
 <script>
-import LayoutWithBg from "./LayoutWithBg.vue"
+import LayoutWithBg from "./LayoutWithBg.vue";
 import StartTimer from "../../mixins/countDown"
 import OnBoardingButton from '../../components/Buttons/OnBoardingButton.vue';
 import router from "../../router/index"
@@ -39,19 +40,26 @@ import router from "../../router/index"
 export default {
     name:"Layout",
     components:{
-        LayoutWithBg,
-        OnBoardingButton
+      LayoutWithBg,
+        OnBoardingButton,
     },
     data(){
         return{
             timerCount: 0,
+            otpValue:null,
+            loading:false,
+            errorObj:{
+              email:null,
+              email_verification_code:null
+            }
         }
     },
     methods:{
 
-       handleSubmit(){
-        router.push({name:"SuccessRegistrationCard"})
-       }, 
+       async handleSubmit(){
+         await router.push({name:"SuccessRegistrationCard"})
+       },
+
        tab() {
         //Initial references
         const input = document.querySelectorAll(".otp");
@@ -80,9 +88,9 @@ export default {
 
                     if (value.length == 1) {
                         updateInputConfig(e.target, true);
-                        if (inputCount <= 3 && e.key != "Backspace") {
+                        if (inputCount <= 4 && e.key != "Backspace") {
                             finalInput += value;
-                            if (inputCount < 3) {
+                            if (inputCount < 4) {
                                 updateInputConfig(e.target.nextElementSibling, false);
                             }
                         }
@@ -105,7 +113,7 @@ export default {
             });
 
             window.addEventListener("keyup", (e) => {
-                if (inputCount > 3) {
+                if (inputCount > 4) {
                     // submitButton.classList.remove("hide");
                     // submitButton.classList.add("show");
                     if (e.key == "Backspace") {
@@ -124,8 +132,7 @@ export default {
                 input.forEach((input) => {
                     otp += input.value
                 })
-
-                console.log(otp)
+                this.otpValue = otp
             }
 
             //Start
@@ -145,11 +152,10 @@ export default {
         }
     },
 
-    resendOtp(){
-        console.log('llll')
+    async resendOtp(){
         StartTimer()
         this.timerCount = 30
-    },
+      },
 
     },
 
@@ -166,6 +172,12 @@ export default {
         },
     },
 
+    computed:{
+      getEmail(){
+        return router.currentRoute.value.query.email
+      }
+    },
+
     mounted(){
         this.tab()
     }
@@ -179,6 +191,11 @@ export default {
     align-items: center;
     justify-content:center;
     height: 30rem;
+   /*border: solid crimson;*/
+}
+
+.card_bottom{
+  width: 100%;
 }
 
 .disabledBtn{
@@ -186,7 +203,7 @@ export default {
 }
 
 .almost_done{
-    color: var(--grey-100, #161616);
+    color: #161616;
     /* Headings 24px */
     font-family: 'Apercu';
     font-size: 1.5rem;
@@ -195,7 +212,7 @@ export default {
     line-height: 2rem; /* 133.333% */
 }
 .code_sent{
-    color: var(--grey-80, #555);
+    color: #555;
     /* For short paragraphs */
     font-family: 'Apercu';
     font-size: 0.875rem;
@@ -205,7 +222,7 @@ export default {
 }
 
 .email_sent_to{
-    color: var(--main-branding-primary, #89128A);
+    color:  #89128A;
     /* For short paragraphs */
     font-family: 'Apercu';
     font-size: 0.875rem;
@@ -216,7 +233,7 @@ export default {
 }
 
 .resend{
-    color: var(--main-branding-primary, #89128A);
+    color:  #89128A;
     /* subtext/medium/14px */
     font-family: 'Product Sans';
     font-size: 0.875rem;
@@ -228,7 +245,7 @@ export default {
     cursor: pointer;
 }
 .resend_code{
-    color: var(--black-text-03, #444854);
+    color:  #444854;
     font-family: 'Product Sans';
     font-size: 0.875rem;
     font-style: normal;
@@ -240,7 +257,7 @@ export default {
 }
 
 .card{
-    width: 36.875rem;
+    width: 41.875rem;
     height: 25.00rem;
     border-radius: 0.625rem;
     background:  #FFF;
@@ -250,8 +267,9 @@ export default {
 
 @media screen and (max-width: 1024px){
     .card{
-        margin: 12rem 1rem;   
+        margin: 0;
         width: 100%;
+        /*border: solid;*/
     }
     
 }
@@ -263,12 +281,28 @@ export default {
 .inner_card{
     margin:2.25rem 4.06rem;
     display: inline-block;
+    /*border: solid;*/
 }
+
+@media (max-width: 1024px) {
+  .inner_card{
+    margin:2.25rem 1rem;
+    width: 90%;
+
+  }
+  .card_body{
+    margin:2.94rem 0;
+    /*border: solid;*/
+  }
+}
+
+
 .otp-div{
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 28px;
+  width: 100%;
 }
 
 .otp{
@@ -281,6 +315,13 @@ export default {
   border: 1px solid #555555;
   border-radius: 8px;
   font-size: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .otp{
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 }
 
 .otp:focus{

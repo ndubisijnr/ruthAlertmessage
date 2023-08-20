@@ -1,6 +1,6 @@
 <template>
   <button :id="id" :type="type ? type : 'button'"
-   :style="{width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"  
+   :style="{border:border? border :'1px solid  #89128A',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
    class="on_boarding_button" :class="{'disabled':disabled}" :disabled="disabled">
     <p class="text">{{textNode}}</p>
   </button>
@@ -8,8 +8,8 @@
 
 <script>
 export default {
-  name: "OnBoardingButton",
-  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height']
+    name: "OnBoardingButton",
+  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border']
 }
 </script>
 
@@ -20,7 +20,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-radius: 6px;
-  border: 1px solid  #89128A;
   cursor: pointer;
   width:26.25rem;
 }

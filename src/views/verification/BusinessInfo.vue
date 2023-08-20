@@ -82,7 +82,7 @@ export default {
 
 <style scoped>
 .upload_business_logo{
-    color: var(--black-text-01, #1D1E2C);
+    color:  #1D1E2C;
 
     /* 16px/bold */
     font-family: 'Product Sans';
@@ -93,7 +93,7 @@ export default {
 }
 
 .size_limit{
-    color: var(--black-text-04, #575A65);
+    color:  #575A65;
 
     /* caption/12px/regular */
     font-family:'Product Sans';
@@ -122,7 +122,7 @@ export default {
 }
 
 .support{
-    color: var(--main-branding-primary, #89128A);
+    color: #89128A;
     font-family: 'Product Sans';
     font-size: 0.875rem;
     font-style: normal;
@@ -131,7 +131,7 @@ export default {
 }
 
 .reach_out p{
-    color: var(--black-text-01, #1D1E2C);
+    color:  #1D1E2C;
     font-family: 'Product Sans';
     font-size: 0.875rem;
     font-style: normal;
@@ -176,7 +176,7 @@ export default {
 .business_information{
     /* padding-top: 1.5rem; */
     padding-bottom:1.5rem;
-    color: var(--primary-colors-dark-head, #272833);
+    color:  #272833;
 
     /* bold/24px */
     font-family: 'Product Sans';
@@ -191,5 +191,10 @@ export default {
     /* height: 47.625rem; */
     flex-shrink: 0;
     background: #FFF;
+}
+@media screen {
+  .business_information_card{
+    width: 100%;
+  }
 }
 </style>

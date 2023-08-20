@@ -27,14 +27,13 @@
 </template>
 
 <script>
-import LayoutWithBg from "./LayoutWithBg.vue"
-
+import LayoutWithBg from "./LayoutWithBg.vue";
 
 export default {
     name:"SuccessRegistrationCard",
 
     components:{
-        LayoutWithBg,
+      LayoutWithBg,
     },
 
     data(){
@@ -92,11 +91,18 @@ export default {
     height: 29.25rem;       
     background:  #FFF;
     /* z-index: 9999999999; */
-    /* margin: 50px 393px; */
+     margin-top: 50px;
     border-radius: 0.5rem;
-    background: var(--primary-colors-white, #FFF);
+    background:  #FFF;
     /* shadow-2 */
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
+}
+
+@media (max-width: 1024px) {
+  .card_success{
+    width: 100%;
+  }
+
 }
 
 
@@ -122,6 +128,16 @@ export default {
     height:22.88rem;
     margin:3.19rem 4.13rem;
 }
+
+@media (max-width: 1024px) {
+  .inner_card{
+    width:100%;
+    height:22.88rem;
+    margin:3.19rem 0;
+  }
+
+}
+
 
 .sublink{
     display: flex;

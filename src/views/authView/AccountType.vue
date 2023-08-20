@@ -22,7 +22,7 @@
                     </svg>
                     <span>Experience travel-booking like never before</span> 
                 </div> 
-                </div>
+            </div>
          </template>
         <template v-slot:children>
             <div class="account_type_card">
@@ -64,7 +64,7 @@ a{
     text-decoration: none !important;
 }
 .domain_account_h{
-    color: var(--black-text-01, #1D1E2C);
+    color: #1D1E2C;
     /* Headings/48px/bold */
     font-family: 'Product Sans';
     font-size: 3rem;
@@ -74,10 +74,21 @@ a{
     display: inline-block;
 }
 
+@media (max-width: 1024px) {
+  .domain_account_h{
+    text-align: center;
+  }
+}
+
 .domain_account{
     display: block;
     width: 27.4375rem;
+}
 
+@media (max-width: 1024px) {
+  .domain_account{
+      width: 100%;
+  }
 }
 
 .experence{
@@ -86,8 +97,15 @@ a{
     align-items: center;
     margin-top: 1rem;
 }
+
+@media (max-width: 1024px) {
+  .experence{
+    justify-content: center;
+  }
+}
+
 .subdomain{
-    color: var(--main-branding-primary, #89128A);
+    color:  #89128A;
     /* Headings/48px/bold */
     font-family: 'Product Sans';
     font-size: 3rem;
@@ -131,6 +149,22 @@ a{
 
 }
 
+@media (width:1114px) {
+  .account_type_card{
+    height: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .account_type_card{
+    width: 100%;
+    padding:1rem;
+    margin-top: 0;
+
+
+  }
+}
+
 .b2{
     display: flex;
     padding: 2rem 4rem;
@@ -147,24 +181,24 @@ a{
     line-height: normal;
     background: #FFF;
 
-    
+}
+
+@media (max-width: 1024px) {
+  .b2{
+    text-align: center;
+    padding: 2rem 4rem;
+  }
 }
 
 .personal{
-    color: var(--main-branding-primary-09, #D8B0D8);
-    border: 1px solid var(--main-branding-primary-09, #D8B0D8);
+    color: #D8B0D8;
+    border: 1px solid  #D8B0D8;
 }
 
 
 .cooperate{
-    border: 1px solid var(--main-branding-primary-08, #C488C4);
-    color: var(--main-branding-primary, #89128A);
+    border: 1px solid  #C488C4;
+    color:  #89128A;
 }
 
-@media (max-width: 1024px) {
-    .account_type_card{
-        width: 100%;
-        margin-top: 0.625rem;
-    }
-}
 </style>

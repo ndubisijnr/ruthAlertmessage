@@ -3,25 +3,19 @@
         <div class="top-angle"></div>
         <div class="bottom-angle"></div>
 
-        <div style="margin: 2rem;">
+        <div class="m5-0">
             <div class="inner_wrapper">
-
                 <div class="select_account_type">
                     <div class="logo_area">
-                        <img src="../../assets/TravelYakataLogo.svg" />
+                        <img src="../../assets/TravelYakataLogo.png" style="width: 12.0625rem;height: 5.95919rem;" />
                     </div>
 
                     <slot name="sub-child"></slot>
                    
                     <slot name="children"></slot>
                 </div>
-                
-
-
             </div>
         </div>
-
-       
     </div>
   
 </template>
@@ -37,17 +31,31 @@ export default {
 <style  scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
 
+.m5-0{
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 1024px) {
+  .m5-0{
+    margin: 0rem;
+    min-height: 100vh;
+  }
+}
 
 .select_account_type{
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /*justify-content: space-around;*/
     /* margin-top: 4.96rem; */
     position: relative;
     /* height: 52.00rem; */
     height: 52.00rem;
     padding: 3.5rem;
+    gap: 327px;
 
 }
 
@@ -55,6 +63,11 @@ export default {
     .select_account_type{
         max-width: 100%;
         flex-direction: column;
+        padding: 1rem;
+        justify-content: start;
+        gap: 1rem;
+        height: auto;
+
     }
 }
 
@@ -71,6 +84,12 @@ export default {
     bottom: -10%;
     background: linear-gradient(91deg, #F8F1F8 0%, #F1E0F1 100%);
     z-index: 1
+}
+
+@media (max-width: 1024px) {
+  .bottom-angle{
+    right: -40%;
+  }
 }
 
 .top-angle {
@@ -111,5 +130,17 @@ export default {
     position: absolute;
     top: 0;
     float: left;
+}
+
+@media (max-width: 1024px) {
+  .logo_area{
+    position: relative;
+    float: none;
+  }
+  .inner_wrapper{
+    height: auto;
+    width: 100%;
+    display: inline-block;
+  }
 }
 </style>

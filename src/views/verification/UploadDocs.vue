@@ -26,7 +26,7 @@
                             <div class="input-area">
                                 <img src="../../assets/group-folders.svg" />
                                 <div>
-                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span>to upload</p>
+                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
                                     <input type="file" id="compDoc" hidden>
                                     <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                                 </div>
@@ -46,7 +46,6 @@
                     
                         <div>
                            <p class="doc_type"> Choose document type</p>
-                        
                         </div>
                         <img src="../../assets/Monotone.svg" />
                     </div>
@@ -60,7 +59,7 @@
                             <div class="input-area">
                                 <img src="../../assets/group-folders.svg" />
                                 <div>
-                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span>to upload</p>
+                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
                                     <input type="file" id="personalDoc" hidden>
 
                                     <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
@@ -115,7 +114,6 @@ export default {
     margin-top:2.5rem;
     margin-bottom:1rem;
     width: 37.125rem;
-
 }
 .choose_document_type{
     display: flex;
@@ -125,12 +123,12 @@ export default {
     justify-content: space-between;
     align-items: center;
     border-radius: 0.375rem;
-    border: 1px solid var(--dividers-borders-disabled-states, #EFF2F7);
+    border: 1px solid  #EFF2F7;
 
 }
 
 .txt-1{
-    color: var(--main-branding-primary-07, #B061B1);
+    color: #B061B1;
 
     /* Body/16px/Regular */
     font-family: 'Product Sans';
@@ -152,20 +150,20 @@ export default {
 }
 
 .txt-5{
-    color: var(--text-secondary-caption, #6B6C7E);
-text-align: center;
+    color:  #6B6C7E;
+    text-align: center;
 
-/* Subtext/14px/Regular */
-font-family: 'Product Sans';
-font-size: 0.875rem;
-font-style: normal;
-font-weight: 400;
-line-height: 1.5rem; /* 171.429% */
-text-align: center;
+    /* Subtext/14px/Regular */
+    font-family: 'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem; /* 171.429% */
+    text-align: center;
 }
 
 .txt-4{
-    color: var(--black-text-01, #1D1E2C);
+    color:  #1D1E2C;
 text-align: center;
 
 /* 16px/bold */
@@ -180,7 +178,7 @@ line-height: 1.75rem; /* 175% */
 .business_information{
     /* padding-top: 1.5rem; */
     padding-bottom:1.5rem;
-    color: var(--primary-colors-dark-head, #272833);
+    color:  #272833;
 
     /* bold/24px */
     font-family: 'Product Sans';
@@ -192,7 +190,7 @@ line-height: 1.75rem; /* 175% */
 
 
 .txt-3{
-    color: var(--text-secondary-caption, #6B6C7E);
+    color:  #6B6C7E;
 
 
 /* Subtext/14px/Regular */
@@ -219,26 +217,51 @@ line-height: 1.75rem; /* 175% */
 }
 
 .component_wrapper{
-    width: 35.4375rem;
-    height: 16.5rem;
-    background: #FFF;
-    display: flex;
-    padding: 0.9375rem 1.5rem 1.5rem 1.5rem;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.5rem;
-    margin-top:1rem;
+  width: 35.4375rem;
+  height: 14.4375rem;
+  background: #FFF;
+  display: flex;
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  margin-top:1rem;
 
 }
+
 
 .input-area{
     display: flex;
-height: 9.6875rem;
-padding: 1.5rem 2.4375rem 1.6875rem 2.4375rem;
-justify-content: center;
-align-items: center;
-border-radius: 0.25rem;
-border: 1px dashed var(--border-secondary-l-2-border, #CDCED9);
-flex-direction: column;
+    height: 9.6875rem;
+    padding: 1.5rem 2.4375rem 1.6875rem 2.4375rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    border: 1px dashed  #CDCED9;
+    flex-direction: column;
 }
+
+
+@media (max-width: 1024px) {
+  .business_information_card{
+    width: 100%;
+    border: none;
+  }
+  .component_wrapper{
+    width: 100%;
+    height: auto;
+  }
+  .choose_document_type{
+    width: 100%;
+  }
+
+  .personal-docs{
+    width: 100%;
+  }
+
+  .input-area{
+    height: auto;
+  }
+}
+
 </style>

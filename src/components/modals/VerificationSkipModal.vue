@@ -2,7 +2,7 @@
     <Layout>
         <template v-slot:children>
             <div class="modal_child">
-                <div class="cancel" @click="cancle"> 
+                <div class="cancel" @click="cancel">
                     <img src="../../assets/cancle.svg" />
                 </div>
                 <div class="child_body">
@@ -21,8 +21,8 @@
                 </div>
                 <div class="child_footer">
                     <div class="inner_child_footer">
-                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancle" :textNode="'No, Cancle'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
-                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton>
+                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancle'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
+                        <a href="/dashboard"><OnBoardingButton  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton></a>
                     </div>
                 </div>
             </div>
@@ -34,6 +34,7 @@
 <script>
 import Layout from "./Layout.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
+import router from "../../router";
 export default {
     components:{
         Layout,
@@ -41,15 +42,19 @@ export default {
     },
 
     methods:{
-        cancle(){
-            this.$emit('cancle', false)
-        }
+        cancel(){
+            this.$emit('cancel', false)
+        },
+
     }
 
 }
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 
 .modal_child{
     display: flex;
@@ -60,14 +65,16 @@ justify-content: center;
 align-items: center;
 gap: 1.5rem;
 border-radius: 0.5rem;
-border: 1px solid var(--stroke-light, #DEE2E6);
-background: var(--gray-white, #FFF);
+border: 1px solid  #DEE2E6;
+background:  #FFF;
 
 /* Shadow / Small */
 box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.08), 0px 0px 2px 0px rgba(0, 0, 0, 0.12);
 margin: 100px auto;
 position: relative;
 }
+
+
 
 .cancel{
     position: absolute;
@@ -102,7 +109,7 @@ line-height: 1.75rem; /* 140% */
 }
 
 .p2{
-    color: var(--main-branding-primary, #89128A);
+    color:  #89128A;
 
 /* 16px/bold */
 font-family:'Product Sans';
@@ -122,5 +129,25 @@ font-size: 0.875rem;
 font-style: normal;
 font-weight: 400;
 line-height: 1.5rem; /* 171.429% */
+}
+
+
+@media (max-width: 1024px) {
+  .modal_child{
+    width: 90%;
+
+  }
+
+  .child_footer{
+    justify-content: center;
+  }
+
+
+}
+
+@media (max-width:500px) {
+  .inner_child_footer{
+    flex-direction: column;
+  }
 }
 </style>
