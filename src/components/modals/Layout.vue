@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name:"Layour"
+    name:"Layout"
 
 }
 </script>

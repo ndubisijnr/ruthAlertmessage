@@ -34,7 +34,6 @@
 <script>
 import Layout from "./Layout.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
-import router from "../../router";
 export default {
     name:"VerificationSkipModal",
     components:{
