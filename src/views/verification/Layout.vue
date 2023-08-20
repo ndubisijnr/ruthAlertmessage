@@ -1,5 +1,5 @@
 <template>
-    <verificationSkipModal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkiping"></verificationSkipModal>
+    <verification-skip-modal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkipping"></verification-skip-modal>
 
     <div class="wrapper">
         <div class="inner-wrapper">
@@ -44,7 +44,6 @@ import storeUtils from "../../utils/storeUtils"
 export default {
     name:"Layout",
     components:{
-    
         VerificationSkipModal
     },
 
@@ -58,11 +57,11 @@ export default {
     methods:{
 
         Skip(){
-            storeUtils.fireAway().global?.commitSkip(!storeUtils.fireAway().global?.getIsSkiping)
+            storeUtils.fireAway().global?.commitIsSkipping(!storeUtils.fireAway().global?.getIsSkipping)
         },
 
       cancel(value){
-            storeUtils.fireAway().global?.commitSkip(value)
+            storeUtils.fireAway().global?.commitIsSkipping(value)
 
         }
 
