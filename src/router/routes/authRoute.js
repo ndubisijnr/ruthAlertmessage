@@ -1,11 +1,13 @@
 export default [
+
     {
-        path: '/register',
-        // redirect:'create-account',
+        path: '/register/:user_type',
+        // redirect:'Register',
         name: 'Register',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/Register.vue')
     },
+
     {
         path: '/register/verify',
         // redirect:'create-account',

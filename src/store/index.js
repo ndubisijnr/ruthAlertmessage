@@ -1,8 +1,6 @@
-import {useGlobalStore} from './globalStore'
-
+import {useGlobalStore} from "./globalStore";
 const stores = {
-    global:useGlobalStore(),
-   
+    global:useGlobalStore()
 }
 
 export default stores

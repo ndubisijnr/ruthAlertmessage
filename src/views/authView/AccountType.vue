@@ -28,13 +28,13 @@
             <div class="account_type_card">
                 <div>
                     <p class="b1">AS</p>
-                   <router-link to="/register">
+                   <router-link to="/register/cooperate_manager">
                         <div class="b2 cooperate">
                             Corporate Manager
                         </div>
                     </router-link>
                     <p class="b1 center">OR</p>
-                    <router-link to="/register">
+                    <router-link to="/register/personal_manager">
                         <div class="b2 personal">
                             Personal  Manager
                         </div>
@@ -88,6 +88,7 @@ a{
 @media (max-width: 1024px) {
   .domain_account{
       width: 100%;
+    text-align: center;
   }
 }
 
@@ -169,7 +170,7 @@ a{
     display: flex;
     padding: 2rem 4rem;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
     border-radius: 0.5rem;
     /* border: none; */

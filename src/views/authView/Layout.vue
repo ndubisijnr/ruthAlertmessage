@@ -21,10 +21,15 @@
 </template>
 
 <script>
+import storeUtils from "../../utils/storeUtils";
 
 export default {
     name:"CompleteRegistrationLayout",
-  
+
+    mounted() {
+      storeUtils.fireAway().global?.getTenant()
+    }
+
 }
 </script>
 

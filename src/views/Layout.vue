@@ -79,10 +79,15 @@
 
 <script>
 import NavBar from "../components/dashboardComponents/NavBar.vue";
+import storeUtils from "../utils/storeUtils";
 
 export default {
   name: "Layout",
-  components:{NavBar}
+  components:{NavBar},
+  mounted() {
+    storeUtils.fireAway().global?.getTenant()
+  }
+
 }
 </script>
 

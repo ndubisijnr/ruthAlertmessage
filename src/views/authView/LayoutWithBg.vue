@@ -6,7 +6,7 @@
       <div class="marger">
           <div class="inner_wrapper">
               <div class="logo_area">
-                <img src="../../assets/TravelYakataLogo.svg" />
+                <img src="../../assets/TravelYakataLogo.png" style="width: 12.0625rem;height: 5.95919rem;"/>
               </div>
               
               <slot name="children"></slot>

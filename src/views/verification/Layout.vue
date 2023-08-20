@@ -69,9 +69,12 @@ export default {
        
     },
 
-    computed:{
-        
-    }
+    computed: {},
+
+  mounted() {
+    storeUtils.fireAway().global?.getTenant()
+  }
+
 
 }
 </script>

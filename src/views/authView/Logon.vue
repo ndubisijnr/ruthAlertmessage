@@ -50,7 +50,7 @@
                 </div>
 
 
-                <on-boarding-button @click="handleClick" :id="'login'" text-node="Next" :disabled="!model.password || !model.email"></on-boarding-button>
+                <on-boarding-button border="none" @click="handleClick" :id="'login'" text-node="Next" :disabled="!model.password || !model.email"></on-boarding-button>
               </div>
             </div>
           </div>
