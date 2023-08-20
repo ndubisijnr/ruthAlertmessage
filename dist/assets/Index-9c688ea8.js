@@ -1,1 +1,0 @@
-import{L as t}from"./Layout-8b1415bf.js";import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{a as n,o as r,c as s}from"./index-3e5f9722.js";import"./storeUtils-979e9e43.js";const a={name:"Bookings",components:{Layout:t}};function c(p,m,_,f,i,u){const o=n("layout");return r(),s(o)}const k=e(a,[["render",c]]);export{k as default};
