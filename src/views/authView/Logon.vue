@@ -186,7 +186,10 @@ line-height: 1.1875rem; /* 135.714% */
 
 @media (max-width: 1024px) {
   .domain_account{
-    display: none;
+    display: block;
+    height: auto;
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -195,7 +198,13 @@ line-height: 1.1875rem; /* 135.714% */
     gap:1rem;
     align-items: center;
     margin-top: 1rem;
-    position: absolute;
+    /*position: absolute;*/
+}
+
+@media (max-width: 1024px) {
+  .experence{
+    justify-content: center;
+  }
 }
 .subdomain{
     color: var(--main-branding-primary, #89128A);
