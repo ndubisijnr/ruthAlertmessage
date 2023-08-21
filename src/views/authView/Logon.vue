@@ -181,7 +181,6 @@ line-height: 1.1875rem; /* 135.714% */
 .domain_account{
     display: block;
     width: 17.25rem;
-  border: solid;
   height: auto;
 }
 
