@@ -1,16 +1,18 @@
 import {defineStore} from "pinia"
-import AuthRequest from "../model/AuthRequest";
 import AuthService from "../service/AuthService";
 import {catchErrorHandler} from "../mixins/ErrorHandler";
 
 export const useGlobalStore = defineStore('globalStore', {
     state:()=>({
-        isSkipping:false
+        isSkipping:false,
+        tenant_id:null,
 
     }),
 
     getters:{
-        getIsSkipping:state => state.isSkipping
+        getIsSkipping:state => state.isSkipping,
+        getTenant_id:state => state.tenant_id
+
     },
 
     actions:{
@@ -19,10 +21,13 @@ export const useGlobalStore = defineStore('globalStore', {
         },
 
         async getTenant(){
-            const hostname = window.location.url
+            const hostname = location.href
             try{
-                const response = await AuthService.getTenantId('nnbffg.localhost')
-                console.log(response.data)
+                const response = await AuthService.getTenantId(hostname.split('//')[1].split('/')[0])
+                let responseData = response.data
+                if(responseData.success){
+                    this.tenant_id = responseData.data[0].id
+                }
 
             }catch (err){
                 catchErrorHandler(err)

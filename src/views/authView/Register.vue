@@ -37,23 +37,23 @@
             </div>
             <div>
               <div class="grouped_input">
-                <on-boarding-input-vue width="100%" label="first Name" @inputValue="(value) => model.firstName = value"
+                <on-boarding-input-vue :error="error ? error.first_name : null" width="100%" label="first Name" @inputValue="(value) => model.first_name = value"
                   :type="'text'"> </on-boarding-input-vue>
 
-                <on-boarding-input-vue width="100%"  label="last Name" @inputValue="(value) => model.firstName = value"
+                <on-boarding-input-vue width="100%" :error="error ? error.first_name : null"  label="last Name" @inputValue="(value) => model.last_name = value"
                   :type="'text'"> </on-boarding-input-vue>
               </div>
-              <on-boarding-input-vue :width="'100%'" label="Email Address" @inputValue="(value) => model.email = value" :type="'email'">
+              <on-boarding-input-vue :width="'100%'" :error="error ? error.email : null" label="Email Address" @inputValue="(value) => model.email = value" :type="'email'">
               </on-boarding-input-vue>
-              <on-boarding-input-vue width="100%" label="Business Name" @inputValue="(value) => model.firstName = value" :type="'text'">
+              <on-boarding-input-vue width="100%" :error="error ? error.business_name : null" label="Business Name" @inputValue="(value) => model.business_name = value" :type="'text'">
               </on-boarding-input-vue>
 
-              <on-boarding-input-vue width="100%" label="Password" :type="'password'" :id="'yourPassword'" @inputValue="(value) => {model.password = value, check()}"></on-boarding-input-vue>
+              <on-boarding-input-vue width="100%"  label="Password" :type="'password'" :id="'yourPassword'" @inputValue="(value) => {model.password = value, check()}"></on-boarding-input-vue>
 
               <div class="password_checker">
                 <p class="password_must_contain">Password must contain :</p>
 
-                <div class="containes">
+                <div class="containes animate__animated" id="password-checker">
                   <div class="checker" >
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" v-if="a_z" fill="none">
                       <path
@@ -134,7 +134,7 @@
 
               </div>
 
-              <on-boarding-button border="none" @click="handleClick" :id="'login'" btnWidth="100%" text-node="Sign Up" :disabled="!agreed_condition"></on-boarding-button>
+              <on-boarding-button :loading="loading" border="none" @click="handleClick" :id="'login'" btnWidth="100%" text-node="Sign Up" :disabled="!agreed_condition"></on-boarding-button>
             </div>
         </div>
       </div>
@@ -147,6 +147,8 @@ import Layout from './Layout.vue'
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import OnBoardingInputVue from '../../components/Inputs/OnBoardingInput.vue';
 import router from "../../router/index"
+import AuthRequest from "../../model/AuthRequest";
+import storeUtils from "../../utils/storeUtils";
 
 export default {
   name: "Register",
@@ -157,38 +159,51 @@ export default {
   },
   data() {
     return {
-      model: {
-        firstName: null,
-        lastName: null,
+      errorObj:{
+        first_name:null,
+        last_name:null,
+        email:null,
         password:null,
-        email:null
+        type:null,
+        business_name:null,
       },
+
+      model:AuthRequest.register,
       agreed_condition: false,
       a_z:false,
       A_Z:false,
       special:false,
       num:false,
       showTip:false,
-      passwordGood:false
+      passwordGood:false,
+      canProceed:false,
     }
   },
 
   methods:{
     handleClick(){
-      router.push({name:"OtpCard", query:{email:this.model.email}})
+      if(this.agreed_condition && this.canProceed && this.passwordGood) {
+        storeUtils.fireAway().auth?.commitErrors(this.errorObj)
+        storeUtils.fireAway().auth?.register()
+      }else{
+        const password_checker_div = document.getElementById('password-checker')
+        password_checker_div.classList.add('animate__shakeX')
+        setTimeout(() => {
+          password_checker_div.classList.remove('animate__shakeX')
+        },500)
+      }
     },
 
     check(){
 
       this.showTip = true
       const input = document.getElementById('yourPassword').value
-      console.log(input);
-      const button = document.getElementById('login')
+      // const button = document.getElementById('login')
       const regex = /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
       const regex_a_z = /^(?=.*[a-z])/
       const regexA_Z = /^(?=.*[A-Z])/
       const regexNum = /\d+/;
-      const all_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
+      const all_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 
       if(regex_a_z.test(input)){
         this.a_z = true
@@ -219,10 +234,10 @@ export default {
       }
 
       if(all_regex.test(input)){
-        button.disabled = false
+        this.canProceed= true
       }
       else{
-        button.disabled = true
+        this.canProceed = false
       }
 
       if(input.length >= 8){
@@ -233,6 +248,14 @@ export default {
       }
 
     },
+  },
+  computed:{
+    loading(){
+      return storeUtils.fireAway().auth?.getLoading
+    },
+    error(){
+      return storeUtils.fireAway().auth?.getErrors
+    }
   }
 }
 </script>
@@ -246,7 +269,7 @@ a{
   margin:6.50rem 5.5rem;
   background-color: #FFF;
   padding: 2rem;
-  height: 45.1875rem;
+  height: auto;
 }
 
 @media (max-width: 1024px) {

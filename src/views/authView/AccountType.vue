@@ -156,6 +156,12 @@ a{
   }
 }
 
+@media (width:1120px) {
+  .account_type_card{
+    height: auto;
+  }
+}
+
 @media (max-width: 1024px) {
   .account_type_card{
     width: 100%;

@@ -1,10 +1,10 @@
 import {RuthdoAlert} from "ruthly";
+import storeUtils from "../utils/storeUtils";
 
 export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
-    console.log(exception)
 
-    if(exception.response.data) {
-        const error =  exception.response.data
+    if(exception?.response?.data) {
+        const error =  exception?.response?.data
         RuthdoAlert({title: exception.response.data.message, icon: 'error'})
         if(error.errors){
             Object.keys(errorObj).forEach(key => {
@@ -15,19 +15,17 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
                 if(errorKeys.includes(key)){
                     let message = Object.values(error.errors[key])
                     errorObj[key] = message.toLocaleString()
-                    localStorage.errors = JSON.stringify(errorObj)
+                    storeUtils.fireAway().auth?.commitErrors(errorObj)
                 }else{
                     //.....
                 }
             })
         }else{
             errorObj[AdditionalErrorName] = error.data
-            console.log(error)
-            console.log(errorObj[AdditionalErrorName] )
         }
     }
     else{
-        RuthdoAlert({title: exception.response.message, icon:'error'})
+        RuthdoAlert({title: exception?.response?.message, icon:'error'})
 
     }
 

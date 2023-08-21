@@ -16,7 +16,7 @@ export default [
         component: () => import('../../views/authView/OtpCard.vue')
     },
     {
-        path: '/register/success',
+        path: '/register/success/:token',
         // redirect:'create-account',
         name: 'SuccessRegistrationCard',
         meta: {layout: 'auth',authRequired:false},

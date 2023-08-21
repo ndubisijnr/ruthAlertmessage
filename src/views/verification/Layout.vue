@@ -18,8 +18,8 @@
                         <div class="inner-side-area" >
                             <slot name="maker"></slot>
                             <div class="current-active" id="nav0">
-                                <router-link to="/verification/business/"><p class="item">Business Information</p></router-link>
-                                <router-link to="/verification/document-upload/"><p class="item" >Document Upload</p></router-link>
+                                <router-link :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p class="item">Business Information</p></router-link>
+                                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><p class="item" >Document Upload</p></router-link>
                             </div>
                            
                         </div>
@@ -68,7 +68,13 @@ export default {
        
     },
 
-    computed: {},
+    computed: {
+      getUser(){
+        if(localStorage.user){
+          return JSON.parse(localStorage.user)
+        }
+      }
+    },
 
   mounted() {
     storeUtils.fireAway().global?.getTenant()

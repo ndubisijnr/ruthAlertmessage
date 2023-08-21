@@ -23,8 +23,13 @@
 
 <script>
 
+import storeUtils from "../../utils/storeUtils";
+
 export default {
   name:"LayoutWithBg",
+  mounted() {
+    storeUtils.fireAway().global?.getTenant()
+  }
 
 }
 </script>

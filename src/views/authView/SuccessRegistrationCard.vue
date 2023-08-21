@@ -10,12 +10,12 @@
                         <div class="card_body">
                             <p class="sign_up_successfull">Sign Up Successful</p>
                             <p class="welcome_to_tiqwa">
-                                Welcome to Tiqwa. Experience travel-booking like never before.
-                                Sign In into your account using your generated subdomain below.
+                                Welcome to Travel Yakata. Experience travel-booking like never before.
+                               Click on continue and begin your journey on Travel Yakata.
                             </p>
-                            <div class="sublink">
-                                <span class="sublink_link">https://travelgo.tiqwa.com</span>
-                            </div>
+                           <router-link :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"> <div class="sublink">
+                                <span class="sublink_link">Continue</span>
+                            </div></router-link>
                         
                         </div>
                     </div>
@@ -45,6 +45,14 @@ export default {
 
     },
 
+  computed:{
+      getUser(){
+        if(localStorage.user){
+          return JSON.parse(localStorage?.user)
+        }
+      }
+  },
+
     watch: {},
 
     mounted(){}
@@ -52,6 +60,9 @@ export default {
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .card_wrapper{
     padding: 0;
     display:flex;
@@ -149,12 +160,13 @@ export default {
     border-radius: 0.625rem;
     border: 1px solid var(--button-disabled, #F1E4F2);
     background: var(--main-branding-light, #F8F1F8);
+  cursor: pointer;
 }
 
 .sublink_link{
     color: #1D1E2C;
     text-align: center;
-
+  cursor: pointer;
     /* Body/16px/Regular */
     font-family: Product Sans;
     font-size: 1rem;

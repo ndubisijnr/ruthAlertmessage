@@ -1,29 +1,29 @@
 <template>
     <layout>
-<!--      <template v-slot:sub-child>-->
-<!--          <div class="domain_account">-->
-<!--              <div class="domain_account_h"> Sign In to Get <br />-->
-<!--                <span class="subdomain">Started</span></div>-->
+      <template v-slot:sub-child>
+          <div class="domain_account">
+              <div class="domain_account_h"> Sign In to Get <br />
+                <span class="subdomain">Started</span></div>
 
-<!--              <div class="experence">-->
-<!--                  <svg width="22" height="20" viewBox="0 0 22 20" fill="none"-->
-<!--                      xmlns="http://www.w3.org/2000/svg">-->
-<!--                      <rect x="0.316467" width="21.2658" height="20" rx="4" fill="#89128A" />-->
-<!--                      <g clip-path="url(#clip0_328_1436)">-->
-<!--                      <path-->
-<!--                          d="M9.43086 12.2661L16.4121 5.69971L17.4868 6.70971L9.43086 14.2861L4.59744 9.74042L5.67137 8.73042L9.43086 12.2661Z"-->
-<!--                          fill="white" />-->
-<!--                      </g>-->
-<!--                      <defs>-->
-<!--                      <clipPath id="clip0_328_1436">-->
-<!--                          <rect width="18.2278" height="17.1429" fill="white" transform="translate(1.83594 1.4292)" />-->
-<!--                      </clipPath>-->
-<!--                      </defs>-->
-<!--                  </svg>-->
-<!--                  <span>Experience travel-booking like never before</span> -->
-<!--              </div> -->
-<!--            </div>-->
-<!--      </template>-->
+              <div class="experence">
+                  <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <rect x="0.316467" width="21.2658" height="20" rx="4" fill="#89128A" />
+                      <g clip-path="url(#clip0_328_1436)">
+                      <path
+                          d="M9.43086 12.2661L16.4121 5.69971L17.4868 6.70971L9.43086 14.2861L4.59744 9.74042L5.67137 8.73042L9.43086 12.2661Z"
+                          fill="white" />
+                      </g>
+                      <defs>
+                      <clipPath id="clip0_328_1436">
+                          <rect width="18.2278" height="17.1429" fill="white" transform="translate(1.83594 1.4292)" />
+                      </clipPath>
+                      </defs>
+                  </svg>
+                  <span>Experience travel-booking like never before</span>
+              </div>
+            </div>
+      </template>
       <template v-slot:children>
         <div class="improvise">
           <div class="login_card">
@@ -40,17 +40,17 @@
                 <on-boarding-input-vue label="Password" :type="'password'" :id="'login_password'" @inputValue="(value) => model.password = value"></on-boarding-input-vue>
 
                 <div class="remember_me">
-                  <div style="display: flex;align-items: center;gap:0.62rem">
-                    <input type="checkbox" />
-                    <span class="remember_me_span">Remember me</span>
-                  </div>
+<!--                  <div style="display: flex;align-items: center;gap:0.62rem">-->
+<!--                    <input type="checkbox" />-->
+<!--                    <span class="remember_me_span">Remember me</span>-->
+<!--                  </div>-->
 
                   <span class="fgpassword">Forgot Password ?</span>
 
                 </div>
 
 
-                <on-boarding-button border="none" @click="handleClick" :id="'login'" text-node="Next" :disabled="!model.password || !model.email"></on-boarding-button>
+                <on-boarding-button border="none" :loading="loading" @click="handleClick" :id="'login'" text-node="Next" :disabled="!model.password || !model.email"></on-boarding-button>
               </div>
             </div>
           </div>
@@ -66,6 +66,8 @@ import Layout from './Layout.vue'
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import OnBoardingInputVue from '../../components/Inputs/OnBoardingInput.vue';
 import router from "../../router/index"
+import AuthRequest from "../../model/AuthRequest";
+import storeUtils from "../../utils/storeUtils";
 
 export default {
   name: "Logon",
@@ -78,20 +80,21 @@ export default {
 
   data() {
     return {
-      model: {
-        firstName: null,
-        lastName: null,
-        password:null,
-        email:null
-      },
+      model: AuthRequest.login,
       remember_me: false,
     }
   },
 
   methods:{
     handleClick(){
-      router.push({name:"BusinessInfo", query:{user:'showfaketkshbb3n0948wbzjn!ndjdbtokenbdubf3848hPej!#293sn3ij3'}})
+      storeUtils.fireAway().auth?.login()
     },
+  },
+
+  computed:{
+    loading(){
+      return storeUtils.fireAway().auth?.getLoading
+    }
   }
 }
 </script>
@@ -105,7 +108,7 @@ export default {
 }
 .remember_me{
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   margin-bottom:2.5rem;
 }
 .login_card{

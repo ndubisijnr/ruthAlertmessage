@@ -7,7 +7,7 @@
                         <div class="card_head">
                             <h3 class="almost_done">Almost done!</h3>
                             <p class="code_sent">We have sent a code via Email. <br />
-                                Enter 4-digit code sent to <span class="email_sent_to">{{ getEmail }}</span></p>
+                                Enter 5-digit code sent to <span class="email_sent_to">{{ getEmail }}</span></p>
                         </div>
                         <div class="card_body">
                             <div class="otp-div">
@@ -19,8 +19,8 @@
                             </div>
                         </div>
                         <div class="card_bottom">
-                            <on-boarding-button :loading="loading" @click="handleSubmit" textNode="Verify Code" btn-width="100%" />
-                            <p class="resend_code">Resend code {{timerCount > 0 ? `in ${timerCount} seconds` : 'now?'}} <button @click="resendOtp"  class="resend"  :class="{'disabledBtn':timerCount > 0 || loading}" :disabled="timerCount > 0 || loading">Resend code</button></p>
+                            <on-boarding-button border="none" :loading="loading" @click="handleSubmit" textNode="Verify Code" btn-width="100%" />
+                            <p class="resend_code">Resend code {{timerCount > 0 ? `in ${timerCount} seconds` : 'now?'}} <button @click="resend"  class="resend"  :class="{'disabledBtn':timerCount > 0 || loading}" :disabled="timerCount > 0 || loading">Resend code</button></p>
                         </div>
                     </div>
                 </div>
@@ -35,6 +35,8 @@ import LayoutWithBg from "./LayoutWithBg.vue";
 import StartTimer from "../../mixins/countDown"
 import OnBoardingButton from '../../components/Buttons/OnBoardingButton.vue';
 import router from "../../router/index"
+import AuthRequest from "../../model/AuthRequest";
+import storeUtils from "../../utils/storeUtils";
 
 
 export default {
@@ -46,8 +48,8 @@ export default {
     data(){
         return{
             timerCount: 0,
+            model:AuthRequest.verifyEmail,
             otpValue:null,
-            loading:false,
             errorObj:{
               email:null,
               email_verification_code:null
@@ -56,8 +58,9 @@ export default {
     },
     methods:{
 
-       async handleSubmit(){
-         await router.push({name:"SuccessRegistrationCard"})
+      handleSubmit(){
+         this.model.email_verification_code = this.otpValue
+          storeUtils.fireAway().auth?.verifyEmail()
        },
 
        tab() {
@@ -152,9 +155,12 @@ export default {
         }
     },
 
-    async resendOtp(){
-        StartTimer()
-        this.timerCount = 30
+     resend(){
+        storeUtils.fireAway().auth?.resendOtp().then(() => {
+          StartTimer()
+          this.timerCount = 30
+        })
+
       },
 
     },
@@ -175,6 +181,10 @@ export default {
     computed:{
       getEmail(){
         return router.currentRoute.value.query.email
+      },
+
+      loading(){
+        return storeUtils.fireAway().auth?.getLoading
       }
     },
 

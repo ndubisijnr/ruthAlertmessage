@@ -1,15 +1,19 @@
 <template>
   <button :id="id" :type="type ? type : 'button'"
-   :style="{border:border? border :'1px solid  #89128A',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
-   class="on_boarding_button" :class="{'disabled':disabled}" :disabled="disabled">
-    <p class="text">{{textNode}}</p>
+   :style="{border:border ? border :'1px solid  #89128A',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
+   class="on_boarding_button" :class="{'disabled':disabled || loading}" :disabled="disabled">
+    <p class="text">{{loading ? null : textNode }} <spinner-loader v-show="loading"></spinner-loader></p>
   </button>
 </template>
 
 <script>
+import SpinnerLoader from "../loaders/SpinnerLoader.vue";
 export default {
     name: "OnBoardingButton",
-  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border']
+  components:{
+      SpinnerLoader
+  },
+  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading']
 }
 </script>
 

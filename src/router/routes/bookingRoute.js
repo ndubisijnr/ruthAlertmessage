@@ -1,9 +1,9 @@
 export default [
     {
-        path: '/bookings',
+        path: '/bookings/:token',
         // redirect:'create-account',
         name: 'Bookings',
-        meta: {layout: 'dashboard',authRequired:false},
+        meta: {layout: 'dashboard',authRequired:true},
         component: () => import('../../views/bookings/Index.vue')
     }
 ]
