@@ -47,6 +47,7 @@ export default {
   .m5-0{
     margin: 0rem;
     min-height: 100vh;
+    align-items: start;
   }
 }
 
@@ -146,6 +147,7 @@ export default {
     height: auto;
     width: 100%;
     display: inline-block;
+    align-items: start;
   }
 }
 </style>
