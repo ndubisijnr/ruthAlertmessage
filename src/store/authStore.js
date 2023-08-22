@@ -136,6 +136,42 @@ export const useAuthStore = defineStore('authStore', {
         },
 
 
+        async getBusinessProfile(){
+            try{
+                const response = await AuthService.getBusinessProfile(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.businessProfile = responseData.data
+                    localStorage.businessProfile=JSON.stringify(responseData.data)
+                }
+            }
+            catch (err) {
+                catchErrorHandler(err)
+            }
+        },
+
+        async handleUploadProfilePic(payload){
+            try{
+                this.loading = true
+                const response = await AuthService.upload(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    this.businessProfile = responseData.data
+                    localStorage.businessProfile=JSON.stringify(responseData.data)
+                }
+            }
+        catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        }
+
+
+
+
     }
 
 })

@@ -21,9 +21,21 @@ export const useGlobalStore = defineStore('globalStore', {
         },
 
         async getTenant(){
-            const hostname = location.href
+            // const hostname = location.href
+            // let newHostName;
+            // if(hostname.includes('www')){
+            //     //split off www
+            //     const x = hostname?.split('.').filter((item, index) => {
+            //         return index !== 0
+            //     })
+            //     // split off / (ending trails)
+            //     newHostName = x?.toLocaleString()?.replace(',', '.')?.split('/')[0]
+            // }else{
+            //     newHostName = hostname?.split('//')[1]?.split('/')[0]
+            // }
+
             try{
-                const response = await AuthService.getTenantId(hostname.split('//')[1].split('/')[0])
+                const response = await AuthService.getTenantId('akaraltd.localhost:5173')
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id

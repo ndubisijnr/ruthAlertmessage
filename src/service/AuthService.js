@@ -1,4 +1,4 @@
-import {apiService} from "./BaseService";
+import {apiService, appClientImgUpload} from "./BaseService";
 export default {
 
     initiateLogin(tenant_id,payload) {
@@ -26,7 +26,11 @@ export default {
     },
 
     upload(tenant_id, payload){
-        return apiService.Client.post(`api/${tenant_id}/business/upload`, payload)
+        return appClientImgUpload.post(`api/${tenant_id}/business/upload`, payload)
+    },
+
+    getBusinessProfile(tenant_id){
+        return apiService.Client.get(`api/${tenant_id}/business`)
     }
 
 

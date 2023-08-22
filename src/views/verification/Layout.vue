@@ -77,7 +77,10 @@ export default {
     },
 
   mounted() {
-    storeUtils.fireAway().global?.getTenant()
+    storeUtils.fireAway().global?.getTenant().then(() =>{
+      storeUtils.fireAway().auth?.getBusinessProfile()
+
+    })
   }
 
 

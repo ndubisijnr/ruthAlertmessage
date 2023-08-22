@@ -15,7 +15,7 @@
                     <div class="business_information_card_head">
                         <div class="inner_head">
                             <div class="profile">
-                                AD
+                              {{ getFirstLettersOfFirstAndLastName(getUser?.first_name + ' ' + getUser?.last_name) }}
                                 <div class="upload_icon" @click="initiateUpload">
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="28" height="28" rx="14" fill="#F8F1F8"/>
@@ -24,7 +24,7 @@
                                         <path d="M11.6357 8.58447C11.6357 8.09796 11.2363 7.69873 10.75 7.69873H8.36719C7.88086 7.69873 7.48145 8.09796 7.48145 8.58447V9.28937H11.6357V8.58447Z" fill="#89128A"/>
                                     </svg>
                                 </div>
-                                <input type="file" id="logo" hidden>
+                                <input id="logo" hidden accept="image/*" type="file">
                             </div>
                             <div> 
                                 <p class="upload_business_logo">Upload Business logo</p>
@@ -34,11 +34,11 @@
                     </div>
                     <div class="business_information_card_body">
                         <div> 
-                            <OnBoardingInput :required="true" :error="errors ? errors.email : null" type="text" :label="'Business Name'" :width="'100%'"  @inputValue="(value) => model.name = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.email : null" type="email" :label="'Business Email address'" :width="'100%'"  @inputValue="(value) => model.email = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.address : null" type="text" :label="'Address'" :width="'100%'"  @inputValue="(value) => model.address = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.website : null" type="text" :label="'Business  Website'" :width="'100%'"  @inputValue="(value) => model.website = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.cac_number : null" type="text" :label="'CAC Registration Number'" :width="'100%'"  @inputValue="(value) => model.cac_number = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.email : null" type="text" :label="'Business Name'" :placeholder="getBusinessProfile.name" :width="'100%'"  @inputValue="(value) => model.name = value" ></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.email : null" type="email" :label="'Business Email address'" :placeholder="getBusinessProfile.email" :width="'100%'"  @inputValue="(value) => model.email = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.address : null" type="text" :label="'Address'" :width="'100%'" :placeholder="getBusinessProfile.address"  @inputValue="(value) => model.address = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.website : null" type="text" :label="'Business  Website'" :width="'100%'" :placeholder="getBusinessProfile.website"  @inputValue="(value) => model.website = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.cac_number : null" type="text" :label="'CAC Registration Number'" :width="'100%'" :placeholder="getBusinessProfile.cac_number === 'pending' ? '' : getBusinessProfile.cac_number"  @inputValue="(value) => model.cac_number = value"></OnBoardingInput>
                         </div>
                         <div class="reach_out">
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
@@ -71,6 +71,8 @@ import OnBoardingInput from '../../components/Inputs/OnBoardingInput.vue';
 import OnBoardingButton from '../../components/Buttons/OnBoardingButton.vue';
 import AuthRequest from "../../model/AuthRequest";
 import storeUtils from "../../utils/storeUtils";
+import {RuthdoAlert} from "ruthly";
+import {getFirstLettersOfFirstAndLastName} from "../../mixins/lettersExtractor";
 export default {
     name:"BusinessInfo",
     components:{
@@ -87,7 +89,9 @@ export default {
           address:null,
           website:null,
           cac_number:null,
-        }
+        },
+        uploadModel:AuthRequest.upload,
+        getFirstLettersOfFirstAndLastName
       }
   },
 
@@ -96,9 +100,59 @@ export default {
       document.getElementById('logo').click()
     },
 
+    async triggerUpload(obj){
+      await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
+    },
+
+    async handleUpload(file) {
+
+      const formData = new FormData();
+      if (!file.length) return;
+      await formData.append('file',file[0], file[0].name)
+      // console.log(formData)
+      await this.triggerUpload(this.uploadModel)
+      this.uploadModel.type = 'logo'
+      this.uploadModel.file = formData
+
+
+      // await StoreUtils.dispatch(StoreUtils.actions.documents.uploadDocumentToS3, formData)
+
+      // try {
+      //   reader.onload = async (e) => {
+      //     // this.model.base64 = e.target.result
+      //     // this.model.directorType = this.directorType
+      //     // this.model.username = this.fileName+"-"+StoreUtils.rootGetters(StoreUtils.getters.auth.getCurrentOrganization).organisationName.replace(" ","-").toLowerCase()
+      //     // await this.$store.dispatch(this.uploadType, this.model);
+      //     // this.hide();
+      //     // this.loadData();
+      //     // await console.log(e)
+      //
+      //   };
+      //   reader.readAsDataURL(file);
+      //   this.$emit('input', file);
+      // } catch (e) {
+      //   console.warn(e.message)
+      // }
+
+    },
+
+
     handleUpdateProfile(){
-      storeUtils.fireAway().auth?.commitErrors(this.error)
-      storeUtils.fireAway().auth?.updateBusinessProfile()
+      if(!this.getBusinessProfile.name){
+        this.error.name = "business name is required"
+        storeUtils.fireAway().auth?.commitErrors(this.error)
+        RuthdoAlert({title:"business name is required", icon:'error'})
+      }else {
+        this.model.name = this.model.name ? this.model.name : this.getBusinessProfile.name
+        this.model.email = this.model.email ? this.model.email : this.getBusinessProfile.email
+        this.model.address = this.model.address ? this.model.address : this.getBusinessProfile.address
+        this.model.website = this.model.website ? this.model.website : this.getBusinessProfile.website
+        this.model.cac_number = this.model.cac_number ? this.model.cac_number : this.getBusinessProfile.cac_number
+        storeUtils.fireAway().auth?.commitErrors(this.error)
+        storeUtils.fireAway().auth?.updateBusinessProfile()
+      }
+
+
     }
   },
 
@@ -108,8 +162,18 @@ export default {
       },
       errors(){
         return storeUtils.fireAway().auth?.getErrors
+      },
+
+      getBusinessProfile(){
+        const business = JSON.parse(localStorage.businessProfile)
+        return business
+      },
+
+      getUser(){
+        const user = JSON.parse(localStorage.user)
+        return user
       }
-  }
+  },
 
 }
 </script>
