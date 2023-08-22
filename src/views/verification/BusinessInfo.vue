@@ -24,7 +24,7 @@
                                         <path d="M11.6357 8.58447C11.6357 8.09796 11.2363 7.69873 10.75 7.69873H8.36719C7.88086 7.69873 7.48145 8.09796 7.48145 8.58447V9.28937H11.6357V8.58447Z" fill="#89128A"/>
                                     </svg>
                                 </div>
-                                <input id="logo" hidden accept="image/*" type="file">
+                                <input id="logo" hidden accept="image/*" type="file" @change="handleUpload($event.target.files)">
                             </div>
                             <div> 
                                 <p class="upload_business_logo">Upload Business logo</p>
@@ -34,11 +34,11 @@
                     </div>
                     <div class="business_information_card_body">
                         <div> 
-                            <OnBoardingInput :error="errors ? errors.email : null" type="text" :label="'Business Name'" :placeholder="getBusinessProfile.name" :width="'100%'"  @inputValue="(value) => model.name = value" ></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.email : null" type="email" :label="'Business Email address'" :placeholder="getBusinessProfile.email" :width="'100%'"  @inputValue="(value) => model.email = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.address : null" type="text" :label="'Address'" :width="'100%'" :placeholder="getBusinessProfile.address"  @inputValue="(value) => model.address = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.website : null" type="text" :label="'Business  Website'" :width="'100%'" :placeholder="getBusinessProfile.website"  @inputValue="(value) => model.website = value"></OnBoardingInput>
-                            <OnBoardingInput :error="errors ? errors.cac_number : null" type="text" :label="'CAC Registration Number'" :width="'100%'" :placeholder="getBusinessProfile.cac_number === 'pending' ? '' : getBusinessProfile.cac_number"  @inputValue="(value) => model.cac_number = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.email : null" type="text" :label="'Business Name'" :placeholder="getBusinessProfile?.name" :width="'100%'"  @inputValue="(value) => model.name = value" ></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.email : null" type="email" :label="'Business Email address'" :placeholder="getBusinessProfile?.email" :width="'100%'"  @inputValue="(value) => model.email = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.address : null" type="text" :label="'Address'" :width="'100%'" :placeholder="getBusinessProfile?.address"  @inputValue="(value) => model.address = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.website : null" type="text" :label="'Business  Website'" :width="'100%'" :placeholder="getBusinessProfile?.website"  @inputValue="(value) => model.website = value"></OnBoardingInput>
+                            <OnBoardingInput :error="errors ? errors.cac_number : null" type="text" :label="'CAC Registration Number'" :width="'100%'" :placeholder="getBusinessProfile?.cac_number === 'pending' ? '' : getBusinessProfile?.cac_number"  @inputValue="(value) => model.cac_number = value"></OnBoardingInput>
                         </div>
                         <div class="reach_out">
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
@@ -165,13 +165,19 @@ export default {
       },
 
       getBusinessProfile(){
-        const business = JSON.parse(localStorage.businessProfile)
-        return business
+        if(localStorage.businessProfile){
+          const business = JSON.parse(localStorage?.businessProfile)
+          return business
+        }
+
       },
 
       getUser(){
-        const user = JSON.parse(localStorage.user)
-        return user
+        if(localStorage.user){
+          const user = JSON.parse(localStorage?.user)
+          return user
+        }
+
       }
   },
 

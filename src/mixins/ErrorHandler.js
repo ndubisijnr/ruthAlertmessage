@@ -17,6 +17,7 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
                     errorObj[key] = message.toLocaleString()
                     storeUtils.fireAway().auth?.commitErrors(errorObj)
                 }else{
+                    RuthdoAlert({title: error.data, icon:'error'})
                     //.....
                 }
             })

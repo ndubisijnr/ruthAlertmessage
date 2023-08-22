@@ -13,7 +13,7 @@ const Client = axios.create({
 });
 
 export const appClientImgUpload = axios.create({
-    baseURL:"https://dev-api.travelwahoo.com",
+    baseURL:"https://b2b-api-dev.tiqwa.com/",
     withCredentials: false,
     headers: {
         Accept: "application/json",
@@ -23,7 +23,7 @@ export const appClientImgUpload = axios.create({
 });
 
 Client.interceptors.request.use(config => {
-    config.headers.Authorization = null
+    config.headers.Authorization = localStorage.token ?  "Bearer" + " " + localStorage.token : null;
     return config
 })
 
@@ -33,7 +33,6 @@ Client.interceptors.response.use(async response => {
 
 appClientImgUpload.interceptors.request.use(config => {
     config.headers.Authorization = "Bearer" + " " + localStorage.token;
-    console.log(config.headers.Authorization)
     return config
 })
 

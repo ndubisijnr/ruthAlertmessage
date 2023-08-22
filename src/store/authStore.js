@@ -64,6 +64,7 @@ export const useAuthStore = defineStore('authStore', {
                     this.loading = false
                      localStorage.user = JSON.stringify(responseData.data)
                       this.token = responseData.data.access_token
+                      localStorage.token = responseData.data.access_token
                     await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
                 }
             }catch (err){
@@ -159,8 +160,7 @@ export const useAuthStore = defineStore('authStore', {
 
                 if(responseData.success){
                     this.loading = false
-                    this.businessProfile = responseData.data
-                    localStorage.businessProfile=JSON.stringify(responseData.data)
+                    console.log(responseData)
                 }
             }
         catch (err) {
