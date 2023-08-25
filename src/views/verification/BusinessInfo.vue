@@ -1,7 +1,8 @@
 <template>
-    <layout :in_route="inRoute" :is-component="isComponent">
+    <layout :in_route="inRoute=true" :is-component="true">
 
         <template v-slot:maker>
+          {{inRoute}} {{isComponent}}
             <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
                 <rect width="4" height="72" rx="2" fill="#CDCED9"/>
                 <rect width="4" height="20" rx="2" fill="#720F73"/>

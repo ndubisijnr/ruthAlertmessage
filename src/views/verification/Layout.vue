@@ -2,7 +2,7 @@
     <verification-skip-modal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkipping"></verification-skip-modal>
 
     <div class="wrapper">
-        <div v-show="isComponent" class="inner-wrapper">
+        <div v-if="getCurrentRoute === 'UploadDocs'|| getCurrentRoute === 'BusinessInfo'" class="inner-wrapper">
             <header class="header">
               <div class="skip-div" @click="Skip">
                 <span>Skip</span>
@@ -17,12 +17,12 @@
                     <div class="side-area">
                         <div class="inner-side-area" >
                             <slot name="maker"></slot>
-                            <div class="current-active" id="nav0" v-show="in_route">
+                            <div class="current-active" id="nav0" v-if="getCurrentRoute === 'UploadDocs'|| getCurrentRoute === 'BusinessInfo'">
                                 <router-link v-if="getUser.is_corporate === 'true'" :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p  class="item">Business Information</p></router-link>
                                 <p v-else  class="item" style="cursor:not-allowed" >Business Information</p>
                                 <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><p class="item" >Document Upload</p></router-link>
                             </div>
-                          <div class="current-active" v-show="!in_route">
+                          <div class="current-active" v-else>
                             <p class="item" v-if="getUser.is_corporate === 'false'" style="cursor:not-allowed" >Business Information</p>
                             <p class="item" v-else @click="switchToBusiness">Business Information</p>
                             <p class="item" @click="switchToDoc">Document Upload</p>
@@ -45,6 +45,7 @@
 <script>
 import VerificationSkipModal from '../../components/modals/VerificationSkipModal.vue';
 import storeUtils from "../../utils/storeUtils"
+import router from "../../router";
 
 export default {
     name:"Layout",
@@ -86,6 +87,9 @@ export default {
         if(localStorage.user){
           return JSON.parse(localStorage.user)
         }
+      },
+      getCurrentRoute(){
+        return router.currentRoute.value.name
       }
     },
 
