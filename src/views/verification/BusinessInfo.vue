@@ -1,5 +1,5 @@
 <template>
-    <layout>
+    <layout :in_route="true" :is-component="true">
 
         <template v-slot:maker>
             <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
