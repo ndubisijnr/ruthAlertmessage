@@ -1,5 +1,5 @@
 <template>
-    <layout :in_route="true" :is-component="true">
+    <layout :in_route="inRoute" :is-component="isComponent">
 
         <template v-slot:maker>
             <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
@@ -62,8 +62,6 @@
 
 
         </template>
-
-
     </layout>
 
 </template>
@@ -78,6 +76,7 @@ import {RuthdoAlert} from "ruthly";
 import {getFirstLettersOfFirstAndLastName} from "../../mixins/lettersExtractor";
 export default {
     name:"BusinessInfo",
+    props:['inRoute','isComponent'],
     components:{
         Layout,
         OnBoardingInput,

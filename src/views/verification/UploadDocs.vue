@@ -1,5 +1,5 @@
 <template>
-   <layout>
+   <layout :in_route="inRoute" :is-component="isComponent">
         <template v-slot:maker>
             <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
                 <rect width="4" height="62.348" rx="2" fill="#CDCED9"/>
@@ -108,6 +108,7 @@ import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
 
 export default {
     name:"UploadDocs",
+    props:['inRoute','isComponent'],
     data(){
       return {
         uploadModel:AuthRequest.upload,

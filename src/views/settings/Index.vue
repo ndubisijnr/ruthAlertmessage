@@ -360,8 +360,8 @@
         </div>
       </div>
       <div class="verifications" v-show="currentTab === 'Verification'">
-        <business-verification v-if="getUser.is_corporate === 'true' &&  verificationType === 'business'"></business-verification>
-        <upload-docs v-if="verificationType === 'docs'"></upload-docs>
+        <business-verification :is-component="false" :in-route="false"  v-if="getUser.is_corporate === 'true' &&  verificationType === 'business'"></business-verification>
+        <upload-docs  :is-component="false" :in-route="false" v-if="verificationType === 'docs'"></upload-docs>
       </div>
     </div>
 
