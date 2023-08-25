@@ -45,7 +45,8 @@
               </div>
               <on-boarding-input-vue :width="'100%'" :error="error ? error.email : null" label="Email Address" @inputValue="(value) => model.email = value" :type="'email'">
               </on-boarding-input-vue>
-              <on-boarding-input-vue width="100%" :error="error ? error.business_name : null" label="Business Name" @inputValue="(value) => model.business_name = value" :type="'text'">
+
+              <on-boarding-input-vue v-show="getCurrentRoute.user_type === 'cooperate_manager'" width="100%" :error="error ? error.business_name : null" label="Business Name" @inputValue="(value) => model.business_name = value" :type="'text'">
               </on-boarding-input-vue>
 
               <on-boarding-input-vue width="100%"  label="Password" :type="'password'" :id="'yourPassword'" @inputValue="(value) => {model.password = value, check()}"></on-boarding-input-vue>
@@ -255,6 +256,9 @@ export default {
     },
     error(){
       return storeUtils.fireAway().auth?.getErrors
+    },
+    getCurrentRoute(){
+      return router.currentRoute.value.params
     }
   }
 }

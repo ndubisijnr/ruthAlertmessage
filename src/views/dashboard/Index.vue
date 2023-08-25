@@ -1,6 +1,6 @@
 <template>
    <layout v-slot:child-content>
-     <h3 class="user-name"> Hello Fele </h3>
+     <h3 class="user-name"> Hello {{getUser.first_name}} </h3>
 
      <div class="get-started">
        <div class="with-tiqwa">
@@ -149,13 +149,24 @@ export default {
   components:{NavBar,OnBoardingButton,DashboardStatsCard,Layout},
   data(){
     return{
-      users:users
+      users:users,
     }
-  }
+  },
+
+  computed: {
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
+    }
+  },
 }
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .double-revenue-display{
  display: flex;
   gap: 1.25rem;
@@ -259,12 +270,13 @@ export default {
   font-style: normal;
   font-weight: 700;
   line-height: 2.625rem; /* 131.25% */
+  text-transform: capitalize;
 }
 
 .get-started{
   width: 100%;
   height: 10.625rem;
-  background-image: url("src/assets/background.png");
+  background-image: url("../../assets/background.png");
   margin: 3rem 0;
   display: flex;
   align-items: center;

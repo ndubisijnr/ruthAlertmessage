@@ -2,7 +2,7 @@
     <verification-skip-modal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkipping"></verification-skip-modal>
 
     <div class="wrapper">
-        <div class="inner-wrapper">
+        <div v-show="isComponent" class="inner-wrapper">
             <header class="header">
               <div class="skip-div" @click="Skip">
                 <span>Skip</span>
@@ -12,15 +12,21 @@
              </header>
         </div>
         <main>
-            <div class="main-wrapper">
+          <div class="main-wrapper">
                 <div class="side-area-wrapper">
                     <div class="side-area">
                         <div class="inner-side-area" >
                             <slot name="maker"></slot>
-                            <div class="current-active" id="nav0">
-                                <router-link :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p class="item">Business Information</p></router-link>
+                            <div class="current-active" id="nav0" v-show="in_route">
+                                <router-link v-if="getUser.is_corporate === 'true'" :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p  class="item">Business Information</p></router-link>
+                                <p v-else  class="item" style="cursor:not-allowed" >Business Information</p>
                                 <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><p class="item" >Document Upload</p></router-link>
                             </div>
+                          <div class="current-active" v-show="!in_route">
+                            <p class="item" v-if="getUser.is_corporate === 'false'" style="cursor:not-allowed" >Business Information</p>
+                            <p class="item" v-else @click="switchToBusiness">Business Information</p>
+                            <p class="item" @click="switchToDoc">Document Upload</p>
+                          </div>
                            
                         </div>
                     </div>
@@ -31,7 +37,6 @@
                 </div>
 
             </div>
-
         </main>
     </div>
   
@@ -43,6 +48,7 @@ import storeUtils from "../../utils/storeUtils"
 
 export default {
     name:"Layout",
+    props:['isComponent', 'in_route'],
     components:{
         VerificationSkipModal
     },
@@ -55,6 +61,13 @@ export default {
     },
 
     methods:{
+      switchToBusiness(){
+        storeUtils.fireAway().global?.commitVerificationType('business')
+      },
+      switchToDoc(){
+        storeUtils.fireAway().global?.commitVerificationType('docs')
+
+      },
 
         Skip(){
             storeUtils.fireAway().global?.commitIsSkipping(!storeUtils.fireAway().global?.getIsSkipping)
@@ -201,6 +214,8 @@ main{
     line-height: 1.75rem; /* 175% */
     cursor: pointer;
       color: #393A4A;
+  background: transparent;
+  border: none;
 }
 
 

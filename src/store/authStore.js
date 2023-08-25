@@ -65,7 +65,12 @@ export const useAuthStore = defineStore('authStore', {
                      localStorage.user = JSON.stringify(responseData.data)
                       this.token = responseData.data.access_token
                       localStorage.token = responseData.data.access_token
-                    await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
+                    console.log(responseData)
+                     if(responseData.data.is_corporate === 'true'){
+                         await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
+                     }else{
+                         await router.push({name: "UploadDocs", params: {token:responseData.data.access_token.slice(0,20)}})
+                     }
                 }
             }catch (err){
                 this.loading = false

@@ -6,3 +6,12 @@ export const getFirstLettersOfFirstAndLastName = (value) => {
     return firstName[0].toUpperCase() + lastName[0].toUpperCase()
 
 }
+
+export const ellipsis = (value, length) => {
+    if (value == null)
+        return value
+    else if (value.length <= 9)
+        return value
+    else
+        return value.substr(0, length)+'...'
+}

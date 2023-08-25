@@ -7,7 +7,7 @@
             </svg>
         </template>
         <template v-slot:children>
-            <div>
+            <div style="margin-bottom: 50px">
                 <div class="business_information">Document Upload</div>
 
                 <div class="business_information_card">
@@ -19,17 +19,23 @@
 
                     <div class="component_wrapper">
 
-                        <div>
+                        <div style="width: 35.4375rem">
                             <p class="txt-3">Kindly upload your Certification of Incorporation</p>
 
 
                             <div class="input-area">
+                                <spinner-loader v-if="loading && uploadModel.type === 'cac_document'"></spinner-loader>
+
+                                <section v-else style="text-align: center">
                                 <img src="../../assets/group-folders.svg" />
                                 <div>
                                     <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
-                                    <input type="file" id="compDoc" hidden>
+                                    <input  id="compDoc" :disabled="loading" accept="image/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
                                     <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                                 </div>
+                              </section>
+
+                                 <img id="company_image_preview" src="" />
                             </div>
                             
                         </div>
@@ -42,30 +48,40 @@
                         <p class="txt-2">Kindly provide one of the following personal documents for verification purposes: Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
                     </div>
 
-                    <div class="choose_document_type">
+                    <div class="choose_document_type" style="cursor: no-drop">
                     
-                        <div>
+                        <div >
                            <p class="doc_type"> Choose document type</p>
+<!--                            <div class="doc_type_options">-->
+<!--                              <ul>-->
+<!--                                <li>Certification of Incorporation</li>-->
+<!--                              </ul>-->
+<!--                            </div>-->
                         </div>
                         <img src="../../assets/Monotone.svg" />
                     </div>
 
                     <div class="component_wrapper">
 
-                        <div>
-                            <p class="txt-3">Kindly upload your Certification of Incorporation</p>
+                        <div style="width: 35.4375rem">
+                          <p class="txt-3">Kindly upload any of the above document type</p>
 
+                              <div class="input-area" >
+                                <spinner-loader v-if="loading && uploadModel.type === 'id_document'"></spinner-loader>
 
-                            <div class="input-area">
-                                <img src="../../assets/group-folders.svg" />
-                                <div>
+                                <section style="text-align: center" v-else>
+                                  <img src="../../assets/group-folders.svg" />
+
+                                  <div>
                                     <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
-                                    <input type="file" id="personalDoc" hidden>
+                                    <input id="personalDoc" accept="image/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
 
                                     <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                                 </div>
-                            </div>
-                            
+                                </section>
+
+                              </div>
+
                         </div>
 
                     </div>
@@ -85,14 +101,25 @@
 <script>
 import UploadDocumentsComponentVue from '../../components/forms/UploadDocumentsComponent.vue';
 import Layout from './Layout.vue';
+import storeUtils from "../../utils/storeUtils";
+import AuthRequest from "../../model/AuthRequest";
+import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
 
 
 export default {
     name:"UploadDocs",
+    data(){
+      return {
+        uploadModel:AuthRequest.upload,
+
+      }
+    },
     components:{
         Layout,
-        UploadDocumentsComponentVue
+        UploadDocumentsComponentVue,
+        SpinnerLoader
     },
+
     methods:{
         handlePersonalDoc(){
             const input = document.getElementById('personalDoc')
@@ -102,8 +129,44 @@ export default {
         handleCompanylDoc(){
             const input = document.getElementById('compDoc')
             input.click()
-        }
+        },
 
+      async triggerUpload(obj){
+        await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
+      },
+
+
+
+      async handleUploadCompany(file){
+        const img = document.getElementById('company_image_preview')
+        if (!file.length) return;
+        this.uploadModel.type = 'cac_document'
+        this.uploadModel.file = file[0]
+        //
+        // const reader = new FileReader();
+        //
+        // reader.onload = (e) => {
+        //   img.src = e.target.result;
+        // };
+        //
+        // reader.readAsDataURL(file);
+
+        await this.triggerUpload(this.uploadModel)
+      },
+
+      async handleUploadPersonal(file){
+        if (!file.length) return;
+        this.uploadModel.type = 'id_document'
+        this.uploadModel.file = file[0]
+        await this.triggerUpload(this.uploadModel)
+      }
+
+    },
+
+    computed:{
+      loading(){
+        return storeUtils.fireAway().auth?.getLoading
+      },
     }
 
 }
@@ -239,6 +302,7 @@ line-height: 1.75rem; /* 175% */
     border-radius: 0.25rem;
     border: 1px dashed  #CDCED9;
     flex-direction: column;
+    width: 100%;
 }
 
 

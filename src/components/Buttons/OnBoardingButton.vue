@@ -1,7 +1,7 @@
 <template>
-  <button :id="id" :type="type ? type : 'button'"
-   :style="{border:border ? border :'1px solid  #89128A',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
+  <button :id="id" :type="type ? type : 'button'" :style="{fontSize:fontsize ? fontsize : '14px', border:border ? border :'1px solid  #89128A',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#89128A', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
    class="on_boarding_button" :class="{'disabled':disabled || loading}" :disabled="disabled">
+    <div></div>
     <p class="text">{{loading ? null : textNode }} <spinner-loader v-show="loading"></spinner-loader></p>
   </button>
 </template>
@@ -13,7 +13,7 @@ export default {
   components:{
       SpinnerLoader
   },
-  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading']
+  props:['textNode', 'disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading', 'fontsize']
 }
 </script>
 
@@ -37,7 +37,6 @@ export default {
 
 .text{
   font-family: 'Product Sans';
-  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -51,7 +50,7 @@ export default {
   }
   .text{
   font-family: 'Product Sans';
-  font-size: 14px;
+  font-size: 14px !important;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

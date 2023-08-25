@@ -3,10 +3,11 @@ import authRoutes from "./routes/authRoute";
 import verificationRoutes from "./routes/verificationRoutes"
 import dashboardRoute from "./routes/dashboardRoute";
 import bookingRoute from "./routes/bookingRoute";
+import settingsRoute from "./routes/settingsRoute";
 
 const baseRoute = []
 
-const routes = baseRoute.concat(authRoutes,verificationRoutes,dashboardRoute,bookingRoute)
+const routes = baseRoute.concat(authRoutes,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

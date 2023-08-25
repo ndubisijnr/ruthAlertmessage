@@ -1,23 +1,32 @@
 import {defineStore} from "pinia"
 import AuthService from "../service/AuthService";
 import {catchErrorHandler} from "../mixins/ErrorHandler";
+import {toValue} from "vue";
 
 export const useGlobalStore = defineStore('globalStore', {
     state:()=>({
         isSkipping:false,
         tenant_id:null,
+        tenant:null,
+        verificationType:'docs'
 
     }),
 
     getters:{
         getIsSkipping:state => state.isSkipping,
-        getTenant_id:state => state.tenant_id
+        getTenant_id:state => state.tenant_id,
+        Tenant:state => state.tenant,
+        getVerificationType: state => state.verificationType
 
     },
 
     actions:{
         commitIsSkipping(value){
             this.isSkipping = value
+        },
+
+        commitVerificationType(value){
+            this.verificationType = value
         },
 
         async getTenant(){
@@ -39,10 +48,11 @@ export const useGlobalStore = defineStore('globalStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id
+                    this.tenant = responseData.data[0]
                 }
 
-            }catch (err){
-                catchErrorHandler(err)
+            }catch{
+                // do nothing
             }
 
         }

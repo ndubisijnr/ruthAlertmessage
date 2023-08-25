@@ -15,7 +15,10 @@
                     <div class="business_information_card_head">
                         <div class="inner_head">
                             <div class="profile">
-                              {{ getFirstLettersOfFirstAndLastName(getUser?.first_name + ' ' + getUser?.last_name) }}
+                              <div>
+                                {{ getFirstLettersOfFirstAndLastName(getUser?.first_name + ' ' + getUser?.last_name) }}
+                              </div>
+                               <img src="" />
                                 <div class="upload_icon" @click="initiateUpload">
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="28" height="28" rx="14" fill="#F8F1F8"/>
@@ -105,34 +108,10 @@ export default {
     },
 
     async handleUpload(file) {
-
-      const formData = new FormData();
       if (!file.length) return;
-      await formData.append('file',file[0], file[0].name)
-      // console.log(formData)
-      await this.triggerUpload(this.uploadModel)
       this.uploadModel.type = 'logo'
-      this.uploadModel.file = formData
-
-
-      // await StoreUtils.dispatch(StoreUtils.actions.documents.uploadDocumentToS3, formData)
-
-      // try {
-      //   reader.onload = async (e) => {
-      //     // this.model.base64 = e.target.result
-      //     // this.model.directorType = this.directorType
-      //     // this.model.username = this.fileName+"-"+StoreUtils.rootGetters(StoreUtils.getters.auth.getCurrentOrganization).organisationName.replace(" ","-").toLowerCase()
-      //     // await this.$store.dispatch(this.uploadType, this.model);
-      //     // this.hide();
-      //     // this.loadData();
-      //     // await console.log(e)
-      //
-      //   };
-      //   reader.readAsDataURL(file);
-      //   this.$emit('input', file);
-      // } catch (e) {
-      //   console.warn(e.message)
-      // }
+      this.uploadModel.file = file[0]
+      await this.triggerUpload(this.uploadModel)
 
     },
 
@@ -251,6 +230,7 @@ export default {
     justify-content: end;
     display: flex;
 }
+
 .profile{
     display: flex;
     align-items: center;
@@ -297,7 +277,8 @@ export default {
     flex-shrink: 0;
     background: #FFF;
 }
-@media screen {
+
+@media (max-width: 1024px) {
   .business_information_card{
     width: 100%;
   }

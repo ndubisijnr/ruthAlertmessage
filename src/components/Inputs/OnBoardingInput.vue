@@ -43,6 +43,7 @@ export default {
     },
 
   },
+
   mounted(){
     const id = document.getElementById('hideShow')
     if(id)id.innerHTML = 'SHOW'
@@ -121,6 +122,7 @@ export default {
   color:  #575A65;
   transition: ease-in-out .2s;
 }
+
 .label{
   position:absolute;
   top:1.13rem;

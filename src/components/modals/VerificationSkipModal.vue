@@ -22,7 +22,7 @@
                 <div class="child_footer">
                     <div class="inner_child_footer">
                         <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancle'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
-                        <a href="/dashboard"><OnBoardingButton  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton></a>
+                        <a :href="`/dashboard/${getUser?.access_token?.slice(0,20)}`"><OnBoardingButton  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton></a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,14 @@ export default {
             this.$emit('cancel', false)
         },
 
+    },
+    computed: {
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
     }
+  },
 
 }
 </script>

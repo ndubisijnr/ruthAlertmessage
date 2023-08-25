@@ -10,7 +10,7 @@ class AuthRequest{
         last_name:null,
         email:null,
         password:null,
-        type:null,
+        type:'manager',
         business_name:null,
         is_corporate:null
     };
