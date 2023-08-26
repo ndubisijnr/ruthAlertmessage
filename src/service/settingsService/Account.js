@@ -1,4 +1,4 @@
-import {apiService} from "./BaseService";
+import {apiService} from "../BaseService";
 
 export default {
     getPersonalProfile(tenant_id, id){
@@ -22,7 +22,7 @@ export default {
     },
 
     updateBusinessProfile(tenant_id, id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/user/profile/${id}`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/business/profile/${id}`, payload)
     },
 
 }

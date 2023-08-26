@@ -7,7 +7,6 @@
     </div>
 
     <div class="main">
-
       <div class="modal-body">
 
         <div class="email-area">
@@ -29,7 +28,7 @@
 
         <div class="choose-role">
           <p class="choose-role-p">Choose Role</p>
-          <div class="role-options" v-for="(i, index) in options" @click="select(index)">
+          <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">
             <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="20" height="20" rx="10" fill="#89128A"/>
               <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
@@ -38,9 +37,12 @@
             <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
               <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
             </svg>
-            <div>
-              <p class="p-1">{{ i.type }}</p>
-              <p class="p-2">{{ i.can_do }}</p>
+            <div style="display: flex;align-items: center;gap: 0.5rem">
+              <img src="../../assets/Image.png" class="role-image"/>
+              <div>
+                <p class="p-1">{{ i.name }}</p>
+                <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>
+              </div>
             </div>
           </div>
 
@@ -48,7 +50,7 @@
       </div>
 
       <div class="modal-footer">
-        <on-boarding-button btn-width="100%" text-node="Add Member"></on-boarding-button>
+        <on-boarding-button border="none" :loading="getLoading" @click="inviteMember" :disabled="getLoading" btn-width="100%" text-node="Add Member"></on-boarding-button>
         <on-boarding-button @click="close" btn-width="100%" color="#000" text-node="Cancel" background="transparent" border="none"></on-boarding-button>
       </div>
 
@@ -65,6 +67,9 @@
 import Layout from "./Layout.vue";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import {ellipsis} from "../../mixins/lettersExtractor";
+import storeUtils from "../../utils/storeUtils";
+import SettingsRequest from "../../model/SettingsRequest";
+import {RuthdoAlert} from "ruthly";
 export default {
   name: "AddTeamMember",
   components:{
@@ -77,6 +82,7 @@ export default {
       isFocused:false,
       activeSelected:null,
       activeSelectedIndex:null,
+      model:SettingsRequest.inviteNewMember,
       emails:[],
       ellipsis,
       options:[
@@ -97,12 +103,21 @@ export default {
   },
   methods:{
     close(){
+      this.activeSelectedIndex = null
       this.$emit('close', false)
     },
 
-    select(value){
+    inviteMember(){
+      this.model.emails = this.emails
+      if(this.model.emails.length < 1) RuthdoAlert({title:"Please Add Emails", icon:"error"})
+      else if(!this.model.role_ids) RuthdoAlert({title:"Please Select a role", icon:"error"})
+      else(storeUtils.fireAway().settings?.addTeamMembers(this.model))
+    },
+
+    select(value, i){
      this.activeSelected = true
       this.activeSelectedIndex = value
+      this.model.role_ids = i.id
     },
 
     checkComma(){
@@ -129,10 +144,29 @@ export default {
 
   },
 
+  computed:{
+    getRoles(){
+      return storeUtils.fireAway().settings?.getAllRoles
+    },
+    getLoading(){
+      return storeUtils.fireAway().settings?.loading
+    }
+  },
+
+  mounted() {
+     storeUtils.fireAway().settings?.readAllRoles()
+  }
+
 }
 </script>
 
 <style scoped>
+.role-image{
+  width: 2.35294rem;
+  height: 2.35294rem;
+  flex-shrink: 0;
+  border-radius: 360px;
+}
 .modal-footer{
   padding-bottom: 2.54rem;
   padding-top: 3rem;
@@ -169,6 +203,7 @@ export default {
   border: 1px solid #EFF2F7;
   margin-bottom: 1.25rem;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
 @media (max-width: 1024px) {
@@ -194,6 +229,7 @@ export default {
   gap: 15px;
   align-items: center;
   justify-content: start;
+  margin-bottom: 1.25rem;
 }
 .main{
   margin: 2rem;

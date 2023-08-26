@@ -22,7 +22,7 @@
                 <div class="child_footer">
                     <div class="inner_child_footer">
                         <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancle'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
-                        <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"><OnBoardingButton  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton></router-link>
+                        <OnBoardingButton @click="skip"  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton>
                     </div>
                 </div>
             </div>
@@ -34,6 +34,7 @@
 <script>
 import Layout from "./Layout.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
+import router from "../../router";
 export default {
     name:"VerificationSkipModal",
     components:{
@@ -45,6 +46,11 @@ export default {
         cancel(){
             this.$emit('cancel', false)
         },
+
+      skip(){
+          this.cancel()
+          router.push({path:`/dashboard/${this.getUser?.access_token?.slice(0,20)}`})
+      }
 
     },
     computed: {

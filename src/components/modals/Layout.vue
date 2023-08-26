@@ -1,6 +1,8 @@
 <template>
   <div class="modal_wrapper">
-    <slot name="children"></slot>
+    <div class="main-main">
+      <slot name="children"></slot>
+    </div>
        
   </div>
 </template>
@@ -16,11 +18,25 @@ export default {
 .modal_wrapper{
     background: #00000065;
     width: 100%;
-    min-height: 100%;
-    position: absolute;
-    z-index: 9999999999;
-    display: inline-block;
+    height: 100vh;
+    z-index: 999999;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+}
 
+.main-main{
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 </style>

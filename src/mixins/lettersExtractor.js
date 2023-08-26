@@ -15,3 +15,18 @@ export const ellipsis = (value, length) => {
     else
         return value.substr(0, length)+'...'
 }
+
+
+export const convertToWord = (date) => {
+    const arrivalTime = date;
+    const arrivalDate = new Date(arrivalTime);
+
+// Converting to words
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = arrivalDate.toLocaleDateString('en-US', options);
+
+    return formattedDate
+
+    // console.log(formattedDate); // Output: June 29, 2023
+
+}

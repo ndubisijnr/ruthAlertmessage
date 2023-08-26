@@ -28,7 +28,7 @@ import storeUtils from "../../utils/storeUtils";
 export default {
   name:"LayoutWithBg",
   mounted() {
-    storeUtils.fireAway().global?.getTenant()
+    if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant()
   }
 
 }

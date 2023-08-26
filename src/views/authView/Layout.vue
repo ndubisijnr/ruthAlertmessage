@@ -27,7 +27,7 @@ export default {
     name:"CompleteRegistrationLayout",
 
     mounted() {
-      storeUtils.fireAway().global?.getTenant()
+      if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant()
     }
 
 }

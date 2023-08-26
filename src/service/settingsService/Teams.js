@@ -1,4 +1,4 @@
-import {apiService} from "./BaseService";
+import {apiService} from "../BaseService";
 
 export default {
     invite(tenant_id, payload){
@@ -11,7 +11,7 @@ export default {
     },
 
     getAllRoles(tenant_id){
-        return apiService.Client.get(`/api/${tenant_id}/roles`)
+        return apiService.Client.get(`/api/${tenant_id}/role`)
     },
 
     getAllPermission(tenant_id){

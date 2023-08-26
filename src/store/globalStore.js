@@ -9,12 +9,11 @@ export const useGlobalStore = defineStore('globalStore', {
         tenant_id:null,
         tenant:null,
         verificationType:'docs'
-
     }),
 
     getters:{
         getIsSkipping:state => state.isSkipping,
-        getTenant_id:state => state.tenant_id,
+        getTenant_id:state => state.tenant_id ? state.tenant_id : localStorage.tenant_id,
         Tenant:state => state.tenant,
         getVerificationType: state => state.verificationType
 
@@ -44,10 +43,11 @@ export const useGlobalStore = defineStore('globalStore', {
             // }
 
             try{
-                const response = await AuthService.getTenantId('akaraltd.localhost:5173')
+                const response = await AuthService.getTenantId('tommyltd.localhost')
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id
+                    localStorage.tenant_id = responseData.data[0].id
                     this.tenant = responseData.data[0]
                 }
 
