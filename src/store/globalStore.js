@@ -8,20 +8,27 @@ export const useGlobalStore = defineStore('globalStore', {
         isSkipping:false,
         tenant_id:null,
         tenant:null,
-        verificationType:'docs'
+        verificationType:'docs',
+        error:'false'
+
     }),
 
     getters:{
         getIsSkipping:state => state.isSkipping,
         getTenant_id:state => state.tenant_id ? state.tenant_id : localStorage.tenant_id,
         Tenant:state => state.tenant,
-        getVerificationType: state => state.verificationType
+        getVerificationType: state => state.verificationType,
+        getError:state => state.error,
+
 
     },
 
     actions:{
         commitIsSkipping(value){
             this.isSkipping = value
+        },
+        commitError(value){
+            this.error = value
         },
 
         commitVerificationType(value){

@@ -1,5 +1,7 @@
 <template>
-   <layout :in_route="inRoute" :is-component="isComponent">
+  <verification-complete-modal v-if="getBusinessProfile?.cac_document && getBusinessProfile?.id_document && show"></verification-complete-modal>
+
+  <layout :in_route="inRoute" :is-component="isComponent">
         <template v-slot:maker>
             <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
                 <rect width="4" height="62.348" rx="2" fill="#CDCED9"/>
@@ -11,83 +13,101 @@
                 <div class="business_information">Document Upload</div>
 
                 <div class="business_information_card">
+                  <div>
+                      <p class="txt-1">Company Document</p>
+                      <p class="txt-2">Corporate  Affairs Commission - CAC</p>
+                  </div>
 
-                    <div> 
-                        <p class="txt-1">Company Document</p>
-                        <p class="txt-2">Corporate  Affairs Commission - CAC</p>
-                    </div>
+                  <div v-if="!getBusinessProfile.cac_document" class="component_wrapper">
 
-                    <div class="component_wrapper">
-
-                        <div style="width: 35.4375rem">
-                            <p class="txt-3">Kindly upload your Certification of Incorporation</p>
-
-
-                            <div class="input-area">
-                                <spinner-loader v-if="loading && uploadModel.type === 'cac_document'"></spinner-loader>
-
-                                <section v-else style="text-align: center">
-                                <img src="../../assets/group-folders.svg" />
-                                <div>
-                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
-                                    <input  id="compDoc" :disabled="loading" accept="image/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
-                                    <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
-                                </div>
-                              </section>
-
-                                 <img id="company_image_preview" src="" />
-                            </div>
-                            
-                        </div>
-
-                        </div>
+                      <div  style="width: 35.4375rem">
+                          <p class="txt-3">Kindly upload your Certification of Incorporation</p>
 
 
-                    <div class="personal-docs"> 
-                        <p class="txt-1">Personal Document</p>
-                        <p class="txt-2">Kindly provide one of the following personal documents for verification purposes: Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
-                    </div>
+                          <div class="input-area">
+                              <spinner-loader v-if="loading && uploadModel.type === 'cac_document'"></spinner-loader>
 
-                    <div class="choose_document_type" style="cursor: no-drop">
-                    
-                        <div >
-                           <p class="doc_type"> Choose document type</p>
-<!--                            <div class="doc_type_options">-->
-<!--                              <ul>-->
-<!--                                <li>Certification of Incorporation</li>-->
-<!--                              </ul>-->
-<!--                            </div>-->
-                        </div>
-                        <img src="../../assets/Monotone.svg" />
-                    </div>
-
-                    <div class="component_wrapper">
-
-                        <div style="width: 35.4375rem">
-                          <p class="txt-3">Kindly upload any of the above document type</p>
-
-                              <div class="input-area" >
-                                <spinner-loader v-if="loading && uploadModel.type === 'id_document'"></spinner-loader>
-
-                                <section style="text-align: center" v-else>
-                                  <img src="../../assets/group-folders.svg" />
-
-                                  <div>
-                                    <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
-                                    <input id="personalDoc" accept="image/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
-
-                                    <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
-                                </div>
-                                </section>
-
+                              <section v-else style="text-align: center">
+                              <img src="../../assets/group-folders.svg" />
+                              <div>
+                                  <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
+                                  <input  id="compDoc" :disabled="loading" accept="image/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
+                                  <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                               </div>
+                            </section>
+
+                          </div>
+
+                      </div>
+
+                  </div>
+
+                  <div v-else class="doc_pending_wrapper">
+                  <div class="doc_pending">
+                    <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile.cac_document" />
+                    <img v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                  </div>
+                  <img  v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
+                </div>
+
+
+
+                  <div class="personal-docs">
+                      <p class="txt-1">Personal Document</p>
+                      <p class="txt-2">Kindly provide one of the following personal documents for verification purposes: Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
+                </div>
+
+                  <div v-if="!getBusinessProfile.id_document">
+
+                    <div class="choose_document_type" style="position: relative;">
+
+                      <div style="">
+                        <p class="doc_type"> {{ LocalMarkUpPlaceHolder }}</p>
+                        <div class="doc_type_options" v-show="localDropdown">
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Driver\'s License',toggleLocalDropdown(),uploadModel.type= 'Driver\'s License'">Driver's License</p>
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='International Passport', toggleLocalDropdown(),uploadModel.type= 'International Passport'" >International Passport</p>
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='NIN (National Identification Number) Slip', toggleLocalDropdown(),uploadModel.type = 'NIN (National Identification Number) Slip'" >NIN (National Identification Number) Slip</p>
 
                         </div>
 
+                      </div>
+                      <img src="../../assets/Monotone.svg" style="cursor: pointer" @click="toggleLocalDropdown" />
                     </div>
 
+                    <div class="component_wrapper">
 
+                          <div style="width: 35.4375rem">
+                            <p class="txt-3">Kindly upload your {{LocalMarkUpPlaceHolder}}</p>
 
+                            <div class="input-area" >
+                                  <spinner-loader v-if="loading && uploadModel.type === 'id_document'"></spinner-loader>
+
+                                  <section style="text-align: center" v-else>
+                                    <img src="../../assets/group-folders.svg" />
+
+                                    <div>
+                                      <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
+                                      <input id="personalDoc" accept="image/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
+
+                                      <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
+                                  </div>
+                                  </section>
+
+                                </div>
+
+                          </div>
+
+                      </div>
+
+                </div>
+
+                  <div v-else class="doc_pending_wrapper">
+                    <div class="doc_pending">
+                      <img class="img-uploaded" id="personal_image_preview" :src="getBusinessProfile.id_document" />
+                      <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                    </div>
+                    <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
+                  </div>
 
                 </div>
                     
@@ -104,24 +124,34 @@ import Layout from './Layout.vue';
 import storeUtils from "../../utils/storeUtils";
 import AuthRequest from "../../model/AuthRequest";
 import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
+import VerificationCompleteModal from "../../components/modals/VerificationCompleteModal.vue";
 
 
 export default {
     name:"UploadDocs",
-    props:['inRoute','isComponent'],
+    props:['inRoute','isComponent','show'],
     data(){
       return {
         uploadModel:AuthRequest.upload,
+        LocalMarkUpPlaceHolder:"Choose Document Type",
+        localDropdown:false,
+
+
 
       }
     },
     components:{
         Layout,
         UploadDocumentsComponentVue,
-        SpinnerLoader
+        SpinnerLoader,
+      VerificationCompleteModal
+
     },
 
     methods:{
+      toggleLocalDropdown(){
+        this.localDropdown = !this.localDropdown
+      },
         handlePersonalDoc(){
             const input = document.getElementById('personalDoc')
             input.click()
@@ -168,17 +198,96 @@ export default {
       loading(){
         return storeUtils.fireAway().auth?.getLoading
       },
+      getBusinessProfile(){
+        if(localStorage.businessProfile){
+          const business = JSON.parse(localStorage?.businessProfile)
+          return business
+        }
+
+      },
     }
 
 }
 </script>
 
 <style scoped>
+.doc_pending_wrapper{
+  display: flex;
+  gap: 1.5rem;
+}
+.doc_pending{
+  display: inline-flex;
+  padding: 1.5rem;
+  align-items: center;
+  width: 31.81rem;
+  justify-content: space-around;
+  gap: 4.875rem;
+  border-radius: 0.375rem;
+  border: 1px solid  #E0E6ED;
+}
+
+.choose_document_type{
+  display: flex;
+  width: 100%;
+  height: 4rem;
+  padding: 0.875rem 1.25rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid  #EFF2F7;
+  margin-bottom: 1rem;
+
+}
+
+.img-uploaded{
+  width: 4rem;
+  height: 2.65rem;
+}
+
+.doc_type{
+  color: #2D3139;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
 .personal-docs{
     margin-top:2.5rem;
     margin-bottom:1rem;
     width: 37.125rem;
 }
+
+.doc_type_item{
+  cursor: pointer;
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+
+}
+
+.doc_type_item:hover{
+  background: #89128A;
+  color: white;
+}
+
+.doc_type_options{
+  display: flex;
+  width: 36rem;
+  flex-direction: column;
+  align-items: flex-start;
+  /*gap: 1.25rem;*/
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background: #FFF;
+  position: absolute;
+  left: 0;
+  /*bottom: -60px;*/
+  /* m4 */
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+}
+
 .choose_document_type{
     display: flex;
     width: 35.4375rem;

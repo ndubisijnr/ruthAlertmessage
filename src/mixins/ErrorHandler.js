@@ -21,9 +21,9 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
                 }
             })
         }
-        else{
-            errorObj[AdditionalErrorName] = error?.data
-        }
+        // else{
+        //     errorObj[AdditionalErrorName] = error?.data
+        // }
     }
     else{
         RuthdoAlert({title: exception?.response?.message ? exception?.response?.message : exception?.response?.data, icon:'error'})

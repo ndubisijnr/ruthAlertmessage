@@ -1,68 +1,160 @@
 <template>
 
   <div class="table-container">
-    <div class="table">
-      <div class="th">
-        <div v-for="h in fields" :key="h.key" class="table-header">
-          <p class="table-label">{{ h.label }}</p>
-        </div>
-      </div>
-      <div class="tr">
-        <div v-for="h in fields" :key="h.key" class="table-cell">
-          <div class="table-row" v-for="j in data">
-            <div class="table-value">
-              <div style="display: flex;align-items: center;gap: 5px">
-               <div>
-                 <p>{{ j[h.key]}}</p>
-               </div>
+    <table class="table">
+      <thead class="th">
+        <tr v-for="h in fields" :key="h.key" class="table-header">
+          <th class="table-label">{{ h.label }}</th>
+        </tr>
+      </thead>
+      <tbody class="tr">
+        <tr v-for="h in fields" :key="h.key" class="table-cell">
 
-              <svg v-if="h.label === 'Domain Name'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M15 8.25C14.8011 8.25 14.6103 8.32902 14.4697 8.46967C14.329 8.61032 14.25 8.80109 14.25 9V13.5C14.25 13.6989 14.171 13.8897 14.0303 14.0303C13.8897 14.171 13.6989 14.25 13.5 14.25H4.5C4.30109 14.25 4.11032 14.171 3.96967 14.0303C3.82902 13.8897 3.75 13.6989 3.75 13.5V4.5C3.75 4.30109 3.82902 4.11032 3.96967 3.96967C4.11032 3.82902 4.30109 3.75 4.5 3.75H9C9.19891 3.75 9.38968 3.67098 9.53033 3.53033C9.67098 3.38968 9.75 3.19891 9.75 3C9.75 2.80109 9.67098 2.61032 9.53033 2.46967C9.38968 2.32902 9.19891 2.25 9 2.25H4.5C3.90326 2.25 3.33097 2.48705 2.90901 2.90901C2.48705 3.33097 2.25 3.90326 2.25 4.5V13.5C2.25 14.0967 2.48705 14.669 2.90901 15.091C3.33097 15.5129 3.90326 15.75 4.5 15.75H13.5C14.0967 15.75 14.669 15.5129 15.091 15.091C15.5129 14.669 15.75 14.0967 15.75 13.5V9C15.75 8.80109 15.671 8.61032 15.5303 8.46967C15.3897 8.32902 15.1989 8.25 15 8.25Z" fill="black"/>
-                <path d="M12.0004 3.75H13.1854L8.46794 8.46C8.39765 8.52972 8.34185 8.61267 8.30377 8.70407C8.2657 8.79546 8.24609 8.89349 8.24609 8.9925C8.24609 9.09151 8.2657 9.18954 8.30377 9.28093C8.34185 9.37233 8.39765 9.45528 8.46794 9.525C8.53766 9.5953 8.62062 9.65109 8.71201 9.68917C8.8034 9.72724 8.90143 9.74685 9.00044 9.74685C9.09945 9.74685 9.19748 9.72724 9.28888 9.68917C9.38027 9.65109 9.46322 9.5953 9.53294 9.525L14.2504 4.815V6C14.2504 6.19891 14.3295 6.38968 14.4701 6.53033C14.6108 6.67098 14.8015 6.75 15.0004 6.75C15.1994 6.75 15.3901 6.67098 15.5308 6.53033C15.6714 6.38968 15.7504 6.19891 15.7504 6V3C15.7504 2.80109 15.6714 2.61032 15.5308 2.46967C15.3901 2.32902 15.1994 2.25 15.0004 2.25H12.0004C11.8015 2.25 11.6108 2.32902 11.4701 2.46967C11.3295 2.61032 11.2504 2.80109 11.2504 3C11.2504 3.19891 11.3295 3.38968 11.4701 3.53033C11.6108 3.67098 11.8015 3.75 12.0004 3.75Z" fill="black"/>
-              </svg>
-              <p v-if="h.label === 'Domain Name' && j.is_primary === 1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+          <td  class="table-row" v-for="j in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
+               <!-- template {domain status}  -->
+               <span class="connected" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
+
+               <span  v-else-if="h.label === 'Member Status'" :style="j.status === 'pending' ? {color:'#F1D302'} : j.status === 'active' ? {color: '#159D54'} : {color:'#F04444'}">
+                 <svg v-if="j.status === 'pending'" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+                  <circle cx="3" cy="3" r="3" fill="#F1D302"/>
+                 </svg>
+
+                 <svg v-else-if="j.status === 'active'" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+                  <circle cx="3" cy="3" r="3" fill="#159D54"/>
+                </svg>
+
+                 <svg v-else xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+                  <circle cx="3" cy="3" r="3" fill="#F04444"/>
+                </svg>
+
+                 {{ j.status }}</span>
+
+
+            <!-- template {domain is_primary}  -->
+
+            <span v-else-if="h.label.toLowerCase() === 'domain name' && j.is_primary === 1">
+              {{ j.domain}} <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M15 8.25C14.8011 8.25 14.6103 8.32902 14.4697 8.46967C14.329 8.61032 14.25 8.80109 14.25 9V13.5C14.25 13.6989 14.171 13.8897 14.0303 14.0303C13.8897 14.171 13.6989 14.25 13.5 14.25H4.5C4.30109 14.25 4.11032 14.171 3.96967 14.0303C3.82902 13.8897 3.75 13.6989 3.75 13.5V4.5C3.75 4.30109 3.82902 4.11032 3.96967 3.96967C4.11032 3.82902 4.30109 3.75 4.5 3.75H9C9.19891 3.75 9.38968 3.67098 9.53033 3.53033C9.67098 3.38968 9.75 3.19891 9.75 3C9.75 2.80109 9.67098 2.61032 9.53033 2.46967C9.38968 2.32902 9.19891 2.25 9 2.25H4.5C3.90326 2.25 3.33097 2.48705 2.90901 2.90901C2.48705 3.33097 2.25 3.90326 2.25 4.5V13.5C2.25 14.0967 2.48705 14.669 2.90901 15.091C3.33097 15.5129 3.90326 15.75 4.5 15.75H13.5C14.0967 15.75 14.669 15.5129 15.091 15.091C15.5129 14.669 15.75 14.0967 15.75 13.5V9C15.75 8.80109 15.671 8.61032 15.5303 8.46967C15.3897 8.32902 15.1989 8.25 15 8.25Z" fill="black"/>
+                  <path d="M12.0004 3.75H13.1854L8.46794 8.46C8.39765 8.52972 8.34185 8.61267 8.30377 8.70407C8.2657 8.79546 8.24609 8.89349 8.24609 8.9925C8.24609 9.09151 8.2657 9.18954 8.30377 9.28093C8.34185 9.37233 8.39765 9.45528 8.46794 9.525C8.53766 9.5953 8.62062 9.65109 8.71201 9.68917C8.8034 9.72724 8.90143 9.74685 9.00044 9.74685C9.09945 9.74685 9.19748 9.72724 9.28888 9.68917C9.38027 9.65109 9.46322 9.5953 9.53294 9.525L14.2504 4.815V6C14.2504 6.19891 14.3295 6.38968 14.4701 6.53033C14.6108 6.67098 14.8015 6.75 15.0004 6.75C15.1994 6.75 15.3901 6.67098 15.5308 6.53033C15.6714 6.38968 15.7504 6.19891 15.7504 6V3C15.7504 2.80109 15.6714 2.61032 15.5308 2.46967C15.3901 2.32902 15.1994 2.25 15.0004 2.25H12.0004C11.8015 2.25 11.6108 2.32902 11.4701 2.46967C11.3295 2.61032 11.2504 2.80109 11.2504 3C11.2504 3.19891 11.3295 3.38968 11.4701 3.53033C11.6108 3.67098 11.8015 3.75 12.0004 3.75Z" fill="black"/>
+                </svg> <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
                   <circle cx="3" cy="3" r="3" fill="#7B61FF"/>
-                  </svg>
-                  <span class="primary">Primary</span>
-              </p>
+                </svg> <span class="primary">Primary</span>
+            </span>
 
-              <p class="connected" v-if="h.key === 'active'"> {{ j.active === 1 ? 'Connected' : "Not Connected" }}</p>
-            </div>
-            </div>
+            <!-- template {actions}  -->
+            <span v-else-if="h.label.toLowerCase() === 'action'"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18" fill="none">
+                      <path d="M3.86744 2.58888C3.86751 2.83416 3.81928 3.07706 3.72549 3.3037C3.63169 3.53034 3.49418 3.73629 3.32079 3.90979C3.14741 4.08329 2.94155 4.22093 2.71497 4.31487C2.48838 4.40881 2.24552 4.4572 2.00024 4.45728C1.75495 4.45736 1.51206 4.40913 1.28541 4.31533C1.05877 4.22154 0.852823 4.08402 0.679326 3.91064C0.505829 3.73725 0.368183 3.53139 0.274244 3.30481C0.180305 3.07823 0.131915 2.83536 0.131836 2.59008C0.131677 2.09471 0.32831 1.61956 0.678478 1.26917C1.02865 0.918777 1.50366 0.721839 1.99904 0.72168C2.49441 0.721521 2.96955 0.918154 3.31995 1.26832C3.67034 1.61849 3.86728 2.09351 3.86744 2.58888Z" fill="black"/>
+                      <path d="M2.00001 10.8665C3.03124 10.8665 3.86721 10.0305 3.86721 8.99928C3.86721 7.96805 3.03124 7.13208 2.00001 7.13208C0.968786 7.13208 0.132812 7.96805 0.132812 8.99928C0.132812 10.0305 0.968786 10.8665 2.00001 10.8665Z" fill="black"/>
+                      <path d="M2.00001 17.2781C3.03124 17.2781 3.86721 16.4421 3.86721 15.4109C3.86721 14.3797 3.03124 13.5437 2.00001 13.5437C0.968786 13.5437 0.132812 14.3797 0.132812 15.4109C0.132812 16.4421 0.968786 17.2781 2.00001 17.2781Z" fill="black"/>
+                    </svg></span>
+
+
+
+            <!-- template {team member fullname}  -->
+
+            <span v-else-if="h.label.toLowerCase() === 'name'">{{j.first_name}} {{j.last_name}}</span>
+
+
+            <!-- template {roles number}  -->
+            <span v-else-if="h.label.toLowerCase() === 'no.of member'">{{j?.users?.length}}</span>
+
+
+            <!-- template {permission number}  -->
+            <span v-else-if="h.label.toLowerCase() === 'no.of permission'">{{j?.permissions?.length}}</span>
+
+
+            <span v-else> {{ j[h.key]}}</span>
+
+
+
+          </td>
+      </tr>
+    </tbody>
+  </table>
+
+    <div class="paginate" v-if="getTotalPage > 1">
+      <div style="width: 100%">Total Pages: {{getTotalPage}}</div>
+      <div class="paginate_num">
+        <img src="../../assets/Icons/Settings/leftArrows.svg" @click="currentPage=currentPage - 1" />
+        <div @click="currentPage=i" :class="{'activePage':i===currentPage}" class="pag_item" v-for="i in getTotalPage">
+          <span >{{i}}</span>
         </div>
+        <img src="../../assets/Icons/Settings/rightArrow.svg" @click="currentPage=currentPage + 1"/>
       </div>
     </div>
-  </div>
   </div>
 
 </template>
 
 <script>
 import {convertToWord} from "../../mixins/lettersExtractor";
+import paginate from "../../mixins/paginate";
 export default {
   name: "DomainTable",
-  props:['data'],
+  props:['data', 'fields','isPaginate'],
   data(){
     return{
-      fields:[
-          {key:"domain", label:"Domain Name"},
-          {key:"active", label:"Status"},
-          {key:"created_at", label:"Date Added"},
-          {key:"Action", label:"Action"},
-      ],
-      convertToWord
+      convertToWord,
+      currentPage:1,
+      itemsPerPage:3,
+      paginate
     }
-  }
+  },
+
+  computed:{
+    getTotalPage(){
+        return Math.ceil(Number(this.data?.length) / Number(this.itemsPerPage))
+    }
+}
 }
 </script>
 
 <style scoped>
-.table-container {
+.activePage{
+  border-left: 0.6px solid  #E5E9F2;
+  background:  #E5E9F2;
+}
+.paginate_num{
+  display: flex;
+  height: 2rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   width: 100%;
-  overflow-x: scroll;
+}
+
+.pag_item{
+  width: 2.5rem;
+  height: 2rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-left: 0.6px solid var(--secondarytext-default-text-textfield, #E5E9F2);
+}
+
+.paginate{
+  display: flex;
+  background: #ffffff;
+  height: 3.5rem;
+  padding: 0.875rem 0.75rem 0.625rem 0.75rem;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 42.625rem;
+  flex-shrink: 0;
+}
+.table-container {
+  width: 68.625rem;
+  overflow-x: scroll;
+  justify-content: center;
+  margin-top: 0.25rem;
+  margin-bottom: 13rem;
+}
+
+@media (max-width: 1024px) {
+  .table-container{
+    overflow-x: scroll;
+  }
 }
 
 .primary{
@@ -130,7 +222,7 @@ export default {
   display: flex;
   width: auto;
   height: auto;
-  padding: 1.25rem 1.5rem;
+  background: white;
 }
 
 
@@ -142,12 +234,26 @@ export default {
 .table-row {
   display: flex;
   align-items: center;
+  justify-content: center;
+  /*width: 100%;*/
+  height: 3.5rem;
+  text-align: center;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  color:  #1D1E2C;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+
 }
 
 .table-value {
   margin: 0;
-  width: 100%;
-  text-align: center;
+
 }
 
 @media (max-width: 1024px) {

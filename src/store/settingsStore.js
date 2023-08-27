@@ -6,6 +6,9 @@ import Account from "../service/settingsService/Account";
 import AuthRequest from "../model/AuthRequest";
 import SettingsRequest from "../model/SettingsRequest";
 import Teams from "../service/settingsService/Teams";
+import Notification from "../service/settingsService/Notification";
+import Markup from "../service/settingsService/Markup";
+import {RuthdoAlert} from "ruthly";
 
 
 
@@ -16,7 +19,11 @@ export const useSettingsStore = defineStore('settingsStore', {
         personalProfile:null,
         businessProfile:null,
         allRoles:null,
-        permissions:null
+        permissions:null,
+        notifications:null,
+        markup:null,
+        members:null
+
 
     }),
 
@@ -26,7 +33,10 @@ export const useSettingsStore = defineStore('settingsStore', {
         getPersonalProfile:state => state.personalProfile,
         getBusinessProfile:state => state.businessProfile,
         getAllRoles:state => state.allRoles,
-
+        getPermissions:state => state.permissions,
+        getNotifications:state => state.notifications,
+        getMarkup:state => state.markup,
+        getMembers:state => state.members
 
     },
 
@@ -76,7 +86,7 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
-        async updateBusinessProfileAction(payload=AuthRequest.businessProfile){
+        async updateBusinessProfileAction(payload=SettingsRequest.updateBusinessProfile){
             const userid = JSON.parse(localStorage?.businessProfile)
 
             this.loading = true
@@ -117,6 +127,24 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
+        async createRole(payload=SettingsRequest.createRole){
+            this.loading = true
+            try{
+                const response = await Teams.createARole(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    // standby
+                }
+            }catch(err){
+                this.loading = false
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
+            }
+
+        },
+
         async readAllRoles(){
             this.loading = true
 
@@ -126,6 +154,23 @@ export const useSettingsStore = defineStore('settingsStore', {
                 if(responseData.success){
                     this.loading = false
                     this.allRoles = responseData.data
+                }
+
+            }catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+        async readAllMembers(){
+            this.loading = true
+            try{
+                const response = await Teams.getAllTeamMembers(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    this.members = responseData.data
                 }
 
             }catch{
@@ -152,6 +197,59 @@ export const useSettingsStore = defineStore('settingsStore', {
             }
 
         },
+
+        async readAllNotification(){
+            this.loading = true
+
+            try{
+                const response = await Notification.getAllNotifications(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    this.notifications = responseData.data
+                }
+
+            }catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+        async readMarkupSettings(){
+            this.loading = true
+
+            try{
+                const response = await Markup.getMarkupSettings(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    this.markup = responseData.data
+                }
+
+            }
+            catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+        async updateNotification(payload){
+            try{
+                const response = await Notification.updateNotificationSettings(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.notifications = responseData.data
+                    // do nothing
+                }
+
+            }
+            catch{
+                this.loading = false
+                // do nothing
+            }
+        }
 
     }
 

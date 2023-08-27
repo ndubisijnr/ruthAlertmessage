@@ -7,7 +7,7 @@ export default {
 
 
     getAllTeamMembers(tenant_id){
-        return apiService.Client.get(`/api/${tenant_id}/users`)
+        return apiService.Client.get(`/api/${tenant_id}/user`)
     },
 
     getAllRoles(tenant_id){
@@ -19,15 +19,15 @@ export default {
     },
 
     getARole(tenant_id, role_id){
-        return apiService.Client.get(`/api/${tenant_id}/roles/${role_id}`)
+        return apiService.Client.get(`/api/${tenant_id}/role/${role_id}`)
     },
 
     createARole(tenant_id, payload){
-        return apiService.Client.post(`/api/${tenant_id}/roles`, payload)
+        return apiService.Client.post(`/api/${tenant_id}/role`, payload)
     },
 
     updateARole(tenant_id, payload){
-        return apiService.Client.post(`/api/${tenant_id}/roles`, payload)
+        return apiService.Client.post(`/api/${tenant_id}/role`, payload)
     }
 
 

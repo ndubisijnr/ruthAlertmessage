@@ -1,4 +1,4 @@
-import {apiService} from "./BaseService";
+import {apiService} from "../BaseService";
 
 export default {
 

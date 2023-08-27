@@ -13,12 +13,12 @@
 
                 <div class="business_information_card">
                     <div class="business_information_card_head">
-                        <div class="inner_head">
-                            <div class="profile">
-                              <div>
+
+                      <div class="inner_head">
+                            <div class="profile" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : null">
+                              <div v-if="!getBusinessProfile?.logo">
                                 {{ getFirstLettersOfFirstAndLastName(getUser?.first_name + ' ' + getUser?.last_name) }}
                               </div>
-                               <img src="" />
                                 <div class="upload_icon" @click="initiateUpload">
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="28" height="28" rx="14" fill="#F8F1F8"/>
@@ -241,6 +241,8 @@ export default {
     color: #FFF;
     background: #000;
     position: relative;
+    background-position: center;
+    background-size: cover;
 
     /* bold/24px */
     font-family:'Product Sans';

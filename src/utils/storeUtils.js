@@ -1,11 +1,16 @@
 import stores from "../store/";
+import {RuthdoAlert} from "ruthly";
 
 class storeUtils {
     //automatic dispatcher
 
 
     static fireAway() {
-        return stores;
+        if(stores){
+            return stores;
+        }else{
+            RuthdoAlert({title:'Store doesn\'t exist', icon:'error'})
+        }
     }
 
 }

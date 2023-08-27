@@ -1,6 +1,5 @@
 <template>
     <verification-skip-modal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkipping"></verification-skip-modal>
-
     <div class="wrapper">
         <div v-if="getCurrentRoute === 'UploadDocs'|| getCurrentRoute === 'BusinessInfo'" class="inner-wrapper">
             <header class="header">
@@ -24,7 +23,7 @@
                             </div>
                           <div class="current-active" v-else>
                             <p class="item" v-if="getUser.is_corporate === 'false'" style="cursor:not-allowed" >Business Information</p>
-                            <p class="item" v-else @click="switchToBusiness">Business Information</p>
+                            <p class="item" v-else style="cursor: not-allowed">Business Information</p>
                             <p class="item" @click="switchToDoc">Document Upload</p>
                           </div>
                            
@@ -51,7 +50,7 @@ export default {
     name:"Layout",
     props:['isComponent', 'in_route'],
     components:{
-        VerificationSkipModal
+        VerificationSkipModal,
     },
 
     data(){

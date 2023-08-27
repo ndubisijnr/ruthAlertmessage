@@ -61,14 +61,19 @@ export const useAuthStore = defineStore('authStore', {
                 const response = await AuthService.initiateLogin(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {
-                    this.loading = false
+                    await storeUtils.fireAway().auth?.getBusinessProfile()
                     localStorage.user = JSON.stringify(responseData.data)
                     this.token = responseData.data.access_token
                     localStorage.token = responseData.data.access_token
-                    if(responseData.data.is_corporate === 'true'){
-                        await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
+                    this.loading = false
+                    if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
+                        if(responseData.data.is_corporate === 'true'){
+                            await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
+                        }else{
+                            await router.push({name: "UploadDocs", params: {token:responseData.data.access_token.slice(0,20)}})
+                        }
                     }else{
-                        await router.push({name: "UploadDocs", params: {token:responseData.data.access_token.slice(0,20)}})
+                        await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
                     }
                     await storeUtils.fireAway().settings?.getDomainsAction()
 
@@ -131,6 +136,7 @@ export const useAuthStore = defineStore('authStore', {
                 if(responseData.success){
                     const user = JSON.parse(localStorage?.user)
                     this.loading = false
+                    await RuthdoAlert({title:'Successful', icon:'success'})
                     await router.push({name:"UploadDocs", params:{token:this.token ? this.token.slice(0,20): user.access_token.slice(0,20)}})
                     this.businessProfile = responseData.data
                     localStorage.businessProfile=JSON.stringify(responseData.data)
@@ -167,7 +173,8 @@ export const useAuthStore = defineStore('authStore', {
 
                 if(responseData.success){
                     this.loading = false
-                    console.log(responseData)
+                    await storeUtils.fireAway().auth?.getBusinessProfile()
+                    location.reload()
                 }
             }
         catch (err) {
