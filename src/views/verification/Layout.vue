@@ -23,7 +23,7 @@
                             </div>
                           <div class="current-active" v-else>
                             <p class="item" v-if="getUser.is_corporate === 'false'" style="cursor:not-allowed" >Business Information</p>
-                            <p class="item" v-else style="cursor: not-allowed">Business Information</p>
+                            <p class="item" v-else @click="switchToBusiness">Business Information</p>
                             <p class="item" @click="switchToDoc">Document Upload</p>
                           </div>
                            

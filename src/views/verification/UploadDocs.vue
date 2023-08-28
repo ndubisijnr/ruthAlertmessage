@@ -224,6 +224,7 @@ export default {
   gap: 4.875rem;
   border-radius: 0.375rem;
   border: 1px solid  #E0E6ED;
+
 }
 
 .choose_document_type{
@@ -435,6 +436,13 @@ line-height: 1.75rem; /* 175% */
 
   .input-area{
     height: auto;
+  }
+  .doc_pending_wrapper{
+    flex-direction: column;
+  }
+
+  .doc_pending{
+    width: 100%;
   }
 }
 

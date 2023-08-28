@@ -10,9 +10,9 @@
       <tbody class="tr">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
 
-          <td  class="table-row" v-for="j in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
+          <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
                <!-- template {domain status}  -->
-               <span class="connected" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
+               <span class="connected" :class="{'pending':j.active !== 1}" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
 
                <span  v-else-if="h.label === 'Member Status'" :style="j.status === 'pending' ? {color:'#F1D302'} : j.status === 'active' ? {color: '#159D54'} : {color:'#F04444'}">
                  <svg v-if="j.status === 'pending'" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
@@ -41,12 +41,33 @@
                 </svg> <span class="primary">Primary</span>
             </span>
 
+
             <!-- template {actions}  -->
-            <span v-else-if="h.label.toLowerCase() === 'action'"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18" fill="none">
+            <div v-else-if="h.label.toLowerCase() === 'action'">
+            <span @click="currentActionIndex = index, show=!show" style="cursor: pointer"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18" fill="none">
                       <path d="M3.86744 2.58888C3.86751 2.83416 3.81928 3.07706 3.72549 3.3037C3.63169 3.53034 3.49418 3.73629 3.32079 3.90979C3.14741 4.08329 2.94155 4.22093 2.71497 4.31487C2.48838 4.40881 2.24552 4.4572 2.00024 4.45728C1.75495 4.45736 1.51206 4.40913 1.28541 4.31533C1.05877 4.22154 0.852823 4.08402 0.679326 3.91064C0.505829 3.73725 0.368183 3.53139 0.274244 3.30481C0.180305 3.07823 0.131915 2.83536 0.131836 2.59008C0.131677 2.09471 0.32831 1.61956 0.678478 1.26917C1.02865 0.918777 1.50366 0.721839 1.99904 0.72168C2.49441 0.721521 2.96955 0.918154 3.31995 1.26832C3.67034 1.61849 3.86728 2.09351 3.86744 2.58888Z" fill="black"/>
                       <path d="M2.00001 10.8665C3.03124 10.8665 3.86721 10.0305 3.86721 8.99928C3.86721 7.96805 3.03124 7.13208 2.00001 7.13208C0.968786 7.13208 0.132812 7.96805 0.132812 8.99928C0.132812 10.0305 0.968786 10.8665 2.00001 10.8665Z" fill="black"/>
                       <path d="M2.00001 17.2781C3.03124 17.2781 3.86721 16.4421 3.86721 15.4109C3.86721 14.3797 3.03124 13.5437 2.00001 13.5437C0.968786 13.5437 0.132812 14.3797 0.132812 15.4109C0.132812 16.4421 0.968786 17.2781 2.00001 17.2781Z" fill="black"/>
-                    </svg></span>
+                    </svg>
+            </span>
+
+              <div class="menu" v-show="currentActionIndex === index && show">
+                <!-- template {team} -->
+                <div v-if="h.id === 'member'">
+                  <p class="menu-item">Edit Member</p>
+                  <p class="menu-item">Deactivate Member</p>
+
+                </div>
+
+                <!-- template {roles} -->
+                <div v-if="h.id === 'role'">
+                  <p class="menu-item">Edit Role</p>
+                  <p class="menu-item">Delete Role</p>
+
+                </div>
+              </div>
+
+            </div>
 
 
 
@@ -97,7 +118,9 @@ export default {
       convertToWord,
       currentPage:1,
       itemsPerPage:3,
-      paginate
+      paginate,
+      currentActionIndex:null,
+      show:false
     }
   },
 
@@ -110,6 +133,27 @@ export default {
 </script>
 
 <style scoped>
+.menu{
+  display: inline-flex;
+  /*padding: 1.5rem;*/
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background: #FFF;
+  width: 12.87rem;
+  position: absolute;
+
+  /* m4 */
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+}
+
+.menu-item{
+  /*border: solid;*/
+  text-align: left;
+  margin: 1.31rem;
+}
 .activePage{
   border-left: 0.6px solid  #E5E9F2;
   background:  #E5E9F2;
@@ -182,6 +226,16 @@ export default {
   line-height: 1rem; /* 114.286% */
 }
 
+.pending{
+  border-radius: 1.5rem;
+  background: rgba(202, 80, 16, 0.05);
+  color: #CA5010;
+  display: inline-flex;
+  padding: 0.375rem 0.625rem;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
 .table {
   border-collapse: collapse;
   width: 100%;
@@ -238,7 +292,7 @@ export default {
   /*width: 100%;*/
   height: 3.5rem;
   text-align: center;
-  text-transform: capitalize;
+  /*text-transform: capitalize;*/
   margin-bottom: 1rem;
   color:  #1D1E2C;
 

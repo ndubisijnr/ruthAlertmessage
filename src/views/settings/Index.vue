@@ -141,7 +141,7 @@
 
         </div>
 
-        <div>
+        <div style="overflow-x: scroll">
           <domain-table :data="getDomains" :fields="domainFields"></domain-table>
         </div>
       </div>
@@ -171,7 +171,7 @@
         <div class="teams-main">
 
           <div v-if="activeManageRole==='team'" >
-            <div v-if="getMembers?.length > 0">
+            <div v-if="getMembers?.length > 0" style="overflow-x: scroll">
               <domain-table :is-paginate="true" :data="getMembers" :fields="membersFields"></domain-table>
             </div>
 
@@ -207,7 +207,7 @@
          </div>
           <div v-else>
 
-            <div v-if="getRoles?.length > 0">
+            <div v-if="getRoles?.length > 0" style="overflow-x: scroll">
               <domain-table :is-paginate="true" :data="getRoles" :fields="rolesFields"></domain-table>
             </div>
             <div v-else class="no-team-member">
@@ -433,8 +433,8 @@
         </div>
       </div>
       <div class="verifications" v-show="currentTab === 'Verification'">
-        <business-verification :is-component="false" :in-route="false"></business-verification>
-        <upload-docs :show="false"  :is-component="false" :in-route="false" v-if="verificationType === 'docs'"></upload-docs>
+        <business-verification v-if="verificationType ==='business'"  :is-component="false" :in-route="false"></business-verification>
+        <upload-docs :show="false"  v-else :is-component="false" :in-route="false" v-if="verificationType === 'docs'"></upload-docs>
       </div>
     </div>
 
@@ -505,7 +505,7 @@ export default {
         {key:"name", label:"Roles"},
         {key:"users", label:"No.of member"},
         {key:"permissions", label:"No.of permission"},
-        {key:"Action", label:"Action"},
+        {key:"Action", label:"Action", id:"role"},
       ],
       membersFields:[
         {key:"name", label:"Name"},
@@ -513,7 +513,7 @@ export default {
         {key:"type", label:"Role"},
         {key:"created_at", label:"Date Added"},
         {key:"status", label:"Member Status"},
-        {key:"Action", label:"Action"},
+        {key:"Action", label:"Action",id:"member"},
       ],
 
     }
@@ -1413,6 +1413,13 @@ m-2{
 @media (max-width: 1024px) {
   .business_information_card{
     width: 100%;
+  }
+
+  .m-1{
+    font-size: 1rem;
+  }
+  .m-2{
+    font-size: 14px;
   }
 }
 
