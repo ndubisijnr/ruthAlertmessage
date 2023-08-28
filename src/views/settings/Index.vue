@@ -141,7 +141,7 @@
 
         </div>
 
-        <div style="overflow-x: scroll">
+        <div class="table-wrapper">
           <domain-table :data="getDomains" :fields="domainFields"></domain-table>
         </div>
       </div>
@@ -171,7 +171,7 @@
         <div class="teams-main">
 
           <div v-if="activeManageRole==='team'" >
-            <div v-if="getMembers?.length > 0" style="overflow-x: scroll">
+            <div v-if="getMembers?.length > 0" class="table-wrapper">
               <domain-table :is-paginate="true" :data="getMembers" :fields="membersFields"></domain-table>
             </div>
 
@@ -207,7 +207,7 @@
          </div>
           <div v-else>
 
-            <div v-if="getRoles?.length > 0" style="overflow-x: scroll">
+            <div v-if="getRoles?.length > 0" class="table-wrapper">
               <domain-table :is-paginate="true" :data="getRoles" :fields="rolesFields"></domain-table>
             </div>
             <div v-else class="no-team-member">
@@ -256,18 +256,18 @@
             <div class="notification-items">
               <div class="item">
                 <p class="n-3">In-app</p>
-                <img style="margin-right: -10px"  src="../../assets/Switchon.svg" @click="getNotifications.message_in_app_notification = false,updateNotification()"  v-if="getNotifications?.message_in_app_notification" />
-                <img  src="../../assets/Switchoff.svg" @click="getNotifications.message_in_app_notification = true, updateNotification()" v-else />
+                <img style="margin-right: -10px"  src="../../assets/Switchon.svg" @click="getNotifications.message_in_app_notification = 0,updateNotification()"  v-if="getNotifications?.message_in_app_notification" />
+                <img  src="../../assets/Switchoff.svg" @click="getNotifications.message_in_app_notification = 1, updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Send to email</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.message_email_notification = false,updateNotification()"  v-if="getNotifications?.message_email_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.message_email_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.message_email_notification = 0,updateNotification()"  v-if="getNotifications?.message_email_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.message_email_notification = 1,updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Text to phone</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.message_sms_notification = false,updateNotification()"  v-if="getNotifications?.message_sms_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.message_sms_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.message_sms_notification = 0,updateNotification()"  v-if="getNotifications?.message_sms_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.message_sms_notification = 1,updateNotification()" v-else />
               </div>
             </div>
           </div>
@@ -281,18 +281,18 @@
             <div class="notification-items">
               <div class="item">
                 <p class="n-3">In-app</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_in_app_notification = false,updateNotification()"  v-if="getNotifications?.reminder_in_app_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_in_app_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_in_app_notification = 0,updateNotification()"  v-if="getNotifications?.reminder_in_app_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_in_app_notification = 1,updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Send to email</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_email_notification = false,updateNotification()"  v-if="getNotifications?.reminder_email_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_email_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_email_notification = 0,updateNotification()"  v-if="getNotifications?.reminder_email_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_email_notification = 1,updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Text to phone</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_sms_notification = false,updateNotification()"  v-if="getNotifications?.reminder_sms_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_sms_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.reminder_sms_notification = 0,updateNotification()"  v-if="getNotifications?.reminder_sms_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.reminder_sms_notification = 1,updateNotification()" v-else />
               </div>
             </div>
           </div>
@@ -306,18 +306,18 @@
             <div class="notification-items">
               <div class="item">
                 <p class="n-3">In-app</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_in_app_notification = false,updateNotification()"  v-if="getNotifications?.ads_newsletter_in_app_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_in_app_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_in_app_notification = 0,updateNotification()"  v-if="getNotifications?.ads_newsletter_in_app_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_in_app_notification = 1,updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Send to email</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_email_notification = false,updateNotification()"  v-if="getNotifications?.ads_newsletter_email_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_email_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_email_notification = 0,updateNotification()"  v-if="getNotifications?.ads_newsletter_email_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_email_notification = 1,updateNotification()" v-else />
               </div>
               <div class="item">
                 <p class="n-3">Text to phone</p>
-                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_sms_notification = false,updateNotification()"  v-if="getNotifications?.ads_newsletter_sms_notification" />
-                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_sms_notification = true,updateNotification()" v-else />
+                <img style="margin-right: -10px" src="../../assets/Switchon.svg" @click="getNotifications.ads_newsletter_sms_notification = 0,updateNotification()"  v-if="getNotifications?.ads_newsletter_sms_notification" />
+                <img src="../../assets/Switchoff.svg" @click="getNotifications.ads_newsletter_sms_notification = 1,updateNotification()" v-else />
               </div>
             </div>
           </div>
@@ -683,6 +683,15 @@ export default {
 
 <style scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
+.table-wrapper{
+  overflow-x: scroll;
+  width: 68.625rem;
+}
+@media (max-width: 1024px) {
+  .table-wrapper{
+    width: auto !important;
+  }
+}
 
 .doc_type_item{
   cursor: pointer;

@@ -18,10 +18,10 @@
      <div class="cards">
        <div class="inner-cards">
          <dashboard-stats-card :icon="users" sub_text="Total Customers" values="0"></dashboard-stats-card>
-         <dashboard-stats-card sub_text="Total Payment" values="N2,456,122.05"></dashboard-stats-card>
-         <dashboard-stats-card sub_text="Total Bookings" values="245"></dashboard-stats-card>
-         <dashboard-stats-card sub_text="Pending Bookings" values="12"></dashboard-stats-card>
-         <dashboard-stats-card sub_text="Cancelled Bookings" values="27"></dashboard-stats-card>
+         <dashboard-stats-card :icon="card" sub_text="Total Payment" values="N0.00"></dashboard-stats-card>
+         <dashboard-stats-card :icon="card" sub_text="Total Bookings" values="0"></dashboard-stats-card>
+         <dashboard-stats-card :icon="card" sub_text="Pending Bookings" values="0"></dashboard-stats-card>
+         <dashboard-stats-card :icon="card" sub_text="Cancelled Bookings" values="0"></dashboard-stats-card>
        </div>
      </div>
 
@@ -143,6 +143,7 @@ import NavBar from "../../components/dashboardComponents/NavBar.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DashboardStatsCard from "../../components/dashboardComponents/DashboardStatsCard.vue";
 import users from '../../components/dashboardComponents/icons/overviewIcons.png'
+import card from '../../components/dashboardComponents/icons/card.png'
 import Layout from "../Layout.vue";
 export default {
   name: "Dashboard",
@@ -150,6 +151,7 @@ export default {
   data(){
     return{
       users:users,
+      card
     }
   },
 

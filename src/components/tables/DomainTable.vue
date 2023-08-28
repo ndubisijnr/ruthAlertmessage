@@ -55,7 +55,7 @@
                 <!-- template {team} -->
                 <div v-if="h.id === 'member'">
                   <p class="menu-item">Edit Member</p>
-                  <p class="menu-item">Deactivate Member</p>
+                  <p class="menu-item deactivate">Deactivate Member</p>
 
                 </div>
 
@@ -133,6 +133,16 @@ export default {
 </script>
 
 <style scoped>
+.deactivate{
+  color: #F04444;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
 .menu{
   display: inline-flex;
   /*padding: 1.5rem;*/

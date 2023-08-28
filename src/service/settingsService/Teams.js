@@ -28,6 +28,10 @@ export default {
 
     updateARole(tenant_id, payload){
         return apiService.Client.post(`/api/${tenant_id}/role`, payload)
+    },
+
+    deleteARole(tenant_id, id){
+        return apiService.Client.delete(`api/${tenant_id}/role/${id}`)
     }
 
 
