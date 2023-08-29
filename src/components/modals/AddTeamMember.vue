@@ -1,6 +1,6 @@
 <template>
   <layout v-slot:children>
-  <div class="modal">
+    <div class="modal">
     <div class="modal-header">
       <p class="add-team-member">Add Team Member</p>
       <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
@@ -60,6 +60,18 @@
 
 
   </div>
+    <div v-if="!getError" class="invite-success">
+      <div class="invite-success-body">
+        <img src="../../assets/invite_success.gif" class="invite-gif" />
+
+        <h4 class="invite-h">Invite sent successful!</h4>
+
+        <p class="invite-p">You have successfully sent an invite to your member</p>
+      </div>
+
+      <on-boarding-button text-node="Cancel" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>
+    </div>
+
   </layout>
 </template>
 
@@ -70,11 +82,13 @@ import {ellipsis} from "../../mixins/lettersExtractor";
 import storeUtils from "../../utils/storeUtils";
 import SettingsRequest from "../../model/SettingsRequest";
 import {RuthdoAlert} from "ruthly";
+import InviteSuccessful from "./InviteSuccessful.vue";
 export default {
   name: "AddTeamMember",
   components:{
     Layout,
-    OnBoardingButton
+    OnBoardingButton,
+    InviteSuccessful
   },
   data(){
     return{
@@ -150,6 +164,10 @@ export default {
     },
     getLoading(){
       return storeUtils.fireAway().settings?.loading
+    },
+
+    getError(){
+      return storeUtils.fireAway().global?.getError
     }
   },
 
@@ -161,6 +179,52 @@ export default {
 </script>
 
 <style scoped>
+.invite-h{
+  color:  #1D1E2C;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  width: 15.625rem;
+}
+
+.invite-success-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.invite-p{
+  color: #444854;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.invite-gif{
+  display: flex;
+  width: 11.25rem;
+  height: 11.25rem;
+  justify-content: center;
+  align-items: center;
+}
+.invite-success{
+  display: flex;
+  width: 30rem;
+  padding: 2.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  border-radius: 0.625rem;
+  background: #FFF;
+}
 .role-image{
   width: 2.35294rem;
   height: 2.35294rem;
@@ -289,6 +353,7 @@ export default {
   border-radius: 1rem;
 
 }
+
 .on_boarding_input{
   position:relative;
   width: 100%;

@@ -86,8 +86,6 @@
 
             <span v-else> {{ j[h.key]}}</span>
 
-
-
           </td>
       </tr>
     </tbody>

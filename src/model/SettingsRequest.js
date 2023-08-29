@@ -66,5 +66,13 @@ class SettingsRequest {
         role_ids:null
     }
 
+    static  createDomain = {
+        domain: null
+    }
+
+    static  makePrimaryDomain = {
+        domain: null
+    }
+
 }
 export default SettingsRequest

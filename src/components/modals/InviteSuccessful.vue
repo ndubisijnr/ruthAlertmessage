@@ -1,4 +1,9 @@
 <template>
+  <div class="modal">
+    <div>
+      <img src="../../assets/invite_success.gif" />
+    </div>
+  </div>
 
 </template>
 

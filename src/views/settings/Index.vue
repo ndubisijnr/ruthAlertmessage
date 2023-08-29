@@ -1,6 +1,9 @@
 <template>
   <add-team-member v-show="addMember" @close="close"></add-team-member>
   <add-new-role v-show="addRole" @close="close"></add-new-role>
+<!--  <add-domain></add-domain>-->
+<!--  <account-deactivated></account-deactivated>-->
+<!--  <deactivate-account-confirm></deactivate-account-confirm>-->
   <layout v-slot:child-content>
     <div class="settings-wrapper-navs">
       <div class="breadcrumb">
@@ -442,6 +445,8 @@
 
 </template>
 
+
+
 <script>
 import Layout from "../Layout.vue";
 import BusinessVerification from "../../views/verification/BusinessInfo.vue"
@@ -457,6 +462,9 @@ import DomainTable from "../../components/tables/DomainTable.vue";
 import {RuthdoAlert} from "ruthly";
 import SettingsRequest from "../../model/SettingsRequest";
 import AddNewRole from "../../components/modals/AddNewRole.vue";
+import AccountDeactivated from "../../components/modals/AccountDeactivated.vue";
+import DeactivateAccountConfirm from "../../components/modals/DeactivateAccountConfirm.vue";
+import AddDomain from "../../components/modals/AddDomain.vue";
 
 export default {
   name: "Settings",
@@ -468,7 +476,10 @@ export default {
     OnBoardingInput,
     AddTeamMember,
     DomainTable,
-    AddNewRole
+    AddNewRole,
+    AccountDeactivated,
+    DeactivateAccountConfirm,
+    AddDomain
   },
 
   data(){
@@ -682,6 +693,7 @@ export default {
 </script>
 
 <style scoped>
+
 @import url('https://fonts.cdnfonts.com/css/apercu');
 .table-wrapper{
   overflow-x: scroll;

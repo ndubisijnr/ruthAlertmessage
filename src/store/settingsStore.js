@@ -22,7 +22,8 @@ export const useSettingsStore = defineStore('settingsStore', {
         permissions:null,
         notifications:null,
         markup:null,
-        members:null
+        members:null,
+        dominAvaliability:null
 
 
     }),
@@ -119,9 +120,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                     // standby
                 }
 
-            }catch{
+            }catch(err){
                 this.loading = false
-
+                 catchErrorHandler(err)
                 // do nothing
             }
 
@@ -249,7 +250,99 @@ export const useSettingsStore = defineStore('settingsStore', {
                 this.loading = false
                 // do nothing
             }
+        },
+
+
+        async createDomain(payload=SettingsRequest.createDomain){
+            try{
+                const response = await Domains.createDomain(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async makePrimaryDomain(id, payload=SettingsRequest.makePrimaryDomain){
+            try{
+                const response = await Domains.makePrimaryDomain(storeUtils.fireAway().global?.getTenant_id, id)
+                let responseData = response.data
+                if(responseData.success){
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async dns(type){
+            try{
+                const response = await Domains.dns(storeUtils.fireAway().global?.getTenant_id, type)
+                let responseData = response.data
+                if(responseData.success){
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async checkIfConnectedDomain(domain){
+            try{
+                const response = await Domains.checkIfConnected(storeUtils.fireAway().global?.getTenant_id, domain)
+                let responseData = response.data
+                if(responseData.success){
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async deleteDomain(id){
+            try{
+                const response = await Domains.deleteDomain(storeUtils.fireAway().global?.getTenant_id, id)
+                let responseData = response.data
+                if(responseData.success){
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async checkDomainAvaliability(domain){
+            try{
+                const response = await Domains.checkDomain(storeUtils.fireAway().global?.getTenant_id, domain)
+                let responseData = response.data
+                if(responseData.success){
+                    this.dominAvaliability = responseData.data
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
         }
+
 
     }
 
