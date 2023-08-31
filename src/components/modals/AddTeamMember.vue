@@ -124,14 +124,18 @@ export default {
     inviteMember(){
       this.model.emails = this.emails
       if(this.model.emails.length < 1) RuthdoAlert({title:"Please Add Emails", icon:"error"})
-      else if(!this.model.role_ids) RuthdoAlert({title:"Please Select a role", icon:"error"})
-      else(storeUtils.fireAway().settings?.addTeamMembers(this.model))
+      else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
+      else(storeUtils.fireAway().settings?.addTeamMembers(this.model).then(() => {
+          if(this.getError === 'false'){
+            this.close(false)
+          }
+        }))
     },
 
     select(value, i){
      this.activeSelected = true
       this.activeSelectedIndex = value
-      this.model.role_ids = i.id
+      this.model.role_id = i.id
     },
 
     checkComma(){
@@ -400,22 +404,26 @@ export default {
 
 .label.focused{
   position:absolute;
-  top:0.68rem;
+  top:-0.5rem;
   left:1.25rem;
   width: auto;
   height:1.50rem;
   font-size:0.88rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   text-transform: capitalize;
   line-height: 1.5rem; /* 171.429% */
   font-style: normal;
   font-weight: 300;
   color:  #575A65;
   transition: ease-in-out .2s;
+  background-color: white;
 }
 
 .label{
   position:absolute;
-  top:1.13rem;
+  top:.5rem;
   left:1.25rem;
   width: auto;
   height:1.50rem;

@@ -1,4 +1,4 @@
-import {apiService} from "./BaseService";
+import {apiService} from "../BaseService";
 
 export default {
 
@@ -9,13 +9,13 @@ export default {
         return apiService.Client.get(`/api/${tenant_id}/bank/${id}`)
     },
     bank_list(tenant_id){
-        return apiService.Client.get(`/api/${tenant_id}/bank/bank-listing`)
+        return apiService.Client.get(`/api/${tenant_id}/bank/listing`)
     },
     delete(tenant_id, id){
         return apiService.Client.delete(`/api/${tenant_id}/bank/${id}`)
     },
-    add(tenant_id){
-        return apiService.Client.post(`/api/${tenant_id}/bank`)
+    add(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/bank`, payload)
     },
     update(tenant_id){
         return apiService.Client.patch(`/api/${tenant_id}/bank`)

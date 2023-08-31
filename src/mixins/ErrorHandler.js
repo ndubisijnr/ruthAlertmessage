@@ -16,7 +16,7 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
                     errorObj[key] = message.toLocaleString()
                     storeUtils.fireAway().auth?.commitErrors(errorObj)
                 }else{
-                    RuthdoAlert({title: error.data, icon:'error'})
+                    RuthdoAlert({title: exception?.response?.data.message ? exception?.response?.data.message : exception?.response?.data.data ? exception?.response?.data.data : exception?.response?.data, icon: 'error'})
                     //.....
                 }
             })
@@ -26,8 +26,7 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
         // }
     }
     else{
-        RuthdoAlert({title: exception?.response?.message ? exception?.response?.message : exception?.response?.data, icon:'error'})
-
+        RuthdoAlert({title: exception?.response?.data.message ? exception?.response?.data.message : exception?.response?.data.data ? exception?.response?.data.data : exception?.response?.data, icon: 'error'})
     }
 
 

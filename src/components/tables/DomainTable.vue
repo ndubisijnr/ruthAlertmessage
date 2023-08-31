@@ -3,13 +3,12 @@
   <div class="table-container">
     <table class="table">
       <thead class="th">
-        <tr v-for="h in fields" :key="h.key" class="table-header">
+        <tr v-for="h in fields" :key="h.key" class="table-cell table-header">
           <th class="table-label">{{ h.label }}</th>
         </tr>
       </thead>
       <tbody class="tr">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
-
           <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
                <!-- template {domain status}  -->
                <span class="connected" :class="{'pending':j.active !== 1}" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
@@ -79,6 +78,9 @@
             <!-- template {roles number}  -->
             <span v-else-if="h.label.toLowerCase() === 'no.of member'">{{j?.users?.length}}</span>
 
+            <!-- template {roles number}  -->
+            <span v-else-if="h.key === 'created_at'">{{convertToWord(j?.created_at)}}</span>
+
 
             <!-- template {permission number}  -->
             <span v-else-if="h.label.toLowerCase() === 'no.of permission'">{{j?.permissions?.length}}</span>
@@ -91,7 +93,7 @@
     </tbody>
   </table>
 
-    <div class="paginate" v-if="getTotalPage > 1">
+    <div v-show="isPaginate" class="paginate" v-if="getTotalPage > 1">
       <div style="width: 100%">Total Pages: {{getTotalPage}}</div>
       <div class="paginate_num">
         <img src="../../assets/Icons/Settings/leftArrows.svg" @click="currentPage=currentPage - 1" />
@@ -201,6 +203,7 @@ export default {
   justify-content: center;
   margin-top: 0.25rem;
   margin-bottom: 13rem;
+
 }
 
 @media (max-width: 1024px) {
@@ -232,6 +235,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 114.286% */
+  width: auto !important;
 }
 
 .pending{
@@ -248,6 +252,7 @@ export default {
   border-collapse: collapse;
   width: 100%;
   margin: 0 auto;
+
 }
 
 .table-label{
@@ -259,12 +264,13 @@ export default {
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
-  text-align: center;
+  text-align: start;
   width: 100%;
 }
 
 .th {
   display: flex;
+
 }
 
 .table-header {
@@ -274,7 +280,6 @@ export default {
   font-weight: bold;
   display: flex;
   height: 3.5rem;
-  padding: 1.25rem 1.5rem;
   align-items: center;
   gap: 13.75rem;
   width: 100%;
@@ -291,17 +296,18 @@ export default {
 
 .table-cell {
   flex: 1;
+  padding-left:1rem;
+
 }
 
 .table-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   /*width: 100%;*/
   height: 3.5rem;
-  text-align: center;
-  /*text-transform: capitalize;*/
-  margin-bottom: 1rem;
+  text-align: justify-all;
+  text-transform:lowercase;
   color:  #1D1E2C;
 
   /* Body/16px/Regular */
@@ -313,8 +319,12 @@ export default {
 
 }
 
-.table-value {
-  margin: 0;
+.table-row span {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 0.5rem;
 
 }
 

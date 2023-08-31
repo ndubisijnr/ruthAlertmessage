@@ -1,12 +1,10 @@
 class SettingsRequest {
 
     static updateProfileInfo = {
-        business_name:null,
-        business_address:null,
-        business_website:null,
-        business_email:null,
-        cac_number:null,
-        no_of_employees:null
+        first_name:null,
+        last_name:null,
+        email:null,
+        phone:null
     }
 
     static uploadProfilePhoto = {
@@ -50,7 +48,6 @@ class SettingsRequest {
         international_markup_per_route:true // true, false
     }
 
-
     static createRole = {
         name: null,
         permission_ids:null
@@ -63,7 +60,7 @@ class SettingsRequest {
 
     static inviteNewMember = {
         emails: null,
-        role_ids:null
+        role_id:null
     }
 
     static  createDomain = {
@@ -72,6 +69,21 @@ class SettingsRequest {
 
     static  makePrimaryDomain = {
         domain: null
+    }
+
+    static addBank = {
+        account_name:null,
+        bank_name:null,
+        account_number:null,
+        code:null,
+    }
+
+    static updateBank = {
+        id:null,
+        account_name:null,
+        bank_name:null,
+        account_number:null,
+        code:null,
     }
 
 }

@@ -9,6 +9,7 @@ import Teams from "../service/settingsService/Teams";
 import Notification from "../service/settingsService/Notification";
 import Markup from "../service/settingsService/Markup";
 import {RuthdoAlert} from "ruthly";
+import Payment from "../service/settingsService/Payment";
 
 
 
@@ -23,8 +24,9 @@ export const useSettingsStore = defineStore('settingsStore', {
         notifications:null,
         markup:null,
         members:null,
-        dominAvaliability:null
-
+        domainAvaliability:null,
+        domainSuccess:false,
+        banks:null
 
     }),
 
@@ -37,7 +39,10 @@ export const useSettingsStore = defineStore('settingsStore', {
         getPermissions:state => state.permissions,
         getNotifications:state => state.notifications,
         getMarkup:state => state.markup,
-        getMembers:state => state.members
+        getMembers:state => state.members,
+        getDomainAvaliability:state => state.domainAvaliability,
+        getDomainSuccess:state => state.domainSuccess,
+        getBanks: state => state.banks
 
     },
 
@@ -108,6 +113,26 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
+        async updateProfileAction(payload=SettingsRequest.updateProfileInfo){
+
+            this.loading = true
+
+            try{
+                const response = await Account.updateProfileInfo(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    // standby
+                }
+
+            }catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+                // do nothing
+            }
+
+        },
+
         async addTeamMembers(payload=SettingsRequest.inviteNewMember){
             this.loading = true
 
@@ -116,13 +141,16 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.loading = false
-
+                    storeUtils.fireAway().global?.commitError('false')
+                    RuthdoAlert({title:'success', icon:"success"})
+                    await storeUtils.fireAway().settings?.readAllMembers()
                     // standby
                 }
 
             }catch(err){
                 this.loading = false
-                 catchErrorHandler(err)
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
                 // do nothing
             }
 
@@ -135,7 +163,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.loading = false
-                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    storeUtils.fireAway().global?.commitError('false')
+                    await RuthdoAlert({title:responseData.data, icon:'success'})
+                    await storeUtils.fireAway().settings?.readAllRoles()
                     // standby
                 }
             }catch(err){
@@ -218,8 +248,6 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async readMarkupSettings(){
-            this.loading = true
-
             try{
                 const response = await Markup.getMarkupSettings(storeUtils.fireAway().global?.getTenant_id)
                 let responseData = response.data
@@ -252,18 +280,23 @@ export const useSettingsStore = defineStore('settingsStore', {
             }
         },
 
-
         async createDomain(payload=SettingsRequest.createDomain){
+            this.loading = true
             try{
                 const response = await Domains.createDomain(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
                 if(responseData.success){
-                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    this.loading = false
+                    RuthdoAlert({title:"Success", icon:'success'})
+                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().settings?.getDomainsAction()
+                    // location.reload()
                 }
 
             }
             catch(err){
                 this.loading = false
+                storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
             }
         },
@@ -329,11 +362,17 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async checkDomainAvaliability(domain){
+            this.loading = true
             try{
                 const response = await Domains.checkDomain(storeUtils.fireAway().global?.getTenant_id, domain)
                 let responseData = response.data
                 if(responseData.success){
-                    this.dominAvaliability = responseData.data
+                    this.loading = false
+                    if(responseData.data === 'AVAILABLE'){
+                        this.domainSuccess = true
+                    }else{
+                        this.domainAvaliability = responseData.data
+                    }
                 }
 
             }
@@ -341,7 +380,65 @@ export const useSettingsStore = defineStore('settingsStore', {
                 this.loading = false
                 catchErrorHandler(err)
             }
-        }
+        },
+
+        commitDomainAvaliability(value){
+            this.domainAvaliability = value
+            this.domainSuccess = false
+        },
+
+        async readBanks(){
+            try{
+                const response = await Payment.bank_list(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.banks = responseData.data?.data
+                }
+
+            }
+            catch(err){
+                catchErrorHandler(err)
+            }
+        },
+
+        async addBank(payload = SettingsRequest.addBank){
+            this.loading = true
+            try{
+                const response = await Payment.add(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:"Success", icon:"success"})
+                    storeUtils.fireAway().global?.commitError('false')
+                    //
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
+            }
+        },
+
+        async updateMarkup(payload = SettingsRequest.updateMarkup){
+            this.loading = true
+            try{
+                const response = await Markup.updateMarkupSettings(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:"Success", icon:"success"})
+                    await storeUtils.fireAway().settings?.readMarkupSettings()
+                    //
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                // catchErrorHandler(err)
+            }
+        },
 
 
     }

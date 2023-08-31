@@ -17,12 +17,13 @@
                       <p class="txt-1">Company Document</p>
                       <p class="txt-2">Corporate  Affairs Commission - CAC</p>
                   </div>
+                  <input  id="compDoc" :disabled="loading" accept="/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
+
 
                   <div v-if="!getBusinessProfile.cac_document" class="component_wrapper">
 
                       <div  style="width: 35.4375rem">
                           <p class="txt-3">Kindly upload your Certification of Incorporation</p>
-
 
                           <div class="input-area">
                               <spinner-loader v-if="loading && uploadModel.type === 'cac_document'"></spinner-loader>
@@ -31,7 +32,6 @@
                               <img src="../../assets/group-folders.svg" />
                               <div>
                                   <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
-                                  <input  id="compDoc" :disabled="loading" accept="image/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
                                   <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                               </div>
                             </section>
@@ -46,6 +46,8 @@
                   <div class="doc_pending">
                     <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile.cac_document" />
                     <img v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                    <img src="../../assets/cancle.svg" @click="handleCompanylDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
+
                   </div>
                   <img  v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
                 </div>
@@ -56,6 +58,8 @@
                       <p class="txt-1">Personal Document</p>
                       <p class="txt-2">Kindly provide one of the following personal documents for verification purposes: Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
                 </div>
+
+                  <input id="personalDoc" accept="/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
 
                   <div v-if="!getBusinessProfile.id_document">
 
@@ -87,7 +91,6 @@
 
                                     <div>
                                       <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
-                                      <input id="personalDoc" accept="image/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
 
                                       <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                                   </div>
@@ -103,8 +106,10 @@
 
                   <div v-else class="doc_pending_wrapper">
                     <div class="doc_pending">
-                      <img class="img-uploaded" id="personal_image_preview" :src="getBusinessProfile.id_document" />
+                      <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile.id_document" />
                       <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                      <img src="../../assets/cancle.svg" @click="handlePersonalDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
+
                     </div>
                     <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
                   </div>
@@ -153,6 +158,7 @@ export default {
         this.localDropdown = !this.localDropdown
       },
         handlePersonalDoc(){
+          console.log('click')
             const input = document.getElementById('personalDoc')
             input.click()
         },
@@ -214,6 +220,7 @@ export default {
 .doc_pending_wrapper{
   display: flex;
   gap: 1.5rem;
+  position: relative;
 }
 .doc_pending{
   display: inline-flex;
@@ -224,6 +231,7 @@ export default {
   gap: 4.875rem;
   border-radius: 0.375rem;
   border: 1px solid  #E0E6ED;
+  position: relative;
 
 }
 

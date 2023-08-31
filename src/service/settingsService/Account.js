@@ -10,19 +10,19 @@ export default {
     },
 
     updateProfileInfo(tenant_id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/user/profile`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/profile`, payload)
     },
 
     uploadProfilePhoto(tenant_id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/user/profile`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/user`, payload)
     },
 
     deactivateAccount(tenant_id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/user/profile`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/user`, payload)
     },
 
     updateBusinessProfile(tenant_id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/business/profile`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/business`, payload)
     },
 
 }

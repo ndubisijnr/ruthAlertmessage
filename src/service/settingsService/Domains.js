@@ -9,8 +9,8 @@ export default {
         return apiService.Client.delete(`/api/${tenant_id}/domains/${id}`)
     },
 
-    createDomain(tenant_id){
-        return apiService.Client.post(`/api/${tenant_id}/domains`)
+    createDomain(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/domains`, payload)
     },
 
     makePrimaryDomain(tenant_id, id, payload){
