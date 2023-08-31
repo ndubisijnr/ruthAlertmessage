@@ -122,6 +122,7 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.loading = false
+                    RuthdoAlert({title:"Success", icon:"success"})
                     // standby
                 }
 
