@@ -10,7 +10,7 @@ export default {
     },
 
     updateProfileInfo(tenant_id, payload){
-        return apiService.Client.patch(`/api/${tenant_id}/profile`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/user/profile`, payload)
     },
 
     uploadProfilePhoto(tenant_id, payload){
