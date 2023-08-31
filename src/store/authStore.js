@@ -61,11 +61,12 @@ export const useAuthStore = defineStore('authStore', {
                 const response = await AuthService.initiateLogin(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {
-                    await storeUtils.fireAway().auth?.getBusinessProfile()
                     localStorage.user = JSON.stringify(responseData.data)
                     this.token = responseData.data.access_token
                     localStorage.token = responseData.data.access_token
                     this.loading = false
+                    await storeUtils.fireAway().auth?.getBusinessProfile()
+                    await storeUtils.fireAway().settings?.getDomainsAction()
                     if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
                         if(responseData.data.is_corporate === 'true'){
                             await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
@@ -75,7 +76,6 @@ export const useAuthStore = defineStore('authStore', {
                     }else{
                         await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
                     }
-                    await storeUtils.fireAway().settings?.getDomainsAction()
 
                 }
             }catch (err){
