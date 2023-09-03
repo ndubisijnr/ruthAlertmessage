@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('authStore', {
                 let responseData = response.data
                 if (responseData.success) {
                     this.loading = false
-                    await router.push({name: "OtpCard", query: {email: AuthRequest.register.email}})
+                    await router.push({path: "/register/verify", query: {email: AuthRequest.register.email}})
                 }
             }catch (err){
                 this.loading = false
