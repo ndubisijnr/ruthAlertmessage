@@ -45,7 +45,7 @@
 <!--                    <span class="remember_me_span">Remember me</span>-->
 <!--                  </div>-->
 
-                  <span class="fgpassword">Forgot Password ?</span>
+                  <router-link to="/forgot/reset/password"><span class="fgpassword">Forgot Password ?</span></router-link>
 
                 </div>
 
@@ -180,8 +180,9 @@ line-height: 1.1875rem; /* 135.714% */
 
 .domain_account{
     display: block;
-    width: 100%;
-  height: auto;
+    width: auto;
+   height: auto;
+   position: absolute;
 }
 
 @media (max-width: 1024px) {
@@ -190,6 +191,7 @@ line-height: 1.1875rem; /* 135.714% */
     height: auto;
     width: 100%;
     text-align: center;
+    position: relative;
   }
 }
 

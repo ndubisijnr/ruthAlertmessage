@@ -22,6 +22,10 @@ class AuthRequest{
         email:null
     }
 
+    static forgotPassword = {
+        email:null
+    }
+
     static businessProfile = {
         name:null,
         email:null,
@@ -33,6 +37,13 @@ class AuthRequest{
     static upload = {
         type: null,  //logo, id_document, cac_document
         file: null
+    }
+
+    static resetPassword = {
+        token: null,
+        email:null,
+        password:null,
+        password_confirmation:null
     }
 
     // document upload and verification request

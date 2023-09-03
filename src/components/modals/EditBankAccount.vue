@@ -2,7 +2,7 @@
   <layout v-slot:children>
     <div class="modal">
       <div class="modal-header">
-        <p class="add-team-member">Add Bank Account</p>
+        <p class="add-team-member">Update Bank Account</p>
         <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
       </div>
 
@@ -23,7 +23,7 @@
 
         </div>
         <div class="modal-footer">
-          <on-boarding-button border="none" @click="addBank" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Add Account"></on-boarding-button>
+          <on-boarding-button border="none" @click="addBank" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Save"></on-boarding-button>
           <on-boarding-button @click="close" btn-width="100%" color="#000" text-node="Cancel" background="transparent" border="none"></on-boarding-button>
         </div>
 
@@ -40,7 +40,7 @@ import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 export default {
-  name: "AddBankAccount",
+  name: "EditBankAccount",
   components:{
     OnBoardingInput,
     OnBoardingButton,
@@ -48,7 +48,7 @@ export default {
   },
   data(){
     return{
-      model:SettingsRequest.addBank,
+      model:SettingsRequest.updateBank,
       filteredBank:[],
       holder:null,
       searchValue:null,
@@ -68,7 +68,7 @@ export default {
       this.$emit('close', false)
     },
     addBank(){
-      storeUtils.fireAway().settings?.addBank().then(() => {
+      storeUtils.fireAway().settings?.updateBank().then(() => {
         if(this.getError === 'false'){
           this.close(false)
         }
@@ -158,16 +158,6 @@ export default {
   box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
 }
 
-@media (max-width: 1024px) {
-  .modal{
-    margin: 20px auto;
-    width: 90%;
-  }
-  .doc_type_options{
-    width: 100%;
-  }
-}
-
 .pp{
   width: 100%;
 }
@@ -223,5 +213,15 @@ export default {
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
+@media (max-width: 1024px) {
+  .modal{
+    margin: 20px auto;
+    width: 90%;
+  }
+  .doc_type_options{
+    width: 100%;
+  }
+}
+
 
 </style>

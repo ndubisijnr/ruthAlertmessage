@@ -16,6 +16,12 @@ import Payment from "../service/settingsService/Payment";
 export const useSettingsStore = defineStore('settingsStore', {
     state:()=>({
         loading:false,
+        teamLoading:false,
+        rolesLoading:false,
+        domainLoading:false,
+        verificationLoading:false,
+        markupLoading:false,
+        notificationLoading:false,
         domains:null,
         personalProfile:null,
         businessProfile:null,
@@ -26,7 +32,9 @@ export const useSettingsStore = defineStore('settingsStore', {
         members:null,
         domainAvaliability:null,
         domainSuccess:false,
-        banks:null
+        banks:null,
+        bankAccount:null,
+        deleteLoading:false,
 
     }),
 
@@ -42,7 +50,9 @@ export const useSettingsStore = defineStore('settingsStore', {
         getMembers:state => state.members,
         getDomainAvaliability:state => state.domainAvaliability,
         getDomainSuccess:state => state.domainSuccess,
-        getBanks: state => state.banks
+        getBanks: state => state.banks,
+        getBankAccount: state => state.bankAccount,
+        getDeleteLoading: state => state.deleteLoading
 
     },
 
@@ -161,6 +171,26 @@ export const useSettingsStore = defineStore('settingsStore', {
             this.loading = true
             try{
                 const response = await Teams.createARole(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    storeUtils.fireAway().global?.commitError('false')
+                    await RuthdoAlert({title:responseData.data, icon:'success'})
+                    await storeUtils.fireAway().settings?.readAllRoles()
+                    // standby
+                }
+            }catch(err){
+                this.loading = false
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
+            }
+
+        },
+
+        async deleteRole(id){
+            this.loading = true
+            try{
+                const response = await Teams.deleteARole(storeUtils.fireAway().global?.getTenant_id,id)
                 let responseData = response.data
                 if(responseData.success){
                     this.loading = false
@@ -318,11 +348,13 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async dns(type){
+            this.loading = true
             try{
                 const response = await Domains.dns(storeUtils.fireAway().global?.getTenant_id, type)
                 let responseData = response.data
+                this.loading = false
                 if(responseData.success){
-                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    //do nothing
                 }
 
             }
@@ -333,13 +365,18 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async checkIfConnectedDomain(domain){
+            this.loading = true
             try{
                 const response = await Domains.checkIfConnected(storeUtils.fireAway().global?.getTenant_id, domain)
                 let responseData = response.data
+                this.loading = false
                 if(responseData.success){
-                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    let createModel = SettingsRequest.createDomain
+                    createModel.domain = domain
+                    await storeUtils.fireAway().settings?.createDomain(createModel)
+                }else{
+                    RuthdoAlert({title:responseData.data, icon:'error'})
                 }
-
             }
             catch(err){
                 this.loading = false
@@ -358,6 +395,24 @@ export const useSettingsStore = defineStore('settingsStore', {
             }
             catch(err){
                 this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async deleteBank(id){
+            this.deleteLoading = true
+            try{
+                const response = await Payment.delete(storeUtils.fireAway().global?.getTenant_id, id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.deleteLoading = false
+                    storeUtils.fireAway().global?.commitError('false')
+                    RuthdoAlert({title:'Success', icon:'success'})
+                    await storeUtils.fireAway().settings?.readBanksAccount()
+                }
+            }
+            catch(err){
+                this.deleteLoading = false
                 catchErrorHandler(err)
             }
         },
@@ -411,6 +466,28 @@ export const useSettingsStore = defineStore('settingsStore', {
                     this.loading = false
                     RuthdoAlert({title:"Success", icon:"success"})
                     storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().settings?.readBanksAccount()
+                    //
+                }
+
+            }
+            catch(err){
+                this.loading = false
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
+            }
+        },
+
+        async updateBank(payload = SettingsRequest.updateBank){
+            this.loading = true
+            try{
+                const response = await Payment.update(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:"Success", icon:"success"})
+                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().settings?.readBanksAccount()
                     //
                 }
 
@@ -441,6 +518,19 @@ export const useSettingsStore = defineStore('settingsStore', {
             }
         },
 
+        async readBanksAccount(){
+            try{
+                const response = await Payment.banks(storeUtils.fireAway().global?.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.bankAccount = responseData.data
+                }
+
+            }
+            catch(err){
+                catchErrorHandler(err)
+            }
+        },
 
     }
 

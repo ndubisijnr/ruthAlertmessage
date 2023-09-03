@@ -11,7 +11,9 @@ export const useAuthStore = defineStore('authStore', {
         token:null,
         errors:null,
         user:null,
-        businessProfile:null
+        businessProfile:null,
+        stage: 'email',
+
 
     }),
 
@@ -19,10 +21,15 @@ export const useAuthStore = defineStore('authStore', {
         getLoading:state => state.loading,
         getErrors:state => state.errors,
         User:state => state.user,
+        getStage:state => state.stage
 
     },
 
     actions:{
+
+       commitStage(value){
+           this.stage = value
+       },
 
        commitErrors(obj){
             this.errors = obj
@@ -125,7 +132,6 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-
        async updateBusinessProfile(payload = AuthRequest.businessProfile){
             try{
 
@@ -148,8 +154,7 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-
-        async getBusinessProfile(){
+       async getBusinessProfile(){
             try{
                 const response = await AuthService.getBusinessProfile(storeUtils.fireAway().global?.getTenant_id)
                 let responseData = response.data
@@ -164,7 +169,6 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-
         async handleUploadProfilePic(payload){
             try{
                 this.loading = true
@@ -174,14 +178,52 @@ export const useAuthStore = defineStore('authStore', {
                 if(responseData.success){
                     this.loading = false
                     await storeUtils.fireAway().auth?.getBusinessProfile()
-                    location.reload()
                 }
             }
         catch (err) {
                 this.loading = false
                 catchErrorHandler(err)
             }
+        },
+
+
+        async handleForgotPassword(payload=AuthRequest.forgotPassword){
+            try{
+                this.loading = true
+                const response = await AuthService.initiateForgotPassword(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    this.stage = 'otp'
+                    await router.push({path:'/forgot/reset/password/complete', query:{email:payload.email}})
+                }
+            }
+            catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+
+        async handleResetPassword(payload=AuthRequest.resetPassword){
+            try{
+                this.loading = true
+                const response = await AuthService.resetPassword(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    this.stage = 'success'
+                }
+            }
+            catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
         }
+
+
 
 
 

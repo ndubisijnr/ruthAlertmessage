@@ -5,7 +5,8 @@
             <img src="../../assets/verification_success.svg"  class="mobile"/>
             <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"> <div class="sublink">
               <span class="sublink_link">Continue</span>
-            </div></router-link>
+            </div>
+            </router-link>
 
           </div>
         </div>

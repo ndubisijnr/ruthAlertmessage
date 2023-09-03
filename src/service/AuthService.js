@@ -17,6 +17,14 @@ export default {
         return apiService.Client.post(`api/${tenant_id}/auth/resend_verify_email`,payload)
     },
 
+    initiateForgotPassword(tenant_id,payload) {
+        return apiService.Client.post(`/api/${tenant_id}/auth/forgot_password`,payload)
+    },
+
+    resetPassword(tenant_id,payload) {
+        return apiService.Client.post(`/api/${tenant_id}/auth/reset_password`,payload)
+    },
+
     getTenantId(hostname){
         return apiService.Client.get(`/api/tenant/${hostname}`)
     },

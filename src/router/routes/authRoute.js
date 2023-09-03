@@ -36,5 +36,23 @@ export default [
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/AccountType.vue')
     },
+    {
+        path: '/forgot/reset/password',
+        name: 'VerifyEmail',
+        meta: {layout: 'auth',authRequired:false},
+        component: () => import('../../views/authView/forgotPassword/VerifyEmail.vue')
+    },
+    {
+        path: '/forgot/reset/password/complete',
+        name: 'OtpCard',
+        meta: {layout: 'auth',authRequired:false},
+        component: () => import('../../views/authView/forgotPassword/OtpCard.vue')
+    },
+    {
+        path: '/boarding/user',
+        name: 'OnBoarding',
+        meta: {layout: 'auth',authRequired:false},
+        component: () => import('../../views/authView/onboarding/OnBoarding.vue')
+    },
 
 ]

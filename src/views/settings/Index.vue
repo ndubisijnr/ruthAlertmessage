@@ -3,7 +3,43 @@
   <add-new-role v-show="addRole" @close="close"></add-new-role>
   <add-domain v-show="addDomain" @close="close"></add-domain>
   <add-bank-account v-show="addAccount" @close="close"></add-bank-account>
-<!--  <account-deactivated></account-deactivated>-->
+  <edit-bank-account v-show="editBankAccount" @close="close"></edit-bank-account>
+  <div v-show="inModal" class="layout-modal">
+    <div v-show="showDeleteBankModal" class="delete-card-option">
+      <div class="card-header">
+        <p class="card-header-h">Confirm Action</p>
+      </div>
+
+      <div style="margin: 2rem">
+        <p class="are-you-sure">Are you sure you want to delete this bank account?</p>
+
+        <p class="are-you-sure-p">You're about to remove this bank {{bankName?.bank_name}}; This action is irreversible.</p>
+      </div>
+
+      <div class="card-footer">
+        <p @click="cancelAction">Cancel</p>
+        <on-boarding-button :loading="deleteLoading" :disabled="deleteLoading" @click="deleteBankAction" btn-width="11.0625rem" border="none" background="#F04444" text-node="Yes, Delete"></on-boarding-button>
+      </div>
+
+    </div>
+
+    <div v-show="showCannotDeleteModal" class="delete-card-option">
+      <div class="card-header">
+        <p class="card-header-h">Oops</p>
+        <img @click="cancelAction" src="../../assets/cancle.svg" />
+      </div>
+
+      <div style="margin: 2rem">
+        <p class="are-you-sure">Sorry!</p>
+
+        <p class="are-you-sure-p">You cannot delete this bank account information because you have just one bank account saved in your payment method.
+          Please add a new bank account to replace this card so you can delete this card information..</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!--  <account-deactivated></account-deactivated>-->
 <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
   <layout v-slot:child-content>
     <div class="settings-wrapper-navs">
@@ -31,7 +67,7 @@
 
 
     </div>
-    <div class="tabs">
+    <div class="tabs" >
       <div id="accounts" class="accounts" v-show="currentTab === 'Account'">
         <div class="accounts-inner">
           <div class="accounts-header">
@@ -161,11 +197,10 @@
              <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
              <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
            </svg>
-           <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search team members"/>
+           <input v-model="searchQuery" type="search" @input="doFilter" style="outline: none;border: none;width: 19.4rem" placeholder="Search team members"/>
          </div>
 
           <div class="btn3">
-            <on-boarding-button filter_icon="true" class="filter" color="#89128A" border="none" background="#F8F1F8" btn-width="7.5rem" height="2.5rem" text-node="Filter"></on-boarding-button>
             <on-boarding-button v-show="activeManageRole === 'team'" class="role" @click="addMember=true" btn-width="10.625rem" height="2.5rem" text-node="Add New Member" fontsize="12px"></on-boarding-button>
             <on-boarding-button v-show="activeManageRole === 'permissions'" class="role" @click="addRole=true" btn-width="10.625rem" height="2.5rem" text-node="Create role" fontsize="12px"></on-boarding-button>
           </div>
@@ -175,7 +210,7 @@
 
           <div v-if="activeManageRole==='team'" >
             <div v-if="getMembers?.length > 0" class="table-wrapper">
-              <domain-table :is-paginate="true" :data="getMembers" :fields="membersFields"></domain-table>
+              <domain-table :is-paginate="true" :data="membersFilteredResult.length > 0 ? membersFilteredResult : getMembers" :fields="membersFields"></domain-table>
             </div>
 
             <div v-else class="no-team-member">
@@ -333,14 +368,40 @@
             <on-boarding-button @click="addAccount = true" fontsize="1rem" color="#FFFFFF" text-node="Add bank account" btn-width="12.25rem" height="2.5rem" border="none"></on-boarding-button>
           </div>
 
-          <div >
+          <div>
             <div class="payment-choice">
-              <p class="payment-m-s" style="cursor: not-allowed">Payment  Gateway</p>
+<!--              <p class="payment-m-s" style="cursor: not-allowed">Payment  Gateway</p>-->
               <p class="payment-m-s" :class="{'payment_type_active':paymentType === 'bank'}" style="cursor: pointer" @click="paymentType = 'bank'">Bank Account</p>
             </div>
 
             <div v-if="paymentType === 'bank'">
-              <div class="no-team-member">
+
+              <div v-if="getBankAccount?.length > 0">
+                <div class="bank-wrapper">
+                  <div class="bank-card" v-for="(i, index) in getBankAccount" :key="index">
+                  <div @click="showActions(index)" style="position: absolute;right: 1.5rem;top:1.25rem;cursor: pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="4" height="22" viewBox="0 0 4 22" fill="none">
+                      <circle cx="2" cy="2" r="2" fill="#1D1E2C"/>
+                      <circle cx="2" cy="11" r="2" fill="#1D1E2C"/>
+                      <circle cx="2" cy="20" r="2" fill="#1D1E2C"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="accounts_name">{{i.account_name}}</p>
+                    <p class="bank_name">{{i.account_number}}</p>
+                    <p class="bank_name">{{i.bank_name}}</p>
+                  </div>
+                  <div v-if="index===bankIndex && show" class="card-option">
+                      <p class="edit" @click="editBank(i)">Edit Bank Account</p>
+
+                      <p class="delete" @click="deleteBank(i)">Delete Bank Account</p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else class="no-team-member">
                 <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                   <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
                   <path d="M8.3418 20.9214L67.758 3.4748L90.5149 80.9757L31.0986 98.4223L8.3418 20.9214Z" fill="white" stroke="#1D1E2C" stroke-width="1.79437" stroke-linecap="round" stroke-linejoin="round"/>
@@ -408,7 +469,7 @@
               <div class="choose_document_type" style="position: relative;">
 
                 <div style="">
-                  <p class="doc_type"> {{ getMarkup?.domestic_markup_type ? getMarkup?.domestic_markup_type : LocalMarkUpPlaceHolder }}</p>
+                  <p class="doc_type"> {{LocalMarkUpPlaceHolder }}</p>
                   <div class="doc_type_options" v-show="localDropdown">
                     <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Fixed',toggleLocalDropdown(),markupModel.domestic_markup_type = 'fixed'">fixed</p>
                     <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Percentage', toggleLocalDropdown(),markupModel.domestic_markup_type = 'percentage'" >percentage</p>
@@ -421,13 +482,13 @@
 
               <div class="item">
                 <p class="n-3">Per Passenger</p>
-                <img style="margin-right: -10px;cursor: pointer" @click="setLocalPerPass(0)" v-if="markupModel?.domestic_markup_per_passenger === 1" src="../../assets/Switchon.svg" />
+                <img style="margin-right: -10px;cursor: pointer" @click="setLocalPerPass(0)" v-if="getMarkup?.domestic_markup_per_passenger === 1" src="../../assets/Switchon.svg" />
 
                 <img style="cursor: pointer"  src="../../assets/Switchoff.svg" v-else @click="setLocalPerPass(1)"/>
               </div>
               <div class="item">
                 <p class="n-3">Per Route</p>
-                <img style="margin-right: -10px;cursor: pointer" @click="setLocalPerRou(0)" src="../../assets/Switchon.svg" v-if="markupModel?.domestic_markup_per_route === 1" />
+                <img style="margin-right: -10px;cursor: pointer" @click="setLocalPerRou(0)" src="../../assets/Switchon.svg" v-if="getMarkup?.domestic_markup_per_route === 1" />
 
                 <img style="cursor: pointer" src="../../assets/Switchoff.svg" @click="setLocalPerRou(1)" v-else/>
 
@@ -447,7 +508,7 @@
               <div class="choose_document_type"  style="position: relative;">
 
                 <div style="">
-                  <p class="doc_type"> {{ getMarkup?.international_markup_type ? getMarkup.international_markup_type : IntMarkUpPlaceHolder }}</p>
+                  <p class="doc_type"> {{ IntMarkUpPlaceHolder }}</p>
                   <div class="doc_type_options" v-show="intDropdown">
                     <p class="doc_type_item" @click="IntMarkUpPlaceHolder='fixed',toggleIntDropdown(),markupModel.international_markup_type = 'fixed'">fixed</p>
                     <p class="doc_type_item" @click="IntMarkUpPlaceHolder='percentage',toggleIntDropdown(),markupModel.international_markup_type = 'percentage'">percentage</p>
@@ -467,7 +528,7 @@
 
               <div class="item">
                 <p class="n-3">Per Route</p>
-                <img style="margin-right: -10px;cursor: pointer"  @click="setIntPerRou(0)" src="../../assets/Switchon.svg" v-if="markupModel?.international_markup_per_route === 1" />
+                <img style="margin-right: -10px;cursor: pointer"  @click="setIntPerRou(0)" src="../../assets/Switchon.svg" v-if="getMarkup?.international_markup_per_route === 1" />
 
                 <img style="cursor: pointer" src="../../assets/Switchoff.svg" @click="setIntPerRou(1)" v-else/>
 
@@ -482,11 +543,10 @@
         </div>
       </div>
       <div id="verifications" class="verifications" v-show="currentTab === 'Verification'">
-        <business-verification v-if="verificationType ==='business'"  :is-component="false" :in-route="false"></business-verification>
-        <upload-docs :show="false"  v-else :is-component="false" :in-route="false" v-if="verificationType === 'docs'"></upload-docs>
+        <business-verification v-if="verification_Type ==='business'"  :is-component="false" :in-route="false"></business-verification>
+        <upload-docs :show="false"  v-else :is-component="false" :in-route="false" v-if="verification_Type === 'docs'"></upload-docs>
       </div>
     </div>
-
   </layout>
 
 </template>
@@ -512,6 +572,7 @@ import AccountDeactivated from "../../components/modals/AccountDeactivated.vue";
 import DeactivateAccountConfirm from "../../components/modals/DeactivateAccountConfirm.vue";
 import AddDomain from "../../components/modals/AddDomain.vue";
 import AddBankAccount from "../../components/modals/AddBankAccount.vue";
+import EditBankAccount from "../../components/modals/EditBankAccount.vue";
 
 export default {
   name: "Settings",
@@ -527,7 +588,8 @@ export default {
     AccountDeactivated,
     DeactivateAccountConfirm,
     AddDomain,
-    AddBankAccount
+    AddBankAccount,
+    EditBankAccount
   },
 
   data(){
@@ -538,16 +600,23 @@ export default {
       model1:SettingsRequest.updateProfileInfo,
       model3:SettingsRequest.updateNotificationSettings,
       markupModel:SettingsRequest.updateMarkup,
-      LocalMarkUpPlaceHolder:"Markup Type",
-      IntMarkUpPlaceHolder:"Markup Type",
+      updateBank:SettingsRequest.updateBank,
+      LocalMarkUpPlaceHolder:this.getMarkup?.domestic_markup_type  ? this.getMarkup?.domestic_markup_type : "Markup Type" ,
+      IntMarkUpPlaceHolder:this.getMarkup?.international_markup_type  ? this.getMarkup?.international_markup_type :"Markup Type",
       addMember:false,
       addRole:false,
+      searchQuery:null,
+      editBankAccount:false,
+      show:true,
       intDropdown:false,
       addDomain:false,
       addAccount:false,
       localDropdown:false,
       activeManageRole:"team",
+      bankIndex:null,
+      bankName:null,
       paymentType:'bank',
+      inModal:false,
       // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
       error:{
         name:null,
@@ -562,7 +631,7 @@ export default {
         {key:"domain", label:"Domain Name"},
         {key:"active", label:"Status"},
         {key:"created_at", label:"Date Added"},
-        {key:"Action", label:"Action"},
+        // {key:"Action", label:"Action"},
       ],
       rolesFields:[
         {key:"name", label:"Roles"},
@@ -576,13 +645,78 @@ export default {
         {key:"type", label:"Role"},
         {key:"created_at", label:"Date Added"},
         {key:"status", label:"Member Status"},
-        {key:"Action", label:"Action",id:"member"},
+        // {key:"Action", label:"Action",id:"member"},
       ],
+      showDeleteBankModal:false,
+      showCannotDeleteModal:false,
+      membersFilteredResult:[],
+
 
     }
   },
 
   methods:{
+    doFilter(){
+      this.membersFilteredResult = this.getMembers.filter(it => it.first_name?.toLowerCase().includes(this.searchQuery)
+      ||it.last_name?.toLowerCase().includes(this.searchQuery) ||
+          it.email?.toLowerCase().includes(this.searchQuery) ||
+          it.type?.toLowerCase().includes(this.searchQuery))
+    },
+
+    deleteBank(value){
+      this.inModal = !this.inModal
+      this.bankName = value
+      if(this.getBankAccount.length === 1){
+        this.showCannotDeleteModal = !this.showCannotDeleteModal
+      }else{
+        this.showDeleteBankModal = !this.showDeleteBankModal
+      }
+
+    },
+    editBank(obj){
+      this.editBankAccount= true
+      SettingsRequest.updateBank.bank_name = obj.bank_name
+      SettingsRequest.updateBank.id = obj.id
+      SettingsRequest.updateBank.code = obj.code
+      SettingsRequest.updateBank.account_name = obj.account_name
+      SettingsRequest.updateBank.account_number = obj.account_number
+
+    },
+    deleteBankAction(){
+      storeUtils.fireAway().settings?.deleteBank(this.bankName.id).then(() =>{
+        if(this.getError === 'false'){
+          this.close(false)
+          this.cancelAction()
+        }
+      })
+    },
+
+    showActions(index){
+
+      if(this.bankIndex === index){
+        this.bankIndex=index
+        this.show = !this.show
+      }else if(!this.show){
+        this.bankIndex=index
+        this.show = !this.show
+      }
+        else{
+        this.bankIndex=index
+
+      }
+    },
+
+    cancelAction(){
+      this.inModal = !this.inModal
+      this.bankName = null
+      if(this.getBankAccount.length === 1){
+        this.showCannotDeleteModal = !this.showCannotDeleteModal
+      }else{
+        this.showDeleteBankModal = !this.showDeleteBankModal
+
+      }
+    },
+
     updateNotification(){
       this.model3.message_in_app_notification = this.getNotifications.message_in_app_notification
       this.model3.message_email_notification = this.getNotifications.message_email_notification
@@ -615,6 +749,8 @@ export default {
       this.addRole = value
       this.addDomain = value
       this.addAccount = value
+      this.editBankAccount = value
+      this.bankIndex = null
     },
 
     handleUpdateBizProfile(){
@@ -660,6 +796,7 @@ export default {
     },
 
     doUpdateMarkup(){
+      console.log(this.markupModel)
       storeUtils.fireAway().settings?.updateMarkup()
     },
 
@@ -688,6 +825,10 @@ export default {
   computed:{
     getCurrentRoute(){
       return router.currentRoute.value.name
+    },
+
+    deleteLoading(){
+      return storeUtils.fireAway().settings?.getDeleteLoading
     },
 
     getCurrentRouteParams(){
@@ -724,7 +865,7 @@ export default {
       return storeUtils.fireAway().settings?.getAllRoles?.reverse()
     },
 
-    verificationType(){
+    verification_Type(){
       return storeUtils.fireAway().global?.getVerificationType
     },
 
@@ -744,6 +885,10 @@ export default {
         return storeUtils.fireAway().settings?.getMembers?.reverse()
     },
 
+    getBankAccount(){
+      return storeUtils.fireAway().settings?.getBankAccount
+    }
+
   },
 
   // watch:{
@@ -759,25 +904,207 @@ export default {
 
 
   mounted() {
-    setTimeout(() => { this.currentTab = this.getCurrentRouteParams },1000)
+    setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
+    storeUtils.fireAway().global?.commitError(null)
     storeUtils.fireAway().settings?.getDomainsAction()
     storeUtils.fireAway().settings?.getPersonalProfileAction()
     storeUtils.fireAway().settings?.readAllNotification()
     storeUtils.fireAway().settings?.readMarkupSettings()
     storeUtils.fireAway().settings?.readAllMembers()
+    storeUtils.fireAway().settings?.readBanksAccount()
   }
 }
 </script>
 
 <style scoped>
-
 @import url('https://fonts.cdnfonts.com/css/apercu');
+.accounts_name{
+  color: #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+.bank_name{
+  color:  #1D1E2C;
+  /* Subtext/14px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+
+
+.delete{
+  color:  #F04444;
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+}
+
+.edit{
+  color:  #1D1E2C;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+
+}
+
+.delete-card-option{
+  width: 34rem;
+  height: 23.25rem;
+  border-radius: 0.5rem;
+  background:  #FFF;
+  position: relative;
+  /* Shadows / Modals */
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+}
+
+@media (max-width: 1024px) {
+  .delete-card-option{
+    width: 90% !important;
+  }
+}
+
+.layout-modal{
+  background: #00000065;
+  width: 100%;
+  height: 100vh;
+  z-index: 999999;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.are-you-sure{
+  color:  #1D1E2C;
+
+  /* Title/18px/Medium */
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.625rem; /* 144.444% */
+  margin-bottom: 0.88rem;
+}
+
+.are-you-sure-p{
+  color:  #575A65;
+
+  /* Body/16px/Regular */
+  font-family:' Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.bank-wrapper{
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.card-option{
+  display: inline-flex;
+  padding: 1.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background: #FFF;
+  position: absolute;
+  right: 1rem;
+  bottom: -2rem;
+  z-index: 99;
+  /* m4 */
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+}
 
 .payment-choice{
   display: inline-flex;
   gap: 3.88rem;
   border-bottom: 1px solid #DFE6ED;
   width: 48.75006rem;
+}
+
+
+.bank-card{
+  width: 20.4375rem;
+  height: 9.5rem;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 1px solid  #E5E9F2;
+  background: #F9FAFC;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap:0.5rem;
+  padding-left:1.5rem;
+  background-image: url("../../assets/Settings/bank_svg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+@media (max-width: 1024px) {
+  .payment-choice{
+    width:100%;
+  }
+
+  .bank-card{
+    width: 100%;
+  }
+}
+
+.card-header{
+  display: flex;
+  width: 34rem;
+  height: 4.5rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  align-items: center;
+  flex-shrink: 0;
+  background:  #F9FAFC;
+  justify-content: space-between;
+}
+
+.card-header-h{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.card-footer{
+  display: flex;
+  align-items: center;
+  gap:2.9rem;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  width: 100%;
 }
 
 .payment-header{
@@ -794,6 +1121,12 @@ export default {
 @media (max-width: 1024px) {
   .table-wrapper{
     width: auto !important;
+  }
+
+  .payment-header{
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
   }
 }
 
@@ -876,6 +1209,17 @@ export default {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
 
+}
+
+@media (max-width: 1024px) {
+  .manage-roles{
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .doc_type_options{
+    width: 100%;
+  }
 }
 
 .m-1{
@@ -1190,6 +1534,11 @@ m-2{
   background: #FFF;
 
 }
+@media (max-width: 1024px) {
+  .search-team{
+    width: 100%;
+  }
+}
 
 ::placeholder{
   color: #9DA8B6;
@@ -1219,6 +1568,12 @@ m-2{
   padding-left: 1.5rem;
   margin-top: 2rem;
   width: 52rem;
+}
+
+@media (max-width: 1024px) {
+  .payment-wrapper{
+    width: 100%;
+  }
 }
 
 .domains{
@@ -1272,6 +1627,7 @@ m-2{
 }
 .tabs{
   width: 100%;
+  min-height: 100vh;
 }
 
 .current-tab{
@@ -1535,6 +1891,11 @@ m-2{
   .business_information_card{
     width: 100%;
   }
+
+  .card-header{
+    width: 100%;
+  }
+
 
   .m-1{
     font-size: 1rem;

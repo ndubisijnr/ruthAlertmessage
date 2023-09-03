@@ -17,8 +17,8 @@ export default {
     add(tenant_id, payload){
         return apiService.Client.post(`/api/${tenant_id}/bank`, payload)
     },
-    update(tenant_id){
-        return apiService.Client.patch(`/api/${tenant_id}/bank`)
+    update(tenant_id, payload){
+        return apiService.Client.patch(`/api/${tenant_id}/bank`,payload)
     },
     transfer(tenant_id, payload){
         return apiService.Client.post(`/api/${tenant_id}/user/transfer`, payload)

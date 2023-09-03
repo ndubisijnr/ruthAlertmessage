@@ -1,4 +1,25 @@
 <template>
+  <div v-show="inModal" class="layout-modal">
+    <div class="delete-card-option">
+      <div class="card-header">
+        <p class="card-header-h">Confirm Action</p>
+      </div>
+
+      <div style="margin: 2rem">
+        <p class="are-you-sure">Are you sure you want to delete this bank account?</p>
+
+        <p class="are-you-sure-p">You're about to remove this bank {{bankName?.bank_name}}; This action is irreversible.</p>
+      </div>
+
+      <div class="card-footer">
+        <p @click="cancelAction">Cancel</p>
+        <on-boarding-button :loading="deleteLoading" :disabled="deleteLoading" @click="deleteBankAction" btn-width="11.0625rem" border="none" background="#F04444" text-node="Yes, Delete"></on-boarding-button>
+      </div>
+
+    </div>
+
+  </div>
+
 
   <div class="table-container">
     <table class="table">
@@ -9,7 +30,7 @@
       </thead>
       <tbody class="tr">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
-          <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
+          <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : filteredResult.length > 0 ? filteredResult : data">
                <!-- template {domain status}  -->
                <span class="connected" :class="{'pending':j.active !== 1}" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
 
@@ -61,7 +82,7 @@
                 <!-- template {roles} -->
                 <div v-if="h.id === 'role'">
                   <p class="menu-item">Edit Role</p>
-                  <p class="menu-item">Delete Role</p>
+                  <p class="menu-item deactivate" >Delete Role</p>
 
                 </div>
               </div>
@@ -110,9 +131,11 @@
 <script>
 import {convertToWord} from "../../mixins/lettersExtractor";
 import paginate from "../../mixins/paginate";
+import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 export default {
   name: "DomainTable",
   props:['data', 'fields','isPaginate'],
+  components:{OnBoardingButton},
   data(){
     return{
       convertToWord,
@@ -120,8 +143,15 @@ export default {
       itemsPerPage:3,
       paginate,
       currentActionIndex:null,
-      show:false
+      show:false,
+      filteredResult:[],
+      inModal:false,
+
     }
+  },
+
+  methods:{
+
   },
 
   computed:{
@@ -159,10 +189,67 @@ export default {
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
 }
 
+.layout-modal{
+  /*background: #00000065;*/
+  width: 100%;
+  height: 100vh;
+  z-index: 999999;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-card-option{
+  width: 34rem;
+  height: 23.25rem;
+  border-radius: 0.5rem;
+  background:  #FFF;
+  position: relative;
+  /* Shadows / Modals */
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+}
+
+.card-header{
+  display: flex;
+  width: 34rem;
+  height: 4.5rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  align-items: center;
+  flex-shrink: 0;
+  background:  #F9FAFC;
+  justify-content: space-between;
+}
+
+.card-header-h{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.card-footer{
+  display: flex;
+  align-items: center;
+  gap:2.9rem;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  width: 100%;
+}
+
+
+
 .menu-item{
   /*border: solid;*/
   text-align: left;
   margin: 1.31rem;
+  text-transform: capitalize;
 }
 .activePage{
   border-left: 0.6px solid  #E5E9F2;

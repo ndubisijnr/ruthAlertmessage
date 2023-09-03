@@ -9,7 +9,7 @@ export const useGlobalStore = defineStore('globalStore', {
         tenant_id:null,
         tenant:null,
         verificationType:'docs',
-        error:'false'
+        error:null
 
     }),
 

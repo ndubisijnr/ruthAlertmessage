@@ -1,6 +1,6 @@
 <template>
   <layout v-slot:children>
-    <div class="modal">
+    <div v-if="getError !== 'false'" class="modal">
     <div class="modal-header">
       <p class="add-team-member">Add Team Member</p>
       <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
@@ -60,7 +60,8 @@
 
 
   </div>
-    <div v-if="!getError" class="invite-success">
+
+    <div v-if="getError === 'false'" class="invite-success">
       <div class="invite-success-body">
         <img src="../../assets/invite_success.gif" class="invite-gif" />
 
@@ -69,7 +70,7 @@
         <p class="invite-p">You have successfully sent an invite to your member</p>
       </div>
 
-      <on-boarding-button text-node="Cancel" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>
+      <on-boarding-button @click="close" text-node="Continue" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>
     </div>
 
   </layout>
@@ -117,6 +118,7 @@ export default {
   },
   methods:{
     close(){
+      storeUtils.fireAway().global?.commitError(null)
       this.activeSelectedIndex = null
       this.$emit('close', false)
     },
@@ -125,11 +127,12 @@ export default {
       this.model.emails = this.emails
       if(this.model.emails.length < 1) RuthdoAlert({title:"Please Add Emails", icon:"error"})
       else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
-      else(storeUtils.fireAway().settings?.addTeamMembers(this.model).then(() => {
-          if(this.getError === 'false'){
-            this.close(false)
-          }
-        }))
+      else(storeUtils.fireAway().settings?.addTeamMembers(this.model))
+        //     .then(() => {
+        //   if(this.getError === 'false'){
+        //     this.close(false)
+        //   }
+        // }))
     },
 
     select(value, i){
@@ -228,6 +231,7 @@ export default {
   gap: 4rem;
   border-radius: 0.625rem;
   background: #FFF;
+  margin: 100px auto;
 }
 .role-image{
   width: 2.35294rem;

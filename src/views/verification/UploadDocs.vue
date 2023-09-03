@@ -17,6 +17,7 @@
                       <p class="txt-1">Company Document</p>
                       <p class="txt-2">Corporate  Affairs Commission - CAC</p>
                   </div>
+
                   <input  id="compDoc" :disabled="loading" accept="/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
 
 
@@ -45,11 +46,11 @@
                   <div v-else class="doc_pending_wrapper">
                   <div class="doc_pending">
                     <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile.cac_document" />
-                    <img v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                    <img v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
                     <img src="../../assets/cancle.svg" @click="handleCompanylDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
 
                   </div>
-                  <img  v-if="getBusinessProfile?.is_cac_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
+                  <img  v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/pendingDoc.svg" />
                 </div>
 
 
@@ -107,11 +108,11 @@
                   <div v-else class="doc_pending_wrapper">
                     <div class="doc_pending">
                       <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile.id_document" />
-                      <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/notVerified.svg" />
+                      <img v-if="getBusinessProfile?.is_id_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
                       <img src="../../assets/cancle.svg" @click="handlePersonalDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
 
                     </div>
-                    <img v-if="getBusinessProfile?.is_id_verified === 'pending'" src="../../assets/Settings/pendingDoc.svg" />
+                    <img v-if="getBusinessProfile?.is_id_verified === 'false'" src="../../assets/Settings/pendingDoc.svg" />
                   </div>
 
                 </div>
@@ -163,39 +164,31 @@ export default {
             input.click()
         },
 
-        handleCompanylDoc(){
+      handleCompanylDoc(){
             const input = document.getElementById('compDoc')
             input.click()
         },
 
-      async triggerUpload(obj){
+      async triggerUpload1(obj){
         await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
       },
 
-
+      async triggerUpload2(obj){
+        await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
+      },
 
       async handleUploadCompany(file){
-        const img = document.getElementById('company_image_preview')
         if (!file.length) return;
         this.uploadModel.type = 'cac_document'
         this.uploadModel.file = file[0]
-        //
-        // const reader = new FileReader();
-        //
-        // reader.onload = (e) => {
-        //   img.src = e.target.result;
-        // };
-        //
-        // reader.readAsDataURL(file);
-
-        await this.triggerUpload(this.uploadModel)
+        await this.triggerUpload1(this.uploadModel)
       },
 
       async handleUploadPersonal(file){
         if (!file.length) return;
         this.uploadModel.type = 'id_document'
         this.uploadModel.file = file[0]
-        await this.triggerUpload(this.uploadModel)
+        await this.triggerUpload2(this.uploadModel)
       }
 
     },
