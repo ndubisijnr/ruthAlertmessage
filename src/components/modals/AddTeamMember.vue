@@ -12,7 +12,8 @@
         <div class="email-area">
           <div class="on_boarding_input">
             <label class="label" :class="{'focused':isFocused}">Email Address</label>
-            <input id="invite-input" @input="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
+            <input id="invite-input" @keyup="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
+            <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
             <div class="add-emails" >
               <div class="emails" v-for="(i, index) in emails" :key="index">
                 <span >{{ellipsis(i, 18)}}</span>
@@ -124,10 +125,18 @@ export default {
     },
 
     inviteMember(){
-      this.model.emails = this.emails
-      if(this.model.emails.length < 1) RuthdoAlert({title:"Please Add Emails", icon:"error"})
+      if(this.emails.length < 1 && !this.inputValue) RuthdoAlert({title:"Please Add Emails", icon:"error"})
       else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
-      else(storeUtils.fireAway().settings?.addTeamMembers(this.model))
+      else {
+        if (this.emails.length > 1) {
+          this.model.emails = this.emails
+
+        } else {
+          this.model.emails = this.inputValue
+        }
+        // storeUtils.fireAway().settings?.addTeamMembers(this.model)
+      }
+      console.log(this.model)
         //     .then(() => {
         //   if(this.getError === 'false'){
         //     this.close(false)
@@ -142,10 +151,11 @@ export default {
     },
 
     checkComma(){
-      if(this.inputValue.includes(',')){
+      if(this.inputValue.includes(',')) {
         this.emails.push(this.inputValue.replace(',', ''))
         this.inputValue = null
       }
+
     },
 
     handleFocus(){
@@ -202,6 +212,25 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.notice{
+  display: inline-flex;
+  padding: 1rem 1.1875rem 1rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  border: 1px solid  #FAF0AB;
+  background: #FEFCF1;
+  color:  #575A65;
+  margin-bottom: .5rem;
+
+  /* caption/12px/regular */
+  font-family: 'Product Sans';
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem; /* 166.667% */
 }
 
 .invite-p{

@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('authStore', {
 
        async register(payload=AuthRequest.register){
            this.loading = true
-            console.log(this.errors)
             if(router.currentRoute.value.params.user_type === "cooperate_manager"){
                 payload.is_corporate = true
             } else {
@@ -45,18 +44,16 @@ export const useAuthStore = defineStore('authStore', {
             }
 
             try {
-
                 const response = await AuthService.initiateRegister(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {
                     this.loading = false
-                    await router.push({path: "/register/verify", query: {email: AuthRequest.register.email}})
+                    await router.push({name: "RegisterOtpCard", query: {email: AuthRequest.register.email}})
                 }
             }catch (err){
                 this.loading = false
+                console.log(err)
                 catchErrorHandler(err, this.errors)
-                console.log(this.errors)
-
             }
 
         },
@@ -169,64 +166,57 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-        async handleUploadProfilePic(payload){
-            try{
-                this.loading = true
-                const response = await AuthService.upload(storeUtils.fireAway().global?.getTenant_id,payload)
-                let responseData = response.data
+       async handleUploadProfilePic(payload){
+        try{
+            this.loading = true
+            const response = await AuthService.upload(storeUtils.fireAway().global?.getTenant_id,payload)
+            let responseData = response.data
 
-                if(responseData.success){
-                    this.loading = false
-                    await storeUtils.fireAway().auth?.getBusinessProfile()
-                }
-            }
-        catch (err) {
+            if(responseData.success){
                 this.loading = false
-                catchErrorHandler(err)
-            }
-        },
-
-
-        async handleForgotPassword(payload=AuthRequest.forgotPassword){
-            try{
-                this.loading = true
-                const response = await AuthService.initiateForgotPassword(storeUtils.fireAway().global?.getTenant_id,payload)
-                let responseData = response.data
-
-                if(responseData.success){
-                    this.loading = false
-                    this.stage = 'otp'
-                    await router.push({path:'/forgot/reset/password/complete', query:{email:payload.email}})
-                }
-            }
-            catch (err) {
-                this.loading = false
-                catchErrorHandler(err)
-            }
-        },
-
-
-        async handleResetPassword(payload=AuthRequest.resetPassword){
-            try{
-                this.loading = true
-                const response = await AuthService.resetPassword(storeUtils.fireAway().global?.getTenant_id,payload)
-                let responseData = response.data
-
-                if(responseData.success){
-                    this.loading = false
-                    this.stage = 'success'
-                }
-            }
-            catch (err) {
-                this.loading = false
-                catchErrorHandler(err)
+                await storeUtils.fireAway().auth?.getBusinessProfile()
             }
         }
+    catch (err) {
+            this.loading = false
+            catchErrorHandler(err)
+        }
+    },
 
+       async handleForgotPassword(payload=AuthRequest.forgotPassword){
+        try{
+            this.loading = true
+            const response = await AuthService.initiateForgotPassword(storeUtils.fireAway().global?.getTenant_id,payload)
+            let responseData = response.data
 
+            if(responseData.success){
+                this.loading = false
+                this.stage = 'otp'
+                await router.push({path:'/forgot/reset/password/complete', query:{email:payload.email}})
+            }
+        }
+        catch (err) {
+            this.loading = false
+            catchErrorHandler(err)
+        }
+    },
 
+        async handleResetPassword(payload=AuthRequest.resetPassword){
+        try{
+            this.loading = true
+            const response = await AuthService.resetPassword(storeUtils.fireAway().global?.getTenant_id,payload)
+            let responseData = response.data
 
-
+            if(responseData.success){
+                this.loading = false
+                this.stage = 'success'
+            }
+        }
+        catch (err) {
+            this.loading = false
+            catchErrorHandler(err)
+        }
+    }
 
     }
 

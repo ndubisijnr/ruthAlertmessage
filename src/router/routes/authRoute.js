@@ -11,9 +11,9 @@ export default [
     {
         path: '/register/verify',
         // redirect:'create-account',
-        name: 'OtpCard',
+        name: 'RegisterOtpCard',
         meta: {layout: 'auth',authRequired:false},
-        component: () => import('../../views/authView/OtpCard.vue')
+        component: () => import('../../views/authView/RegisterOtpCard.vue')
     },
     {
         path: '/register/success/:token',

@@ -40,7 +40,7 @@ import storeUtils from "../../utils/storeUtils";
 
 
 export default {
-    name:"Layout",
+    name:"RegisterOtpCard",
     components:{
       LayoutWithBg,
         OnBoardingButton,
