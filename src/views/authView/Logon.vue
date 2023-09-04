@@ -45,7 +45,7 @@
 <!--                    <span class="remember_me_span">Remember me</span>-->
 <!--                  </div>-->
 
-                  <router-link to="/forgot/reset/password"><span class="fgpassword">Forgot Password ?</span></router-link>
+                  <router-link to="/forgot/reset/password/verify-email"><span class="fgpassword">Forgot Password ?</span></router-link>
 
                 </div>
 
@@ -100,6 +100,9 @@ export default {
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .improvise{
   display: flex;
   align-items: center;

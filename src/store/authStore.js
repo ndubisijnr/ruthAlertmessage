@@ -192,7 +192,7 @@ export const useAuthStore = defineStore('authStore', {
             if(responseData.success){
                 this.loading = false
                 this.stage = 'otp'
-                await router.push({path:'/forgot/reset/password/complete', query:{email:payload.email}})
+                await router.push({name:'OtpCard', query:{email:payload.email}})
             }
         }
         catch (err) {
@@ -216,7 +216,43 @@ export const useAuthStore = defineStore('authStore', {
             this.loading = false
             catchErrorHandler(err)
         }
-    }
+    },
+
+        async handleChangePassword(payload=AuthRequest.changePassword){
+            try{
+                this.loading = true
+                const response = await AuthService.changePassword(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:'Success', icon:'success'})
+                }
+            }
+            catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+
+        async handleChangeNewUserPassword(payload=AuthRequest.changePassword){
+            try{
+                this.loading = true
+                const response = await AuthService.changeInvitedUserPassword(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    this.stage = 'success'
+                }
+            }
+            catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
 
     }
 

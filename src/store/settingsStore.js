@@ -40,6 +40,9 @@ export const useSettingsStore = defineStore('settingsStore', {
 
     getters:{
         getLoading:state => state.loading,
+        getTeamLoading:state => state.teamLoading,
+        getRolesLoading:state => state.rolesLoading,
+        getDomainLoading:state => state.domainLoading,
         getDomains:state => state.domains,
         getPersonalProfile:state => state.personalProfile,
         getBusinessProfile:state => state.businessProfile,
@@ -59,16 +62,26 @@ export const useSettingsStore = defineStore('settingsStore', {
     actions:{
 
         async getDomainsAction(){
-            try{
-                const response = await Domains.getDomains(storeUtils.fireAway().global?.getTenant_id)
-                let responseData = response.data
-                if(responseData.success){
-                    this.domains = responseData.data
+            const user = JSON.parse(localStorage?.user)
+            if(user.account_type === 'super_admin'){
+                this.domainLoading = true
+                try{
+                    const response = await Domains.getDomains(storeUtils.fireAway().global?.getTenant_id)
+                    let responseData = response.data
+                    if(responseData.success){
+                        this.domainLoading = false
+                        this.domains = responseData.data
+                    }
+
+                }catch{
+                    this.domainLoading = false
+                    // do nothing
                 }
 
-            }catch{
-                // do nothing
+            }else{
+                //
             }
+
 
         },
 
@@ -145,21 +158,20 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async addTeamMembers(payload=SettingsRequest.inviteNewMember){
-            this.loading = true
+            this.teamLoading = true
 
             try{
                 const response = await Teams.invite(storeUtils.fireAway().global?.getTenant_id,payload)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.teamLoading = false
                     storeUtils.fireAway().global?.commitError('false')
-                    RuthdoAlert({title:'success', icon:"success"})
                     await storeUtils.fireAway().settings?.readAllMembers()
                     // standby
                 }
 
             }catch(err){
-                this.loading = false
+                this.teamLoading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
                 // do nothing
@@ -168,19 +180,19 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async createRole(payload=SettingsRequest.createRole){
-            this.loading = true
+            this.rolesLoading = true
             try{
                 const response = await Teams.createARole(storeUtils.fireAway().global?.getTenant_id,payload)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.rolesLoading = false
                     storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
                     // standby
                 }
             }catch(err){
-                this.loading = false
+                this.rolesLoading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
             }
@@ -188,19 +200,19 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async deleteRole(id){
-            this.loading = true
+            this.rolesLoading = true
             try{
                 const response = await Teams.deleteARole(storeUtils.fireAway().global?.getTenant_id,id)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.rolesLoading = false
                     storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
                     // standby
                 }
             }catch(err){
-                this.loading = false
+                this.rolesLoading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
             }
@@ -208,53 +220,53 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async readAllRoles(){
-            this.loading = true
+            this.rolesLoading = true
 
             try{
                 const response = await Teams.getAllRoles(storeUtils.fireAway().global?.getTenant_id)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.rolesLoading = false
                     this.allRoles = responseData.data
                 }
 
             }catch{
-                this.loading = false
+                this.rolesLoading = false
                 // do nothing
             }
 
         },
 
         async readAllMembers(){
-            this.loading = true
+            this.teamLoading = true
             try{
                 const response = await Teams.getAllTeamMembers(storeUtils.fireAway().global?.getTenant_id)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.teamLoading = false
                     this.members = responseData.data
                 }
 
             }catch{
-                this.loading = false
+                this.teamLoading = false
                 // do nothing
             }
 
         },
 
         async readAllPermissions(){
-            this.loading = true
+            this.rolesLoading = true
 
             try{
                 const response = await Teams.getAllPermission(storeUtils.fireAway().global?.getTenant_id)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.rolesLoading = false
                     this.permissions = responseData.data
                 }
 
             }catch{
-                this.loading = false
+                this.rolesLoading = false
                 // do nothing
             }
 
@@ -385,16 +397,18 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async deleteDomain(id){
+            this.domainLoading = true
             try{
                 const response = await Domains.deleteDomain(storeUtils.fireAway().global?.getTenant_id, id)
                 let responseData = response.data
                 if(responseData.success){
+                    this.domainLoading = false
                     RuthdoAlert({title:responseData.data, icon:'success'})
                 }
 
             }
             catch(err){
-                this.loading = false
+                this.domainLoading = false
                 catchErrorHandler(err)
             }
         },
@@ -418,12 +432,12 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async checkDomainAvaliability(domain){
-            this.loading = true
+            this.domainLoading = true
             try{
                 const response = await Domains.checkDomain(storeUtils.fireAway().global?.getTenant_id, domain)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.domainLoading = false
                     if(responseData.data === 'AVAILABLE'){
                         this.domainSuccess = true
                     }else{
@@ -433,7 +447,7 @@ export const useSettingsStore = defineStore('settingsStore', {
 
             }
             catch(err){
-                this.loading = false
+                this.domainLoading = false
                 catchErrorHandler(err)
             }
         },

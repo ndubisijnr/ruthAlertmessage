@@ -234,7 +234,7 @@ export default {
     },
 
     getLoading(){
-      return storeUtils.fireAway().settings?.loading
+      return storeUtils.fireAway().settings?.getRolesLoading
     },
 
     getError(){
@@ -425,6 +425,7 @@ export default {
   font-weight: 700;
   line-height: 1.75rem; /* 155.556% */
 }
+
 .modal{
   width: 39.8125rem;
   height: auto;
@@ -453,6 +454,7 @@ export default {
   border-radius: 1rem;
 
 }
+
 .on_boarding_input{
   position:relative;
   width: 100%;
@@ -469,8 +471,6 @@ export default {
   margin-bottom: 1rem;
   width:100%;
 }
-
-
 
 /* .groupedformInput{} */
 
@@ -493,8 +493,6 @@ export default {
   margin-bottom: 16px;
 
 }
-
-
 
 .label.focused{
   position:absolute;

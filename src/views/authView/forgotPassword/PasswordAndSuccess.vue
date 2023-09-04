@@ -1,42 +1,60 @@
 <template>
   <layout v-slot:children>
-
-    <div class="improvise">
+    <div v-if="stage === 'password'" class="improvise">
       <div class="login_card">
-        <router-link to="/login"> <div class="card-header" @click=""> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <div class="card-header" @click="commitStage('otp')"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M15 20.6695C14.81 20.6695 14.62 20.5995 14.47 20.4495L7.95003 13.9295C6.89003 12.8695 6.89003 11.1295 7.95003 10.0695L14.47 3.54953C14.76 3.25953 15.24 3.25953 15.53 3.54953C15.82 3.83953 15.82 4.31953 15.53 4.60953L9.01003 11.1295C8.53003 11.6095 8.53003 12.3895 9.01003 12.8695L15.53 19.3895C15.82 19.6795 15.82 20.1595 15.53 20.4495C15.38 20.5895 15.19 20.6695 15 20.6695Z" fill="#292D32"/>
-        </svg> Back
-        </div></router-link>
+        </svg> Back </div>
         <div >
           <div class="get_started">
-            <p class="lets_get_started_h">Forgot Password</p>
-            <p class="lets_get_started_p">Enter the email you used to sign up on TravelYakata, we'll send you a password reset code</p>
+            <p class="lets_get_started_h">Set a new password</p>
+            <p class="lets_get_started_p">Kindly enter and set up a new password for your account.</p>
           </div>
           <div style="margin-bottom: 2.5rem">
 
-            <on-boarding-input label="Email Address"  :type="'email'" @inputValue="value => model.email = value"></on-boarding-input>
-          </div>
+            <on-boarding-input label="New password"  :type="'password'" :id="'new_password'" @inputValue="value => model2.password = value"></on-boarding-input>
 
-          <on-boarding-button :loading="getLoading" @click="initiate" :disabled="getLoading" border="none" :id="'login'" text-node="Continue" ></on-boarding-button>
+
+            <on-boarding-input label="Confirm password" :type="'password'" :id="'confirm_password'" @inputValue="value => model2.password_confirmation = value"></on-boarding-input>
+
+          </div>
+          <on-boarding-button :loading="getLoading" border="none" :id="'login'" text-node="Next" @click="handleReset" ></on-boarding-button>
 
         </div>
       </div>
+
     </div>
 
+    <div v-else class="improvise">
+    <div class="login_card">
+      <div style="text-align: center">
+        <img src="../../../assets/invite_success.gif" width="180" height="180" />
+      </div>
+      <div >
+        <div class="get_started">
+          <p class="lets_get_started_h success-h">Password reset successful!</p>
+          <p class="lets_get_started_p success-p">The password to your account has been rest successful </p>
+        </div>
+        <a href="/login"><on-boarding-button border="none" :id="'Go to login'" text-node="Next" ></on-boarding-button></a>
+
+      </div>
+    </div>
+
+  </div>
   </layout>
 </template>
 
 <script>
-
-
+import router from "../../../router";
 import Layout from "./Layout.vue";
 import OnBoardingInput from "../../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../../components/Buttons/OnBoardingButton.vue";
 import AuthRequest from "../../../model/AuthRequest";
 import storeUtils from "../../../utils/storeUtils";
+import StartTimer from "../../../mixins/countDown";
 
 export default {
-  name: "VerifyEmail",
+  name: "PasswordAndSuccess",
   components: {
     Layout,
     OnBoardingInput,
@@ -44,13 +62,7 @@ export default {
   },
   data() {
     return {
-      model1: AuthRequest.resendVerifyEmail,
       model2: AuthRequest.resetPassword,
-      model:AuthRequest.forgotPassword,
-      timerCount: 0,
-      otpValue: null,
-      confirmPassword: null
-
     }
   },
 
@@ -59,6 +71,18 @@ export default {
       storeUtils.fireAway().auth?.handleForgotPassword()
     },
 
+    handleReset(){
+      this.model2.email = router.currentRoute.value.query.email
+      this.model2.token =  router.currentRoute.value.query.otp
+      storeUtils.fireAway().auth?.handleResetPassword()
+    },
+
+    commitStage(value){
+      const email = router.currentRoute.value.query.email
+      storeUtils.fireAway().auth?.commitStage(value)
+      router.push({name:'OtpCard', query:{email:email}})
+
+    },
 
   },
 
@@ -72,7 +96,11 @@ export default {
   },
 
   mounted() {
+    if(this.stage === 'email'){
+      router.push({path:'/forgot/reset/password/verify-email'})
+    }
   }
+
 }
 </script>
 
@@ -95,6 +123,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 5.25rem;
+  cursor: pointer;
 }
 .improvise{
   display: flex;
@@ -109,10 +138,11 @@ export default {
 @media (max-width: 1024px) {
   .improvise{
     width: 100%;
-     height: auto;
+    height: auto;
   }
 
 }
+
 
 .otp-area{
   height: 39.5rem;

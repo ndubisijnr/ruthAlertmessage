@@ -132,11 +132,12 @@ export default {
           this.model.emails = this.emails
 
         } else {
-          this.model.emails = this.inputValue
+          this.emails.push(this.inputValue)
+          this.model.emails =  this.emails
+
         }
-        // storeUtils.fireAway().settings?.addTeamMembers(this.model)
+        storeUtils.fireAway().settings?.addTeamMembers(this.model)
       }
-      console.log(this.model)
         //     .then(() => {
         //   if(this.getError === 'false'){
         //     this.close(false)
@@ -180,7 +181,7 @@ export default {
       return storeUtils.fireAway().settings?.getAllRoles
     },
     getLoading(){
-      return storeUtils.fireAway().settings?.loading
+      return storeUtils.fireAway().settings?.teamLoading
     },
 
     getError(){

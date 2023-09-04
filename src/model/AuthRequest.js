@@ -46,6 +46,11 @@ class AuthRequest{
         password_confirmation:null
     }
 
+    static changePassword = {
+        current_password:null,
+        password:null
+    }
+
     // document upload and verification request
 }
 export default AuthRequest

@@ -15,6 +15,7 @@ export default [
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/RegisterOtpCard.vue')
     },
+
     {
         path: '/register/success/:token',
         // redirect:'create-account',
@@ -36,23 +37,34 @@ export default [
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/AccountType.vue')
     },
+
     {
-        path: '/forgot/reset/password',
+        path: '/forgot/reset/password/verify-email',
         name: 'VerifyEmail',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/forgotPassword/VerifyEmail.vue')
     },
+
     {
-        path: '/forgot/reset/password/complete',
+        path: '/forgot/reset/password/otp',
         name: 'OtpCard',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/forgotPassword/OtpCard.vue')
     },
+
     {
-        path: '/boarding/user',
+        path: '/forgot/reset/password/complete-reset',
+        name: 'PasswordAndSuccess',
+        meta: {layout: 'auth',authRequired:false},
+        component: () => import('../../views/authView/forgotPassword/PasswordAndSuccess.vue')
+    },
+
+
+    {
+        path: '/boarding/user/change-password',
         name: 'OnBoarding',
         meta: {layout: 'auth',authRequired:false},
-        component: () => import('../../views/authView/onboarding/OnBoarding.vue')
+        component: () => import('../../views/authView/onboarding/PasswordAndSuccessOnboarding.vue')
     },
 
 ]
