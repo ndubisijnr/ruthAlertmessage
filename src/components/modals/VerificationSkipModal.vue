@@ -21,7 +21,7 @@
                 </div>
                 <div class="child_footer">
                     <div class="inner_child_footer">
-                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancle" :textNode="'No, Cancle'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
+                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancel'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
                         <OnBoardingButton @click="skip"  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton>
                     </div>
                 </div>
