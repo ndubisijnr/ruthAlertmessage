@@ -140,7 +140,7 @@ export default {
     return{
       convertToWord,
       currentPage:1,
-      itemsPerPage:3,
+      itemsPerPage:10,
       paginate,
       currentActionIndex:null,
       show:false,

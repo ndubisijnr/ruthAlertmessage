@@ -57,9 +57,9 @@
           <ul class="inner-tab-nav">
             <a :class="{'active':currentTab === 'Account'}" @click="currentTab = 'Account'" href="#Account">Account</a>
             <a v-if="getUser.account_type === 'super_admin'" :class="{'active':currentTab === 'Domain'}" href="#Domain" @click="currentTab = 'Domain'">Domain</a>
-            <a :class="{'active':currentTab === 'Teams'}" @click="currentTab = 'Teams'" href="#Teams">Teams</a>
+            <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Teams'}" @click="currentTab = 'Teams'" href="#Teams">Teams</a>
             <a :class="{'active':currentTab === 'Notifications'}" href="#Notifications" @click="currentTab = 'Notifications'">Notifications</a>
-            <a :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
+            <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
             <a :class="{'active':currentTab === 'Markup'}" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
             <a :class="{'active':currentTab === 'Verification'}" href="#Verification" @click="currentTab = 'Verification'">Verification</a>
           </ul>
@@ -81,11 +81,11 @@
               <div class="personal-form-area">
                 <form>
                   <div class="grouped_input">
-                    <on-boarding-input width="100%" :placeholder="getUser.first_name" label="first name" readonly="true"></on-boarding-input>
-                    <on-boarding-input :placeholder="getUser.last_name" width="100%" label="last name" readonly="true"></on-boarding-input>
+                    <on-boarding-input width="100%" :placeholder="getUser.first_name" label="first name"></on-boarding-input>
+                    <on-boarding-input :placeholder="getUser.last_name" width="100%" label="last name"></on-boarding-input>
                   </div>
 
-                  <on-boarding-input width="100%" :placeholder="getUser.email" label="Email address" readonly="true"></on-boarding-input>
+                  <on-boarding-input width="100%" :placeholder="getUser.email" label="Email address"></on-boarding-input>
                   <on-boarding-input width="100%" label="Phone number" :placeholder="getUser.phone" @inputValue="value => model1.phone = value"></on-boarding-input>
                 </form>
                 <div class="change_password">
