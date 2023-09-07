@@ -140,7 +140,7 @@ export default {
     return{
       convertToWord,
       currentPage:1,
-      itemsPerPage:10,
+      itemsPerPage:20,
       paginate,
       currentActionIndex:null,
       show:false,
@@ -289,7 +289,7 @@ export default {
   overflow-x: scroll;
   justify-content: center;
   margin-top: 0.25rem;
-  margin-bottom: 13rem;
+  /*margin-bottom: 13rem;*/
 
 }
 

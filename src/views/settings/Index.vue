@@ -102,70 +102,8 @@
               </div>
             </div>
 
-
-  <!--          <div class="change_password">-->
-  <!--            <div>-->
-  <!--              <p class="change_password-p">Deactivate Account</p>-->
-  <!--              <p class="change_password-sub">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, </p>-->
-  <!--            </div>-->
-  <!--            <on-boarding-button color="#F04444" fontsize="14px" border="1px solid #F04444" text-node="Deactivate Account" btn-width="10rem" height="3rem" background="transparent"></on-boarding-button>-->
-  <!--          </div>-->
-
           </div>
 
-  <!--        <div class="accounts-inner" v-if="getUser.is_corporate === 'true'">-->
-  <!--          <div>-->
-  <!--            <div class="business_information">Business Information</div>-->
-
-  <!--            <div class="business_information_card">-->
-  <!--              <div class="business_information_card_head">-->
-  <!--                <div class="inner_head">-->
-  <!--                  <div class="profile" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : null">-->
-  <!--                    <div v-if="!getBusinessProfile.logo">-->
-  <!--                      {{ getFirstLettersOfFirstAndLastName(getUser?.first_name + ' ' + getUser?.last_name) }}-->
-  <!--                    </div>-->
-
-  <!--                    <div class="upload_icon" @click="initiateUpload">-->
-  <!--                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-  <!--                        <rect width="28" height="28" rx="14" fill="#F8F1F8"/>-->
-  <!--                        <path d="M15.8623 18.3373C17.1602 18.3373 18.2109 17.2863 18.2109 15.9888C18.2109 14.6913 17.1602 13.6403 15.8623 13.6403C14.5645 13.6403 13.5137 14.6913 13.5137 15.9888C13.5137 17.2863 14.5645 18.3373 15.8623 18.3373Z" fill="#89128A"/>-->
-  <!--                        <path fill-rule="evenodd" clip-rule="evenodd" d="M20.1787 9.94122H19.1494V8.52838C19.1494 7.6925 18.4629 7.00635 17.627 7.00635H13.5479C12.7119 7.00635 12.0254 7.6925 12.0254 8.52838V9.94122H7.79004C6.80176 9.94122 6 10.7428 6 11.7284V19.3635C6 20.3491 6.80176 21.1537 7.79004 21.1537H20.1816C21.167 21.1537 21.9717 20.3522 21.9717 19.3635V11.7284C21.9688 10.7428 21.167 9.94122 20.1787 9.94122ZM7.88086 12.7015C7.88086 13.2192 8.30176 13.6403 8.81934 13.6403C9.33691 13.6403 9.75879 13.2192 9.75879 12.7015C9.75879 12.1838 9.33691 11.7627 8.81934 11.7627C8.30176 11.7627 7.88086 12.1838 7.88086 12.7015ZM15.8623 20.215C13.5293 20.215 11.6357 18.3218 11.6357 15.9888C11.6357 13.6559 13.5293 11.7627 15.8623 11.7627C18.1943 11.7627 20.0879 13.6559 20.0879 15.9888C20.0879 18.3218 18.1982 20.215 15.8623 20.215Z" fill="#89128A"/>-->
-  <!--                        <path d="M11.6357 8.58447C11.6357 8.09796 11.2363 7.69873 10.75 7.69873H8.36719C7.88086 7.69873 7.48145 8.09796 7.48145 8.58447V9.28937H11.6357V8.58447Z" fill="#89128A"/>-->
-  <!--                      </svg>-->
-  <!--                    </div>-->
-  <!--                    <input id="logo" hidden accept="image/*" type="file" @change="handleUpload($event.target.files)">-->
-  <!--                  </div>-->
-  <!--                  <div>-->
-  <!--                    <p class="upload_business_logo">Upload Business logo</p>-->
-  <!--                    <p class="size_limit">Size limit: 5MB (jpg, jpeg or png)</p>-->
-  <!--                  </div>-->
-  <!--                </div>-->
-  <!--              </div>-->
-  <!--              <div class="business_information_card_body">-->
-  <!--                <div>-->
-  <!--                  <OnBoardingInput :error="errors ? errors.email : null" type="text" :label="'Business Name'" :placeholder="getBusinessProfile?.name" :width="'100%'"  @inputValue="(value) => model.business_name = value" ></OnBoardingInput>-->
-  <!--                  <OnBoardingInput :error="errors ? errors.email : null" type="email" :label="'Business Email address'" :placeholder="getBusinessProfile?.email" :width="'100%'"  @inputValue="(value) => model.business_email = value"></OnBoardingInput>-->
-  <!--                  <OnBoardingInput :error="errors ? errors.address : null" type="text" :label="'Address'" :width="'100%'" :placeholder="getBusinessProfile?.address"  @inputValue="(value) => model.business_address = value"></OnBoardingInput>-->
-  <!--                  <OnBoardingInput :error="errors ? errors.website : null" type="text" :label="'Business  Website'" :width="'100%'" :placeholder="getBusinessProfile?.website"  @inputValue="(value) => model.business_website = value"></OnBoardingInput>-->
-  <!--                  <OnBoardingInput :error="errors ? errors.cac_number : null" type="text" :label="'CAC Registration Number'" :width="'100%'" :placeholder="getBusinessProfile?.cac_number === 'pending' ? '' : getBusinessProfile?.cac_number"  @inputValue="(value) => model.cac_number = value"></OnBoardingInput>-->
-  <!--                </div>-->
-  <!--                <div class="reach_out">-->
-  <!--                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">-->
-  <!--                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.44569 8.7758C9.44569 9.20513 9.09725 9.55357 8.66791 9.55357C8.23858 9.55357 7.89014 9.20513 7.89014 8.7758V4.88691C7.89014 4.45757 8.23858 4.10913 8.66791 4.10913C9.09725 4.10913 9.44569 4.45757 9.44569 4.88691V8.7758ZM8.66791 11.8887C8.23858 11.8887 7.89014 11.5403 7.89014 11.111C7.89014 10.6816 8.23858 10.3332 8.66791 10.3332C9.09725 10.3332 9.44569 10.6816 9.44569 11.111C9.44569 11.5403 9.09725 11.8887 8.66791 11.8887ZM8.6684 0.221191C4.37274 0.221191 0.890625 3.7033 0.890625 7.99897C0.890625 12.2946 4.37274 15.7767 8.6684 15.7767C12.9641 15.7767 16.4462 12.2946 16.4462 7.99897C16.4462 3.7033 12.9641 0.221191 8.6684 0.221191Z" fill="#1D1E2C"/>-->
-  <!--                  </svg>-->
-  <!--                  <p>Please reach out to <span class="support">support</span> if you need to change your business website domain</p>-->
-
-  <!--                </div>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="business_information_card_footer">-->
-  <!--            <div>-->
-  <!--              <OnBoardingButton @click="handleUpdateBizProfile" :loading="loading" border="none" :textNode="'Save Changes'" :btnWidth="'11.0625rem'"></OnBoardingButton>-->
-  <!--            </div>-->
-  <!--          </div>-->
-
-  <!--        </div>-->
 
         </div>
         <div id="domains" class="domains" v-show="currentTab === 'Domain'">
@@ -365,7 +303,7 @@
           <div class="payment-wrapper">
             <div class="payment-header">
               <p class="payment-m-h">Payment method</p>
-              <on-boarding-button @click="addAccount = true" fontsize="1rem" color="#FFFFFF" text-node="Add bank account" btn-width="12.25rem" height="2.5rem" border="none"></on-boarding-button>
+              <on-boarding-button v-if="getUser.account_type === 'super_admin'" @click="addAccount = true" fontsize="1rem" color="#FFFFFF" text-node="Add bank account" btn-width="12.25rem" height="2.5rem" border="none"></on-boarding-button>
             </div>
 
             <div>
@@ -379,7 +317,7 @@
                 <div v-if="getBankAccount?.length > 0">
                   <div class="bank-wrapper">
                     <div class="bank-card" v-for="(i, index) in getBankAccount" :key="index">
-                    <div @click="showActions(index)" style="position: absolute;right: 1.5rem;top:1.25rem;cursor: pointer">
+                    <div v-if="getUser.account_type === 'super_admin'" @click="showActions(index)" style="position: absolute;right: 1.5rem;top:1.25rem;cursor: pointer">
                       <svg xmlns="http://www.w3.org/2000/svg" width="4" height="22" viewBox="0 0 4 22" fill="none">
                         <circle cx="2" cy="2" r="2" fill="#1D1E2C"/>
                         <circle cx="2" cy="11" r="2" fill="#1D1E2C"/>

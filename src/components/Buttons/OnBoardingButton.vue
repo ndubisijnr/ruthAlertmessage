@@ -53,7 +53,7 @@ export default {
 
 @media (max-width: 1024px) {
   .on_boarding_button{
-    width: 100%;
+    width: 100% !important;
   }
   .text{
   font-family: 'Product Sans';
