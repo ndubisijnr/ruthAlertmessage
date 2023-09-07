@@ -29,7 +29,7 @@
        <div class="no-revenue-yet">
          <h3 class="no-revenue-yet-h">No revenue yet</h3>
          <p class="no-revenue-yet-p">There are currently no revenue, when there are, they will appear here.</p>
-         <router-link to="/bookings"><on-boarding-button btn-width="8.9375rem" height="3rem" text-node="Book a Flight" border="none" background="#F8F1F8" color="#89128A"></on-boarding-button></router-link>
+<!--         <router-link to="/bookings"><on-boarding-button btn-width="8.9375rem" height="3rem" text-node="Book a Flight" border="none" background="#F8F1F8" color="#89128A"></on-boarding-button></router-link>-->
 
        </div>
 
@@ -41,7 +41,7 @@
            <img src="../../assets/transactions.svg" />
            <h3 class="no-revenue-yet-h">No transaction yet</h3>
            <p class="no-revenue-yet-p">There are currently no transactions, when there are, they will appear here.</p>
-           <on-boarding-button btn-width="8.9375rem" height="3rem" text-node="Book a Flight" border="none" background="#F8F1F8" color="#89128A"></on-boarding-button>
+<!--           <on-boarding-button btn-width="8.9375rem" height="3rem" text-node="Book a Flight" border="none" background="#F8F1F8" color="#89128A"></on-boarding-button>-->
 
          </div>
 
