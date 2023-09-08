@@ -53,6 +53,9 @@
                 <on-boarding-button border="none" :loading="loading" @click="handleClick" :id="'login'" text-node="Next" :disabled="!model.password || !model.email"></on-boarding-button>
               </div>
             </div>
+
+            <p class="signup_p">Don't have an account ? <span @click="routeToSignUp">Sign up now</span></p>
+
           </div>
 
         </div>
@@ -89,6 +92,9 @@ export default {
     handleClick(){
       storeUtils.fireAway().auth?.login()
     },
+    routeToSignUp(){
+      router.push({path:'/account'})
+    }
   },
 
   computed:{
@@ -120,7 +126,7 @@ a{
 }
 @media (max-width: 1024px) {
   .login_card{
-    padding: 1rem;
+    padding: 1.5rem;
     width: 100%;
   }
 }
@@ -159,9 +165,26 @@ line-height: 1.1875rem; /* 135.714% */
   margin-bottom: 2.5rem;
 }
 
+.signup_p{
+  color:  #444854;
+  font-family:'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 150% */
+  letter-spacing: 0.002rem;
+  margin-top: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.signup_p span{
+  text-decoration: underline;
+}
+
 .lets_get_started_h{
   color:  #1D1E2C;
-  font-family: 'Product Sans' Black;
+  font-family: 'Product Sans';
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 900;

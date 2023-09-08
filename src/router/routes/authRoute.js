@@ -25,14 +25,14 @@ export default [
     },
 
     {
-        path: '/login',
+        path: '/',
         name: 'Logon',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/Logon.vue')
     },
 
     {
-        path: '/',
+        path: '/account',
         name: 'AccountType',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/AccountType.vue')

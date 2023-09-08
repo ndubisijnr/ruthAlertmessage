@@ -29,7 +29,7 @@
       <div class="page_wrapper_inner_div">
          <div>
             <div>
-              <router-link to="/login"><p class="login">Already have an account? <span class="log_in"> Log In</span></p></router-link>
+              <router-link to="/"><p class="login">Already have an account? <span class="log_in"> Log In</span></p></router-link>
             </div>
             <div class="get_started">
               <p class="lets_get_started_h">Let’s get you started</p>
@@ -280,7 +280,7 @@ a{
   .page_wrapper_inner_div{
     width:100%;
     height: auto;
-    padding: 1rem;
+    padding: 1.5rem;
     margin:0;
 }
 }
