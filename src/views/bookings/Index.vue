@@ -3,7 +3,7 @@
     <div class="overall">
       <div class="booking-wrapper">
 
-      <div>
+      <div v-if="currentTab === 'bookings_summary'">
         <div class="search_filter">
             <div class="search">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -29,7 +29,7 @@
             <bookings-cards title="Total Bookings" number="0"></bookings-cards>
             <bookings-cards title="Reserved Bookings" number="0"></bookings-cards>
             <bookings-cards title="Issued Bookings" number="0"></bookings-cards>
-            <div class="create-booking">
+            <div class="create-booking" @click="currentTab='Create new booking'">
               <img src="../../assets/Cards/add.svg" />
               <p class="create-booking-p">Create new booking</p>
             </div>
@@ -73,8 +73,57 @@
          </div>
       </div>
 
-      <div>
+      <div v-if="currentTab === 'Create new booking'" class="create-booking-process">
+        <img src="../../assets/SpiralLines.svg" class="spiralLines"/>
+          <div class="breadcrumb-sub">
+            <span class="current-path-sub">{{getCurrentRoute}}</span>
+            <img src="../../assets/VerificationProcess/arrow-left.svg" />
+            <span class="current-tab">{{currentTab}}</span>
+          </div>
 
+          <div class="travel_type_booking">
+            <div class="progress-or">
+              <div class="progress-or-item" v-for="(i, index) in bookingProgress">
+                <p class="stage">{{ i }}</p>
+                <div style="display: flex;align-items: center;justify-content: start">
+                  <div class="circle" :class="{'activeProgress':currentProgressIndex=== index+1}">{{index + 1}}</div>
+                  <div class="line" v-if="index !== bookingProgress.length - 1"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="booking-div">
+              <div class="destination_type">Destination Type</div>
+
+              <div class="booking-div-inner-wrapper">
+                <div class="booking-nav">
+                  <p class="booking-nav-item">Round Trip</p>
+                  <p class="booking-nav-item">One Way</p>
+                  <p class="booking-nav-item">Multi City</p>
+                </div>
+                <div class="one-round-way-multi-city">
+                  <div class="form-area">
+
+
+
+                    <div class="form-area-body"></div>
+
+
+                    <div class="form-area-checkbox">
+
+                    </div>
+                    <div class="form-area-footer">
+
+                      <on-boarding-button btn-width="100%" text-node="Search for Flights"></on-boarding-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
       </div>
 
     </div>
@@ -88,11 +137,16 @@ import Layout from "../Layout.vue";
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import DomainTable from "../../components/tables/DomainTable.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
+import router from "../../router";
 export default {
   name: "Bookings",
   components:{Layout,BookingsCards,DomainTable,OnBoardingButton},
   data(){
     return{
+      isCreatingBooking:false,
+      currentTab:'bookings_summary',
+      bookingProgress:['Search for flight','Flight Result','Traveller’s Info','Payment Confirmation'],
+      currentProgressIndex:1,
       bookingFields:[
         {key:"name", label:"Customer’s Name"},
         {key:"email", label:"Ticket Amount"},
@@ -105,6 +159,10 @@ export default {
     }
   },
   computed:{
+    getCurrentRoute(){
+      return router.currentRoute.value.name
+    },
+
     getBusinessProfile(){
       if(localStorage.businessProfile){
         const business = JSON.parse(localStorage?.businessProfile)
@@ -117,6 +175,155 @@ export default {
 </script>
 
 <style scoped>
+.destination_type{
+  margin: 0 2rem;
+  padding: 0.38rem;
+  color:  #1D1E2C;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
+.booking-div-inner-wrapper{
+  margin: 0.5rem;
+  border: solid crimson;
+  padding: 1.5rem;
+}
+.booking-nav-item{
+  padding: 0.5rem;
+}
+
+.booking-div{
+  margin: 2.88rem 4.75rem;
+  border: solid;
+}
+.booking-nav{
+  display: flex;
+  border-bottom: 1px solid  #E5E9F2;
+  gap: 5rem;
+}
+.progress-or{
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+}
+
+.stage{
+  color:  #9DA8B6;
+  text-align: left;
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  margin-left: -2rem;
+}
+
+.activeProgress{
+  background: #89128A !important;
+}
+
+
+.progress-or-item{
+}
+.circle{
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  background: #E5E9F2;
+  border-radius: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:  #FFF;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
+
+.line{
+  width: 9.8125rem;
+  height: 0.25rem;
+  flex-shrink: 0;
+  border-radius: 0.3125rem;
+  background: #E5E9F2;
+}
+
+.spiralLines{
+  position: absolute;
+  top: -50px;
+  right: -200px;
+  width: 70%;
+  height: 100%;
+}
+.breadcrumb-sub{
+  height: 2.4rem;
+  width: 20.4rem;
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1.94rem;
+  gap: 0.5rem;
+}
+
+.current-path-sub{
+  color: #575A65;
+  text-align: center;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.create-booking-process{
+  width: 68.125rem;
+  height: auto;
+  flex-shrink: 0;
+  position: relative;
+  display: inline-block;
+}
+
+.current-tab{
+  color:  #1D1E2C;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+}
+
+
+.one-way{}
+
+.travel_type_booking{
+  width: 68.125rem;
+  height: 48.9375rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  border: 1px solid  #D8B0D8;
+  background: #FFF;
+  z-index: 100;
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+}
+
+@media (max-width: 1024px) {
+  .travel_type_booking{
+    width: 100% !important;
+  }
+}
+
 .filter-div{
   background: #FFFFFF;
   padding-left: 1rem;
@@ -185,6 +392,7 @@ export default {
   width: 15.9375rem;
   height: 5rem;
   gap: 0.75rem;
+  cursor: pointer;
 }
 
 .create-booking-p{
@@ -282,9 +490,6 @@ export default {
 
   .booking-wrapper{
     width: 100%;
-  }
-
-  .create-booking{
   }
 
   .table-wrapper{

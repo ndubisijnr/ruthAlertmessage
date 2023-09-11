@@ -1589,6 +1589,7 @@ m-2{
   font-weight: 700;
   line-height: 1.75rem; /* 175% */
 }
+
 .settings-wrapper-navs{
   width: 63.43rem;
 }

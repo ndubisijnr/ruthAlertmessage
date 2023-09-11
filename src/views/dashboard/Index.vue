@@ -10,7 +10,7 @@
          </div>
          <div style="display: flex;gap: 1rem;height: 2.5rem">
            <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button>
-           <on-boarding-button btn-width="8rem" border="none" height="2.5rem" text-node="Skip for later" background="#F1E4F2"></on-boarding-button>
+           <on-boarding-button btn-width="8rem" color="#89128A" border="none" height="2.5rem" text-node="Skip for later" background="#F1E4F2"></on-boarding-button>
          </div>
        </div>
      </div>
