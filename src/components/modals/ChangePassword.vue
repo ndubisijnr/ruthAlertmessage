@@ -226,6 +226,7 @@ export default {
   margin-top:0.75rem;
 
 }
+
 @media (max-width:1024px) {
   .containes{
     flex-direction: column;

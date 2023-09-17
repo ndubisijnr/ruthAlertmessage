@@ -11,7 +11,7 @@
               
               <slot name="children"></slot>
 
-              <img src="../../assets/SignUp/EmailVerification/airplane.svg" class="airplane_group"/>
+<!--              <img src="../../assets/SignUp/EmailVerification/airplane.svg" class="airplane_group"/>-->
 
           </div>
       </div>

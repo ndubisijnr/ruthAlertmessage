@@ -61,7 +61,7 @@ export default [
 
 
     {
-        path: '/boarding/user/change-password',
+        path: '/boarding/user/change-password/:inviteToken',
         name: 'OnBoarding',
         meta: {layout: 'auth',authRequired:false},
         component: () => import('../../views/authView/onboarding/PasswordAndSuccessOnboarding.vue')

@@ -41,8 +41,8 @@ export default {
         return apiService.Client.get(`api/${tenant_id}/business`)
     },
 
-    changeInvitedUserPassword(tenant_id){
-        return apiService.Client.post(`/api/${tenant_id}/auth/change_invited_password`)
+    changeInvitedUserPassword(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/auth/change_invited_password`, payload)
     },
 
      changePassword(tenant_id,payload){
