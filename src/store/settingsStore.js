@@ -165,15 +165,18 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.teamLoading = false
-                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().global?.commitError('false')
                     await storeUtils.fireAway().settings?.readAllMembers()
+                    await storeUtils.fireAway().global?.commitError(null)
                     // standby
                 }
 
             }catch(err){
                 this.teamLoading = false
-                storeUtils.fireAway().global?.commitError('true')
+                await storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                await storeUtils.fireAway().global?.commitError(null)
+
                 // do nothing
             }
 
@@ -186,15 +189,19 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.rolesLoading = false
-                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
+                    await storeUtils.fireAway().global?.commitError(null)
                     // standby
                 }
             }catch(err){
                 this.rolesLoading = false
-                storeUtils.fireAway().global?.commitError('true')
+                await storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                setTimeout(() =>{
+                    storeUtils.fireAway().global?.commitError(null)
+                },500)
             }
 
         },
@@ -206,15 +213,19 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.rolesLoading = false
-                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
+                    await storeUtils.fireAway().global?.commitError(null)
+
                     // standby
                 }
             }catch(err){
                 this.rolesLoading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                await storeUtils.fireAway().global?.commitError(null)
+
             }
 
         },
@@ -226,9 +237,11 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.rolesLoading = false
-                    storeUtils.fireAway().global?.commitError('false')
+                    await storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
+                    await storeUtils.fireAway().global?.commitError(null)
+
                     // standby
                 }
             }catch(err){
@@ -353,6 +366,7 @@ export const useSettingsStore = defineStore('settingsStore', {
                     RuthdoAlert({title:"Success", icon:'success'})
                     storeUtils.fireAway().global?.commitError('false')
                     await storeUtils.fireAway().settings?.getDomainsAction()
+                    await storeUtils.fireAway().global?.commitError(null)
                     // location.reload()
                 }
 
@@ -361,6 +375,8 @@ export const useSettingsStore = defineStore('settingsStore', {
                 this.loading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                await storeUtils.fireAway().global?.commitError(null)
+
             }
         },
 
@@ -443,6 +459,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                     storeUtils.fireAway().global?.commitError('false')
                     RuthdoAlert({title:'Success', icon:'success'})
                     await storeUtils.fireAway().settings?.readBanksAccount()
+                    setTimeout(() =>{
+                        storeUtils.fireAway().global?.commitError(null)
+                    },500)
                 }
             }
             catch(err){
@@ -501,6 +520,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                     RuthdoAlert({title:"Success", icon:"success"})
                     storeUtils.fireAway().global?.commitError('false')
                     await storeUtils.fireAway().settings?.readBanksAccount()
+                    setTimeout(() =>{
+                        storeUtils.fireAway().global?.commitError(null)
+                    },500)
                     //
                 }
 
@@ -509,6 +531,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                 this.loading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                setTimeout(() =>{
+                    storeUtils.fireAway().global?.commitError(null)
+                },500)
             }
         },
 
@@ -522,6 +547,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                     RuthdoAlert({title:"Success", icon:"success"})
                     storeUtils.fireAway().global?.commitError('false')
                     await storeUtils.fireAway().settings?.readBanksAccount()
+                    setTimeout(() =>{
+                        storeUtils.fireAway().global?.commitError(null)
+                    },500)
                     //
                 }
 
@@ -530,6 +558,9 @@ export const useSettingsStore = defineStore('settingsStore', {
                 this.loading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
+                setTimeout(() =>{
+                    storeUtils.fireAway().global?.commitError(null)
+                },500)
             }
         },
 

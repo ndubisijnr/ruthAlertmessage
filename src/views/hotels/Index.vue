@@ -1,6 +1,6 @@
 <template>
   <layout v-slot:child-content>
-    <coming-soon></coming-soon>
+    <coming-soon page="hotel"></coming-soon>
   </layout>
 
 </template>

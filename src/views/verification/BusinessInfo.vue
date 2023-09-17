@@ -107,6 +107,8 @@ export default {
     },
 
     async handleUpload(file) {
+      this.uploadModel.type = null;
+      this.uploadModel.file = null;
       if (!file.length) return;
       this.uploadModel.type = 'logo'
       this.uploadModel.file = file[0]

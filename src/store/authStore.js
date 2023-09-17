@@ -175,6 +175,7 @@ export const useAuthStore = defineStore('authStore', {
             if(responseData.success){
                 this.loading = false
                 await storeUtils.fireAway().auth?.getBusinessProfile()
+                location.reload()
             }
         }
     catch (err) {

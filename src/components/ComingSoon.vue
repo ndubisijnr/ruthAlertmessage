@@ -5,10 +5,10 @@
     </div>
     <div>
       <p class="coming-soon-p">Coming Soon</p>
-      <p class="coming-soon-p2">Our Visa services are coming up soon. Stay tuned to an awesome experience! </p>
+      <p class="coming-soon-p2">Our {{page}} services are coming up soon. Stay tuned to an awesome experience! </p>
     </div>
     <div style="margin-top: 2rem;">
-      <on-boarding-button text-node="Create Booking"></on-boarding-button>
+      <router-link :to="`/bookings/create_new_booking/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button text-node="Create Booking"></on-boarding-button></router-link>
     </div>
   </div>
 
@@ -18,11 +18,22 @@
 import OnBoardingButton from "./Buttons/OnBoardingButton.vue";
 export default {
   name: "ComingSoon",
-  components:{OnBoardingButton}
+  props:['page'],
+  components:{OnBoardingButton},
+  computed:{
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
+    },
+  }
 }
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .coming-soon{
   display: flex;
   flex-direction: column;

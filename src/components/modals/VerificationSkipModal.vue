@@ -21,7 +21,7 @@
                 </div>
                 <div class="child_footer">
                     <div class="inner_child_footer">
-                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancel'" :background="'transparent'" :color="'#89128A'"></OnBoardingButton>
+                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancel'" :background="'transparent'" :color="'#2C6CAC'"></OnBoardingButton>
                         <OnBoardingButton @click="skip"  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton>
                     </div>
                 </div>
@@ -122,7 +122,7 @@ line-height: 1.75rem; /* 140% */
 }
 
 .p2{
-    color:  #89128A;
+    color:  var(--app-default-primary);
 
 /* 16px/bold */
 font-family:'Product Sans';

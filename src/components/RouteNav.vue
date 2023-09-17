@@ -1,11 +1,11 @@
 <template>
   <div class="breadcrumb-sub">
 <!--    to="i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}`"-->
-    <span v-for="(i, index) in getAllRoute" :key="i" >
+    <router-link  :to="i.name.includes('Booking') ? i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}` : '#'" v-for="(i, index) in getAllRoute" :key="i" >
       <span class="current-path-sub"> {{ i.name }}
         <img src="../assets/VerificationProcess/arrow-left.svg" />
       </span>
-    </span>
+    </router-link>
 <!--    <span class="current-tab">{{getCurrentRoute}}</span>-->
   </div>
 </template>

@@ -178,6 +178,8 @@ export default {
       },
 
       async handleUploadCompany(file){
+        this.uploadModel.type = null;
+        this.uploadModel.file = null;
         if (!file.length) return;
         this.uploadModel.type = 'cac_document'
         this.uploadModel.file = file[0]
@@ -185,6 +187,8 @@ export default {
       },
 
       async handleUploadPersonal(file){
+        this.uploadModel.type = null;
+        this.uploadModel.file = null;
         if (!file.length) return;
         this.uploadModel.type = 'id_document'
         this.uploadModel.file = file[0]

@@ -172,7 +172,7 @@ export default {
   }
 
   .sublink_link{
-    color:  #89128A;
+    color:  var(--app-default-primary);
     text-align: center;
 
     /* 16px/bold */
