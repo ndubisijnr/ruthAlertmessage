@@ -2,10 +2,10 @@
     <layout :in_route="inRoute=true" :is-component="true">
 
         <template v-slot:maker>
-            <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
-                <rect width="4" height="72" rx="2" fill="#CDCED9"/>
-                <rect width="4" height="20" rx="2" fill="#720F73"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
+            <rect width="4" height="72" rx="2" fill="#CDCED9"/>
+            <rect width="4" height="20" rx="2" fill="#2C6CAC"/>
+          </svg>
         </template>
         <template v-slot:children>
             <div>

@@ -484,7 +484,7 @@
         </div>
         <div id="verifications" class="verifications" v-show="currentTab === 'Verification'">
         <business-verification v-if="verification_Type ==='business'"  :is-component="false" :in-route="false"></business-verification>
-        <upload-docs :show="false"  v-else :is-component="false" :in-route="false" v-if="verification_Type === 'docs'"></upload-docs>
+        <upload-docs @parentDisableShow=""  v-else :is-component="false" :in-route="false" v-if="verification_Type === 'docs'"></upload-docs>
       </div>
       </div>
     </div>

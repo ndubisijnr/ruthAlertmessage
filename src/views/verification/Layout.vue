@@ -228,7 +228,7 @@ main{
 }
 
 #nav0 a.router-link-exact-active {
-  background:  #F8F1F8;
+  background:  var(--app-defautl-primary-light);
   color: white !important;
   text-align: center;
   width: auto;

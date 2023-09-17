@@ -3,9 +3,9 @@
 <template v-slot:children>
   <div class="card_success">
     <div class="card_body">
-      <img src="../../assets/verification_success.svg"  class="mobile"/>
+      <img src="../../assets/Cards/vC.svg"  class="mobile"/>
       <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"> <div class="sublink">
-        <span class="sublink_link">Continue</span>
+        <span class="sublink_link">Continue to Dashboard</span>
       </div></router-link>
 
     </div>

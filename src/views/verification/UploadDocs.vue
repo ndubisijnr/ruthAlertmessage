@@ -3,10 +3,10 @@
 
   <layout :in_route="inRoute" :is-component="isComponent">
         <template v-slot:maker>
-            <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
-                <rect width="4" height="62.348" rx="2" fill="#CDCED9"/>
-                <rect y="51.0898" width="4" height="20.9103" rx="2" fill="#720F73"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
+            <rect width="4" height="62.348" rx="2" fill="#CDCED9"/>
+            <rect y="51.0898" width="4" height="20.9103" rx="2" fill="#2C6CAC"/>
+          </svg>
         </template>
         <template v-slot:children>
             <div style="margin-bottom: 50px">
@@ -32,7 +32,7 @@
                               <section v-else style="text-align: center">
                               <img src="../../assets/group-folders.svg" />
                               <div>
-                                  <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
+                                  <p class="txt-4">Drop your files here or <span style="color:#2C6CAC;text-decoration: underline;cursor: pointer;" @click="handleCompanylDoc">click here </span> to upload</p>
                                   <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                               </div>
                             </section>
@@ -91,7 +91,7 @@
                                     <img src="../../assets/group-folders.svg" />
 
                                     <div>
-                                      <p class="txt-4">Drop your files here or <span style="color:#89128A;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
+                                      <p class="txt-4">Drop your files here or <span style="color:#2C6CAC;text-decoration: underline;cursor: pointer;" @click="handlePersonalDoc">click here </span> to upload</p>
 
                                       <p class="txt-5">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
                                   </div>
@@ -131,18 +131,18 @@ import storeUtils from "../../utils/storeUtils";
 import AuthRequest from "../../model/AuthRequest";
 import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
 import VerificationCompleteModal from "../../components/modals/VerificationCompleteModal.vue";
+import router from "../../router";
 
 
 export default {
     name:"UploadDocs",
-    props:['inRoute','isComponent','show'],
+    props:['inRoute','isComponent','show', 'disableShow'],
     data(){
       return {
         uploadModel:AuthRequest.upload,
         LocalMarkUpPlaceHolder:"Choose Document Type",
         localDropdown:false,
-
-
+        show:true
 
       }
     },
@@ -168,6 +168,11 @@ export default {
             const input = document.getElementById('compDoc')
             input.click()
         },
+
+      parentDisableShow(){
+        this.disableShow()
+      },
+
 
       async triggerUpload1(obj){
         await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
@@ -208,7 +213,16 @@ export default {
         }
 
       },
-    }
+      getCurrentRoute(){
+        return router.currentRoute.value.name
+      }
+    },
+
+  mounted() {
+      if(this.getCurrentRoute === 'Settings'){
+        this.show = false
+      }
+  }
 
 }
 </script>
@@ -307,7 +321,7 @@ export default {
 }
 
 .txt-1{
-    color: #B061B1;
+    color: var(--app-default-primary);
 
     /* Body/16px/Regular */
     font-family: 'Product Sans';
