@@ -142,7 +142,7 @@
 import NavBar from "../../components/dashboardComponents/NavBar.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DashboardStatsCard from "../../components/dashboardComponents/DashboardStatsCard.vue";
-import users from '../../assets/Cards/overviewicons.png'
+import users from '../../assets/Cards/users.svg'
 import card from '../../assets/Cards/overviecard.png'
 import Layout from "../Layout.vue";
 export default {

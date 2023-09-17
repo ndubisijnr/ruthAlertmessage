@@ -208,7 +208,6 @@ import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
-import {custom_date_picker} from "../../components/Inputs/custom-date-picker/custom-date-picker";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 
 export default {
@@ -272,8 +271,6 @@ export default {
     storeUtils.fireAway().booking?.resetProgressNav()
     storeUtils.fireAway().booking?.commitBookingStage('Search for Flight')
     storeUtils.fireAway().flight?.handleGetAirport()
-    custom_date_picker()
-
   }
 
 }
