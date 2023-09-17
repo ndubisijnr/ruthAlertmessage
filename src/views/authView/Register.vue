@@ -104,7 +104,7 @@
                   v-show="!agreed_condition" @click="agreed_condition = !agreed_condition" style="cursor:pointer">
                   <rect x="0.816406" y="0.5" width="20.2658" height="19" rx="3.5" fill="white" stroke="#C0CCDA" />
                 </svg>
-                <svg width="22" height="20" viewBox="0 0 22 20" @click="agreed_condition = !agreed_condition"  style="cursor:pointer" fill="none"
+                <svg width="22" height="20" viewBox="0 0 22 20" @click="agreed_condition = !agreed_condition"  style="cursor:pointer" fill="#2C6CAC"
                   v-show="agreed_condition" xmlns="http://www.w3.org/2000/svg">
                   <rect x="0.316467" width="21.2658" height="20" rx="4" />
                   <g clip-path="url(#clip0_328_1436)">

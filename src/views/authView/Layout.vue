@@ -90,7 +90,7 @@ export default {
     top: 70%;
     right: -20%;
     bottom: -10%;
-    background:var(--app-default-secondary-linear-gradaint);;
+    background:var(--app-default-secondary-linear-gradaint1);
     z-index: 1
 }
 
@@ -101,13 +101,13 @@ export default {
 }
 
 .top-angle {
-    width: 69.45238rem;
-    height: 27.51469rem;
+  width: 69.45238rem;
+  height: 27.51469rem;
     transform: rotate(150.931deg);
     flex-shrink: 0;
      background: var(--app-default-secondary-linear-gradaint2);
     position: fixed;
-    top: 0;
+    top:0;
     left: -35%;
     z-index: 1;
 

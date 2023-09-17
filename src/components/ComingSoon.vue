@@ -1,14 +1,14 @@
 <template>
   <div class="coming-soon">
     <div>
-      <img src="../../src/assets/LAUNCH.svg">
+      <img src="../../src/assets/Cards/LAUNCH.svg">
     </div>
     <div>
       <p class="coming-soon-p">Coming Soon</p>
       <p class="coming-soon-p2">Our {{page}} services are coming up soon. Stay tuned to an awesome experience! </p>
     </div>
     <div style="margin-top: 2rem;">
-      <router-link :to="`/bookings/create_new_booking/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button text-node="Create Booking"></on-boarding-button></router-link>
+      <router-link :to="`/bookings/create_new_booking/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="11.25rem" height="3.5rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Create Booking"></on-boarding-button></router-link>
     </div>
   </div>
 

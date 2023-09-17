@@ -5,7 +5,7 @@
         <div class="m6-0">
 
           <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
-            <img src="../../src/assets/TravelYakataLogo.png" style="width: 7.91938rem;height: 3.91938rem;" />
+            <img src="../../src/assets/Cards/logo.svg" />
           </router-link>
           <div class="navigation-links" id="nav">
             <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
