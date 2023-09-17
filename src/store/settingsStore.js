@@ -167,7 +167,6 @@ export const useSettingsStore = defineStore('settingsStore', {
                     this.teamLoading = false
                     await storeUtils.fireAway().global?.commitError('false')
                     await storeUtils.fireAway().settings?.readAllMembers()
-                    await storeUtils.fireAway().global?.commitError(null)
                     // standby
                 }
 
@@ -192,16 +191,12 @@ export const useSettingsStore = defineStore('settingsStore', {
                     await storeUtils.fireAway().global?.commitError('false')
                     await RuthdoAlert({title:responseData.data, icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
-                    await storeUtils.fireAway().global?.commitError(null)
                     // standby
                 }
             }catch(err){
                 this.rolesLoading = false
                 await storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
-                setTimeout(() =>{
-                    storeUtils.fireAway().global?.commitError(null)
-                },500)
             }
 
         },
