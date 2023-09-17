@@ -199,6 +199,26 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
+        async updateRole(payload=SettingsRequest.updateRole){
+            this.rolesLoading = true
+            try{
+                const response = await Teams.updateARole(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.rolesLoading = false
+                    storeUtils.fireAway().global?.commitError('false')
+                    await RuthdoAlert({title:responseData.data, icon:'success'})
+                    await storeUtils.fireAway().settings?.readAllRoles()
+                    // standby
+                }
+            }catch(err){
+                this.rolesLoading = false
+                storeUtils.fireAway().global?.commitError('true')
+                catchErrorHandler(err)
+            }
+
+        },
+
         async deleteRole(id){
             this.rolesLoading = true
             try{

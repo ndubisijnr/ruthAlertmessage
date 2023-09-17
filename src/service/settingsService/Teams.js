@@ -27,7 +27,7 @@ export default {
     },
 
     updateARole(tenant_id, payload){
-        return apiService.Client.post(`/api/${tenant_id}/role`, payload)
+        return apiService.Client.patch(`/api/${tenant_id}/role`, payload)
     },
 
     deleteARole(tenant_id, id){

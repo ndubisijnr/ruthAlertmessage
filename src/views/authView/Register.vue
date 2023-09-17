@@ -7,21 +7,10 @@
             <span class="subdomain">Subdomain</span> account</div>
 
           <div class="experence">
-              <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.316467" width="21.2658" height="20" rx="4" fill="#89128A" />
-                  <g clip-path="url(#clip0_328_1436)">
-                  <path
-                      d="M9.43086 12.2661L16.4121 5.69971L17.4868 6.70971L9.43086 14.2861L4.59744 9.74042L5.67137 8.73042L9.43086 12.2661Z"
-                      fill="white" />
-                  </g>
-                  <defs>
-                  <clipPath id="clip0_328_1436">
-                      <rect width="18.2278" height="17.1429" fill="white" transform="translate(1.83594 1.4292)" />
-                  </clipPath>
-                  </defs>
-              </svg>
-              <span>Experience travel-booking like never before</span> 
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M21.4286 0H2.57143C1.88944 0 1.23539 0.270918 0.753154 0.753154C0.270918 1.23539 0 1.88944 0 2.57143L0 21.4286C0 22.1106 0.270918 22.7646 0.753154 23.2468C1.23539 23.7291 1.88944 24 2.57143 24H21.4286C22.1106 24 22.7646 23.7291 23.2468 23.2468C23.7291 22.7646 24 22.1106 24 21.4286V2.57143C24 1.88944 23.7291 1.23539 23.2468 0.753154C22.7646 0.270918 22.1106 0 21.4286 0ZM20.3202 8.88964L10.463 18.7468C10.3023 18.9074 10.0844 18.9976 9.85714 18.9976C9.62991 18.9976 9.41198 18.9074 9.25125 18.7468L3.67982 13.1754C3.60021 13.0958 3.53705 13.0013 3.49397 12.8973C3.45088 12.7932 3.4287 12.6818 3.4287 12.5692C3.4287 12.4566 3.45088 12.3451 3.49397 12.2411C3.53705 12.1371 3.60021 12.0426 3.67982 11.963L4.89161 10.7513C4.9712 10.6716 5.0657 10.6085 5.16971 10.5654C5.27371 10.5223 5.38519 10.5001 5.49777 10.5001C5.61035 10.5001 5.72182 10.5223 5.82583 10.5654C5.92983 10.6085 6.02433 10.6716 6.10393 10.7513L9.85714 14.5045L17.8961 6.46554C17.9757 6.38592 18.0702 6.32277 18.1742 6.27968C18.2782 6.23659 18.3897 6.21442 18.5022 6.21442C18.6148 6.21442 18.7263 6.23659 18.8303 6.27968C18.9343 6.32277 19.0288 6.38592 19.1084 6.46554L20.3202 7.67732C20.3998 7.75692 20.4629 7.85142 20.506 7.95542C20.5491 8.05943 20.5713 8.1709 20.5713 8.28348C20.5713 8.39606 20.5491 8.50754 20.506 8.61154C20.4629 8.71555 20.3998 8.81005 20.3202 8.88964Z" fill="#2C6CAC"/>
+            </svg>
+              <span>Experience travel-booking like never before</span>
           </div> 
         </div>
     </template>
@@ -117,7 +106,7 @@
                 </svg>
                 <svg width="22" height="20" viewBox="0 0 22 20" @click="agreed_condition = !agreed_condition"  style="cursor:pointer" fill="none"
                   v-show="agreed_condition" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.316467" width="21.2658" height="20" rx="4" fill="#89128A" />
+                  <rect x="0.316467" width="21.2658" height="20" rx="4" />
                   <g clip-path="url(#clip0_328_1436)">
                     <path
                       d="M9.43086 12.2661L16.4121 5.69971L17.4868 6.70971L9.43086 14.2861L4.59744 9.74042L5.67137 8.73042L9.43086 12.2661Z"
@@ -315,7 +304,7 @@ a{
     margin-top: 1rem;
 }
 .subdomain{
-    color: var(--main-branding-primary, #89128A);
+    color: var(--app-default-primary);
     /* Headings/48px/bold */
     font-family: 'Product Sans';
     font-size: 3rem;
@@ -382,6 +371,7 @@ a{
     font-size: 1rem;
   }
 }
+
 .grouped_input {
   display: inline-flex;
   width: 100%;
@@ -405,7 +395,7 @@ a{
 }
 
 .log_in {
-  color: #89128A;
+  color: var(--app-default-primary);
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;

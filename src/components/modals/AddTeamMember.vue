@@ -29,11 +29,12 @@
 
         <div class="choose-role">
           <p class="choose-role-p">Choose Role</p>
-          <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">
+          <div class="role-options-wrapper">
+            <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">
             <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="20" height="20" rx="10" fill="#89128A"/>
+              <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
               <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-              <rect x="5" y="5" width="10" height="10" rx="5" fill="#89128A"/>
+              <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
             </svg>
             <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
               <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
@@ -45,6 +46,7 @@
                 <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>
               </div>
             </div>
+          </div>
           </div>
 
         </div>
@@ -197,6 +199,11 @@ export default {
 </script>
 
 <style scoped>
+.role-options-wrapper{
+  height: 40vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 .invite-h{
   color:  #1D1E2C;
   text-align: center;
@@ -270,7 +277,6 @@ export default {
   border-radius: 360px;
 }
 .modal-footer{
-  padding-bottom: 2.54rem;
   padding-top: 3rem;
 }
 .p-1{
@@ -366,7 +372,7 @@ export default {
 .modal{
   width: 39.8125rem;
   height: auto;
-  margin: 50px auto;
+  margin: 20px auto;
   border-radius: 1rem;
   background:  #FFF;
 
@@ -416,9 +422,9 @@ export default {
 .formInput.focused{
   padding-top: 1.13rem;
   padding-left:1.25rem;
-  border: 1px solid #89128A;
+  border: 1px solid var(--app-default-primary);
   border-radius: 0.375rem;
-  outline: #89128A;
+  outline: var(--app-default-primary);
 
 }
 

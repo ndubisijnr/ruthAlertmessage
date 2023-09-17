@@ -308,7 +308,7 @@ export default {
 }
 
 .resend{
-  color:  #89128A;
+  color:  var(--app-default-primary);
   /* subtext/medium/14px */
   font-family: 'Product Sans';
   font-size: 0.875rem;
@@ -339,7 +339,7 @@ export default {
 }
 
 .fgpassword{
-  color: #89128A;
+  color: var(--app-default-primary);
   font-family: 'Product Sans';
   font-size: 0.875rem;
   font-style: normal;
@@ -348,7 +348,7 @@ export default {
 }
 
 .remember_me_span{
-  color: var(--black-text-03, #444854);
+  color:  #444854;
   font-family: 'Product Sans';
   font-size: 0.9375rem;
   font-style: normal;
@@ -373,7 +373,7 @@ export default {
 
 .lets_get_started_h{
   color:  #1D1E2C;
-  font-family: 'Product Sans' Black;
+  font-family: 'Product Sans';
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 900;
@@ -383,7 +383,7 @@ export default {
 
 
 .domain_account_h{
-  color: var(--black-text-01, #1D1E2C);
+  color:  #1D1E2C;
   /* Headings/48px/bold */
   font-family: 'Product Sans';
   font-size: 3rem;
@@ -422,7 +422,7 @@ export default {
   }
 }
 .subdomain{
-  color: var(--main-branding-primary, #89128A);
+  color: var(--app-default-primary);
   /* Headings/48px/bold */
   font-family: 'Product Sans';
   font-size: 3rem;

@@ -1,16 +1,16 @@
 <template>
    <layout v-slot:child-content>
-     <h3 class="user-name"> Hello {{getUser.first_name}} </h3>
+     <h3 class="user-name"> Hello {{getUser?.first_name}} </h3>
 
-     <div class="get-started">
+     <div class="get-started" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document">
        <div class="with-tiqwa">
          <div>
            <h3 class="with-tiqwa-h">Get started with Tiqwa 🎉</h3>
            <p class="with-tiqwa-p">Please complete your setup to access your full TIQWA services, </p>
          </div>
          <div style="display: flex;gap: 1rem;height: 2.5rem">
-           <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button>
-           <on-boarding-button btn-width="8rem" color="#89128A" border="none" height="2.5rem" text-node="Skip for later" background="#F1E4F2"></on-boarding-button>
+           <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Verification`"><on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button></router-link>
+<!--           <on-boarding-button btn-width="8rem" color="#2C6CAC" border="none" height="2.5rem" text-node="Skip for later" background="transparent"></on-boarding-button>-->
          </div>
        </div>
      </div>
@@ -142,8 +142,8 @@
 import NavBar from "../../components/dashboardComponents/NavBar.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DashboardStatsCard from "../../components/dashboardComponents/DashboardStatsCard.vue";
-import users from '../../components/dashboardComponents/icons/overviewIcons.png'
-import card from '../../components/dashboardComponents/icons/card.png'
+import users from '../../assets/Cards/overviewicons.png'
+import card from '../../assets/Cards/overviecard.png'
 import Layout from "../Layout.vue";
 export default {
   name: "Dashboard",
@@ -151,7 +151,8 @@ export default {
   data(){
     return{
       users:users,
-      card
+      card,
+      showing:false
     }
   },
 
@@ -160,7 +161,15 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
-    }
+    },
+
+    getBusinessProfile(){
+      if(localStorage.businessProfile){
+        const business = JSON.parse(localStorage?.businessProfile)
+        return business
+      }
+
+    },
   },
 }
 </script>
@@ -278,13 +287,14 @@ a{
 .get-started{
   width: 100%;
   height: 10.625rem;
-  background-image: url("../../assets/background.png");
+  background-image: url("../../assets/home_background_blue.svg");
   margin: 3rem 0;
   display: flex;
   align-items: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background-size: contain;
+  background-position: right;
+  background-color: var(--app-defautl-primary-light);
 }
 
 @media (max-width: 1024px) {

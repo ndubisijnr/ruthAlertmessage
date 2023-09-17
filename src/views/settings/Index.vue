@@ -38,6 +38,8 @@
 
     </div>
   </div>
+  <change-password v-show="changePassword" @close="close"></change-password>
+  <edit-role v-show="updateRole" @close="close"></edit-role>
 
   <!--  <account-deactivated></account-deactivated>-->
 <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
@@ -67,7 +69,7 @@
 
 
     </div>
-    <div class="tabs" >
+    <div class="tabs">
       <settings-skeletons-loader v-if="loading &&  teamLoading && rolesLoading"></settings-skeletons-loader>
 
       <div v-else>
@@ -93,7 +95,7 @@
                     <p class="change_password-p">Change Password</p>
                     <p class="change_password-sub">You can change your password here!</p>
                   </div>
-                  <on-boarding-button color="#89128A" text-node="Change Password" btn-width="10rem" height="3rem" background="#F8F1F8" border="none"></on-boarding-button>
+                  <on-boarding-button @click="changePassword=true" color="#2C6CAC" text-node="Change Password" btn-width="10rem" height="3rem" background="#EAF0F7" border="none"></on-boarding-button>
                 </div>
                 <div style="display:flex;justify-content: end">
                   <OnBoardingButton @click="handleUpdateProfile" :loading="loading" :disabled="loading" border="none" :textNode="'Save Changes'" :btnWidth="'11.0625rem'"></OnBoardingButton>
@@ -184,7 +186,7 @@
             <div v-else>
 
               <div v-if="getRoles?.length > 0" class="table-wrapper">
-                <domain-table :is-paginate="true" :data="getRoles" :fields="rolesFields"></domain-table>
+                <domain-table @updatingRole="editRole" :is-paginate="true" :data="getRoles" :fields="rolesFields"></domain-table>
               </div>
               <div v-else class="no-team-member">
                 <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
@@ -507,12 +509,14 @@ import DomainTable from "../../components/tables/DomainTable.vue";
 import {RuthdoAlert} from "ruthly";
 import SettingsRequest from "../../model/SettingsRequest";
 import AddNewRole from "../../components/modals/AddNewRole.vue";
+import ChangePassword from "../../components/modals/ChangePassword.vue";
 import AccountDeactivated from "../../components/modals/AccountDeactivated.vue";
 import DeactivateAccountConfirm from "../../components/modals/DeactivateAccountConfirm.vue";
 import AddDomain from "../../components/modals/AddDomain.vue";
 import AddBankAccount from "../../components/modals/AddBankAccount.vue";
 import EditBankAccount from "../../components/modals/EditBankAccount.vue";
 import SettingsSkeletonsLoader from "../../components/loaders/SettingsSkeletonsLoader.vue";
+import EditRole from "../../components/modals/EditRole.vue";
 
 export default {
   name: "Settings",
@@ -530,7 +534,9 @@ export default {
     AddDomain,
     AddBankAccount,
     EditBankAccount,
-    SettingsSkeletonsLoader
+    SettingsSkeletonsLoader,
+    ChangePassword,
+    EditRole
   },
 
   data(){
@@ -546,6 +552,8 @@ export default {
       IntMarkUpPlaceHolder:this.getMarkup?.international_markup_type  ? this.getMarkup?.international_markup_type :"Markup Type",
       addMember:false,
       addRole:false,
+      changePassword:false,
+      updateRole:false,
       searchQuery:null,
       editBankAccount:false,
       show:true,
@@ -597,6 +605,12 @@ export default {
   },
 
   methods:{
+    editRole(value){
+      console.log(value)
+      this.updateRole = value
+
+    },
+
     doFilter(){
       this.membersFilteredResult = this.getMembers.filter(it => it.first_name?.toLowerCase().includes(this.searchQuery)
       ||it.last_name?.toLowerCase().includes(this.searchQuery) ||
@@ -614,6 +628,7 @@ export default {
       }
 
     },
+
     editBank(obj){
       this.editBankAccount= true
       SettingsRequest.updateBank.bank_name = obj.bank_name
@@ -623,6 +638,7 @@ export default {
       SettingsRequest.updateBank.account_number = obj.account_number
 
     },
+
     deleteBankAction(){
       storeUtils.fireAway().settings?.deleteBank(this.bankName.id).then(() =>{
         if(this.getError === 'false'){
@@ -692,6 +708,8 @@ export default {
       this.addAccount = value
       this.editBankAccount = value
       this.bankIndex = null
+      this.changePassword = value
+      this.updateRole = value
     },
 
     handleUpdateBizProfile(){
@@ -750,6 +768,7 @@ export default {
       this.markupModel.international_markup_per_route = value,
       this.getMarkup.international_markup_per_route = value
     },
+
     setLocalPerPass(value){
       this.markupModel.domestic_markup_per_passenger = value,
       this.getMarkup.domestic_markup_per_passenger = value
@@ -1115,8 +1134,8 @@ export default {
   align-items: center;
   gap: 0.5rem;
   border-radius: 1.25rem;
-  background:  #F8F1F8 !important;
-  color:  #89128A !important;
+  background:  var(--app-defautl-primary-light2) !important;
+  color:  var(--app-default-primary) !important;
   text-align: center;
   /* subtext/medium/14px */
   font-family: 'Product Sans';
@@ -1397,7 +1416,7 @@ m-2{
 }
 
 .payment_type_active{
-  border-bottom:0.125rem solid #89128A;
+  border-bottom:0.125rem solid var(--app-default-primary);
 
 }
 
@@ -1610,7 +1629,7 @@ m-2{
   display: flex;
   align-items: center;
   border-radius: 2rem;
-  border: 1px solid #FDEBFF;
+  border: 1px solid var(--app-defautl-primary-light);
   background: #EFF2F7;
   width: auto;
 

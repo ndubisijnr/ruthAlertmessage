@@ -130,9 +130,9 @@ export default {
 .formInput.focused{
   padding-top: 1.13rem;
   padding-left:1.25rem;
-  border: 1px solid #89128A;
+  border: 1px solid var(--app-default-primary);
   border-radius: 0.375rem;
-  outline: #89128A;  
+  outline: var(--app-default-primary);
 
 }
 

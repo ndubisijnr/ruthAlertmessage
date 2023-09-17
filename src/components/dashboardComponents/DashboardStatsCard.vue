@@ -35,7 +35,7 @@ export default {
   gap: 1rem;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  border: solid #F1E0F1;
+  border: solid var(--app-defautl-primary-light2);
 }
 
 .sub-text{

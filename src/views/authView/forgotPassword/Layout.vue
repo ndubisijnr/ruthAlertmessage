@@ -78,7 +78,6 @@ export default {
   top: 70%;
   right: -20%;
   bottom: -10%;
-  background: linear-gradient(91deg, #F8F1F8 0%, #F1E0F1 100%);
   z-index: 1
 }
 
@@ -102,7 +101,7 @@ export default {
 }
 .wrapper{
   min-height: 100vh;
-  background: #F8F1F8;
+  background: var(--app-default-secondary-linear-gradaint1);
   display: flex;
   width: 100%;
   position: relative;

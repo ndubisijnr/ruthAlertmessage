@@ -71,7 +71,7 @@ export default {
   top: 68%;
   right: -20%;
   bottom: -10%;
-  background: linear-gradient(91deg, #F8F1F8 0%, #F1E0F1 100%);
+  background: var(--app-default-secondary-linear-gradaint1);
   z-index: 1
 }
 
@@ -80,7 +80,7 @@ export default {
   height: 27.51469rem;
   transform: rotate(150.931deg);
   flex-shrink: 0;
-  background: linear-gradient(91deg, #F8F1F8 0%, #F1E0F1 100%);;
+  background:var(--app-default-secondary-linear-gradaint2);
   position: fixed;
   top: 0;
   left: -35%;
@@ -89,7 +89,7 @@ export default {
 }
 .wrapper{
   min-height: 100vh;
-  background: #F8F1F8;
+  background: var(--app-default-primary);
   display: inline-block;
   width: 100%;
   /*border:solid;*/
@@ -102,7 +102,7 @@ export default {
   position: relative;
   padding: 3.5rem;
   border-radius: 1rem;
-  background:  #F8F9FB;
+  background:  var(--app-defautl-primary-light);
   z-index: 5;
   width: 100%;
   height: 52.00rem;

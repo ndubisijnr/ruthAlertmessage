@@ -81,8 +81,8 @@
 
                 <!-- template {roles} -->
                 <div v-if="h.id === 'role'">
-                  <p class="menu-item">Edit Role</p>
-                  <p class="menu-item deactivate" >Delete Role</p>
+                  <p class="menu-item" @click="editRole(j)">Edit Role</p>
+<!--                  <p class="menu-item deactivate" >Delete Role</p>-->
 
                 </div>
               </div>
@@ -132,6 +132,7 @@
 import {convertToWord} from "../../mixins/lettersExtractor";
 import paginate from "../../mixins/paginate";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
+import SettingsRequest from "../../model/SettingsRequest";
 export default {
   name: "DomainTable",
   props:['data', 'fields','isPaginate'],
@@ -146,11 +147,19 @@ export default {
       show:false,
       filteredResult:[],
       inModal:false,
+      model:SettingsRequest.updateRole,
+
 
     }
   },
 
   methods:{
+    editRole(obj){
+      this.model.name = obj?.name
+      this.model.permission_ids = obj?.permissions.map(item => item.id)
+      this.$emit('updatingRole', true)
+
+    }
 
   },
 
@@ -250,6 +259,7 @@ export default {
   text-align: left;
   margin: 1.31rem;
   text-transform: capitalize;
+  cursor: pointer;
 }
 .activePage{
   border-left: 0.6px solid  #E5E9F2;

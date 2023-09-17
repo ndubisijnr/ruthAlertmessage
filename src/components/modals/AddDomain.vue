@@ -22,9 +22,9 @@
 
               <div class="role-options">
                 <svg  v-if="whichDomain === 'new'" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="20" height="20" rx="10" fill="#89128A"/>
+                  <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
                   <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-                  <rect x="5" y="5" width="10" height="10" rx="5" fill="#89128A"/>
+                  <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
                 </svg>
                 <svg @click="whichDomain = 'new'" v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
@@ -39,9 +39,9 @@
 
               <div class="role-options">
                   <svg v-if="whichDomain === 'existing'"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="20" height="20" rx="10" fill="#89128A"/>
+                    <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
                     <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-                    <rect x="5" y="5" width="10" height="10" rx="5" fill="#89128A"/>
+                    <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
                   </svg>
                   <svg @click="whichDomain = 'existing'" v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
@@ -212,7 +212,7 @@ export default {
   },
   computed:{
     getLoading(){
-      return storeUtils.fireAway().settings?.getLoading
+      return storeUtils.fireAway().settings?.domainLoading
     },
 
     getDomainSuccess(){
@@ -238,7 +238,7 @@ export default {
 }
 
 .active_record_type{
-  color: #89128A;
+  color: #2C6CAC;
   border-bottom: solid;
 }
 

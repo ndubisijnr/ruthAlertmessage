@@ -19,6 +19,12 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --app-default-primary: #2C6CAC;
+  --app-defautl-primary-light:#EAF0F7;
+  --app-defautl-primary-light2:#C0D3E6;
+  --app-default-secondary-linear-gradaint1:linear-gradient(241deg, #D5E2EE 32.23%, rgba(213, 226, 238, 0.00) 110.9%);
+  --app-default-secondary-linear-gradaint2:linear-gradient(270deg, #D5E2EE 49.63%, rgba(213, 226, 238, 0.00) 89.52%);
+  --app-nav-active: linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%);
 }
 
 /* semantic color variables for this project */

@@ -104,7 +104,6 @@ a{
     /* z-index: 9999999999; */
      margin-top: 50px;
     border-radius: 0.5rem;
-    background:  #FFF;
     /* shadow-2 */
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
 }
@@ -158,8 +157,8 @@ a{
     align-items: center;
     gap: 0.625rem;
     border-radius: 0.625rem;
-    border: 1px solid var(--button-disabled, #F1E4F2);
-    background: var(--main-branding-light, #F8F1F8);
+    border: 1px solid var(--app-defautl-primary-light2);
+    background: var(--app-defautl-primary-light);
   cursor: pointer;
 }
 
@@ -168,7 +167,7 @@ a{
     text-align: center;
   cursor: pointer;
     /* Body/16px/Regular */
-    font-family: Product Sans;
+    font-family: 'Product Sans';
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;

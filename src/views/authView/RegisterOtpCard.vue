@@ -232,7 +232,7 @@ export default {
 }
 
 .email_sent_to{
-    color:  #89128A;
+    color:  var(--app-default-primary);
     /* For short paragraphs */
     font-family: 'Apercu';
     font-size: 0.875rem;
@@ -243,7 +243,7 @@ export default {
 }
 
 .resend{
-    color:  #89128A;
+    color:  var(--app-default-primary);
     /* subtext/medium/14px */
     font-family: 'Product Sans';
     font-size: 0.875rem;
