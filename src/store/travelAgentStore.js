@@ -45,8 +45,6 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
             return TravelAgentsService.VerifyBusiness(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
-                    await storeUtils.fireAway().travelAgent?.handleGetTravelAgent()
-                    await location.reload()
                     RuthdoAlert({title:'Successful', icon:'success'})
                     // do nothing
                 }

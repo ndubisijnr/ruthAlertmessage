@@ -42,23 +42,43 @@
                     </filter>
                   </defs>
                 </svg>
-                <svg @click="handleApprove('cac')" v-else xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                  <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
-                  <g filter="url(#filter0_d_2183_96401)">
-                    <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                      <feOffset dy="2"/>
-                      <feGaussianBlur stdDeviation="5"/>
-                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
-                    </filter>
-                  </defs>
-                </svg>
+                <div v-else>
+                  <svg v-if="checkedCAC" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
+                    <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
+                    <g filter="url(#filter0_d_2183_96383)">
+                      <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                        <feOffset dy="2"/>
+                        <feGaussianBlur stdDeviation="5"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
+                      </filter>
+                    </defs>
+                  </svg>
+                  <svg @click="handleApprove('cac')" v-else xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
+                    <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
+                    <g filter="url(#filter0_d_2183_96401)">
+                      <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                        <feOffset dy="2"/>
+                        <feGaussianBlur stdDeviation="5"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
+
               </div>
 
             </div>
@@ -103,23 +123,42 @@
                     </filter>
                   </defs>
                 </svg>
-                <svg @click="handleApprove('id')" v-else xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                  <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
-                  <g filter="url(#filter0_d_2183_96401)">
-                    <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                      <feOffset dy="2"/>
-                      <feGaussianBlur stdDeviation="5"/>
-                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
-                    </filter>
-                  </defs>
-                </svg>
+                <div v-else>
+                  <svg v-if="checkedDOC" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
+                    <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
+                    <g filter="url(#filter0_d_2183_96383)">
+                      <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                        <feOffset dy="2"/>
+                        <feGaussianBlur stdDeviation="5"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
+                      </filter>
+                    </defs>
+                  </svg>
+                  <svg v-else @click="handleApprove('id')"  xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
+                    <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
+                    <g filter="url(#filter0_d_2183_96401)">
+                      <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                        <feOffset dy="2"/>
+                        <feGaussianBlur stdDeviation="5"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
               </div>
 
             </div>
@@ -145,7 +184,9 @@ export default {
     return{
       getFirstLettersOfFirstAndLastName,
       convertToWord,
-      model:TravelAgentRequest.verifyBusiness
+      model:TravelAgentRequest.verifyBusiness,
+      checkedCAC:false,
+      checkedDOC:false
     }
   },
   components:{OnBoardingButton, Index},
@@ -153,8 +194,10 @@ export default {
     handleApprove(type){
       this.model.user_id = this.getTravelAgent.id
       if(type === 'id'){
+        this.checkedDOC = true
         this.model.is_id_verified = 'true'
       }else{
+        this.checkedCAC = true
         this.model.is_cac_verified = 'true'
       }
       storeUtils.fireAway().travelAgent?.handleVerifyBusiness()

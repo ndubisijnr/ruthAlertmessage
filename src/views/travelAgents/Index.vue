@@ -32,7 +32,7 @@
                 <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
                 <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
               </svg>
-              <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
+              <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search Agents"/>
             </div>
             <div class="filter">
               <div class="filter-div">
@@ -42,7 +42,7 @@
                 <span class="filter-span">Sort By</span>
               </div>
               <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
-              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking"></on-boarding-button>
+              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button>
             </div>
           </div>
           <div style="margin-top: 3.5rem">
@@ -92,8 +92,8 @@
 import Layout from "../Layout.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
-import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DomainTable from "../../components/tables/DomainTable.vue";
+import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 export default {
   name: "Index",
   component:{DomainTable,OnBoardingButton},
@@ -121,7 +121,7 @@ export default {
 
     }
   },
-  components:{DomainTable, Layout},
+  components:{OnBoardingButton, DomainTable, Layout},
   computed: {
     getCurrentRoute(){
       return router.currentRoute.value.path
