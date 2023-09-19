@@ -69,4 +69,8 @@ label{
   line-height: 1.25rem; /* 166.667% */
   padding-left: 1.25rem;
 }
+
+.input-slot-image{
+  margin-right:1.5rem;
+}
 </style>

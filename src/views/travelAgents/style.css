@@ -1,0 +1,50 @@
+
+.tracker{
+    width: 0.25rem;
+    background: #CDCED9;
+    margin: 0;
+
+}
+
+.sub-active-tracker{
+    width: 0.25rem;
+    height: 1.75rem;
+    background: var(--app-default-primary);
+    border-radius: 0.5rem;
+}
+
+.sub-active-nav{
+    color:var(--app-default-primary) !important;
+  cursor: pointer;
+    /* Body/16px/Regular */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem; /* 175% */
+    padding-bottom: 0.5rem;
+
+}
+
+.sub-nav{
+    color: #393A4A;
+    /* Body/16px/Regular */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem; /* 175% */
+    cursor: pointer;
+    padding-bottom: 0.5rem;
+
+}
+
+.m-nav{
+    display: block;
+}
+
+.item{
+    display: flex;
+    gap: 1rem;
+}
+

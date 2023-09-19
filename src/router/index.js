@@ -7,10 +7,11 @@ import settingsRoute from "./routes/settingsRoute";
 import visaRoute from "./routes/visaRoute";
 import insuranceRoute from "./routes/insuranceRoute";
 import hotelRoute from "./routes/hotelRoute";
+import travelAgentsRoute from "./routes/travelAgentsRoute";
 
 const baseRoute = []
 
-export const routes = baseRoute.concat(authRoutes,visaRoute,insuranceRoute,hotelRoute,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
+export const routes = baseRoute.concat(authRoutes,visaRoute,travelAgentsRoute,insuranceRoute,hotelRoute,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
 
  const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
