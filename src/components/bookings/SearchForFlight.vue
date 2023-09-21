@@ -1,9 +1,14 @@
 <template>
   <booking-index v-slot:booking_children>
         <div class="booking-div">
-          <div class="destination_type">Destination Type</div>
-
+<!--          <div class="destination_type">Destination Type</div>-->
           <div class="booking-div-inner-wrapper">
+            <div style="display: flex">
+              <div class="nav-a1 activeSection">Book Flight</div>
+              <div class="nav-a1">Find Hotels</div>
+              <div class="nav-a1">Visa</div>
+              <div class="nav-a1">insurance</div>
+            </div>
             <div class="booking-nav">
               <p class="booking-nav-item" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
@@ -197,7 +202,6 @@
             </div>
           </div>
 
-
         </div>
         </div>
   </booking-index>
@@ -205,7 +209,7 @@
 </template>
 
 <script>
-import BookingIndex from "../../views/bookings/Index.vue"
+import BookingIndex from "../../views/dashboard/Index.vue"
 import Layout from "../../views/Layout.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
@@ -247,7 +251,7 @@ export default {
     searchFlight(){
       storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
       storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
-      router.push({path:`/bookings/select_available_flights/${this.getUser?.access_token?.slice(0,20)}`})
+      router.push({path:`/dashboard/select_available_flights/${this.getUser?.access_token?.slice(0,20)}`})
     },
     filterAirportFrom(){
       if(this.fromQuery.length < 1){
@@ -327,6 +331,28 @@ export default {
 </script>
 
 <style scoped>
+.nav-a1{
+  display: flex;
+  width: 8rem;
+  padding: 0.25rem 0.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  color: var(--app-default-primary);
+
+  /* Medium/16px */
+  font-family:'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+.activeSection{
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  background: var(--app-default-primary);
+  color: white;
+}
 .airportsDropDown{
   width: 100%;
   display: flex;
@@ -545,6 +571,7 @@ export default {
   justify-content: start;
 
 }
+
 .text-1{
   color:#575A65;
   font-family: 'Product Sans';
@@ -567,6 +594,7 @@ export default {
 
 
 }
+
 .additional-details-info{
   display: flex;
   justify-content: start;
@@ -579,6 +607,7 @@ export default {
   margin-top: 3.5rem;
 
 }
+
 .dropdown-details-div{
   display: flex;
   justify-content: space-between;
@@ -587,11 +616,13 @@ export default {
   height: 5.75rem;
 
 }
+
 .depart_date-info{
   display: flex;
   align-items: center;
   gap: 3.25rem;
 }
+
 .depart-date-info-stops{
   color:  #1D1E2C;
   font-family: 'Product Sans';
@@ -600,6 +631,7 @@ export default {
   font-weight: 400;
   line-height: 1.5rem; /* 150% */
 }
+
 .depart-date{
   color: #1D1E2C;
 
@@ -611,7 +643,6 @@ export default {
   line-height: 1.75rem; /* 140% */
 }
 
-
 .actual-result-wrapper{
   margin-bottom: 2.06rem;
   border-radius: 0.25rem;
@@ -619,6 +650,7 @@ export default {
 
 
 }
+
 .details{
   border-radius: 0.25rem;
   /*border: 1px solid  #E5E9F2;*/
@@ -627,6 +659,7 @@ export default {
 
 
 }
+
 .component87{
   width: 100%;
   height: auto;
@@ -638,6 +671,7 @@ export default {
   padding: 1.5rem;
 
 }
+
 .view-details{
   color:#89128A;
   width: 4.8125rem;
@@ -651,6 +685,7 @@ export default {
   line-height: 1.5rem; /* 171.429% */
   cursor: pointer;
 }
+
 .spiralLines-div{
   position: absolute;
   top: -100px;
@@ -660,6 +695,7 @@ export default {
   /*border: solid;*/
   z-index: -1;
 }
+
 .choose_document_type{
   display: flex;
   width: 100%;
@@ -685,12 +721,14 @@ export default {
 .form-area-footer{
   margin-top: 4rem;
 }
+
 .group-inputs{
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
 }
+
 .stops{
   color:  #444854;
   font-family: 'Product Sans';
@@ -699,6 +737,7 @@ export default {
   font-weight: 400;
   line-height: 1rem; /* 133.333% */
 }
+
 .activeDestType{
   border-bottom:2px solid var(--app-default-primary);
   color:var(--app-default-primary) !important;
@@ -709,12 +748,14 @@ export default {
   font-family: 'Product Sans';
 
 }
+
 .more-flight-info{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .duration{
   color:  #1D1E2C;
 
@@ -725,6 +766,7 @@ export default {
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
+
 .dest{
   color:  #444854;
   font-family: 'Product Sans';
@@ -733,6 +775,7 @@ export default {
   font-weight: 400;
   line-height: 1rem; /* 114.286% */
 }
+
 .logo-area{
   display: flex;
   width: 15.1875rem;
@@ -771,6 +814,7 @@ export default {
   line-height: 1.75rem; /* 140% */
   margin-bottom: 1.25rem;
 }
+
 .amount-book-area{
   border-radius: 0.25rem;
   background:  #F9FAFC;
@@ -780,11 +824,13 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .breaker-2{
   width: 85%;
   height: 0.1rem;
   background: #E5E9F2;
 }
+
 .actual-result-item{
   width: 100%;
   height: 7rem;
@@ -991,6 +1037,7 @@ export default {
   display: flex;
   border-bottom: 1px solid  #E5E9F2;
   gap: 5rem;
+  margin-top: 3rem;
 }
 
 .progress-or{

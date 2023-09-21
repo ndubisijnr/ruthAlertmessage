@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import BookingIndex from "../../views/bookings/Index.vue"
+import BookingIndex from "../../views/dashboard/Index.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";

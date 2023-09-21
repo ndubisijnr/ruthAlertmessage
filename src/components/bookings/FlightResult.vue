@@ -267,7 +267,7 @@
 </template>
 
 <script>
-import BookingIndex from "../../views/bookings/Index.vue";
+import BookingIndex from "../../views/dashboard/Index.vue";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
