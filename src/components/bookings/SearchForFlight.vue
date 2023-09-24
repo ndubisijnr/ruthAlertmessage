@@ -1,7 +1,6 @@
 <template>
   <booking-index v-slot:booking_children>
         <div class="booking-div">
-<!--          <div class="destination_type">Destination Type</div>-->
           <div class="booking-div-inner-wrapper">
             <div style="display: flex">
               <div class="nav-a1 activeSection">Book Flight</div>
@@ -195,13 +194,12 @@
                 </div>
 
                   <div class="form-area-footer">
-                    <on-boarding-button style="cursor: not-allowed" btn-width="100%" disabled="true" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
                   </div>
 
                 </div>
             </div>
           </div>
-
         </div>
         </div>
   </booking-index>
@@ -323,7 +321,7 @@ export default {
 
   mounted() {
     storeUtils.fireAway().booking?.resetProgressNav()
-    storeUtils.fireAway().booking?.commitBookingStage('Search for Flight')
+    storeUtils.fireAway().booking?.commitBookingStage('Flight Search')
   }
 
 }
@@ -1012,8 +1010,7 @@ export default {
 }
 
 .booking-div-inner-wrapper{
-  margin: 0.5rem;
-  padding: 1.5rem;
+  margin: 4rem 0;
 }
 
 .booking-nav-item{
@@ -1030,14 +1027,14 @@ export default {
 }
 
 .booking-div{
-  margin: 2.88rem 4.75rem;
+  margin: 0 3rem;
 }
 
 .booking-nav{
   display: flex;
   border-bottom: 1px solid  #E5E9F2;
   gap: 5rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .progress-or{
@@ -1144,24 +1141,7 @@ export default {
   width: 100%;
 }
 
-.travel_type_booking{
-  width: 68.125rem;
-  height: auto;
-  flex-shrink: 0;
-  border-radius: 1rem;
-  border: 1px solid  #D8B0D8;
-  background: #FFF;
-  z-index: 99;
-  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
-  position: relative;
 
-}
-
-@media (max-width: 1024px) {
-  .travel_type_booking{
-    width: 100% !important;
-  }
-}
 
 .filter-div{
   background: #FFFFFF;

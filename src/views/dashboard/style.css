@@ -597,7 +597,7 @@
     position: relative;
 }
 
-.current-tab{
+.curretravel_type_bookingnt-tab{
     color:  #1D1E2C;
     text-align: center;
     font-family: 'Product Sans';
@@ -618,6 +618,6 @@
     background: #FFF;
     z-index: 99;
     box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
-    position: relative;
+    display: inline-block;
 
 }

@@ -18,13 +18,10 @@
 
      <div class="create-booking-process">
 
-       <route-nav v-show="getCurrentRoute !== 'Dashboard'"></route-nav>
+       <route-nav v-if="getCurrentRoute !== 'Dashboard'"></route-nav>
 
        <div class="travel_type_booking">
-         <!--            <div class="spiralLines-div">-->
-         <!--              <img src="../../assets/SpiralLines.svg" class="spiralLines"/>-->
-         <!--            </div>-->
-         <div class="progress-or">
+         <div class="progress-or" v-if="getCurrentRoute !== 'Dashboard'">
            <div class="progress-or-item" v-for="(i, index) in bookingProgress">
              <p class="stage" :class="{'activeStage':getBookingStage === i || progressNav.includes(i)}">{{ i }}</p>
              <div style="display: flex;align-items: center;justify-content: start">
@@ -176,6 +173,7 @@ import card from '../../assets/Cards/overviecard.png'
 import Layout from "../Layout.vue";
 import RouteNav from "../../components/RouteNav.vue";
 import router from "../../router";
+import storeUtils from "../../utils/storeUtils";
 export default {
   name: "Dashboard",
   components:{NavBar,OnBoardingButton,DashboardStatsCard,Layout,RouteNav},
@@ -183,7 +181,9 @@ export default {
     return{
       users:users,
       card,
-      showing:false
+      showing:false,
+      bookingProgress:['Flight Result','Traveller’s Info','Payment Confirmation'],
+      currentProgressIndex:1,
     }
   },
 
@@ -195,6 +195,21 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
+    },
+    getBookingStage(){
+      return storeUtils.fireAway().booking?.getBookingStage
+    },
+
+    getBookingSum(){
+      return storeUtils.fireAway().booking?.getBookingSummary
+    },
+
+    getLoadingBooking(){
+      return storeUtils.fireAway().booking?.getLoadingBooking
+    },
+
+    progressNav(){
+      return storeUtils.fireAway().booking?.getProgressNav
     },
 
     getBusinessProfile(){

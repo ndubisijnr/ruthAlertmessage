@@ -11,7 +11,7 @@ export const useBookingStore = defineStore('bookingStore', {
         loadingPayment:false,
         bookingSummary:null,
         bookings:null,
-        bookingStage:'Search for Flight',
+        bookingStage:'Flight Search',
         progressNav:[],
 
 

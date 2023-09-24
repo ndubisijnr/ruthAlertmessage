@@ -24,7 +24,7 @@
       <div class="travellers-info">
         <div class="adding-travellers-info">
           <div class="contact-details">
-            <p>Contact Details</p>
+            <p class="contact_details">Contact Details</p>
             <div class="group-inputs">
               <on-boarding-input width="100%" label="Email"></on-boarding-input>
               <on-boarding-input width="100%" label="phone"></on-boarding-input>
@@ -116,6 +116,16 @@ export default {
 </script>
 
 <style scoped>
+.contact_details{
+  color:#1D1E2C;
+
+  /* bold/24px */
+  font-family: 'Product Sans';
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 116.667% */
+}
 .simple-info{
   display: flex;
   width: 43rem;

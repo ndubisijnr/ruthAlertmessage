@@ -298,7 +298,7 @@ export default {
     traveller_info(){
       storeUtils.fireAway().booking?.addToProgressNav('Flight Result')
       storeUtils.fireAway().booking?.commitBookingStage('Traveller’s Info')
-      router.push({path:`/bookings/traveller\n’s_info/${this.getUser?.access_token?.slice(0,20)}`})
+      router.push({path:`/dashboard/traveller\n’s_info/${this.getUser?.access_token?.slice(0,20)}`})
     }
   },
 

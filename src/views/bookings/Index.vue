@@ -97,8 +97,6 @@ export default {
   components:{RouteNav,OnBoardingInput, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
   data(){
     return{
-      bookingProgress:['Search for Flight','Flight Result','Traveller’s Info','Payment Confirmation'],
-      currentProgressIndex:1,
       bookingFields:[
         {key:"name", label:"Customer’s Name"},
         {key:"email", label:"Ticket Amount"},
