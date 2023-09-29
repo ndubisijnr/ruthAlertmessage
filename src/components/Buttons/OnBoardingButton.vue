@@ -40,6 +40,7 @@ export default {
   background: #E5E9F2 !important;
   color: #575A65 !important;
   border: none;
+  cursor: not-allowed;
 }
 
 .text{

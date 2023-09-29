@@ -1,6 +1,6 @@
 <template>
   <booking-index v-slot:booking_children>
-        <div class="booking-div">
+        <div class="booking-div animate__animated animate__fadeIn">
           <div class="booking-div-inner-wrapper">
             <div style="display: flex">
               <div class="nav-a1 activeSection">Book Flight</div>
@@ -11,7 +11,9 @@
             <div class="booking-nav">
               <p class="booking-nav-item" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
-              <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
+              <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
+              <p class="booking-nav-item" style="cursor:not-allowed !important">Multi City</p>
+
             </div>
             <div class="one-round-way-multi-city">
               <div class="form-area">
@@ -21,34 +23,44 @@
                   <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                     <div class="group-inputs">
                       <div class="input-divs">
-                        <on-boarding-input width="100%" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
+                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
                         <div class="airportsDropDown">
-                          <p v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                          <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
                       </div>
                       <div class="input-divs">
-                        <on-boarding-input width="100%" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
                         <div class="airportsDropDown">
-                          <p v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                          <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
                       </div>
                     </div>
                     <div class="group-inputs">
-                      <data-picker label="Departure Date"></data-picker>
-                      <data-picker v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                      <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
+                      <data-picker @dateValue="updateDateValueTo" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
                     </div>
                   </div>
 
                   <div class="multi-city" v-show="activeDestType === 'multiCity'">
-                    <div class="new_flight">
+                    <div class="new_flight" v-for="(i, index) in multiCityFlight">
                       <div class="new_flight_header">
-                        <p class="flight-index">Flight 1</p>
-                        <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
+                        <p class="flight-index">Flight {{ index + 1 }}</p>
+                        <img src="../../assets/cancle.svg"  @click="close, removeFlight(index)" style="cursor: pointer"/>
                       </div>
                       <div class="new_flight_body">
                         <div class="group-inputs">
-                          <on-boarding-input width="100%" label="From" class=""/>
-                          <on-boarding-input width="100%"  label="To" class=""/>
+                          <div class="input-divs">
+                            <on-boarding-input autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
+                            <div class="airportsDropDown">
+                              <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                            </div>
+                          </div>   
+                          <div class="input-divs">
+                            <on-boarding-input autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                            <div class="airportsDropDown">
+                              <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                            </div>
+                          </div>                    
                         </div>
                         <div class="group-inputs">
                           <data-picker icon-id="from_icon_multicity" id="from_multicity" label="Departure Date" />
@@ -57,7 +69,7 @@
 
                     </div>
 
-                    <div class="add-new-flight">
+                    <div class="add-new-flight" @click="addFlight">
                       <img src="../../assets/Cards/add.svg" width="20" />
                       <p>Add another flight</p>
                     </div>
@@ -69,7 +81,14 @@
                   <div class="group-inputs">
 
                     <div  class="choose_document_type" style="position: relative;">
-                      <label>Passengers</label>
+                      <label class="class_label">Passengers</label>
+                      <p class="selected-item">
+                        {{ flightModel.adults > 0 ? `${flightModel.adults} Adults` : null}} 
+                        {{flightModel.infants > 0 && flightModel.adults > 0 ? ',' : null}} 
+                        {{ flightModel.infants > 0 ? `${flightModel.infants} Infants` : null}} 
+                        {{flightModel.children > 0 &&  flightModel.adults > 0 && flightModel.infants > 0 ? 'and' : null }}
+                        {{ flightModel.children > 0 ? `${flightModel.children} ${flightModel.children > 1 ? 'Children' : 'child'} ` : null}}
+                      </p>
                       <div v-if="showPassengers"  class="dropDown">
                         <div class="doc_type_options">
                           <div class="passenger-type">
@@ -79,10 +98,9 @@
                             </div>
 
                             <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                              <img src="../../assets/Cards/icons/bold/minus.svg" />
-                              <p class="text-2">2</p>
-                              <img src="../../assets/Cards/icons/bold/add.svg" />
-
+                              <button :disabled="flightModel.adults < 1" @click="flightModel.adults = --flightModel.adults" class="minus-button"> - </button>
+                              <p class="text-2">{{ flightModel.adults }}</p>
+                              <button @click="flightModel.adults = ++flightModel.adults" class="add-button"> + </button>
                             </div>
 
                           </div>
@@ -93,9 +111,9 @@
                             </div>
 
                             <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                              <img src="../../assets/Cards/icons/bold/minus.svg" />
-                              <p class="text-2">2</p>
-                              <img src="../../assets/Cards/icons/bold/add.svg" />
+                              <button :disabled="flightModel.children < 1" @click="flightModel.children = --flightModel.children" class="minus-button"> - </button>
+                              <p class="text-2">{{ flightModel.children }}</p>
+                              <button @click="flightModel.children = ++flightModel.children" class="add-button"> + </button>
 
                             </div>
 
@@ -107,9 +125,9 @@
                             </div>
 
                             <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                              <img src="../../assets/Cards/icons/bold/minus.svg" />
-                              <p class="text-2">2</p>
-                              <img src="../../assets/Cards/icons/bold/add.svg" />
+                              <button :disabled="flightModel.infants < 1" @click="flightModel.infants = --flightModel.infants" class="minus-button"> - </button>
+                              <p class="text-2">{{ flightModel.infants }}</p>
+                              <button @click="flightModel.infants = ++flightModel.infants" class="add-button"> + </button>
 
                             </div>
 
@@ -131,15 +149,15 @@
                     </div>
 
                     <div class="choose_document_type" style="position: relative;">
-                      <label class="class_label">Passengers</label>
-                      <p>Passengers</p>
+                      <label class="class_label">Class</label>
+                      <p class="selected-item">{{ flightModel.cabin }}</p>
                       <div  v-if="showClass" class="dropDown">
                         <div class="doc_type_options">
                           <div class="passenger-type" style="width: 100%">
-                            <p class="passenger-type-text-1">Adults</p>
+                            <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
                           </div>
                           <div class="passenger-type" style="border: none">
-                            <p class="passenger-type-text-1">Children</p>
+                            <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business',showClass = !showClass">Business</p>
                           </div>
 
 
@@ -150,7 +168,7 @@
 
                   </div>
 
-                  <div class="form-area-checkbox">
+                  <!-- <div class="form-area-checkbox">
                   <div class="form-area-checkbox-item">
                     <p>With Mark Up</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
@@ -191,10 +209,10 @@
                       </defs>
                     </svg>
                   </div>
-                </div>
+                </div> -->
 
                   <div class="form-area-footer">
-                    <on-boarding-button btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
                   </div>
 
                 </div>
@@ -214,6 +232,7 @@ import storeUtils from "../../utils/storeUtils";
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
+import FlightRequest from "../../model/FlightRequest"
 
 export default {
   name: "SearchForFlight",
@@ -222,8 +241,6 @@ export default {
     return{
       activeDestType:'round_trip',
       destination_type:'round_trip',
-      date: null,
-      date2: null,
       multiCity:[],
       showPassengers:false,
       showClass:false,
@@ -231,9 +248,62 @@ export default {
       filteredAirportTo:[],
       fromQuery:null,
       toQuery:null,
+      formatteddateFrom:null,
+      dateFrom:null,
+      dateTo:null,
+      flightModel:FlightRequest.flight,
+      multiCityFlight:[
+        { 
+          departure_date: null,
+        return_date: null,
+        destination: null}
+      ]
     }
   },
   methods:{
+    addFlight(){
+      this.multiCityFlight.push({ 
+          departure_date: null,
+        return_date: null,
+        destination: null})
+    },
+
+    removeFlight(obj){
+      this.multiCityFlight = this.multiCityFlight.filter((it, index) => {
+        return index !== obj
+      })
+
+    },
+
+    updateDateValue(obj){
+      this.dateFrom = obj.date
+      this.formatteddateFrom = obj.formattedDate
+      this.flightModel.departure_date = obj.formattedDate
+    },
+
+    updateDateValueTo(obj){
+      this.dateFrom = obj.date
+      this.formatteddateFrom = obj.formattedDate
+      this.flightModel.return_date = obj.formattedDate
+    },
+    
+    selectDestination(id, destination, code){
+      if(id === 'from_input'){
+        const inputElement = document.getElementById(id)
+        inputElement.value = destination
+        this.flightModel.origin = code
+        this.filteredAirportFrom.length = 0
+      }
+
+      else{
+        const inputElement = document.getElementById(id)
+        inputElement.value = destination
+        this.flightModel.destination = code
+        this.filteredAirportTo.length = 0
+      }
+
+    },
+
     showDropdown(value){
       const passenger = document.getElementById('passengers')
       const classDiv = document.getElementById('classDiv')
@@ -246,11 +316,16 @@ export default {
       }
 
     },
+
     searchFlight(){
-      storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
-      storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
-      router.push({path:`/dashboard/select_available_flights/${this.getUser?.access_token?.slice(0,20)}`})
+      // console.log(this.flightModel)
+      storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
+        this.flightModel.departure_date = null
+        this.flightModel.return_date = null
+
+      })
     },
+
     filterAirportFrom(){
       if(this.fromQuery.length < 1){
         this.filteredAirportFrom.length = 0
@@ -262,6 +337,7 @@ export default {
       }
 
     },
+
     filterAirportTo(){
       if(this.toQuery.length < 1){
         this.filteredAirportTo.length = 0
@@ -310,6 +386,10 @@ export default {
       }
     },
 
+    getLoading(){
+      return storeUtils.fireAway().flight?.getLoading
+    },
+
     getUser(){
       if(localStorage.user){
         return JSON.parse(localStorage.user)
@@ -329,6 +409,45 @@ export default {
 </script>
 
 <style scoped>
+.minus-button{
+  width:20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFFFFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.add-button{
+  width:20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFFFFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.selected-item{
+  padding: 0.25rem 0 0.25rem 0;
+  /* border: solid; */
+}
+.per_airport{
+  padding: 0.5rem;
+  border-bottom:solid var(--app-defautl-primary-light);
+  width: 100%;
+  cursor: pointer;
+}
+
 .nav-a1{
   display: flex;
   width: 8rem;
@@ -356,7 +475,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
   gap: 1.25rem;
   border-radius: 0.5rem;
   top: 80%;
@@ -383,7 +502,7 @@ export default {
   font-style: normal;
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */
-  margin-top: 0.5rem;
+
 }
 .passenger-type{
   display: flex;
@@ -401,6 +520,7 @@ export default {
   font-style: normal;
   font-weight: 900;
   line-height: 1.75rem; /* 175% */
+  cursor: pointer;
 }
 
 .text-2{

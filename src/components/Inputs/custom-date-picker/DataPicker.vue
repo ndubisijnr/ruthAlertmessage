@@ -2,8 +2,9 @@
   <div class="wrapper">
     <img class="input-slot-image" src="../../../assets/Cards/icons/calendar.svg" />
 
-  <label>{{ label }}</label>
-  <VueDatePicker v-model="date" :enable-time-picker="false" auto-apply :clearable="false" position="left" :month-change-on-scroll="false">
+  <label>{{ label }} </label>
+  <VueDatePicker min-date="min_date" :model-value="inputDate" @update:model-value="setDate" :format="format" :enable-time-picker="false" auto-apply :clearable="false" position="left" :month-change-on-scroll="false">
+  
     <template #dp-input="{ value, onInput, onEnter, onTab, onClear, onBlur, onKeypress, onPaste, isMenuOpen }">
       <input type="text" class="data-picker-input" :value="value"  />
     </template>
@@ -22,16 +23,30 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   name: "DataPicker",
-  props:['value', 'label'],
+  props:['value', 'label', 'min_date', 'max_date'],
   components:{VueDatePicker},
   data(){
     return{
       isFocused:false,
-      date: null,
+      inputDate: null,
 
     }
   },
   methods:{
+    setDate(value){
+      this.inputDate = value
+      this.$emit('dateValue', {formattedDate:this.format(this.inputDate), date:value})
+     
+    },
+
+    format(date){
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear(); 
+
+      return `${year}-${month <= 9 ? `0${month}`: month}-${day <= 9 ? `0${day}` : day}`;
+    },
+
     handleFocus(){
       this.isFocused = true
     },

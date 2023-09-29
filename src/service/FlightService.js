@@ -2,8 +2,8 @@ import {apiService} from "./BaseService";
 
 export default {
 
-    doSearch(tenant_id) {
-        return apiService.Client.get(`/api/${tenant_id}/flight/search`)
+    doSearch(tenant_id, payload) {
+        return apiService.Client.post(`/api/${tenant_id}/flight/search`, payload)
     },
 
     airports() {
@@ -26,9 +26,14 @@ export default {
         return apiService.Client.get(`/api/${tenant_id}/booking/summary/${user_id}?`)
     },
 
-    book(tenant_id,flight_id) {
-        return apiService.Client.get(`/api/${tenant_id}/flight/book/${flight_id}`)
+    book(tenant_id,flight_id, payload) {
+        return apiService.Client.post(`/api/${tenant_id}/flight/book/${flight_id}`, payload)
     },
+
+    
+    wallet(tenant_id, user_id){
+        return apiService.Client.get(`/api/${tenant_id}/wallet/${user_id}?`)
+    }
 
 
 

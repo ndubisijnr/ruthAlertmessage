@@ -1,12 +1,13 @@
 <template>
   <div class="breadcrumb-sub">
-<!--    to="i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}`"-->
-    <router-link  :to="i.name.includes('Booking') ? i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}` : '#'" v-for="(i, index) in getAllRoute" :key="i" >
-      <span class="current-path-sub"> {{ i.name }}
+    <!-- :to="i.name.includes('Booking') ? i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}` : "  -->
+    <!-- :to="`${i.path.split(':')[0]}${getUser?.access_token?.slice(0,20)}`"  -->
+    <span  v-for="(i, index) in getAllRoute" :key="i" >
+      <span class="current-path-sub" :class="{'current-tab':getCurrentRoute===i.name}"> {{ i.name }}
         <img src="../assets/VerificationProcess/arrow-left.svg" />
       </span>
-    </router-link>
-<!--    <span class="current-tab">{{getCurrentRoute}}</span>-->
+    </span>
+   <!-- <span class="">{{getCurrentRoute}}</span> -->
   </div>
 </template>
 
@@ -26,6 +27,14 @@ export default {
 
     getCurrentRoute(){
       return router.currentRoute.value.name
+    },
+
+
+    getRelivantRoute(){
+      const routes = [] 
+      routes.push(this.getAllRoute[0])
+      .filter(it => it.name === this.getCurrentRoute)[0].path.split
+      return routes
     },
 
 
@@ -64,6 +73,16 @@ export default {
   margin-top: 1rem;
   margin-bottom: 1.94rem;
   gap: 0.5rem;
+}
+
+.current-tab{
+  color:  #1D1E2C;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
 }
 
 </style>

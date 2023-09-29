@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import FlightService from "../service/FlightService";
 import {catchErrorHandler} from "../mixins/ErrorHandler";
 import storeUtils from "../utils/storeUtils";
+import FlightRequest from '../model/FlightRequest';
+import router from '../router';
+import { RuthdoAlert } from 'ruthly';
 
 export const useFlightStore = defineStore('flightStore', {
     state: () => ({
@@ -26,7 +29,9 @@ export const useFlightStore = defineStore('flightStore', {
         txf_ref:null,
         query:null,
         invoicePayload:null,
-        showingPaymentMethod:false
+        showingPaymentMethod:false,
+        flightResults:null,
+        wallet:null
     }),
 
     getters: {
@@ -43,12 +48,16 @@ export const useFlightStore = defineStore('flightStore', {
         getAirport: state => state.airports,
         getAirlines: state => state.airlines,
         getFlights: state => state.flightSearchPayload,
-        getSelectedFlight: state => state.selectedFlight,
+        getSelectedFlight: () => {return JSON.parse(localStorage?.selectedFlight)},
         getSuccess:state => state.successMsg,
         getBookFlightDetails:state => state.bookedFlightDetails,
         getPaymentLoading:state => state.paymentLoading,
         getInvoicePayload:state => state.invoicePayload,
         getShowingPaymentMethod:state => state.showingPaymentMethod,
+        getFlightResults: () => {return JSON.parse(localStorage?.flightResults)},
+        getWallet: state => state.wallet,
+
+
     },
 
     actions: {
@@ -61,6 +70,86 @@ export const useFlightStore = defineStore('flightStore', {
                 catchErrorHandler(e)
             })
         },
+
+        commitSelectedFlight(obj){
+            const user = JSON.parse(localStorage?.user)
+            localStorage.selectedFlight = JSON.stringify(obj)
+            storeUtils.fireAway().booking?.addToProgressNav('Flight Result')
+            storeUtils.fireAway().booking?.commitBookingStage('Traveller’s Info')
+            router.push({path:`/dashboard/travellers_info/${user?.access_token?.slice(0,20)}`})
+
+        },
+
+        async handleFlightSearch(payload = FlightRequest.flight){
+           const user = JSON.parse(localStorage?.user)
+           this.loading = true
+           try{
+            const response = await FlightService.doSearch(storeUtils.fireAway().global?.getTenant_id, payload)
+            let responseData = response.data
+            this.loading = false
+            if(responseData.success){
+                if(responseData.data.length > 0){
+                    localStorage.flightResults = JSON.stringify(responseData.data)
+                    window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0,20)}`
+                }else{
+                    RuthdoAlert({title:"Couldn't find any flights at the moment", icon:"error"})
+                }
+            }
+           }catch(err){
+            catchErrorHandler(err)
+           }
+        },
+
+        async handleBookFlight(payload, flight_id){
+            const user = JSON.parse(localStorage?.user)
+            this.bookingLoading = true
+            try{
+             const response = await FlightService.book(storeUtils.fireAway().global?.getTenant_id,flight_id, payload)
+             let responseData = response.data
+             this.bookingLoading = false
+             if(responseData.success){
+                localStorage.bookedFlight = JSON.stringify(responseData.data)
+                window.location = `/dashboard/payment/${this.getUser?.access_token?.slice(0,20)}`
+             }
+            }catch(err){
+             this.bookingLoading = false
+             catchErrorHandler(err)
+            }
+         },
+
+         async handleFlightPayment(payload = FlightRequest.bookFlight, flight_id){
+            const user = JSON.parse(localStorage?.user)
+            this.loading = true
+            try{
+             const response = await FlightService.book(storeUtils.fireAway().global?.getTenant_id, payload, flight_id)
+             let responseData = response.data
+             this.loading = false
+             if(responseData.success){
+                 if(responseData.data.length > 0){
+                     localStorage.flightResults = JSON.stringify(responseData.data)
+                     window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0,20)}`
+                 }else{
+                     RuthdoAlert({title:"Couldn't find any flights at the moment", icon:"error"})
+                 }
+             }
+            }catch(err){
+             catchErrorHandler(err)
+            }
+         },
+
+         async handleGetWallet(){
+            const user = JSON.parse(localStorage?.businessProfile)
+            console.log(user);
+            try{
+             const response = await FlightService.wallet(storeUtils.fireAway().global?.getTenant_id, user.id)
+             let responseData = response.data
+             if(responseData.success){
+                 this.wallet = responseData.data
+             }
+            }catch(err){
+             catchErrorHandler(err)
+            }
+         },
 
     }
 })

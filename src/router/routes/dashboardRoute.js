@@ -23,7 +23,7 @@ export default [
     },
 
     {
-        path: '/dashboard/traveller\n’s_info/:token',
+        path: '/dashboard/travellers_info/:token',
         // redirect:'create-account',
         name: 'Traveller’s Info',
         meta: {layout: 'dashboard',authRequired:true},
@@ -33,8 +33,8 @@ export default [
     {
         path: '/dashboard/payment/:token',
         // redirect:'create-account',
-        name: 'Payment',
+        name: 'Flight Payment',
         meta: {layout: 'dashboard',authRequired:true},
-        // component: () => import('../../components/bookings/TravellerInfo.vue')
+        component: () => import('../../components/bookings/FlightPayment.vue')
     }
 ]

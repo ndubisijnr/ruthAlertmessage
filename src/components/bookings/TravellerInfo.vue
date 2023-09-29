@@ -1,38 +1,102 @@
 <template>
   <booking-index v-slot:booking_children>
-    <div class="flight-result">
+    <div class="flight-result animate__animated animate__fadeIn">
       <div><p>Selected Flight</p></div>
-      <div class="booking-info">
-        <div class="search-info-area">
-          <p class="search-info">Round Trip</p>
-          <p class="search-info">4 Passengers</p>
-          <p class="search-info">Business Class</p>
-          <p class="search-info">12th, April 2022 - 15th, May 2022</p>
-        </div>
-        <a href=""> <on-boarding-button @click="doSearch('Search for Flight')" btn-width="7.26981rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Edit Search"></on-boarding-button></a>
-      </div>
-      <div class="dest-abv">
-        <p class="dest-abv-it">Lagos (LOS)</p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M1.49964 11.9991C1.49964 12.198 1.57865 12.3887 1.71931 12.5294C1.85996 12.67 2.05072 12.7491 2.24964 12.7491H19.9391L15.2186 17.4681C15.1489 17.5378 15.0936 17.6206 15.0559 17.7117C15.0181 17.8028 14.9987 17.9004 14.9987 17.9991C14.9987 18.0977 15.0181 18.1953 15.0559 18.2864C15.0936 18.3775 15.1489 18.4603 15.2186 18.5301C15.2884 18.5998 15.3712 18.6551 15.4623 18.6928C15.5534 18.7306 15.651 18.75 15.7496 18.75C15.8483 18.75 15.9459 18.7306 16.037 18.6928C16.1281 18.6551 16.2109 18.5998 16.2806 18.5301L22.2806 12.5301C22.3505 12.4604 22.4059 12.3776 22.4437 12.2865C22.4815 12.1954 22.501 12.0977 22.501 11.9991C22.501 11.9004 22.4815 11.8027 22.4437 11.7116C22.4059 11.6205 22.3505 11.5377 22.2806 11.4681L16.2806 5.46805C16.2109 5.39832 16.1281 5.34301 16.037 5.30527C15.9459 5.26753 15.8483 5.24811 15.7496 5.24811C15.651 5.24811 15.5534 5.26753 15.4623 5.30527C15.3712 5.34301 15.2884 5.39832 15.2186 5.46805C15.1489 5.53778 15.0936 5.62057 15.0559 5.71168C15.0181 5.80279 14.9987 5.90044 14.9987 5.99905C14.9987 6.09767 15.0181 6.19532 15.0559 6.28643C15.0936 6.37754 15.1489 6.46032 15.2186 6.53005L19.9391 11.2491H2.24964C2.05072 11.2491 1.85996 11.3281 1.71931 11.4687C1.57865 11.6094 1.49964 11.8001 1.49964 11.9991Z" fill="#1D1E2C"/>
-        </svg>
-        <p class="dest-abv-it">London (LHN)</p>
-      </div>
+    
       <div class="breaker1"></div>
-      <div style="display: flex;flex-direction: column;margin-top: 2rem;margin-bottom: 1.44rem">
 
+      <div class="intro_summary_wrapper">
+
+      <div class="into-summary" v-for="(i, index) in getSelectedFlight.outbound" :key="index">
+        <div class="into-summary-item">
+          <p>{{convertToWord(i.departure_time)}}</p>
+          <p class="duration">{{ convertDurationToWords(i.duration) }}</p>
+          <p>{{convertToWord(i.arrival_time)}}</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="233" viewBox="0 0 16 233" fill="none">
+          <path d="M7.64645 232.354C7.84171 232.549 8.15829 232.549 8.35355 232.354L11.5355 229.172C11.7308 228.976 11.7308 228.66 11.5355 228.464C11.3403 228.269 11.0237 228.269 10.8284 228.464L8 231.293L5.17157 228.464C4.97631 228.269 4.65973 228.269 4.46447 228.464C4.2692 228.66 4.2692 228.976 4.46447 229.172L7.64645 232.354ZM7.5 0V2H8.5V0L7.5 0ZM7.5 6V10H8.5L8.5 6H7.5ZM7.5 14V18H8.5V14H7.5ZM7.5 22L7.5 26H8.5V22H7.5ZM7.5 30L7.5 34H8.5V30H7.5ZM7.5 38L7.5 42H8.5V38H7.5ZM7.5 46L7.5 50H8.5L8.5 46H7.5ZM7.5 54V58H8.5V54H7.5ZM7.5 62V66H8.5L8.5 62H7.5ZM7.5 70V74H8.5V70H7.5ZM7.5 78L7.5 82H8.5V78H7.5ZM7.5 86L7.5 90H8.5V86H7.5ZM7.5 94L7.5 98H8.5V94H7.5ZM7.5 102L7.5 106H8.5V102H7.5ZM7.5 110V114H8.5V110H7.5ZM7.5 118V122H8.5L8.5 118H7.5ZM7.5 126V130H8.5V126H7.5ZM7.5 134V138H8.5L8.5 134H7.5ZM7.5 142V146H8.5V142H7.5ZM7.5 150L7.5 154H8.5V150H7.5ZM7.5 158L7.5 162H8.5V158H7.5ZM7.5 166L7.5 170H8.5V166H7.5ZM7.5 174L7.5 178H8.5V174H7.5ZM7.5 182V186H8.5V182H7.5ZM7.5 190V194H8.5L8.5 190H7.5ZM7.5 198V202H8.5V198H7.5ZM7.5 206L7.5 210H8.5L8.5 206H7.5ZM7.5 214L7.5 218H8.5V214H7.5ZM7.5 222L7.5 226H8.5V222H7.5ZM7.5 230V232H8.5V230H7.5ZM7.29289 232.707C7.68342 233.098 8.31658 233.098 8.70711 232.707L15.0711 226.343C15.4616 225.953 15.4616 225.319 15.0711 224.929C14.6805 224.538 14.0474 224.538 13.6569 224.929L8 230.586L2.34315 224.929C1.95262 224.538 1.31946 224.538 0.928932 224.929C0.538408 225.319 0.538408 225.953 0.928932 226.343L7.29289 232.707ZM7 0V2H9V0L7 0ZM7 6V10H9V6H7ZM7 14V18H9V14H7ZM7 22L7 26H9V22H7ZM7 30L7 34H9V30H7ZM7 38L7 42H9V38H7ZM7 46L7 50H9L9 46H7ZM7 54V58H9V54H7ZM7 62V66H9L9 62H7ZM7 70V74H9V70H7ZM7 78L7 82H9V78H7ZM7 86L7 90H9V86H7ZM7 94L7 98H9V94H7ZM7 102L7 106H9V102H7ZM7 110V114H9V110H7ZM7 118V122H9L9 118H7ZM7 126V130H9V126H7ZM7 134V138H9L9 134H7ZM7 142V146H9V142H7ZM7 150L7 154H9V150H7ZM7 158L7 162H9V158H7ZM7 166L7 170H9V166H7ZM7 174L7 178H9V174H7ZM7 182V186H9V182H7ZM7 190V194H9L9 190H7ZM7 198V202H9V198H7ZM7 206L7 210H9L9 206H7ZM7 214L7 218H9V214H7ZM7 222L7 226H9V222H7ZM7 230V232H9V230H7Z" fill="#C0CCDA"/>
+        </svg>
+
+        <div class="into-summary-item">
+          <div>
+            <p>{{getCityByCityCode(i.airport_from)}}  ({{i.airport_from}})</p>
+            <p> {{getAirportNamesByCityCode(i.airport_from)}}</p>
+          </div>
+          <div>
+            <div style="display: flex;gap: 0.5rem;">
+              <img  :src="i.airline_details.logo" class="logo"/>
+              <p>{{i.airline_details.name}}</p>
+            </div>
+          </div>
+          <div>
+            <p>{{getCityByCityCode(i.airport_to)}}  ({{i.airport_to}})</p>
+            <p> {{getAirportNamesByCityCode(i.airport_to)}}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div v-if="getSelectedFlight.inbound.length > 0"  class="intro_summary_wrapper">
+
+
+      <div class="into-summary" v-for="(i, index) in getSelectedFlight.inbound" :key="index">
+        <div class="into-summary-item">
+          <p>{{convertToWord(i.departure_time)}}</p>
+          <p>{{ convertDurationToWords(i.duration) }}</p>
+          <p>{{convertToWord(i.arrival_time)}}</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="233" viewBox="0 0 16 233" fill="none">
+          <path d="M7.64645 232.354C7.84171 232.549 8.15829 232.549 8.35355 232.354L11.5355 229.172C11.7308 228.976 11.7308 228.66 11.5355 228.464C11.3403 228.269 11.0237 228.269 10.8284 228.464L8 231.293L5.17157 228.464C4.97631 228.269 4.65973 228.269 4.46447 228.464C4.2692 228.66 4.2692 228.976 4.46447 229.172L7.64645 232.354ZM7.5 0V2H8.5V0L7.5 0ZM7.5 6V10H8.5L8.5 6H7.5ZM7.5 14V18H8.5V14H7.5ZM7.5 22L7.5 26H8.5V22H7.5ZM7.5 30L7.5 34H8.5V30H7.5ZM7.5 38L7.5 42H8.5V38H7.5ZM7.5 46L7.5 50H8.5L8.5 46H7.5ZM7.5 54V58H8.5V54H7.5ZM7.5 62V66H8.5L8.5 62H7.5ZM7.5 70V74H8.5V70H7.5ZM7.5 78L7.5 82H8.5V78H7.5ZM7.5 86L7.5 90H8.5V86H7.5ZM7.5 94L7.5 98H8.5V94H7.5ZM7.5 102L7.5 106H8.5V102H7.5ZM7.5 110V114H8.5V110H7.5ZM7.5 118V122H8.5L8.5 118H7.5ZM7.5 126V130H8.5V126H7.5ZM7.5 134V138H8.5L8.5 134H7.5ZM7.5 142V146H8.5V142H7.5ZM7.5 150L7.5 154H8.5V150H7.5ZM7.5 158L7.5 162H8.5V158H7.5ZM7.5 166L7.5 170H8.5V166H7.5ZM7.5 174L7.5 178H8.5V174H7.5ZM7.5 182V186H8.5V182H7.5ZM7.5 190V194H8.5L8.5 190H7.5ZM7.5 198V202H8.5V198H7.5ZM7.5 206L7.5 210H8.5L8.5 206H7.5ZM7.5 214L7.5 218H8.5V214H7.5ZM7.5 222L7.5 226H8.5V222H7.5ZM7.5 230V232H8.5V230H7.5ZM7.29289 232.707C7.68342 233.098 8.31658 233.098 8.70711 232.707L15.0711 226.343C15.4616 225.953 15.4616 225.319 15.0711 224.929C14.6805 224.538 14.0474 224.538 13.6569 224.929L8 230.586L2.34315 224.929C1.95262 224.538 1.31946 224.538 0.928932 224.929C0.538408 225.319 0.538408 225.953 0.928932 226.343L7.29289 232.707ZM7 0V2H9V0L7 0ZM7 6V10H9V6H7ZM7 14V18H9V14H7ZM7 22L7 26H9V22H7ZM7 30L7 34H9V30H7ZM7 38L7 42H9V38H7ZM7 46L7 50H9L9 46H7ZM7 54V58H9V54H7ZM7 62V66H9L9 62H7ZM7 70V74H9V70H7ZM7 78L7 82H9V78H7ZM7 86L7 90H9V86H7ZM7 94L7 98H9V94H7ZM7 102L7 106H9V102H7ZM7 110V114H9V110H7ZM7 118V122H9L9 118H7ZM7 126V130H9V126H7ZM7 134V138H9L9 134H7ZM7 142V146H9V142H7ZM7 150L7 154H9V150H7ZM7 158L7 162H9V158H7ZM7 166L7 170H9V166H7ZM7 174L7 178H9V174H7ZM7 182V186H9V182H7ZM7 190V194H9L9 190H7ZM7 198V202H9V198H7ZM7 206L7 210H9L9 206H7ZM7 214L7 218H9V214H7ZM7 222L7 226H9V222H7ZM7 230V232H9V230H7Z" fill="#C0CCDA"/>
+        </svg>
+
+        <div class="into-summary-item">
+          <div>
+            <p>{{getCityByCityCode(i.airport_from)}}  ({{i.airport_from}})</p>
+            <p> {{getAirportNamesByCityCode(i.airport_from)}}</p>
+          </div>
+          <div>
+            <div style="display: flex;border: solid;">
+              <img  :src="i.airline_details.logo" class="logo"/>
+              <p>{{i.airline_details.name}}</p>
+            </div>
+          </div>
+          <div>
+            <p>{{getCityByCityCode(i.airport_to)}}  ({{i.airport_to}})</p>
+            <p> {{getAirportNamesByCityCode(i.airport_to)}}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      </div>
+
+
+
+
+      <div style="display: flex;flex-direction: column;margin-top: 2rem;margin-bottom: 1.44rem">
       <div class="travellers-info">
         <div class="adding-travellers-info">
           <div class="contact-details">
             <p class="contact_details">Contact Details</p>
             <div class="group-inputs">
-              <on-boarding-input width="100%" label="Email"></on-boarding-input>
-              <on-boarding-input width="100%" label="phone"></on-boarding-input>
+              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_first_name = value" label="First Name"></on-boarding-input>
+              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_last_name = value" label="Last Name"></on-boarding-input>
+            </div>
+            <div class="group-inputs">
+              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
+              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
             </div>
           </div>
 
+        <div style="margin-bottom: 6rem;" v-for="(i,index) in passengers" :key="index">
+         
+
           <div class="contact-details">
-            <p>Passenger Details</p>
+            <p class="contact_details">Passenger Details</p>
           </div>
 
           <div class="simple-info">
@@ -42,13 +106,117 @@
             <p> Use all given names and surnames exactly as they appear in your
               passport/ID to avoid boarding complications.</p>
           </div>
-          <div class="simple-info">
+
+          <div class="form" >
+            <div class="title">
+              <div class="title-item">
+                <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? i.title = 'mr' : null" :checked="isTitle==='mr'" />
+                <span>Mr</span>
+              </div>
+              <div class="title-item">
+                <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? i.title = 'mrs' : null" :checked="isTitle==='mrs'"/>
+                <span>Mrs</span>
+              </div>
+              <div class="title-item">
+                <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? i.title = 'ms' : null" :checked="isTitle==='ms'"/>
+                <span> Ms</span>
+              </div>
+            </div>
+
+            <div class="input-area">
+                <div class="group-inputs">
+                  <on-boarding-input autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => i.first_name = value"/>
+
+                  <on-boarding-input autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => i.last_name = value" />
+                </div>
+                <div class="group-inputs">
+                  <div class="choose_document_type" style="position: relative;">
+                      <label class="class_label">Gender</label>
+                      <p class="selected-item">{{ i.gender }}</p>
+                      <div  v-if="showGender" class="dropDown">
+                        <div class="doc_type_options">
+                          <div class="passenger-type">
+                            <p class="passenger-type-text-1" @click="i.gender = 'male', showGender = !showGender">Male</p>
+                          </div>
+                          <div class="passenger-type" style="border: none">
+                            <p class="passenger-type-text-1" @click="i.gender = 'female',showGender = !showGender">Female</p>
+                          </div>
+
+
+                        </div>
+                      </div>
+                      <img @click="showGender = !showGender" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                    </div>
+                    <DataPicker label="Date of birth" @dateValue="obj => i.dob = obj.formattedDate"/>
+                </div>
+
+                <div class="group-inputs">
+                  <on-boarding-input autocomplete="off" width="100%" label="Email" class="" @inputValue="(value) => i.email = value"/>
+
+                  <on-boarding-input autocomplete="off" width="100%" label="Phone Number" class="" @inputValue="(value) => i.phone_number = value" />
+                </div>
+
+                <div style="display: flex;justify-content: end;">
+                  <div class="remove_button" @click="removePassengers(i.id)">
+                    Remove Passanger
+                  </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+
+         <div class="simple-info">
             <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
             </svg>
             <p> Covid 19 protocols: You can find some of the special requirements for any destination via the link below
               or directly on your airline's website.
               Please also consult your local health authorities for updated information.</p>
+          </div> 
+
+
+          <div class="add-new-flight" @click="passengers.length < getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  ? addPassenger() : null" :class="{'disabled':passengers.length === getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0) }">
+              <img src="../../assets/Cards/add.svg" width="20" />
+              <p>Add New Passenger</p>
+          </div>
+
+      
+
+
+          <div class="">
+            <p class="contact_details">Paying Now, or Later</p>
+
+            <p class="text-1">To reserve your flights, click <span class="span-1">"Book on Hold." </span>
+              You will then be given complete instructions on how to make payment whenever you are ready during the stipulated time. 
+              Please mention your booking reference.
+               Until payment is confirmed, the advertised fare / pricing is not guaranteed.</p>
+
+
+               <div :class="{'onHold':showBookHold}">
+                  <div class="choose_document_type" style="position: relative;">
+                        <p>Book on Hold</p>
+                        <svg v-if="!showBookHold" @click="showBookHold = !showBookHold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M16.8 12.0005C16.8 12.7005 16.53 13.4005 16 13.9305L9.48001 20.4505C9.19001 20.7405 8.71001 20.7405 8.42001 20.4505C8.13001 20.1605 8.13001 19.6805 8.42001 19.3905L14.94 12.8705C15.42 12.3905 15.42 11.6105 14.94 11.1305L8.42001 4.61047C8.13001 4.32047 8.13001 3.84047 8.42001 3.55047C8.71001 3.26047 9.19001 3.26047 9.48001 3.55047L16 10.0705C16.53 10.6005 16.8 11.3005 16.8 12.0005Z" fill="#292D32"/>
+                        </svg> 
+                        <svg @click="showBookHold = !showBookHold" v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z" fill="#292D32"/>
+                        </svg>                  
+                  </div>
+
+
+                  <div v-if="showBookHold">
+                        <p class="dropDown_p">Hold price and space and you have the flexibility to pay at a later date, 
+                          Hold price and space and you have the flexibility to pay at a later date
+                        </p>
+                  </div>
+               </div>
+             
+
+                <OnBoardingButton style="margin-top:4rem;margin-bottom: 8.87rem;" @click="proceedToPayment" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Continue"></OnBoardingButton>
+          
+          
           </div>
 
         </div>
@@ -58,15 +226,16 @@
               </div>
               <div class="booking_summary_body">
                 <div class="airline_details">
-                  <img src="../../assets/turkishAir.png" class="logo" />
-                  <p class="airline_name">China Southern Airlines</p>
+                  <img :src="getSelectedFlight?.outbound[0].airline_details?.logo" class="logo" />
+                  <p class="airline_name">{{getSelectedFlight?.outbound[0].airline_details?.name}}</p>
                 </div>
 
                 <div class="airline_info">
                   <div class="actual-result-item-info">
                     <div>
-                      <p class="time"> 08:50 am</p>
-                      <p class="dest">Lagos (LOS)</p>
+                      <p class="dest"> {{convertToWord(getSelectedFlight.outbound[0].departure_time.split('T')[0])}}</p>
+                      <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].departure_time)}}</p>
+                      <p class="dest">LOS</p>
                     </div>
                     <div class="more-flight-info">
                       <svg xmlns="http://www.w3.org/2000/svg" width="100" height="16" viewBox="0 0 197 16" fill="none">
@@ -74,23 +243,23 @@
                       </svg>
                     </div>
                     <div>
-                      <p class="time"> 08:50 am</p>
-                      <p class="dest">Lagos (LOS)</p>
+                      <p class="dest">{{convertToWord(getSelectedFlight.outbound[0].arrival_time.split('T')[0])}}</p>
+                      <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].arrival_time)}}</p>
+                      <p class="dest">LOS</p>
                     </div>
                   </div>
-                  <div class="extra-charge-info">
-                    <p class="total">Total</p>
-                    <p>₦ 613,175.15</p>
+                  <div class="actual-result-item-info-2">
+                    <div class="extra-charge-info" v-for="(i, index) in getSelectedFlight?.price_summary" :key="index">
+                      <p class="dest">{{i.passenger_type}} <span style="text-transform: lowercase;">x</span> {{i.quantity}}</p>
+                      <p>₦ {{formatAmount(i.total_price)}}</p>
+                    </div>
                   </div>
-                  <div class="extra-charge-info">
-                    <p class="total">Total</p>
-                    <p>₦ 613,175.15</p>
-                  </div>
+
                 </div>
               </div>
               <div class="booking_summary_footer">
                 <p class="total">Total</p>
-                <p class="amount">₦ 613,175.15</p>
+                <p class="amount">₦ {{ formatAmount(getSelectedFlight?.amount) }}</p>
               </div>
             </div>
       </div>
@@ -107,15 +276,270 @@ import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";
 import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
+import DataPicker from "../Inputs/custom-date-picker/DataPicker.vue";
+import FlightRequest from "../../model/FlightRequest";
+import { formatAmount, convertDurationToWords, convertToWord, convertTo12HourFormat } from "../../mixins/flightUtil";
 export default {
   name: "TravellerInfo",
-  components:{OnBoardingInput, BookingIndex, OnBoardingButton}
+  components:{OnBoardingInput, BookingIndex, OnBoardingButton, DataPicker},
+  data(){
+    return{
+      showBookHold:false,
+      bookFlightModal:FlightRequest.bookFlight,
+      formatAmount,
+      convertToWord,
+      convertTo12HourFormat,
+      convertDurationToWords,
+      passengers:[],
+      passengerIdCounter:1,
+      showGender:false,
+      isTitle:false
+    }
+  },
+  methods:{
+    
+    addPassenger() {
+
+        // Create a new passenger object with a unique ID
+        const newPassenger = {
+          id: this.passengerIdCounter++,
+          passenger_type: "adult",
+          first_name: null,
+          last_name: null,
+          dob: null,
+          gender:null,
+          title: null,
+          email: null,
+          phone_number: null,
+          documents: {}
+        };
+
+    this.passengers.push(newPassenger);
+
+
+    },
+
+
+    removePassengers(value){
+      this.passengers = this.passengers.filter(it => it.id !== value)
+    },
+
+    proceedToPayment(){
+      this.bookFlightModal.passengers = this.passengers
+      storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
+    },
+
+    getAirportNamesByCityCode(city_code){
+      const airports = JSON.parse(localStorage?.airports)
+      if(airports){
+        const airportName = airports.filter(it => it.city_code === city_code)[0]?.name
+        return airportName
+      }
+    },
+
+    getCityByCityCode(city_code){
+      const airports = JSON.parse(localStorage?.airports)
+      if(airports){
+        const cityName = airports.filter(it => it.city_code === city_code)[0]?.city
+        return cityName
+      }
+    },
+    
+  },
+  computed:{
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
+    },
+
+    getSelectedFlight(){
+      return storeUtils.fireAway()?.flight?.getSelectedFlight
+    },
+
+    getLoading(){
+      return storeUtils.fireAway()?.flight?.getBookingLoading
+    }
+  }
 
 
 }
 </script>
 
 <style scoped>
+.class_label{
+  position: absolute;
+  top: 0;
+  color:  #2D3139;
+
+  /* sanslight/12px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem; /* 166.667% */
+
+}
+.disabled{
+  cursor:not-allowed !important;
+  background:transparent !important;
+  border: solid var(--app-default-primary) !important;
+}
+
+.contact-details{
+  margin-bottom: 2rem;
+}
+
+.duration{
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: flex-start;
+  gap: 0.625rem;
+  border-radius: 31.25rem;
+  border: 1px solid var(--black-text-03, #444854);
+  justify-content: center;
+}
+
+
+.remove_button{
+  display: flex;
+  width: 11rem;
+  padding: 0.625rem 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.25rem;
+  background: var(--red-error, #FEF6F6);
+  color: var(--error-red, #F04444);
+  font-family: 'Product Sans' Medium;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+}
+
+.intro_summary_wrapper{
+  border-bottom:solid #DFE6ED;
+  padding-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
+}
+.into-summary{
+  width: 100%;
+ 
+  display: flex;
+  position: relative;
+  align-items: start;
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+.into-summary-item{
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.span-1{
+  color:  #2C6CAC;
+/* Body/16px/Regular */
+font-family: 'Product Sans';
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.75rem;
+}
+
+.dropDown_p{
+  color: #575A65;
+
+/* link/16px/Regular */
+font-family: 'Product Sans';
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.5rem; /* 150% */
+}
+
+.booking_summary_body{
+  margin: 1rem;
+}
+.airline_details{
+  display: inline-flex;
+  gap: 0.37rem;
+  align-items: center;
+}
+.booking_summary_header{
+  border-bottom: solid #DFE6ED;
+  padding: 0.5rem;
+  margin: 0 1rem;
+}
+.title-item{
+  display: inline-flex;
+  gap: 0.88rem;
+  align-items: center;
+}
+
+.onHold{
+  width: 43.875rem;
+  /* height: 9.8125rem; */
+  padding: 1.25rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary-main, #2C6CAC);
+  margin-bottom: 4rem;
+
+}
+.title{
+  display: flex;
+width: 17.1875rem;
+align-items: center;
+gap: 3rem;
+margin-bottom: 1rem;
+align-items: center;
+}
+
+.text-1{
+  color: #575A65;
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  /* width: 43.875rem; */
+  margin: 0.75rem 0;
+}
+
+.add-new-flight{
+  display: flex;
+  width: 14.411rem;
+  padding: 0.5rem 1.25rem 0.5rem 1rem;
+  align-items: center;
+  gap: 0.625rem;
+  color:  var(--app-default-primary);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  border-radius: 0.25rem;
+  background:  var(--app-defautl-primary-light);
+  margin: 2rem 0;
+  cursor: pointer;
+}
+
+.form{
+  width: 100%;
+  margin: 2rem 0;
+}
+.group-inputs{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
 .contact_details{
   color:#1D1E2C;
 
@@ -125,6 +549,7 @@ export default {
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 116.667% */
+  margin:0 0 1.6rem 0;
 }
 .simple-info{
   display: flex;
@@ -149,14 +574,13 @@ export default {
 
 .travellers-info{
   display: flex;
-  border: solid;
   gap: 1.5rem;
-  align-items: center;
+  align-items: start;
+  width: auto;
 }
 
 .adding-travellers-info{
-  border: solid;
-  width: 43rem;
+  width: 43.875rem;
 }
 
 .booking_summary{
@@ -166,6 +590,24 @@ export default {
   border-radius: 0.25rem;
   border: 1px solid  #E5E9F2;
   background: #FFF;
+  position: relative;
+}
+
+.booking_summary_footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.extra-charge-info{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 a{
@@ -264,13 +706,19 @@ a{
   margin-top: 3.5rem;
 
 }
-.dropdown-details-div{
+.dropDown{
+  width: 17.625rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  height: 5.75rem;
-
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  top: 80%;
+  background: #FFF;
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+  position: absolute;
+  z-index: 999999999;
 }
 .depart_date-info{
   display: flex;
@@ -423,6 +871,7 @@ a{
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 114.286% */
+  text-transform: capitalize;
 }
 .logo-area{
   display: flex;
@@ -493,13 +942,25 @@ a{
 .logo{
   width: 2rem;
   height: 2rem;
+  border-radius: 30%;
 }
 
 .actual-result-item-info{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: 100%;
   align-items: center;
+  margin-top: 1rem;
+  border-bottom: solid #DFE6ED;
+  padding-bottom: 1rem;
+}
+.actual-result-item-info-2{
+  display: block;
+  width: 100%;
+  align-items: center;
+  margin-top: 1rem;
+  border-bottom: solid #DFE6ED;
+  padding-bottom: 1rem;
 }
 
 .actual-result{
