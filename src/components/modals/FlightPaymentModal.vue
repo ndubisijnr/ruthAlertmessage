@@ -9,6 +9,7 @@
                 </svg>
             </div>
             <div class="modal_child_wrapper_body">
+        
                 <div class="domain-registration">
                     <div class="role-options" :class="{'role-options-active':isWallet}"  @click="isWallet=!isWallet">
                         <svg  v-if="isWallet" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,10 +25,10 @@
                         </div>
                     </div>
 
-                    <div v-if="isWallet" class="wallet_details" :class="{'error':insufficient_funds}">
+                    <div v-if="isWallet" class="wallet_details" :class="{'error':getError}">
                         <p class="wallet_name">{{user}}</p>
-                        <p class="wallet_balance">Total Wallet Balance: <span :class="{'error':insufficient_funds}">₦ {{formatAmount(balance)}}</span></p>
-                        <p v-if="insufficient_funds" class="insufficient_funds">Insufficient funds</p>
+                        <p class="wallet_balance">Total Wallet Balance: <span :class="{'error':getError}">₦ {{formatAmount(balance)}}</span></p>
+                        <p v-if="getError" class="insufficient_funds">{{getError}}</p>
                     </div>
                 </div>
 
@@ -76,7 +77,7 @@
             </div>
 
             <div class="modal_child_wrapper_footer">
-                <OnBoardingButton border="none" :disabled="!isWallet" textNode="Purchase"></OnBoardingButton>
+                <OnBoardingButton :loading="getLoading" border="none" @click="doPay(reference)" :disabled="!isWallet || getLoading" textNode="Purchase"></OnBoardingButton>
             </div>
         </div>
 
@@ -92,7 +93,7 @@ import storeUtils from '../../utils/storeUtils';
 export default{
     name:"FlightPaymentModal",
     components:{Layout,OnBoardingButton},
-    props:['balance', 'user'],
+    props:['balance', 'user', 'reference'],
     data(){
         return{
             isWallet:false,
@@ -106,12 +107,23 @@ export default{
         close(){
     
             this.$emit('close', false)
+    },
+
+    doPay(value){
+      storeUtils.fireAway().flight?.handleFlightPayment(value)
     }
     },
 
     computed:{
         getSelectedFlight(){
       return storeUtils.fireAway()?.flight?.getSelectedFlight
+    },
+
+    getError(){
+      return storeUtils.fireAway()?.flight?.getErrors
+    },
+    getLoading(){
+      return storeUtils.fireAway()?.flight?.getLoading
     }
 }
 }

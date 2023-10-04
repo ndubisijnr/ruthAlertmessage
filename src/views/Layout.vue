@@ -395,6 +395,8 @@ a:hover{
   position: relative;
   padding-left: 1rem;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
 
 }
 

@@ -26,7 +26,7 @@
              <p class="stage" :class="{'activeStage':getBookingStage === i || progressNav.includes(i)}">{{ i }}</p>
              <div style="display: flex;align-items: center;justify-content: start">
                <div class="circle" :class="{'activeProgress': getBookingStage === i || progressNav.includes(i)}">{{index + 1}}</div>
-               <div class="line" v-if="index !== bookingProgress.length - 1 || getBookingStage === i">
+               <div class="line" v-if="index !== bookingProgress.length - 1">
                  <div :class="{'progress':progressNav.includes(i)}"></div>
                </div>
              </div>
@@ -40,7 +40,7 @@
               <p class="search-info">{{ getFlightResult[0]?.price_summary[0]?.quantity }} Passengers</p>
               <p class="search-info">{{ getFlightResult[0]?.outbound[0]?.cabin_type }}</p>
             </div>
-            <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"> <on-boarding-button @click="doSearch('Search for Flight')" btn-width="7.26981rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Edit Search"></on-boarding-button></router-link>
+            <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"> <on-boarding-button @click="clearStorage" btn-width="7.26981rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Edit Search"></on-boarding-button></router-link>
           </div>
           <div class="dest-abv">
             <p class="dest-abv-it">{{getCityByCityCode(getFlightResult[0]?.outbound[0]?.airport_from) }}  ({{getFlightResult[0]?.outbound[0]?.airport_from}})</p>
@@ -93,6 +93,14 @@ export default {
         return cityName
       }
     },
+
+    clearStorage(){
+      localStorage.progressNav = JSON.stringify([])
+      localStorage.removeItem('bookedFlight')
+      localStorage.removeItem('selectedFlight')
+      localStorage.removeItem('flightResults')
+      localStorage.bookingStage = "Flight Search"
+    }
   },
 
   computed: {
@@ -105,7 +113,7 @@ export default {
       }
     },
     getBookingStage(){
-      return storeUtils.fireAway().booking?.getBookingStage
+      return storeUtils.fireAway().flight?.getBookingStage
     },
 
     getBookingSum(){
@@ -117,7 +125,7 @@ export default {
     },
 
     progressNav(){
-      return storeUtils.fireAway().booking?.getProgressNav
+      return storeUtils.fireAway().flight?.getProgressNav
     },
 
     getFlightResult(){
@@ -163,7 +171,6 @@ a{
 }
 
 .create-booking-process{
-  width: 100%;
   margin-top: 1.5rem;
 }
 

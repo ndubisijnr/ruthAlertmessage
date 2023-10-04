@@ -18,29 +18,20 @@ export const useBookingStore = defineStore('bookingStore', {
     }),
 
     getters:{
-
         getLoadingBooking:state => state.loadingBooking,
         getLoadingFlightSearch:state => state.loadingFlightSearch,
         getLoading:state => state.loading,
         getLoadingPayment:state => state.loadingPayment,
         getBookingSummary:state => state.bookingSummary,
         getBookings:state => state.bookings,
-        getBookingStage: state => state.bookingStage,
-        getProgressNav:state => state.progressNav
+
 
     },
 
     actions:{
-        commitBookingStage(value){
-            this.bookingStage = value
-        },
-
-        addToProgressNav(value){
-          this.progressNav.push(value)
-        },
-
+    
         resetProgressNav(){
-            this.progressNav = []
+           localStorage.progressNav = []
         },
 
         async getSummary(){

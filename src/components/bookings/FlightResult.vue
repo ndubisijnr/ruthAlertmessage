@@ -469,7 +469,7 @@ export default {
     },
 
     getBookingStage(){
-      return storeUtils.fireAway().booking?.getBookingStage
+      return storeUtils.fireAway().flight?.getBookingStage
     },
 
     getBookingSum(){
@@ -491,8 +491,8 @@ export default {
   },
 
   mounted(){
-    storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
-      storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
+    // storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
+    //   storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
   }
 
 

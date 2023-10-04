@@ -56,6 +56,8 @@ export const useFlightStore = defineStore('flightStore', {
         getShowingPaymentMethod:state => state.showingPaymentMethod,
         getFlightResults: () => {return JSON.parse(localStorage?.flightResults)},
         getWallet: state => state.wallet,
+        getBookingStage: () => {return localStorage.bookingStage},
+        getProgressNav:() => {return localStorage.progressNav},
 
 
     },
@@ -74,9 +76,11 @@ export const useFlightStore = defineStore('flightStore', {
         commitSelectedFlight(obj){
             const user = JSON.parse(localStorage?.user)
             localStorage.selectedFlight = JSON.stringify(obj)
-            storeUtils.fireAway().booking?.addToProgressNav('Flight Result')
-            storeUtils.fireAway().booking?.commitBookingStage('Traveller’s Info')
-            router.push({path:`/dashboard/travellers_info/${user?.access_token?.slice(0,20)}`})
+            const bookingprogressarray = JSON.parse(localStorage.progressNav)
+            bookingprogressarray.push('Flight Result')
+            localStorage.progressNav = JSON.stringify(bookingprogressarray)
+            localStorage.bookingStage = 'Traveller’s Info'
+            window.location = `/dashboard/travellers_info/${user?.access_token?.slice(0,20)}`
 
         },
 
@@ -90,6 +94,10 @@ export const useFlightStore = defineStore('flightStore', {
             if(responseData.success){
                 if(responseData.data.length > 0){
                     localStorage.flightResults = JSON.stringify(responseData.data)
+                     const bookingprogressarray = JSON.parse(localStorage.progressNav)
+                     bookingprogressarray.push('Search for Flight')
+                     localStorage.progressNav = JSON.stringify(bookingprogressarray)
+                    localStorage.bookingStage = 'Flight Result'
                     window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0,20)}`
                 }else{
                     RuthdoAlert({title:"Couldn't find any flights at the moment", icon:"error"})
@@ -109,6 +117,10 @@ export const useFlightStore = defineStore('flightStore', {
              this.bookingLoading = false
              if(responseData.success){
                 localStorage.bookedFlight = JSON.stringify(responseData.data)
+                const bookingprogressarray = JSON.parse(localStorage.progressNav)
+                bookingprogressarray.push('Traveller’s Info')
+                localStorage.progressNav = JSON.stringify(bookingprogressarray)
+                localStorage.bookingStage = 'Payment Confirmation'
                 window.location = `/dashboard/payment/${this.getUser?.access_token?.slice(0,20)}`
              }
             }catch(err){
@@ -117,22 +129,24 @@ export const useFlightStore = defineStore('flightStore', {
             }
          },
 
-         async handleFlightPayment(payload = FlightRequest.bookFlight, flight_id){
+         async handleFlightPayment(booking_refrence){
             const user = JSON.parse(localStorage?.user)
+            this.errors = null
             this.loading = true
             try{
-             const response = await FlightService.book(storeUtils.fireAway().global?.getTenant_id, payload, flight_id)
+             const response = await FlightService.pay(storeUtils.fireAway().global?.getTenant_id, booking_refrence)
              let responseData = response.data
              this.loading = false
              if(responseData.success){
-                 if(responseData.data.length > 0){
-                     localStorage.flightResults = JSON.stringify(responseData.data)
-                     window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0,20)}`
-                 }else{
-                     RuthdoAlert({title:"Couldn't find any flights at the moment", icon:"error"})
-                 }
+               
+                 // do nothing
+             }else{
+                this.errors = responseData.data  
+                
              }
             }catch(err){
+                this.loading = false
+              this.errors = err.response.data.data 
              catchErrorHandler(err)
             }
          },

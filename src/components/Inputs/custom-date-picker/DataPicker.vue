@@ -3,7 +3,7 @@
     <img class="input-slot-image" src="../../../assets/Cards/icons/calendar.svg" />
 
   <label>{{ label }} </label>
-  <VueDatePicker min-date="min_date" :model-value="inputDate" @update:model-value="setDate" :format="format" :enable-time-picker="false" auto-apply :clearable="false" position="left" :month-change-on-scroll="false">
+  <VueDatePicker :max-date="max_date" :min-date="min_date" :model-value="inputDate" @update:model-value="setDate" :format="format" :enable-time-picker="false" auto-apply :clearable="false" position="left" :month-change-on-scroll="false">
   
     <template #dp-input="{ value, onInput, onEnter, onTab, onClear, onBlur, onKeypress, onPaste, isMenuOpen }">
       <input type="text" class="data-picker-input" :value="value"  />

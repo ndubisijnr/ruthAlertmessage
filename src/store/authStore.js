@@ -70,6 +70,8 @@ export const useAuthStore = defineStore('authStore', {
                     localStorage.token = responseData.data.access_token
                     await storeUtils.fireAway().auth?.getBusinessProfile()
                     await storeUtils.fireAway().settings?.getDomainsAction()
+                    localStorage.bookingStage = 'Flight Search'
+                    localStorage.progressNav = JSON.stringify([])
                     this.loading = false
                     if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
                         if(responseData.data.is_corporate === 'true'){

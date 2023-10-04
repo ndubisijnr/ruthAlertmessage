@@ -22,8 +22,8 @@ export default {
         return apiService.Client.get(`/api/${tenant_id}/booking/summary/${user_id}?`)
     },
 
-    pay(tenant_id,user_id) {
-        return apiService.Client.get(`/api/${tenant_id}/booking/summary/${user_id}?`)
+    pay(tenant_id,booking_refrence) {
+        return apiService.Client.post(`/api/${tenant_id}/flight/pay/${booking_refrence}?`)
     },
 
     book(tenant_id,flight_id, payload) {

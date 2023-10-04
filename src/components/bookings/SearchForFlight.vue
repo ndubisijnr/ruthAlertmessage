@@ -37,7 +37,7 @@
                     </div>
                     <div class="group-inputs">
                       <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
-                      <data-picker @dateValue="updateDateValueTo" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                      <data-picker @dateValue="updateDateValueTo" :min_date="flightModel.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
                     </div>
                   </div>
 
@@ -400,8 +400,9 @@ export default {
   },
 
   mounted() {
-    storeUtils.fireAway().booking?.resetProgressNav()
-    storeUtils.fireAway().booking?.commitBookingStage('Flight Search')
+  
+    localStorage.bookingStage = 'Flight Search'
+
   }
 
 }

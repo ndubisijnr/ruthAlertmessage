@@ -1,9 +1,11 @@
 <template>
-    <FlightPaymentModal :balance="getWallet.balance" :user="getUser?.first_name + ' ' + getUser?.last_name " v-if="isPaying" @close="close"></FlightPaymentModal>
+    <FlightPaymentModal :reference="getBookedFlight.reference" :balance="getWallet.balance" :user="getUser?.first_name + ' ' + getUser?.last_name " v-if="isPaying" @close="close"></FlightPaymentModal>
     <booking-index v-slot:booking_children>
     <div class="wrapper">
+        <!-- {{ getBookedFlight }} -->
 
         <div class="payment-wrapper">
+           
 
             <div class="payment-wrapper-header">
                 <img src="../../assets/map.svg" />
@@ -17,11 +19,7 @@
 
                 <div class="booking-summary-item">
                     <p class="key">Booking Reference</p>
-                    <p class="value"></p>
-                </div>
-                <div class="booking-summary-item">
-                    <p class="key">Airline Type</p>
-                    <p class="value"></p>
+                    <p class="value">{{getBookedFlight.reference}}</p>
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Payment Amount</p>
@@ -29,19 +27,19 @@
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Booking Creation Date</p>
-                    <p class="value"></p>
+                    <p class="value">{{ getBookedFlight.created_at }}</p>
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Booking Expiry Date</p>
-                    <p class="value"></p>
+                    <p class="value">{{ getBookedFlight.expires_at }}</p>
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Payment Date</p>
-                    <p class="value"></p>
+                    <p class="value">{{ getBookedFlight.pricing.payable }}</p>
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Booking Status</p>
-                    <p class="value"></p>
+                    <p class="value">{{ getBookedFlight.status }}</p>
                 </div>
                 <div class="booking-summary-item">
                     <p class="key">Total Price</p>
@@ -52,7 +50,7 @@
                 <div style="width: 100%;display: flex;flex-direction: column;gap: 1.5rem;">
                     <OnBoardingButton @click="isPaying = true" btn-width="100%" textNode="Pay Now"></OnBoardingButton>
                     <OnBoardingButton btn-width="100%" color="#2C6CAC" background="transparent" textNode="Print Iternery"></OnBoardingButton>
-                    <OnBoardingButton btn-width="100%" color="#2C6CAC" border="none" background="transparent" textNode="Make New Booking"></OnBoardingButton>
+                    <OnBoardingButton @click="clearStorage" btn-width="100%" color="#2C6CAC" border="none" background="transparent" textNode="Make New Booking"></OnBoardingButton>
                 </div>
 
             </div>
@@ -160,6 +158,13 @@ export default{
         }
     },
     methods:{
+        clearStorage(){
+      localStorage.progressNav = JSON.stringify([])
+      localStorage.removeItem('bookedFlight')
+      localStorage.removeItem('selectedFlight')
+      localStorage.removeItem('flightResults')
+      localStorage.bookingStage = "Flight Search"
+    },
         close(value){
             this.isPaying = value
         },
@@ -178,6 +183,15 @@ export default{
         return cityName
       }
     },
+    clearStorage(){
+      const user = JSON.parse(localStorage?.user)
+      localStorage.progressNav = JSON.stringify([])
+      localStorage.removeItem('bookedFlight')
+      localStorage.removeItem('selectedFlight')
+      localStorage.removeItem('flightResults')
+      localStorage.bookingStage = "Flight Search"
+      window.location = `/dashboard/${user?.access_token?.slice(0,20)}`
+    }
     },
     computed:{
        getWallet(){
@@ -188,13 +202,15 @@ export default{
         const user = JSON.parse(localStorage?.user)
         return user
        },
+       getBookedFlight(){
+        const flight = JSON.parse(localStorage?.bookedFlight)
+        return flight
+       },
        getSelectedFlight(){
       return storeUtils.fireAway()?.flight?.getSelectedFlight
     },
     },
     mounted(){
-        storeUtils.fireAway().booking?.addToProgressNav('Traveller’s Info')
-        storeUtils.fireAway().booking?.commitBookingStage('Payment Confirmation')
         storeUtils.fireAway().flight?.handleGetWallet()
     }
 }
