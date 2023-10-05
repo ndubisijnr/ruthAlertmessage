@@ -44,6 +44,7 @@
   <!--  <account-deactivated></account-deactivated>-->
 <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
   <layout v-slot:child-content>
+    <div>
     <div class="settings-wrapper-navs">
       <div class="breadcrumb">
         <p class="current-path">{{getCurrentRoute}}</p>
@@ -73,7 +74,7 @@
       <settings-skeletons-loader v-if="loading &&  teamLoading && rolesLoading"></settings-skeletons-loader>
 
       <div v-else>
-        <div id="accounts" class="accounts" v-show="currentTab === 'Account'">
+        <div id="accounts" class="accounts  animate__animated animate__fadeIn" v-show="currentTab === 'Account'">
           <div class="accounts-inner">
             <div class="accounts-header">
               <p class="p-info">Personal Information</p>
@@ -108,7 +109,7 @@
 
 
         </div>
-        <div id="domains" class="domains" v-show="currentTab === 'Domain'">
+        <div id="domains" class="domains  animate__animated animate__fadeIn" v-show="currentTab === 'Domain'">
           <div class="domain-header">
             <div>
               <p class="p-info">Domain</p>
@@ -124,7 +125,7 @@
             <domain-table :data="getDomains" :is-paginate="false" :fields="domainFields"></domain-table>
           </div>
         </div>
-        <div id="teams" class="teams" v-show="currentTab === 'Teams'">
+        <div id="teams" class="teams  animate__animated animate__fadeIn" v-show="currentTab === 'Teams'">
           <div class="manage-roles">
             <p :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>
             <p class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>
@@ -223,7 +224,7 @@
           </div>
 
         </div>
-        <div id="notifications" class="notifications" v-show="currentTab === 'Notifications'">
+        <div id="notifications" class="notifications  animate__animated animate__fadeIn" v-show="currentTab === 'Notifications'">
           <div class="notification-wrapper">
             <div class="notification-inner">
               <div>
@@ -301,7 +302,7 @@
             </div>
           </div>
         </div>
-        <div id="payments" class="payments" v-show="currentTab === 'Payment'">
+        <div id="payments" class="payments  animate__animated animate__fadeIn" v-show="currentTab === 'Payment'">
           <div class="payment-wrapper">
             <div class="payment-header">
               <p class="payment-m-h">Payment method</p>
@@ -396,7 +397,7 @@
   <!--          </div>-->
           </div>
         </div>
-        <div id="markups" class="markups" v-show="currentTab === 'Markup'">
+        <div id="markups" class="markups  animate__animated animate__fadeIn" v-show="currentTab === 'Markup'">
           <div class="markups-wrapper">
             <div class="markup-item">
               <div>
@@ -482,12 +483,13 @@
             </div>
           </div>
         </div>
-        <div id="verifications" class="verifications" v-show="currentTab === 'Verification'">
+        <div id="verifications" class="verifications  animate__animated animate__fadeIn" v-show="currentTab === 'Verification'">
         <business-verification v-if="verification_Type ==='business'"  :is-component="false" :in-route="false"></business-verification>
         <upload-docs @parentDisableShow=""  v-else :is-component="false" :in-route="false" v-if="verification_Type === 'docs'"></upload-docs>
       </div>
       </div>
     </div>
+  </div>
   </layout>
 
 </template>

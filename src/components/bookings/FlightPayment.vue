@@ -1,7 +1,7 @@
 <template>
     <FlightPaymentModal :reference="getBookedFlight.reference" :balance="getWallet.balance" :user="getUser?.first_name + ' ' + getUser?.last_name " v-if="isPaying" @close="close"></FlightPaymentModal>
     <booking-index v-slot:booking_children>
-    <div class="wrapper">
+    <div class="wrapper  animate__animated animate__fadeIn">
         <!-- {{ getBookedFlight }} -->
 
         <div class="payment-wrapper">
