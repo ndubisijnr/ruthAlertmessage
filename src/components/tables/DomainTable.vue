@@ -28,7 +28,7 @@
           <th class="table-label">{{ h.label }}</th>
         </tr>
       </thead>
-      <tbody class="tr">
+      <tbody class="tr" v-if="data?.length > 1">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
           <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : filteredResult.length > 0 ? filteredResult : data">
                <!-- template {domain status}  -->
@@ -130,6 +130,10 @@
           </td>
       </tr>
     </tbody>
+    <div class="empty_area" v-else>
+      <slot name="emptyIcon"></slot>
+      <p>{{ emptyMessage }}</p>
+    </div>
   </table>
 
     <div v-show="isPaginate" class="paginate" v-if="getTotalPage > 1">
@@ -154,7 +158,7 @@ import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 export default {
   name: "DomainTable",
-  props:['data', 'fields','isPaginate'],
+  props:['data', 'fields','isPaginate','emptyMessage'],
   components:{OnBoardingButton},
   data(){
     return{
@@ -174,6 +178,7 @@ export default {
 
   methods:{
     readAgent(obj){
+      localStorage.userWallet = JSON.stringify(obj.wallet)
       storeUtils.fireAway().travelAgent?.handleGetUser(obj)
     },
     editRole(obj){
@@ -194,6 +199,15 @@ export default {
 </script>
 
 <style scoped>
+.empty_area{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 200px;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+}
 .deactivate{
   color: #F04444;
 
@@ -317,7 +331,7 @@ export default {
   flex-shrink: 0;
 }
 .table-container {
-  width: 68.625rem;
+  /* width: 68.625rem; */
   overflow-x: scroll;
   justify-content: center;
   margin-top: 0.25rem;

@@ -1,54 +1,39 @@
 <template>
-    <WalletTopUp :user="getTravelAgent?.first_name + ' ' + getTravelAgent?.last_name" v-if="isFunding" @close="close"/>
-    <WalletDedut :user="getTravelAgent?.first_name + ' ' + getTravelAgent?.last_name" v-if="isDeduting" @close="close"/>
-    <index v-slot:children>
-        <div class="manage_wallet_main_wrapper">
+    <Index v-slot:children>
+        <div>
             <div>
-                <h3 class="user-name">Manage Wallet</h3>
+                <h3>Flight Bookings</h3>
             </div>
 
-        <div class="get-started">
-            <div class="with-tiqwa">
-                <div>
-                <h3 class="wallet_balance">Total Wallet Balance </h3>
-                <p class="balance">N {{ getWallet?.balance }} </p>
+            <div class="card_wrapper">
+                <div class="flight_booking_card">
+                   
                 </div>
-                <div style="display: flex;gap: 1rem;height: 2.5rem">
-                    <on-boarding-button @click="isFunding = true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Top up wallet"></on-boarding-button>
-                    <on-boarding-button @click="isDeduting = true" btn-width="8rem" color="#2C6CAC" height="2.5rem" text-node="Deduct wallet" background="transparent"></on-boarding-button>
+                <div class="flight_booking_card"></div>
+            </div>
+
+
+            <div>
+                <div class="min_card_history">
+                    <div class="min_card_header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
+                        </svg>
+                        <p>Unissued Flights</p>
+                    </div>
+                    <div></div>
                 </div>
-            </div>
-        </div>
 
-
-        <div class="transaction_history_area">
-
-            <div>
-                <h3>Transaction History</h3>
-            </div>
-
-            <div>
-                <div class="search_filter">
-            <div class="search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
-                  <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
-                </svg>
-                <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
-            </div>
-            <div class="filter">
-              <div class="filter-div">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
-                </svg>
-                <span class="filter-span">Sort By</span>
-              </div>
-              <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
-              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter transaction"></on-boarding-button>
-            </div>
-          </div>
-                <DomainTable :fields="wallet_history_data" empty-message="No Transactions Found">
-                    <template v-slot:emptyIcon>
+                <div class="min_card_history">
+                    <div class="min_card_header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
+                        </svg>
+                        <p>Flights History</p>
+                    </div>
+                    <div>
+                        <DomainTable :fields="flight_history_data" emptyMessage="No Flight Bookings Found">
+                            <template v-slot:emptyIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
                             <path d="M0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75Z" fill="#F1F2F6"/>
                             <path d="M10.6561 27.1094L87.6427 4.50355L117.129 104.923L40.1425 127.529L10.6561 27.1094Z" fill="white" stroke="#1D1E2C" stroke-width="2.325" stroke-linecap="round" stroke-linejoin="round"/>
@@ -71,200 +56,89 @@
                             <path d="M48.325 140.588C48.325 141.631 51.3624 142.631 56.7691 143.368C62.1757 144.106 69.5088 144.52 77.155 144.52C84.8011 144.52 92.1342 144.106 97.5408 143.368C102.948 142.631 105.985 141.631 105.985 140.588C105.985 139.545 102.948 138.545 97.5408 137.808C92.1342 137.07 84.8011 136.656 77.155 136.656C69.5088 136.656 62.1757 137.07 56.7691 137.808C51.3624 138.545 48.325 139.545 48.325 140.588Z" fill="#E5E9F2"/>
                             </svg>
                     </template>
-                </DomainTable>
+                        
+                        </DomainTable>
+                    </div>
+                </div>
             </div>
-        </div>
-
 
         </div>
 
-    </index>
+    </Index>
 
 </template>
 
 <script>
-import storeUtils from '../../utils/storeUtils';
 import Index from '../../views/travelAgents/Index.vue';
-import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
+import BookingsCards from '../bookings/BookingsCards.vue';
 import DomainTable from '../tables/DomainTable.vue';
-import WalletTopUp from '../modals/WalletTopUp.vue';
-import WalletDedut from '../modals/WalletDedut.vue';
 
 export default{
-    name:"ManageWallet",
-
-    components:{
-        Index,
-        OnBoardingButton,
-        DomainTable,
-        WalletTopUp,
-        WalletDedut
-    },
+    name:"Flight_Bookings",
 
     data(){
         return{
-            wallet_history_data:[
-            {key:"Amount", label:"Amount"},
-            {key:"Reference ID", label:"Reference ID"},
-            {key:"Transaction Date", label:"Transaction Date"},
-            {key:"status", label:"Status"},
-            ],
-            isFunding:false,
-            isDeduting:false
+            flight_history_data:[
+            {key:"Ticket Amount", label:"Name"},
+            {key:"Ticket ID", label:"Email Address"},
+            {key:"Airline", label:"Role"},
+            {key:"Booking Date", label:"Date Added"},
+            {key:"status", label:"Member Status"},
+            ]
         }
     },
 
-    methods:{
-        close(value){
-            this.isFunding = value
-            this.isDeduting = value
-        },
+    components:{
+        Index,
+        BookingsCards,
+        DomainTable
     },
 
-    computed:{
-        getWallet(){
-            const wallet = JSON.parse(localStorage.userWallet)
-            return wallet
-        },
-        getTravelAgent(){
-            const travelAgent = JSON.parse(localStorage?.travelAgent)
-            if(travelAgent){
-                return travelAgent
-            }
-        }
-    },
+    methods:{},
 
-    mounted(){
-        const user = JSON.parse(localStorage.travelAgent)
-        storeUtils.fireAway().travelAgent.handleGetUserTransaction(user.id)
-    }
+    computed:{},
+
+    mounted(){}
 
 }
 
 </script>
 
 <style scoped>
-.transaction_history_area{
-    width: 43.6875rem;
-
-}
-.filter{
-  display: flex;
-  gap: 1.25rem;
+.min_card_history{
+    margin: 2.5rem 0;
 }
 
-.search_filter{
-  margin-top: 1rem;
-  margin-bottom: 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.filter-span{
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.5rem; /* 171.429% */
-}
-
-.search{
-  display: flex;
-  width: 15.4375rem;
-  padding: 0.5rem 5rem 0.5rem 1.25rem;
-  align-items: center;
-  gap: 1.0625rem;
-  flex-shrink: 0;
-  outline:none;
-  border-radius: 0.375rem;
-  border: 0.6px solid #E5E9F2;
-  background: #FFF;
-}
-
-.wallet_balance{
-    color: var(--3, #6A8297);
-    font-family: 'Product Sans';
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-.manage_wallet_main_wrapper{
-}
-
-.filter-div{
-  background: #FFFFFF;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-}
-
-.balance{
-    color: var(--3, #6A8297);
-font-family:'Product Sans';
-font-size: 1.5rem;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-}
-
-.user-name{
-  color: #000;
-  /* Headings/32px/bold */
-  font-family: 'Product Sans';
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 2.625rem; /* 131.25% */
-  text-transform: capitalize;
-}
-
-
-.get-started{
-    width: 43.6875rem;
-  background-image: url("../../assets/home_background_blue.svg");
-  margin: 2.5rem 0 4rem 0;
-  display: flex;
-  align-items: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: top right;
-  background-color: var(--app-defautl-primary-light);
-  border-radius: 0.5rem;
-border: 1px solid var(--primary-05, #EAF0F7);
-}
-
-.with-tiqwa{
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-left:2rem;
-  margin-top: 1rem;
-  width: 24.5rem;
-  height: 7.125rem;
-}
-
-.with-tiqwa-p{
-  color: #2D3139;
-  /* Subtext/14px/Regular */
-  font-family: 'Product Sans';
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.5rem; /* 171.429% */
-}
-
-/* @media (max-width: 1024px) {
-  .get-started{
-    height: 12.625rem;
+.min_card_header{
+    display: flex;
+    gap:0.75rem;
+    align-items: center;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    background-color: #EFF2F7;
     margin: 1rem 0;
-    background-position: top;
-  }
-} */
+}
+
+.card_wrapper{
+    display: flex;
+    gap: 1.5rem;
+    width: 50rem;
+    margin: 2.5rem 0;
+}
+
+
+.flight_booking_card{
+    display: flex;
+height: 5rem;
+padding: 0.8125rem 9.625rem 0.8125rem 1.5rem;
+align-items: center;
+width: 24rem;
+flex: 1 0 0;
+border-radius: 0.25rem;
+border: 1.2px solid var(--dividers-borders-disabled-states, #EFF2F7);
+background: var(--whitwe, #FFF);
+
+/* Shadows / Cards */
+box-shadow: 0px 1px 12px 0px rgba(21, 41, 82, 0.03);
+
+}
 </style>

@@ -102,11 +102,11 @@ export default {
       active:"Business Information",
       navs:[
           {nav:'Business Information',route:'/agents/business-information'},
-          {nav:'Flight Bookings',route: '#'},
-          {nav:'Manage Wallet',route: '#'},
-          {nav:'Manage Team',route: '#'},
+          {nav:'Flight Bookings',route: '/agents/flights'},
+          {nav:'Manage Wallet',route: '/agents/wallet'},
+          {nav:'Manage Team',route: '/agents/manage-teams'},
           {nav:'Verification',route: '/agents/document-verification'},
-          {nav:'Account Officer',route: '#'}
+          {nav:'Account Officer',route: '/agents/acount-officers'}
       ],
 
       membersFields:[
@@ -122,6 +122,7 @@ export default {
     }
   },
   components:{OnBoardingButton, DomainTable, Layout},
+
   computed: {
     getCurrentRoute(){
       return router.currentRoute.value.path
@@ -323,7 +324,6 @@ m-2{
 
 }
 
-
 .reach_out p{
   color:  #1D1E2C;
   font-family: 'Product Sans';
@@ -349,6 +349,8 @@ m-2{
 
 .inner-main-wrapper{
   margin-top: 0;
+  width: 65.125rem;
+  height: 39.875rem;
 }
 
 a{
@@ -356,9 +358,8 @@ a{
 }
 .wrapper{
   width: 100%;
-  background-color: #F9FAFC;
+  /* background-color: #F9FAFC; */
   min-height: 100vh;
-  border: none;
 
 }
 .inner-wrapper{
@@ -416,6 +417,7 @@ main{
 .main-wrapper{
   display: flex;
   gap: 10.5rem;
+  width: 100%;
 }
 
 

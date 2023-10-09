@@ -1,5 +1,5 @@
 <template>
- <div class="booking-cards">
+ <div class="booking-cards" >
   <div class="inner-booking-cards">
     <p class="title">{{title}}</p>
     <p class="number">{{number}}</p>

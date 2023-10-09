@@ -10,13 +10,21 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
     state: () => ({
         loading: false,
         users:null,
-        travelAgents:null
+        travelAgents:null,
+        userWallet:null,
+        singleTransaction:null,
+        transactions:null,
+        userTransactions:null
     }),
 
     getters: {
         getUser:state => state.users,
         getTravelAgents:state => state.travelAgents,
         getLoading: state => state.loading,
+        getUserWallet: state => state.userWallet,
+        getSingleTransaction: state => state.singleTransaction,
+        getTransactions: state => state.transactions,
+        getUserTransactions:state => state.userTransactions
     },
 
     actions: {
@@ -52,6 +60,55 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
                 catchErrorHandler(e)
             })
         },
+
+        handleGetUserWallet(payload=TravelAgentRequest.makePayment){
+            return TravelAgentsService.getUserWallet(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {
+                let responseData = response.data
+                if(responseData.success){
+                   this.userWallet = responseData.data 
+                    // do nothing
+                }
+            }).catch(e => {
+                catchErrorHandler(e)
+            })
+        },
+
+        handleGetTransactionSummary(user_id){
+            return TravelAgentsService.getTransactionSummary(storeUtils.fireAway().global?.getTenant_id, user_idß).then(async response => {
+                let responseData = response.data
+                if(responseData.success){
+                   this.transactions = responseData.data 
+                    // do nothing
+                }
+            }).catch(e => {
+                catchErrorHandler(e)
+            })
+        },
+
+        handleGetUserTransaction(user_id){
+            return TravelAgentsService.getUserTransactions(storeUtils.fireAway().global?.getTenant_id, user_id).then(async response => {
+                let responseData = response.data
+                if(responseData.success){
+                   this.userTransactions = responseData.data 
+                    // do nothing
+                }
+            }).catch(e => {
+                catchErrorHandler(e)
+            })
+        },
+
+        handleGetATransaction(id){
+            return TravelAgentsService.getATransactions(storeUtils.fireAway().global?.getTenant_id, id).then(async response => {
+                let responseData = response.data
+                if(responseData.success){
+                   this.singleTransaction = responseData.data 
+                    // do nothing
+                }
+            }).catch(e => {
+                catchErrorHandler(e)
+            })
+        },
+
 
     }
 })

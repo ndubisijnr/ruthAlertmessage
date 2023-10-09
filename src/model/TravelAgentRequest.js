@@ -5,6 +5,11 @@ class TravelAgentRequest{
 
     }
 
+    static makePayment = {
+        id: null,  // user id to transfer to
+        amount: null
+    }
+
 }
 
 export default TravelAgentRequest

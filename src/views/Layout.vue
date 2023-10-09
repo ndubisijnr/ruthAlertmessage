@@ -120,7 +120,7 @@
 
         </div>
       </NavBar>
-      <div class="dashboard_content">
+      <div class="dashboard_content animate__animated animate__fadeIn">
         <slot name="child-content"></slot>
       </div>
     </div>
