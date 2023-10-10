@@ -40,11 +40,9 @@
 
         <div style="margin-top: 3.5rem">
           <div class="table-wrapper">
-           <domain-table :fields="bookingFields"></domain-table>
-          </div>
-
-           <div class="no-team-member">
-            <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
+           <domain-table :fields="bookingFields" :data="getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
+            <template v-slot:emptyIcon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
               <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
               <path d="M8.3418 20.9214L67.758 3.4748L90.5149 80.9757L31.0986 98.4223L8.3418 20.9214Z" fill="white" stroke="#1D1E2C" stroke-width="1.79437" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M20.0869 8.62842H82.0131V89.3999H20.0869V8.62842Z" fill="white" stroke="#1D1E2C" stroke-width="1.79437" stroke-linecap="round" stroke-linejoin="round"/>
@@ -65,12 +63,8 @@
               <path d="M82.5389 58.1331C84.8205 60.4147 86.3742 63.3216 87.0037 66.4863C87.6332 69.6509 87.3101 72.9312 86.0753 75.9122C84.8405 78.8933 82.7494 81.4412 80.0666 83.2338C77.3837 85.0265 74.2295 85.9833 71.0028 85.9833C67.7762 85.9833 64.622 85.0265 61.9391 83.2338C59.2562 81.4412 57.1652 78.8933 55.9304 75.9122C54.6956 72.9312 54.3725 69.6509 55.0019 66.4863C55.6314 63.3216 57.1852 60.4147 59.4667 58.1331C60.9816 56.6179 62.78 55.4161 64.7594 54.5961C66.7388 53.7761 68.8603 53.354 71.0028 53.354C73.1453 53.354 75.2669 53.7761 77.2462 54.5961C79.2256 55.4161 81.0241 56.6179 82.5389 58.1331Z" stroke="#1D1E2C" stroke-width="1.79437" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M37.4121 108.503C37.4121 109.308 39.7563 110.079 43.9291 110.649C48.1018 111.218 53.7612 111.537 59.6624 111.537C65.5635 111.537 71.2229 111.218 75.3956 110.649C79.5684 110.079 81.9126 109.308 81.9126 108.503C81.9126 107.698 79.5684 106.926 75.3956 106.357C71.2229 105.788 65.5635 105.468 59.6624 105.468C53.7612 105.468 48.1018 105.788 43.9291 106.357C39.7563 106.926 37.4121 107.698 37.4121 108.503Z" fill="#E5E9F2"/>
             </svg>
-            <div class="no-team-member-text">
-              <div style="text-align: center">
-                <p class="no-team-member-h">Hi {{ getBusinessProfile?.name }}, you have not created any booking!</p>
-                <p class="no-team-member-sub">Yeah, your bookings will appear here.</p>
-              </div>
-            </div>
+            </template>
+          </domain-table>
           </div>
          </div>
       </div>
@@ -98,12 +92,12 @@ export default {
   data(){
     return{
       bookingFields:[
-        {key:"name", label:"Customer’s Name"},
-        {key:"email", label:"Ticket Amount"},
-        {key:"type", label:"Ticket ID"},
-        {key:"created_at", label:"Airline"},
-        {key:"status", label:"Booking Date"},
-        {key:"status", label:"Status"},
+        {key:"", label:"Customer’s Name"},
+        {key:"amount", label:"Ticket Amount"},
+        {key:"id", label:"Ticket ID"},
+        {key:"", label:"Airline"},
+        {key:"created_at", label:"Booking Date"},
+        {key:"status", label:"Status_"},
         // {key:"Action", label:"Action",id:"member"},
       ],
     }

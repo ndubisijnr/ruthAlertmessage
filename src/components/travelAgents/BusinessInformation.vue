@@ -8,13 +8,14 @@
           <div class="inner_head">
             <div class="profile" :style="getTravelAgent?.logo ? {backgroundImage:`url(${getTravelAgent?.logo})`} : null">
               <div v-if="!getTravelAgent?.logo">
-                {{ getFirstLettersOfFirstAndLastName(getTravelAgent?.first_name + ' ' + getTravelAgent?.last_name) }}
+                <p style="text-transform: capitalize;">{{ getFirstLettersOfFirstAndLastName(getTravelAgent?.first_name + ' ' + getTravelAgent?.last_name) }}</p>
               </div>
             </div>
             <div>
               <p class="upload_business_logo">{{getTravelAgent?.first_name + ' ' + getTravelAgent?.last_name}}</p>
-              <div style="margin-bottom: 1rem">
-                <p class="size_limit">{{getTravelAgent?.phone}}</p>
+              <div style="margin-bottom: 1rem; display: flex;gap:1.06rem;">
+                <p v-if="getTravelAgent?.phone" class="size_limit">{{getTravelAgent?.phone}}</p>
+                <p v-else class="size_limit">-------</p>
                  <p class="account_type" v-if="getTravelAgent?.is_corporate === 'true'">Corporate Manager</p>
                  <p class="account_type" v-else>Personal Manager</p>
               </div>
@@ -31,7 +32,6 @@
       <div>
         <p class="business_information">Business Information</p>
         <div class="business_information_card_head">
-
           <div class="inner_head">
             <div class="profile" :style="getTravelAgent?.logo ? {backgroundImage:`url(${getTravelAgent?.logo})`} : null">
               <div v-if="!getTravelAgent?.logo">
@@ -39,26 +39,29 @@
               </div>
             </div>
             <div>
-              <p class="upload_business_logo">{{ getTravelAgent?.name }}</p>
+              <p class="upload_business_logo">{{ getTravelAgent?.business_name }}</p>
               <div class="info">
-                <div>
+                <div style="width: 12rem;">
                   <p class="key">Business Mobile</p>
-                  <p class="size_limit">{{getTravelAgent?.phone}}</p>
+                  <p class="size_limit" v-if="getTravelAgent?.business_phone">{{getTravelAgent?.business_phone}}</p>
+                  <p v-else class="size_limit">-------</p>
 
                 </div>
-                <div>
+                <div style="width: 12rem;">
                   <p class="key">Business Email</p>
-                  <p class="size_limit">{{ getTravelAgent?.email }}</p>
+                  <p class="size_limit" v-if="getTravelAgent?.business_email">{{ getTravelAgent?.business_email }}</p>
+                  <p v-else class="size_limit">-------</p>
                 </div>
               </div>
               <div class="info">
-                <div>
+                <div style="width: 12rem;">
                   <p class="key">CAC Registration Number</p>
                   <p class="size_limit">{{getTravelAgent?.cac_number}}</p>
                 </div>
-                <div>
+                <div style="width: 12rem;">
                   <p class="key">Business Address</p>
-                  <p class="size_limit">{{ getTravelAgent?.address }}</p>
+                  <p class="size_limit" v-if="getTravelAgent?.business_address">{{ getTravelAgent?.business_address }}</p>
+                  <p v-else class="size_limit">-------</p>
                 </div>
               </div>
             </div>
@@ -143,7 +146,7 @@ export default {
   color:  #2C6CAC;
 
   /* Subtext/14px/Regular */
-  font-family:'Product Sans';
+  font-family:'Product Sans' !important;
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
@@ -158,7 +161,8 @@ export default {
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 1.75rem; /* 116.667% */
+  line-height: 1.75rem; /* 116.667% */;
+  text-transform: capitalize;
 }
 
 .size_limit{
@@ -176,7 +180,7 @@ export default {
   display: flex;
   padding: 1.5rem;
   gap:5rem;
-  align-items: center;
+  align-items: start;
 }
 
 .business_information_card_body{

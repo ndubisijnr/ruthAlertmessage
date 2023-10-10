@@ -19,12 +19,19 @@ export default {
     },
 
     getUserTransactions(tenant_id, user_id){
-        return apiService.Client.get(`/api/${tenant_id}/wallet/transactions/${user_id}?`)
+        return apiService.Client.post(`/api/${tenant_id}/wallet/transactions/${user_id}?`)
     },
 
     getATransactions(tenant_id, id){
         return apiService.Client.get(`/api/${tenant_id}/wallet/transaction/${id}`)
-    }
+    },
+
+    fundTransfer(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/wallet/transfer`, payload)
+    },
+    getAgentsTeamMembers(tenant_id, user_id){
+        return apiService.Client.get(`/api/${tenant_id}/user/${user_id}?`)
+    },
 
 
 }

@@ -104,6 +104,23 @@
 
             <span v-else-if="h.label.toLowerCase() === 'name'">{{j.first_name}} {{j.last_name}}</span>
 
+
+            <!-- template {bookings user fullname} -->
+
+            <span v-else-if="h.label === 'Customer’s Name'">{{j.contact_first_name}} {{j.contact_last_name}}</span>
+
+             <!-- template {bookings status} -->
+
+             <span v-else-if="h.label === 'Status_'" :style="j.status === 'reserved' ? {'text-transform':'Capitalized', 'color':'#F1D302'} : j.status === 'issued' ? {'text-transform':'Capitalized', 'color':'#159D54'} : {'text-transform':'Capitalized', 'color':'#F04444'}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+                 <circle cx="3" cy="3" r="3" :fill="j.status === 'reserved' ? '#F1D302' : j.status === 'issued' ? '#159D54' : '#F04444' "/>
+              </svg> {{j.status}}  <svg style="margin-left: 20px;cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18" fill="none">
+                <path d="M3.86719 2.58888C3.86727 2.83416 3.81904 3.07706 3.72524 3.3037C3.63145 3.53034 3.49393 3.73629 3.32055 3.90979C3.14716 4.08329 2.9413 4.22093 2.71472 4.31487C2.48814 4.40881 2.24527 4.4572 1.99999 4.45728C1.75471 4.45736 1.51181 4.40913 1.28517 4.31533C1.05853 4.22154 0.852579 4.08402 0.679082 3.91064C0.505585 3.73725 0.367938 3.53139 0.274 3.30481C0.180061 3.07823 0.131671 2.83536 0.131592 2.59008C0.131433 2.09471 0.328066 1.61956 0.678234 1.26917C1.0284 0.918777 1.50342 0.721839 1.99879 0.72168C2.49416 0.721521 2.96931 0.918154 3.3197 1.26832C3.67009 1.61849 3.86703 2.09351 3.86719 2.58888Z" fill="#1D1E2C"/>
+                <path d="M2.00001 10.8662C3.03124 10.8662 3.86721 10.0303 3.86721 8.99904C3.86721 7.96781 3.03124 7.13184 2.00001 7.13184C0.968786 7.13184 0.132812 7.96781 0.132812 8.99904C0.132812 10.0303 0.968786 10.8662 2.00001 10.8662Z" fill="#1D1E2C"/>
+                <path d="M2.00001 17.2783C3.03124 17.2783 3.86721 16.4424 3.86721 15.4111C3.86721 14.3799 3.03124 13.5439 2.00001 13.5439C0.968786 13.5439 0.132812 14.3799 0.132812 15.4111C0.132812 16.4424 0.968786 17.2783 2.00001 17.2783Z" fill="#1D1E2C"/>
+              </svg>
+            </span>
+
             <!-- template {team member agent type}  -->
 
             <span v-else-if="h.label.toLowerCase() === 'status'">{{j.type}}</span>

@@ -14,7 +14,8 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         userWallet:null,
         singleTransaction:null,
         transactions:null,
-        userTransactions:null
+        userTransactions:null,
+        agentTeams:null
     }),
 
     getters: {
@@ -24,10 +25,46 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         getUserWallet: state => state.userWallet,
         getSingleTransaction: state => state.singleTransaction,
         getTransactions: state => state.transactions,
-        getUserTransactions:state => state.userTransactions
+        getUserTransactions:state => state.userTransactions,
+        getAgentTeams:state => state.agentTeams
     },
 
     actions: {
+
+        async readAgentMembers(user_id){
+            this.loading = true
+            try{
+                const response = await TravelAgentsService.getAgentsTeamMembers(storeUtils.fireAway().global?.getTenant_id, user_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    this.agentTeams = responseData.data
+                }
+
+            }catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+        handleFundsTransfer(payload){
+            this.loading = true
+            return TravelAgentsService.fundTransfer(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }else{
+                    this.loading = false
+                    RuthdoAlert({title:responseData.data, icon:'error'})
+                }
+            }).catch(e => {
+                this.loading = false
+                catchErrorHandler(e)
+            })
+
+        },
 
         handleGetTravelAgent(){
             this.loading = true
@@ -74,7 +111,7 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         },
 
         handleGetTransactionSummary(user_id){
-            return TravelAgentsService.getTransactionSummary(storeUtils.fireAway().global?.getTenant_id, user_idß).then(async response => {
+            return TravelAgentsService.getTransactionSummary(storeUtils.fireAway().global?.getTenant_id, user_id).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
                    this.transactions = responseData.data 

@@ -139,17 +139,17 @@
               <p class="key">{{ w.passenger_type }} </p>
 
               <div>
-                <div class="title">
+                <div class="title" v-if="w.passenger_type === 'adult'">
                   <div class="title-item">
-                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? w.title = 'mr' : null" :checked="isTitle==='mr'" />
+                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? w.title = 'mr' : null" :checked="w.title==='mr'" />
                     <span>Mr</span>
                   </div>
                   <div class="title-item">
-                    <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? w.title = 'mrs' : null" :checked="isTitle==='mrs'"/>
+                    <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? w.title = 'mrs' : null" :checked="w.title==='mrs'"/>
                     <span>Mrs</span>
                   </div>
                   <div class="title-item">
-                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? w.title = 'ms' : null" :checked="isTitle==='ms'"/>
+                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? w.title = 'ms' : null" :checked="w.title==='ms'"/>
                     <span> Ms</span>
                   </div>
                 </div>
@@ -164,19 +164,15 @@
                       <div class="choose_document_type" style="position: relative;">
                           <label class="class_label">Gender</label>
                           <p class="selected-item">{{ w?.gender }}</p>
-                          <div  v-if="showGender" class="dropDown">
-                            <div class="doc_type_options">
-                              <div class="passenger-type">
+                          <div  v-if="showGender && index === showingGenderIndex" class="dropDown">
+                            <div class="passenger-type">
                                 <p class="passenger-type-text-1" @click="w.gender = 'male', showGender = !showGender">Male</p>
                               </div>
                               <div class="passenger-type" style="border: none">
                                 <p class="passenger-type-text-1" @click="w.gender = 'female',showGender = !showGender">Female</p>
                               </div>
-
-
-                            </div>
                           </div>
-                          <img @click="showGender = !showGender" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                          <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
                         </div>
 
                         <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
@@ -271,7 +267,7 @@
                 </div>
 
                 <div class="airline_info">
-                  <div class="actual-result-item-info">
+                  <!-- <div class="actual-result-item-info">
                     <div>
                       <p class="dest"> {{convertToWord(getSelectedFlight.outbound[0].departure_time.split('T')[0])}}</p>
                       <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].departure_time)}}</p>
@@ -287,7 +283,7 @@
                       <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].arrival_time)}}</p>
                       <p class="dest">LOS</p>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="actual-result-item-info-2">
                     <div class="extra-charge-info" v-for="(i, index) in getSelectedFlight?.price_summary" :key="index">
                       <p class="dest">{{i.passenger_type}} <span style="text-transform: lowercase;">x</span> {{i.quantity}}</p>
@@ -333,6 +329,7 @@ export default {
       getYYYYMMDDFormat,
       passengers:[],
       passengerIdCounter:1,
+      showingGenderIndex:null,
       showGender:false,
       isTitle:false,
       dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
@@ -343,8 +340,7 @@ export default {
     
     addPassenger(value) {
 
-        // Create a new passenger object with a unique ID
-        const newPassenger = {
+      const newPassenger = {
           passenger_type: value,
           first_name: null,
           last_name: null,
@@ -364,7 +360,18 @@ export default {
           // }
         };
 
-    this.passengers.push(newPassenger);
+        // Create a new passenger object with a unique ID
+        if(value === 'child' || value === 'infant'){
+          if(newPassenger.gender === 'male'){
+            newPassenger.title = 'mr'
+          }else{
+            newPassenger.title = 'ms'
+          }
+           
+        }
+        
+
+      this.passengers.push(newPassenger);
 
 
     },
@@ -671,7 +678,7 @@ align-items: center;
 
 .booking_summary{
   width: 21.75rem;
-  height: 21.5rem;
+  height: auto;
   flex-shrink: 0;
   border-radius: 0.25rem;
   border: 1px solid  #E5E9F2;
@@ -680,13 +687,14 @@ align-items: center;
 }
 
 .booking_summary_footer{
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   width: 100%;
   height: 4rem;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
+
 }
 
 .extra-charge-info{

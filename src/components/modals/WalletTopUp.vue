@@ -33,16 +33,16 @@
                     </div>
 
                     <div style="margin-top: 1.5rem;">
-                        <OnBoardingInput label="Amount"></OnBoardingInput>
+                        <OnBoardingInput label="Amount" @inputValue="value => fundRequest.amount = value"></OnBoardingInput>
                         <div>
-                            <textarea placeholder="Narrations" class="formInput"></textarea>
+                            <textarea v-model="fundRequest.narration" placeholder="Narrations" class="formInput"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="modal_child_wrapper_footer">
-                <OnBoardingButton :loading="getLoading" border="none" @click="doPay(reference)" :disabled="!isWallet || getLoading" textNode="Fund Wallet"></OnBoardingButton>
+                <OnBoardingButton :loading="getLoading" border="none" @click="doFunding" :disabled="!fundRequest.amount || getLoading" textNode="Fund Wallet"></OnBoardingButton>
             </div>
         </div>
 
@@ -53,8 +53,9 @@
 import Layout from './Layout.vue';
 import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
 import { formatAmount, convertDurationToWords, convertToWord, convertTo12HourFormat } from '../../mixins/flightUtil';
-import storeUtils from '../../utils/storeUtils';
 import OnBoardingInput from '../Inputs/OnBoardingInput.vue';
+import TravelAgentRequest from '../../model/TravelAgentRequest';
+import storeUtils from '../../utils/storeUtils';
 
 export default{
     name:"WalletTopUp",
@@ -66,7 +67,8 @@ export default{
             formatAmount,
             convertDurationToWords,
             convertToWord,
-            convertTo12HourFormat
+            convertTo12HourFormat,
+            fundRequest:TravelAgentRequest.makePayment
         }
     },
     methods:{
@@ -75,8 +77,10 @@ export default{
             this.$emit('close', false)
     },
 
-    doPay(value){
-      storeUtils.fireAway().flight?.handleFlightPayment(value)
+    doFunding(){
+      const travelAgent = JSON.parse(localStorage.travelAgent)
+      this.fundRequest.id = travelAgent.id  
+      storeUtils.fireAway().travelAgent?.handleFundsTransfer(this.fundRequest)
     }
     },
 
@@ -85,12 +89,14 @@ export default{
       return storeUtils.fireAway()?.flight?.getSelectedFlight
     },
 
+    getLoading(){
+        return storeUtils.fireAway()?.travelAgent?.getLoading
+    },
+
     getError(){
       return storeUtils.fireAway()?.flight?.getErrors
     },
-    getLoading(){
-      return storeUtils.fireAway()?.flight?.getLoading
-    }
+   
 }
 }
 

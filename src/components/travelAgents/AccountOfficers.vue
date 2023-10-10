@@ -104,7 +104,7 @@
                         AG
                         </div>
                         </div>
-                        <div>
+                        <div>n
                         <p class="upload_business_logo">AG</p>
                         <div style="margin-bottom: 1rem">
                             <p class="size_limit">09049929256</p>
@@ -251,7 +251,7 @@ export default{
     border-radius: 1rem;
     background: var(--Color, #FFF);
     display: block;
-    width: 65.125rem;
+    width: inherit;
     height: 39.875rem;
     padding: 1.5rem;
     gap: 1.5rem;

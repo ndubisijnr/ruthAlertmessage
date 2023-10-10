@@ -9,13 +9,13 @@
 
         <div class="get-started">
             <div class="with-tiqwa">
-                <div>
+                <div style="margin-top: 2.5rem;">
                 <h3 class="wallet_balance">Total Wallet Balance </h3>
-                <p class="balance">N {{ getWallet?.balance }} </p>
+                <p class="balance" style="margin-top: 0.75rem;">N {{ getWallet?.balance }} </p>
                 </div>
-                <div style="display: flex;gap: 1rem;height: 2.5rem">
+                <div style="display: flex;gap: 1rem;height: 2.5rem;margin-top: 2.69rem;margin-bottom: 1.5rem;">
                     <on-boarding-button @click="isFunding = true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Top up wallet"></on-boarding-button>
-                    <on-boarding-button @click="isDeduting = true" btn-width="8rem" color="#2C6CAC" height="2.5rem" text-node="Deduct wallet" background="transparent"></on-boarding-button>
+                    <!-- <on-boarding-button @click="isDeduting = true" btn-width="8rem" color="#2C6CAC" height="2.5rem" text-node="Deduct wallet" background="transparent"></on-boarding-button> -->
                 </div>
             </div>
         </div>
@@ -24,11 +24,11 @@
         <div class="transaction_history_area">
 
             <div>
-                <h3>Transaction History</h3>
+                <h3 class="transaction_history">Transaction History</h3>
             </div>
 
             <div>
-                <div class="search_filter">
+                <!-- <div class="search_filter">
             <div class="search">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
@@ -46,7 +46,7 @@
               <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
               <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter transaction"></on-boarding-button>
             </div>
-          </div>
+          </div> -->
                 <DomainTable :fields="wallet_history_data" empty-message="No Transactions Found">
                     <template v-slot:emptyIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
@@ -90,6 +90,7 @@ import DomainTable from '../tables/DomainTable.vue';
 import WalletTopUp from '../modals/WalletTopUp.vue';
 import WalletDedut from '../modals/WalletDedut.vue';
 
+
 export default{
     name:"ManageWallet",
 
@@ -97,7 +98,7 @@ export default{
         Index,
         OnBoardingButton,
         DomainTable,
-        WalletTopUp,
+            WalletTopUp,
         WalletDedut
     },
 
@@ -110,7 +111,9 @@ export default{
             {key:"status", label:"Status"},
             ],
             isFunding:false,
-            isDeduting:false
+            isDeduting:false,
+        
+
         }
     },
 
@@ -151,6 +154,17 @@ export default{
 .filter{
   display: flex;
   gap: 1.25rem;
+}
+
+.transaction_history{
+    color: var(--black-text-04, #575A65);
+
+/* Headings/20px/bold */
+font-family: 'Product Sans';
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 700;
+line-height: 1.75rem; /* 140% */
 }
 
 .search_filter{
@@ -218,7 +232,7 @@ line-height: normal;
   color: #000;
   /* Headings/32px/bold */
   font-family: 'Product Sans';
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-style: normal;
   font-weight: 700;
   line-height: 2.625rem; /* 131.25% */
@@ -233,8 +247,8 @@ line-height: normal;
   display: flex;
   align-items: center;
   background-repeat: no-repeat;
-  background-size: contain;
-  background-position: top right;
+  background-size: cover;
+  background-position: bottom left;
   background-color: var(--app-defautl-primary-light);
   border-radius: 0.5rem;
 border: 1px solid var(--primary-05, #EAF0F7);
@@ -247,7 +261,7 @@ border: 1px solid var(--primary-05, #EAF0F7);
   margin-left:2rem;
   margin-top: 1rem;
   width: 24.5rem;
-  height: 7.125rem;
+  height: auto;
 }
 
 .with-tiqwa-p{

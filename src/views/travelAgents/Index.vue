@@ -115,7 +115,7 @@ export default {
         {key:"phone", label:"Phone Number"},
         {key:"type", label:"Account Type"},
         {key:"wallet", label:"Wallet Balance"},
-        {key:"travel_agent_action", label:"action", id:"travel_agent_action"},
+        {key:"travel_agent_action", label:"Action", id:"travel_agent_action"},
         // {key:"Action", label:"Action",id:"member"},
       ],
 
@@ -349,8 +349,9 @@ m-2{
 
 .inner-main-wrapper{
   margin-top: 0;
-  width: 65.125rem;
-  height: 39.875rem;
+  width: 59.125rem;
+  height: auto;
+
 }
 
 a{
@@ -416,8 +417,7 @@ main{
 
 .main-wrapper{
   display: flex;
-  gap: 10.5rem;
-  width: 100%;
+  gap: 3.56rem;
 }
 
 
@@ -433,7 +433,8 @@ main{
 
 
 .side-area-wrapper{
-  border: none;
+  width: 15rem;
+
 }
 
 .inner-side-area{

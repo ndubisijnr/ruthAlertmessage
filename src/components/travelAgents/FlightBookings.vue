@@ -2,19 +2,24 @@
     <Index v-slot:children>
         <div>
             <div>
-                <h3>Flight Bookings</h3>
+                <h3 class="user-name">Flight Bookings</h3>
             </div>
 
             <div class="card_wrapper">
                 <div class="flight_booking_card">
+                    <p class="top_1">Total Booking Orders</p>
+                    <p class="top_2">{{ getAgentSummary?.total_bookings }}</p>
                    
                 </div>
-                <div class="flight_booking_card"></div>
+                <div class="flight_booking_card">
+                    <p class="top_1">Unissued Flight</p>
+                    <p class="top_2">{{ getAgentSummary?.total_reserved }}</p>
+                </div>
             </div>
 
 
             <div>
-                <div class="min_card_history">
+                <!-- <div class="min_card_history">
                     <div class="min_card_header">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
@@ -22,17 +27,18 @@
                         <p>Unissued Flights</p>
                     </div>
                     <div></div>
-                </div>
+                </div> -->
 
                 <div class="min_card_history">
                     <div class="min_card_header">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
                         </svg>
-                        <p>Flights History</p>
+                        <p class="text_1">Flights History</p>
                     </div>
                     <div>
-                        <DomainTable :fields="flight_history_data" emptyMessage="No Flight Bookings Found">
+                      
+                        <DomainTable :data="getAgentsBooking" :fields="flight_history_data" emptyMessage="No Flight Bookings Found">
                             <template v-slot:emptyIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
                             <path d="M0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75Z" fill="#F1F2F6"/>
@@ -72,6 +78,8 @@
 import Index from '../../views/travelAgents/Index.vue';
 import BookingsCards from '../bookings/BookingsCards.vue';
 import DomainTable from '../tables/DomainTable.vue';
+import storeUtils from '../../utils/storeUtils';
+import BookingsRequest from '../../model/BookingsRequest';
 
 export default{
     name:"Flight_Bookings",
@@ -79,13 +87,16 @@ export default{
     data(){
         return{
             flight_history_data:[
-            {key:"Ticket Amount", label:"Name"},
-            {key:"Ticket ID", label:"Email Address"},
-            {key:"Airline", label:"Role"},
-            {key:"Booking Date", label:"Date Added"},
-            {key:"status", label:"Member Status"},
-            ]
+                    {key:"", label:"Customer’s Name"},
+                    {key:"amount", label:"Ticket Amount"},
+                    {key:"id", label:"Ticket ID"},
+                    {key:"", label:"Airline"},
+                    {key:"created_at", label:"Booking Date"},
+                    {key:"status", label:"Status_"},
+                ],
+            bookingModel:BookingsRequest.bookingSummary
         }
+      
     },
 
     components:{
@@ -96,17 +107,72 @@ export default{
 
     methods:{},
 
-    computed:{},
+    computed:{
+        getAgentsBooking(){
+            return storeUtils.fireAway().booking?.getAgentBookings?.data
+        },
 
-    mounted(){}
+        getAgentSummary(){
+            return storeUtils.fireAway().booking?.getAgentSummary
+        }
+    },
+
+    mounted(){
+        
+        const user_id= JSON.parse(localStorage.travelAgent)
+        this.bookingModel.booking_status = 'reserved'
+        storeUtils.fireAway().booking.getAllAgentBooking(this.bookingModel, user_id.id)
+        storeUtils.fireAway().booking.getAllAgentSummary('', user_id.id)
+
+        
+       
+    }
 
 }
 
 </script>
 
 <style scoped>
+.user-name{
+  color: #000;
+  /* Headings/32px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 2.625rem; /* 131.25% */
+  text-transform: capitalize;
+}
+.top_1{
+    color: var(--black-text-03, #444854);
+font-family: 'Product Sans';
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.text_1{
+    color: var(--neutrals-onlock-berry, #1D242E);
+    /* 16px/bold */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 175% */
+}
+
+.top_2{
+    color: var(--black-text-03, #444854);
+font-family: 'Product Sans';
+font-size: 1.5rem;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
 .min_card_history{
     margin: 2.5rem 0;
+    background-color: #FFF;
 }
 
 .min_card_header{
@@ -130,12 +196,13 @@ export default{
     display: flex;
 height: 5rem;
 padding: 0.8125rem 9.625rem 0.8125rem 1.5rem;
-align-items: center;
+align-items: start;
 width: 24rem;
 flex: 1 0 0;
 border-radius: 0.25rem;
 border: 1.2px solid var(--dividers-borders-disabled-states, #EFF2F7);
 background: var(--whitwe, #FFF);
+flex-direction: column;
 
 /* Shadows / Cards */
 box-shadow: 0px 1px 12px 0px rgba(21, 41, 82, 0.03);
