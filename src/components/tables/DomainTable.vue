@@ -20,6 +20,8 @@
 
   </div>
 
+  
+
 
   <div class="table-container">
     <table class="table">
@@ -28,7 +30,7 @@
           <th class="table-label">{{ h.label }}</th>
         </tr>
       </thead>
-      <tbody class="tr" v-if="data?.length > 1">
+      <tbody class="tr" v-if="data?.length > 0">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
           <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : filteredResult.length > 0 ? filteredResult : data">
                <!-- template {domain status}  -->
@@ -77,6 +79,13 @@
                 <div v-if="h.id === 'member'">
                   <p class="menu-item">Edit Member</p>
                   <p class="menu-item deactivate">Deactivate Member</p>
+
+                </div>
+
+                 <!-- template {agent_team} -->
+                 <div v-if="h.id === 'team'">
+                  <p class="menu-item" @click="viewAgent(j)">View Agent</p>
+                  <p class="menu-item deactivate" @click="confirmDeactiveAgent">Deactivate Agent</p>
 
                 </div>
 
@@ -173,6 +182,7 @@ import paginate from "../../mixins/paginate";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
+
 export default {
   name: "DomainTable",
   props:['data', 'fields','isPaginate','emptyMessage'],
@@ -203,6 +213,14 @@ export default {
       this.model.permission_ids = obj?.permissions.map(item => item.id)
       this.$emit('updatingRole', true)
 
+    },
+
+    confirmDeactiveAgent(){
+      this.$emit('agentDeactive', true)
+    },
+
+    viewAgent(obj){
+      this.$emit('emitviewAgent', {showing:true, obj:obj})
     }
 
   },

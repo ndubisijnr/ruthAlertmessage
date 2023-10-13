@@ -19,15 +19,67 @@
 
 
             <div>
-                <!-- <div class="min_card_history">
+                <div class="min_card_history">
                     <div class="min_card_header">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
                         </svg>
-                        <p>Unissued Flights</p>
+                        <p class="text_1">Unissued Flights</p>
                     </div>
-                    <div></div>
-                </div> -->
+                    <div style="padding: 1.5rem;">
+                        <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
+                            <p class="time_line">Today </p>
+                    
+                            <div v-for="i in getAgentsBooking">   
+                
+                            <div v-if="formattedDate(i.created_at) === today(i.created_at)">
+                            
+                                <div style="display: flex;justify-content: space-between;align-items: center;">
+                                        <div class="unissued_item">
+                                            <p class="time_booked">{{ i.created_at.split("T")[0] }}</p>
+                                            
+                                            <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
+                                        </div>
+
+                                        <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
+                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
+                            <p class="time_line">Unissued Flight History</p>
+                            <div v-for="i in getAgentsBooking">  
+                                
+                                
+                                <div v-if="formattedDate(i.created_at) !== today(i.created_at)">
+                                
+                                    <div style="display: flex;justify-content: space-between;align-items: center;">
+                                        <div class="unissued_item">
+                                            <p class="time_booked">{{ convertToWord(i.created_at) }}</p>
+                                            
+                                            <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
+                                        </div>
+
+                                        <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
+                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                
+                       
+                       
+                    </div>
+                </div>
 
                 <div class="min_card_history">
                     <div class="min_card_header">
@@ -37,6 +89,7 @@
                         <p class="text_1">Flights History</p>
                     </div>
                     <div>
+                        
                       
                         <DomainTable :data="getAgentsBooking" :fields="flight_history_data" emptyMessage="No Flight Bookings Found">
                             <template v-slot:emptyIcon>
@@ -68,7 +121,7 @@
                 </div>
             </div>
 
-        </div>
+        
 
     </Index>
 
@@ -80,9 +133,12 @@ import BookingsCards from '../bookings/BookingsCards.vue';
 import DomainTable from '../tables/DomainTable.vue';
 import storeUtils from '../../utils/storeUtils';
 import BookingsRequest from '../../model/BookingsRequest';
+import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
+import { convertToWord } from '../../mixins/lettersExtractor';
 
 export default{
     name:"Flight_Bookings",
+    components:{OnBoardingButton},
 
     data(){
         return{
@@ -94,22 +150,45 @@ export default{
                     {key:"created_at", label:"Booking Date"},
                     {key:"status", label:"Status_"},
                 ],
-            bookingModel:BookingsRequest.bookingSummary
+            bookingModel:BookingsRequest.bookingSummary,
+            convertToWord
         }
       
     },
 
     components:{
-        Index,
-        BookingsCards,
-        DomainTable
+    Index,
+    BookingsCards,
+    DomainTable,
+    OnBoardingButton
+},
+
+    methods:{
+        today(){
+            if(this.getAgentsBooking){
+                const currentDate = new Date()
+                return currentDate.getTime()
+            }
+        },
+
+        formattedDate(bookingDate){
+            return new Date(bookingDate).getTime()
+        }
     },
 
-    methods:{},
-
     computed:{
+        yesterday(bookingDate){
+            if(this.getAgentsBooking && bookingDate){
+                const currentDate = new Date()
+                const date = new Date(bookingDate)
+                date.setDate(currentDate.getDate() -1)
+                return date
+            }
+        },
+        
         getAgentsBooking(){
-            return storeUtils.fireAway().booking?.getAgentBookings?.data
+            const bookings = storeUtils.fireAway().booking?.getAgentBookings?.data
+            return bookings
         },
 
         getAgentSummary(){
@@ -133,6 +212,36 @@ export default{
 </script>
 
 <style scoped>
+.time_booked{
+    color: var(--text-main-light-8-body, #393A4A);
+    /* medium/14px */
+    font-family: 'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5rem; /* 171.429% */
+}
+
+.time_line{
+    color: var(--neutrals-onlock-back, #4A5361);
+
+    /* Headings/18px/Medium */
+    font-family: 'Product Sans';
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.625rem; /* 144.444% */
+}
+
+.details{
+    color: var(--black-text-01, #1D1E2C);
+    /* 16px/bold */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 175% */
+}
 .user-name{
   color: #000;
   /* Headings/32px/bold */
@@ -143,6 +252,16 @@ export default{
   line-height: 2.625rem; /* 131.25% */
   text-transform: capitalize;
 }
+
+.unissued_item{
+    display: flex;
+    padding-bottom: 0px;
+    align-items: center;
+    gap: 1rem;
+    width: 34rem;
+    margin: 1.5rem 0;
+}
+
 .top_1{
     color: var(--black-text-03, #444854);
 font-family: 'Product Sans';

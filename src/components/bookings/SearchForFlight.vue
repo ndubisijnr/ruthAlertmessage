@@ -3,12 +3,14 @@
         <div class="booking-div animate__animated animate__fadeIn">
           <div class="booking-div-inner-wrapper">
             <div style="display: flex">
-              <div class="nav-a1 activeSection">Book Flight</div>
-              <div class="nav-a1">Find Hotels</div>
-              <div class="nav-a1">Visa</div>
-              <div class="nav-a1">insurance</div>
+              <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}">Book Flight</div>
+              <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}">Find Hotels</div>
+              <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}">Visa</div>
+              <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}">Insurance</div>
             </div>
-            <div class="booking-nav">
+
+            <div v-if="activeService === 'Flight'">
+              <div class="booking-nav">
               <p class="booking-nav-item" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
               <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
@@ -82,8 +84,9 @@
 
                     <div  class="choose_document_type" style="position: relative;">
                       <label class="class_label">Passengers</label>
-                      <p class="selected-item">
-                        {{ flightModel.adults > 0 ? `${flightModel.adults} Adults` : null}} 
+                      <p style="color:#F00" v-if="flightModel.adults < 1 && flightModel.children < 1 && flightModel.infants < 1" class="selected-item">Please add passengers</p>
+                      <p  class="selected-item">
+                        {{ flightModel.adults > 0 ? `${flightModel.adults} Adult` : null}} 
                         {{flightModel.infants > 0 && flightModel.adults > 0 ? ',' : null}} 
                         {{ flightModel.infants > 0 ? `${flightModel.infants} Infants` : null}} 
                         {{flightModel.children > 0 &&  flightModel.adults > 0 && flightModel.infants > 0 ? 'and' : null }}
@@ -218,6 +221,14 @@
                 </div>
             </div>
           </div>
+
+            </div>
+
+            <div v-else class="coming_soon">
+              <coming-soon :page="activeService"></coming-soon>
+
+            </div>
+           
         </div>
         </div>
   </booking-index>
@@ -233,14 +244,16 @@ import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest"
+import ComingSoon from "../ComingSoon.vue";
 
 export default {
   name: "SearchForFlight",
-  components:{BookingIndex,OnBoardingButton,OnBoardingInput,DataPicker,Layout},
+  components:{BookingIndex,OnBoardingButton,OnBoardingInput,DataPicker,Layout, ComingSoon},
   data(){
     return{
       activeDestType:'round_trip',
       destination_type:'round_trip',
+      activeService:'Flight',
       multiCity:[],
       showPassengers:false,
       showClass:false,
@@ -410,12 +423,16 @@ export default {
 </script>
 
 <style scoped>
+.coming_soon{
+
+  margin: 10rem auto;
+}
 .minus-button{
-  width:20px;
-  height: 20px;
+  width:30px;
+  height: 30px;
   border-radius: 100%;
   background-color: #201F1E;
-  color: #FFFFFF;
+  color: #4c4242;
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -425,8 +442,8 @@ export default {
 }
 
 .add-button{
-  width:20px;
-  height: 20px;
+  width:30px;
+  height: 30px;
   border-radius: 100%;
   background-color: #201F1E;
   color: #FFFFFF;
@@ -458,6 +475,7 @@ export default {
   align-items: center;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
   color: var(--app-default-primary);
+  cursor: pointer;
 
   /* Medium/16px */
   font-family:'Product Sans';
@@ -499,7 +517,7 @@ export default {
 
   /* sanslight/12px/Regular */
   font-family: 'Product Sans';
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */

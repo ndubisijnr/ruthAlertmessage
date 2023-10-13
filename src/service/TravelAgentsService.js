@@ -33,5 +33,21 @@ export default {
         return apiService.Client.get(`/api/${tenant_id}/user/${user_id}?`)
     },
 
+    createAccountOfficer(tenant_id, travel_agent_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/account_officer/${travel_agent_id}`, payload)
+    },
+
+    getAccountOfficer(tenant_id, travel_agent_id){
+        return apiService.Client.get(`/api/${tenant_id}/account_officer/${travel_agent_id}`)
+    },
+
+    updateAccountOfficer(tenant_id, travel_agent_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/account_officer/${travel_agent_id}`, payload)
+    },
+
+    updateAccountOfficerStatus(tenant_id, travel_agent_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/account_officer/${travel_agent_id}`, payload)
+    },
+
 
 }

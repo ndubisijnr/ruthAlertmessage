@@ -1,4 +1,52 @@
 <template>
+    <div v-if="inModal" class="layout-modal">
+    <div class="delete-card-option">
+      <div class="card-header">
+        <p class="card-header-h">Confirm Action</p>
+      </div>
+
+      <div style="margin: 2rem">
+        <p class="are-you-sure">Are you sure you want to deactivate this team member?</p>
+
+        <p class="are-you-sure-p">You're about to remove an invited user; the user will be unable to join until you send a new invitation. This action is irreversible.</p>
+      </div>
+
+      <div class="card-footer">
+        <p @click="cancelAction">Cancel</p>
+        <on-boarding-button :loading="deleteLoading" :disabled="deleteLoading" @click="deleteBankAction" btn-width="11.0625rem" border="none" background="#F04444" text-node="Deactivate"></on-boarding-button>
+      </div>
+
+    </div>
+  </div>
+  <div v-if="viewingAgent"  class="layout-modal">
+    <div class="veiw-agent-card-option">
+      <div class="card-header">
+        <p class="card-header-h">Personal Information</p>
+      </div>
+
+      <div class="inner_head">
+            <div class="profile" :style="agentPayload?.logo ? {backgroundImage:`url(${agentPayload?.logo})`} : null">
+              <div v-if="!agentPayload?.logo">
+                <p style="text-transform: capitalize;">{{ getFirstLettersOfFirstAndLastName(agentPayload?.first_name + ' ' + agentPayload?.last_name) }}</p>
+              </div>
+            </div>
+            <div>
+              <p class="upload_business_logo">{{agentPayload?.first_name + ' ' + agentPayload?.last_name}}</p>
+              <div style="margin-bottom: 1rem; display: flex;gap:1.06rem;">
+                <p v-if="agentPayload?.phone" class="size_limit">{{agentPayload?.phone}}</p>
+                <p v-else class="size_limit">-------</p>
+                 <p class="account_type" v-if="agentPayload?.is_corporate === 'true'">Corporate Manager</p>
+                 <p class="account_type" v-else>Personal Manager</p>
+              </div>
+              <p class="size_limit">{{ agentPayload?.email }}</p>
+
+            </div>
+          </div>
+
+
+
+    </div>
+  </div>
     <Index v-slot:children>
         <div>
             <div>
@@ -15,7 +63,7 @@
                 <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
             </div>
           </div>
-                <DomainTable :fields="membersFields" :data="getAgentTeams" empty-message="No Team Members Found">
+                <DomainTable :fields="membersFields" @emitviewAgent="payload" @agentDeactive="value => inModal=value" :data="getAgentTeams" empty-message="No Team Members Found">
 
                 </DomainTable>
             </div>
@@ -29,29 +77,45 @@
 import Index from '../../views/travelAgents/Index.vue';
 import storeUtils from '../../utils/storeUtils';
 import DomainTable from '../tables/DomainTable.vue';
+import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
 
 export default{
     name:"Manage_Teams",
 
+
     components:{
         Index,
-        DomainTable
+        DomainTable,
+        OnBoardingButton
     },
 
     data(){
         return{
+            inModal:false,
+            agentPayload:null,
+            viewingAgent:false,
             membersFields:[
         {key:"name", label:"Name"},
         {key:"email", label:"Email Address"},
         {key:"type", label:"Role"},
         {key:"created_at", label:"Date Added"},
         {key:"status", label:"Member Status"},
-        // {key:"Action", label:"Action",id:"member"},
+        {key:"Action", label:"Action",id:"team"},
       ],
         }
     },
 
-    methods:{},
+    methods:{
+        cancelAction(){
+            this.inModal = !this.inModal
+            this.viewingAgent =  !this.viewingAgent
+        }, 
+
+        viewAgent(payload){
+            this.agentPayload = payload.obj
+            this.viewingAgent = payload.showing
+        }
+    },
 
     computed:{
         getAgentTeams(){
@@ -69,6 +133,108 @@ export default{
 </script>
 
 <style scoped>
+.veiw-agent-card-option{
+    display: flex;
+    padding: 1.5rem 4.5rem 1.5rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 1px 0px #BBB;
+  background:  #F9FAFC;
+    
+}
+
+.empty_area{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 200px;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+}
+.deactivate{
+  color: #F04444;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+.menu{
+  display: inline-flex;
+  /*padding: 1.5rem;*/
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background: #FFF;
+  width: 12.87rem;
+  position: absolute;
+
+  /* m4 */
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+}
+
+.layout-modal{
+  background: #00000065;
+  width: 100%;
+  height: 100vh;
+  z-index: 999999;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-card-option{
+  width: 34rem;
+  height: 23.25rem;
+  border-radius: 0.5rem;
+  background:  #FFF;
+  position: relative;
+  /* Shadows / Modals */
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+}
+
+.card-header{
+  display: flex;
+  width: 34rem;
+  height: 4.5rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  align-items: center;
+  flex-shrink: 0;
+  background:  #F9FAFC;
+  justify-content: space-between;
+}
+
+.card-header-h{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.card-footer{
+  display: flex;
+  align-items: center;
+  gap:2.9rem;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  width: 100%;
+}
+
+
 .filter{
   display: flex;
   gap: 1.25rem;

@@ -48,6 +48,44 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
 
         },
 
+    
+        async addAccountOfficers(travel_agent_id, payload){
+            this.loading = true
+            try{
+                const response = await TravelAgentsService.createAccountOfficer(storeUtils.fireAway().global?.getTenant_id, travel_agent_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                }else{
+                    this.loading = false
+                    RuthdoAlert({title:responseData.data, icon:'error'})
+                }
+
+            }catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+        async updateAccountOfficers(travel_agent_id, payload){
+            this.loading = true
+            try{
+                const response = await TravelAgentsService.updateAccountOfficer(storeUtils.fireAway().global?.getTenant_id, travel_agent_id, payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                }
+
+            }catch{
+                this.loading = false
+                // do nothing
+            }
+
+        },
+
+
+       
         handleFundsTransfer(payload){
             this.loading = true
             return TravelAgentsService.fundTransfer(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {

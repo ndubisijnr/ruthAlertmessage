@@ -54,6 +54,9 @@
           </div>
         </div>
       </div>
+      <!-- <div v-for="i in extractAirlineDetails(getFlightResult)">
+        {{ i }}
+      </div> -->
       <div class="actual-result-wrapper" v-for="(i, index) in paginate(getFlightResult, currentPage, itemsPerPage)" :key="index">
         <div class="actual-result">
           <div style="width: 100%">
@@ -416,6 +419,25 @@ export default {
     }
   },
   methods:{
+    extractAirlineDetails(obj) {
+      const airlineDetails = [];
+
+        function searchForAirlineDetails(obj) {
+        for (const key in obj) {
+          if (typeof obj[key] === 'object') {
+            if (key === 'airline_details' && !airlineDetails.includes(obj[key].name)) {
+                
+              airlineDetails.push(obj[key]);
+            }
+            searchForAirlineDetails(obj[key]);
+          }
+        }
+      }
+      searchForAirlineDetails(obj);
+             
+      return airlineDetails;
+    },
+
     revealDetails_departure(){
       document.getElementById('departure').classList.remove('u-hide')
       document.getElementById('return').classList.add('u-hide')
@@ -448,6 +470,9 @@ export default {
   },
 
   computed:{
+  
+
+
 
     getTotalPage(){
         return Math.ceil(Number(this.getFlightResult.length) / Number(this.itemsPerPage))

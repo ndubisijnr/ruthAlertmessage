@@ -56,7 +56,8 @@
               <div class="info">
                 <div style="width: 12rem;">
                   <p class="key">CAC Registration Number</p>
-                  <p class="size_limit">{{getTravelAgent?.cac_number}}</p>
+                  <p class="size_limit" v-if="getTravelAgent?.cac_number !== 'pending'">{{getTravelAgent?.cac_number}}</p>
+                  <p v-else class="size_limit">-------</p>
                 </div>
                 <div style="width: 12rem;">
                   <p class="key">Business Address</p>

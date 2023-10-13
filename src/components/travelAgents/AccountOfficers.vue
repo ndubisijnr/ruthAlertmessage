@@ -1,4 +1,5 @@
 <template>
+   <AddAccountOfficerModal v-if="accountOfficerModel" @close="close"></AddAccountOfficerModal>
     <Index v-slot:children>
         <div class="account_officer_card">
             <div>
@@ -88,8 +89,8 @@
                         </svg>
                         <p class="h2">No Account Officer assigned yet</p>
                         <p class="p">There are currently no revenue, when there are, they will appear here.</p>
-
-                        <OnBoardingButton textNode="Assign an Account Officer"></OnBoardingButton>
+ 
+                        <OnBoardingButton @click="accountOfficerModel = true" textNode="Assign an Account Officer"></OnBoardingButton>
                     </div>
                 </div>
             </div>
@@ -104,9 +105,9 @@
                         AG
                         </div>
                         </div>
-                        <div>n
+                        <div>
                         <p class="upload_business_logo">AG</p>
-                        <div style="margin-bottom: 1rem">
+                        <div style="margin-bottom: 1rem;display: flex;gap: 1.06rem;">
                             <p class="size_limit">09049929256</p>
                             <p class="account_type">Corporate Manager</p>
                         </div>
@@ -131,18 +132,31 @@
 <script>
 import Index from '../../views/travelAgents/Index.vue';
 import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
+import AddAccountOfficerModal from '../modals/AddAccountOfficerModal.vue';
 
 export default{
     name:"Account_Officers",
 
     components:{
         Index,
-        OnBoardingButton
+        OnBoardingButton,
+        AddAccountOfficerModal
     },
 
-    data(){},
+    data(){
+      return{
+        accountOfficerModel:false,
+        
+      }
+    
+    },
 
-    methods:{},
+    methods:{
+      close(value){
+        this.accountOfficerModel = value
+
+      }
+    },
 
     computed:{},
 
