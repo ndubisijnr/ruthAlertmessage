@@ -32,7 +32,7 @@
 
 
       <div id="pdf-to-download">
-        <img src="../../src/assets/full-black-logo.svg" id="ondownload" style="display: none;margin-bottom: 20px" />
+        <!-- <img src="../../src/assets/full-black-logo.svg" id="ondownload" style="display: none;margin-bottom: 20px" /> -->
 
         <div class="invoice-receipt"> Flight Itinerary</div>
 
