@@ -216,6 +216,7 @@
 </template>
 
 <script>
+import ComingSoon from "../ComingSoon.vue"
 import BookingIndex from "../../views/dashboard/Index.vue"
 import Layout from "../../views/Layout.vue";
 import router from "../../router";
@@ -224,7 +225,6 @@ import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest"
-import ComingSoon from "../ComingSoon.vue";
 
 export default {
   name: "SearchForFlight",
