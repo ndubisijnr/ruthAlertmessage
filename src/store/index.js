@@ -4,6 +4,7 @@ import {useSettingsStore} from "./settingsStore"
 import {useBookingStore} from "./bookingStore";
 import {useFlightStore} from "./flightStore";
 import {useTravelAgentStore} from "./travelAgentStore";
+import {useTransactionStore} from "./transactionStore";
 
 const stores = {
     global:useGlobalStore(),
@@ -11,7 +12,8 @@ const stores = {
     settings:useSettingsStore(),
     booking:useBookingStore(),
     flight:useFlightStore(),
-    travelAgent:useTravelAgentStore()
+    travelAgent:useTravelAgentStore(),
+    transaction:useTransactionStore()
 }
 
 export default stores

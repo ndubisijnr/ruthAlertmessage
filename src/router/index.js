@@ -4,14 +4,14 @@ import verificationRoutes from "./routes/verificationRoutes"
 import dashboardRoute from "./routes/dashboardRoute";
 import bookingRoute from "./routes/bookingRoute";
 import settingsRoute from "./routes/settingsRoute";
-import visaRoute from "./routes/visaRoute";
+import transactionRoute from "./routes/transactionRoute";
 import insuranceRoute from "./routes/insuranceRoute";
 import hotelRoute from "./routes/hotelRoute";
 import travelAgentsRoute from "./routes/travelAgentsRoute";
 
 const baseRoute = []
 
-export const routes = baseRoute.concat(authRoutes,visaRoute,travelAgentsRoute,insuranceRoute,hotelRoute,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
+export const routes = baseRoute.concat(authRoutes,transactionRoute,travelAgentsRoute,insuranceRoute,hotelRoute,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
 
  const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

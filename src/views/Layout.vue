@@ -18,7 +18,7 @@
               <span class="links">Dashboard</span>
             </div>
             </router-link>
-            <router-link :to="`/agents/${getUser?.access_token?.slice(0,20)}`"> <div class="links-item" :class="{'active':getCurrentRoute.includes('agents')}">
+            <router-link v-if="getUser?.account_type === 'super_admin'" :to="`/agents/${getUser?.access_token?.slice(0,20)}`"> <div class="links-item" :class="{'active':getCurrentRoute.includes('agents')}">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                 <path d="M15.3549 6.59148C15.3299 6.59148 15.3132 6.59148 15.2882 6.59148H15.2466C13.6716 6.54148 12.4966 5.32481 12.4966 3.82481C12.4966 2.29147 13.7466 1.0498 15.2716 1.0498C16.7966 1.0498 18.0466 2.29981 18.0466 3.82481C18.0383 5.33314 16.8632 6.54981 15.3632 6.59981C15.3632 6.59147 15.3632 6.59148 15.3549 6.59148ZM15.2716 2.29148C14.4299 2.29148 13.7466 2.97481 13.7466 3.81648C13.7466 4.64148 14.3883 5.30815 15.2133 5.34148C15.2216 5.33315 15.2882 5.33315 15.3632 5.34148C16.1716 5.29981 16.7966 4.63314 16.8049 3.81648C16.8049 2.97481 16.1216 2.29148 15.2716 2.29148Z" fill="#1B041C"/>
                 <path d="M15.3632 12.7339C15.0382 12.7339 14.7132 12.7089 14.3882 12.6505C14.0466 12.5922 13.8216 12.2672 13.8799 11.9255C13.9382 11.5839 14.2632 11.3589 14.6049 11.4172C15.6299 11.5922 16.7132 11.4005 17.4382 10.9172C17.8299 10.6589 18.0382 10.3339 18.0382 10.0089C18.0382 9.68386 17.8216 9.36719 17.4382 9.10886C16.7132 8.62553 15.6132 8.43386 14.5799 8.6172C14.2382 8.68386 13.9132 8.45053 13.8549 8.10886C13.7966 7.7672 14.0216 7.4422 14.3632 7.38387C15.7216 7.1422 17.1299 7.40053 18.1299 8.06719C18.8632 8.55886 19.2882 9.25886 19.2882 10.0089C19.2882 10.7505 18.8716 11.4589 18.1299 11.9589C17.3716 12.4589 16.3882 12.7339 15.3632 12.7339Z" fill="#1B041C"/>
@@ -42,7 +42,7 @@
             </div>
             </router-link>
 
-            <router-link :to="`/visa/${getUser?.access_token?.slice(0,20)}`"><div class="links-item">
+            <router-link :to="`/transaction/${getUser?.access_token?.slice(0,20)}`"><div class="links-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                 <path d="M14.6931 17.2918H9.30139C8.95972 17.2918 8.67639 17.0085 8.67639 16.6668C8.67639 16.3251 8.95972 16.0418 9.30139 16.0418H14.6931C17.2431 16.0418 17.8431 15.6251 17.9097 13.3585C16.8097 13.0751 15.9931 12.0751 15.9931 10.8918C15.9931 9.70013 16.8097 8.6918 17.9181 8.40846V8.1918C17.9181 5.45013 17.4347 4.9668 14.6931 4.9668H10.0014V10.0001C10.0014 10.3418 9.71806 10.6251 9.37639 10.6251C9.03473 10.6251 8.75139 10.3418 8.75139 10.0001V4.3418C8.75139 4.00013 9.03473 3.7168 9.37639 3.7168H14.6931C18.1264 3.7168 19.1681 4.75846 19.1681 8.1918V8.95846C19.1681 9.30013 18.8847 9.58346 18.5431 9.58346C17.8264 9.58346 17.2431 10.1668 17.2431 10.8918C17.2431 11.6085 17.8264 12.1918 18.5431 12.1918C18.8847 12.1918 19.1681 12.4751 19.1681 12.8168C19.1681 16.2501 18.1264 17.2918 14.6931 17.2918Z" fill="#1B041C"/>
                 <path d="M9.37638 17.2918H7.06805C5.38471 17.2918 4.51805 16.0252 3.72638 14.1252L3.56805 13.7418C3.50971 13.5918 3.50971 13.4168 3.57638 13.2668C3.64305 13.1168 3.76805 12.9918 3.91805 12.9335C4.25138 12.8002 4.50971 12.5418 4.65138 12.2168C4.79305 11.8835 4.79305 11.5168 4.65138 11.1835C4.37638 10.4835 3.58471 10.1585 2.88471 10.4335C2.72638 10.5002 2.55971 10.4918 2.40138 10.4252C2.25138 10.3585 2.12638 10.2335 2.06805 10.0835L1.92638 9.72518C0.593047 6.48351 1.17638 5.09185 4.41805 3.75018L6.61805 2.85018C6.93471 2.71685 7.30138 2.87518 7.43471 3.19185L9.95971 9.30851C9.99305 9.38351 10.0097 9.46685 10.0097 9.55018V11.6668C10.0097 12.0085 9.72638 12.2918 9.38471 12.2918C9.04305 12.2918 8.75971 12.0085 8.75971 11.6668V9.66685L6.50971 4.24185L4.89305 4.90851C2.32638 5.96685 2.01805 6.61685 3.02638 9.11685C4.18471 8.95018 5.35138 9.57518 5.80971 10.7002C6.07638 11.3418 6.07638 12.0502 5.80138 12.6918C5.61805 13.1335 5.31805 13.5085 4.93471 13.7835C5.73471 15.6668 6.31805 16.0418 7.05971 16.0418H8.74305V14.1668C8.74305 13.8252 9.02638 13.5418 9.36805 13.5418C9.70971 13.5418 9.99305 13.8252 9.99305 14.1668V16.6668C10.0014 17.0085 9.71805 17.2918 9.37638 17.2918Z" fill="#1B041C"/>
@@ -76,7 +76,7 @@
           </div>
 
           <div class="m7-0">
-            <img src="../assets/notification.svg">
+            <img src="../assets/notification.svg" class="notification_icon">
             <div  class="profile" @click="showDrop" >
               <div class="profile-icon" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : null"> <p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
               <img src="../assets/Icons/Arrows/Down.svg" />
@@ -123,7 +123,9 @@
       <div class="dashboard_content animate__animated animate__fadeIn">
         <slot name="child-content"></slot>
       </div>
+
     </div>
+    <MobileBottomNav />
   </div>
 
 </template>
@@ -133,11 +135,12 @@ import NavBar from "../components/dashboardComponents/NavBar.vue";
 import storeUtils from "../utils/storeUtils";
 import {getFirstLettersOfFirstAndLastName} from "../mixins/lettersExtractor";
 import router from "../router";
+import MobileBottomNav from "../components/dashboardComponents/MobileBottomNav.vue";
 
 
 export default {
   name: "Layout",
-  components:{NavBar},
+  components:{NavBar, MobileBottomNav},
   data(){
     return{
       getFirstLettersOfFirstAndLastName,
@@ -185,14 +188,15 @@ export default {
 
 #nav a.router-link-exact-active {
   border-radius: 1.25rem;
-  background: var(--app-nav-active);
+  /* background: var(--app-nav-active); */
+  background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
   text-decoration: none;
   transition: ease 2s;
 }
 
 .active{
   border-radius: 1.25rem;
-  background: var(--app-nav-active);
+  /* background: var(--app-nav-active); */
   text-decoration: none;
   transition: ease 2s;
 }
@@ -200,6 +204,10 @@ export default {
 a{
   text-decoration: none;
   color: #181818;
+}
+
+.notification_icon{
+  display: block;
 }
 
 a:hover{
@@ -372,6 +380,7 @@ a:hover{
   width: 100%;
   background-color: #F9FAFC;
   min-height: 100vh;
+
 }
 
 
@@ -390,10 +399,10 @@ a:hover{
 }
 
 .dashboard_content{
-  margin: 0 5.5rem 6.19rem 5.5rem;
-  width: auto;
+  margin: 0;
+  width: 100%;
   position: relative;
-  padding-left: 1rem;
+  padding:0 1rem;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -406,14 +415,24 @@ a:hover{
     display: none;
   }
 
+  .notification_icon{
+  display: none;
+}
+
   .m6-0{
     justify-content: space-between;
   }
 
   .dashboard_content{
-    width: 90%;
-    margin: 1rem;
+    /* padding-left:1.5rem;
+    padding-right: 1.5rem; */
+    /* padding: 0; */
+    margin-bottom: 100px;
+    justify-content: flex-start;
+
   }
+
+
 }
 
 </style>

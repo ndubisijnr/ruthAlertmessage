@@ -222,10 +222,6 @@ main{
 }
 
 
-.nav-item:hover{
-    transform: scale(1.1);
-    color:#1D1E2C;
-}
 
 #nav0 a.router-link-exact-active {
   background:  var(--app-defautl-primary-light);

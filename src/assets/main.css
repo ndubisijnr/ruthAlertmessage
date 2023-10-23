@@ -2,15 +2,15 @@
 @import url('https://fonts.googleapis.com/css?family=Product Sans');
 
 
-
 *{
-  font-family:'Product Sans';
-}
-html{
-  font-size: 14px; 
- 
-}
-
+    font-family:'Product Sans';
+  }
+  html{
+    font-size: 0.9rem; 
+   
+  }
+  
+  
 
 
 

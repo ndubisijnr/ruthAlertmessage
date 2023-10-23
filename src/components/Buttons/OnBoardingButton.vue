@@ -33,6 +33,8 @@ export default {
   border-radius: 6px;
   cursor: pointer;
   width:26.25rem;
+  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s; /* Safari */
 }
 
 
@@ -63,8 +65,59 @@ export default {
   font-weight: 400;
   line-height: normal;
   width: 100%;
-  text-align: center
+  text-align: center;
+  
 }
 }
+
+
+/* .button{
+  position: relative;
+  background-color: black;
+  border-radius: 4em;
+  font-size: 16px;
+  color: white;
+  padding: 0.8em 1.8em;
+  cursor:pointer;
+  user-select:none;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+ 
+} */
+
+.on_boarding_button:hover {
+  transition-duration: 0.1s;
+  background-color: #3A3A3A;
+}
+
+.on_boarding_button:after {
+  content: "";
+  display: block;
+  /* position: absolute; */
+  border-radius: 4em;
+  left: 0;
+  top:0;
+  opacity: 0;
+  transition: all 0.5s;
+  box-shadow: 0 0 10px 40px white;
+  border: solid;
+}
+
+/* .on_boarding_button:active:after {
+  box-shadow: 0 0 0 0 white;
+  position: absolute;
+  border-radius: 4em;
+  left: 0;
+  top:0;
+  opacity: 1;
+  transition: 0s;
+} */
+
+.on_boarding_button:active {
+  top: 1px;
+}
+
+
 
 </style>

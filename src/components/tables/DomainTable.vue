@@ -377,6 +377,7 @@ export default {
 @media (max-width: 1024px) {
   .table-container{
     overflow-x: scroll;
+    width: max-content;
   }
 }
 

@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import {stickyHeader} from "../../mixins/sticky";
+// import {stickyHeader} from "../../mixins/sticky";
 export default {
     name:"NavBar",
   mounted() {
-      stickyHeader()
+      // stickyHeader()
   }
 }
 </script>
@@ -37,7 +37,7 @@ export default {
   margin: 2rem 0;
   width: 100%;
   /* m1 */
-  box-shadow: 0px 18px 40px 0px rgba(30, 30, 30, 0.08);
+  /* box-shadow: 0px 18px 40px 0px rgba(30, 30, 30, 0.08); */
 }
 
 @media (max-width: 1024px) {

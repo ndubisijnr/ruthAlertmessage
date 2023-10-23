@@ -358,9 +358,10 @@ a{
   text-decoration: none !important;
 }
 .wrapper{
-  width: 100%;
+  min-width: 100%;
   /* background-color: #F9FAFC; */
   min-height: 100vh;
+  overflow: scroll;
 
 }
 .inner-wrapper{
@@ -467,10 +468,7 @@ main{
 }
 
 
-.nav-item:hover{
-  transform: scale(1.1);
-  color:#1D1E2C;
-}
+
 
 #nav0 a.router-link-exact-active {
   background:  var(--app-defautl-primary-light);

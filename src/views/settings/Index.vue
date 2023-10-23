@@ -1599,6 +1599,7 @@ m-2{
 .tabs{
   width: 100%;
   min-height: 100vh;
+  margin-bottom: 20px;
 }
 
 .current-tab{

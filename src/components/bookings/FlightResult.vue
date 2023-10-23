@@ -198,11 +198,11 @@
                     <p class="depart-date">Depart on {{ convertToWord(i.outbound[0]?.departure_time.split("T")[0])  }}  ( {{ getCityByCityCode(i.outbound[0]?.airport_from) }} to {{getCityByCityCode(i.outbound[0]?.airport_to)}})</p>
                     <p class="depart-date-info-stops">{{i.outbound_stops}}-Stops</p>
                   </div>
-                  <svg @click="revealDetails_departure" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <svg class="dropdown_icon" @click="isDepartureActive=!isDepartureActive" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 16.0972L6.35164 10.4488L8.04844 8.75198L12 12.7036L15.9516 8.75198L17.6484 10.4488L12 16.0972ZM12 2.40039C6.69842 2.40039 2.40002 6.69759 2.40002 12.0004C2.40002 17.302 6.69842 21.6004 12 21.6004C17.3016 21.6004 21.6 17.302 21.6 12.0004C21.6 6.69759 17.3016 2.40039 12 2.40039Z" fill="#1D1E2C"/>
                   </svg>
                 </div>
-                <div v-if="active==='departure'">
+                <div v-if="isDepartureActive">
 
                   <div v-for="j in i.outbound">
 
@@ -267,16 +267,16 @@
               </div>
 
               <div v-if="i.inbound.length > 0">
-                <div  class="dropdown-details-div u-hide" id="return">
+                <div  class="dropdown-details-div">
                   <div class="depart_date-info">
                     <p class="depart-date">Return on {{ convertToWord(i.inbound[0]?.departure_time.split("T")[0])  }}  ( {{ getCityByCityCode(i.inbound[0]?.airport_from) }} to {{getCityByCityCode(i.inbound[0]?.airport_to)}})</p>
                     <p class="depart-date-info-stops">{{i.inbound_stops}}-Stops</p>
                   </div>
-                  <svg @click="revealDetails_return" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <svg class="dropdown_icon" @click="isReturnActive=!isReturnActive" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 16.0972L6.35164 10.4488L8.04844 8.75198L12 12.7036L15.9516 8.75198L17.6484 10.4488L12 16.0972ZM12 2.40039C6.69842 2.40039 2.40002 6.69759 2.40002 12.0004C2.40002 17.302 6.69842 21.6004 12 21.6004C17.3016 21.6004 21.6 17.302 21.6 12.0004C21.6 6.69759 17.3016 2.40039 12 2.40039Z" fill="#1D1E2C"/>
                   </svg>
                 </div>
-                <div v-if="active==='return'">
+                <div v-if="isReturnActive">
                   <div v-for="x in i.inbound">
 
                   <div class="airline_details">
@@ -416,6 +416,8 @@ export default {
       currentPage:1,
       itemsPerPage:3,
       paginate,
+      isDepartureActive:false,
+      isReturnActive:false
     }
   },
   methods:{
@@ -640,7 +642,6 @@ line-height: 1.75rem; /* 175% */
   border-radius: 0.5rem;
   border: 1px solid  #F9FAFC;
   background:  #F9FAFC;
-
 }
 .book-flight-details-btn{
   width: 100%;
@@ -710,6 +711,12 @@ line-height: 1.75rem; /* 175% */
 
 
 }
+
+.dropdown_icon:hover{
+  border: solid var(--app-default-primary);
+  border-radius: 50%;
+
+}
 .additional-details-info{
   display: flex;
   justify-content: start;
@@ -728,6 +735,10 @@ line-height: 1.75rem; /* 175% */
   align-items: center;
   padding: 1.5rem;
   height: 5.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background:  #F9FAFC;
+  margin-bottom: 1rem;
 
 }
 .depart_date-info{
