@@ -182,7 +182,20 @@ export default {
                         function checkd_uplicate() {
 
                         }
-                        if (it.outbound[0].airline_details.name == filterValue || it.inbound[0]?.airline_details.name) {
+                        if (it.outbound[0].airline_details.name == filterValue) {
+                            const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+                            if (!isDuplicate) {
+                                storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
+                            } else {
+                                flightToRemove.push(it)
+                                this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+                                    return a.id !== it.id
+                                })
+                                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+                            }
+                        }
+
+                        if (it.inbound[0]?.airline_details.name) {
                             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
                             if (!isDuplicate) {
                                 storeUtils.fireAway().flight?.commitFilteredFlightResult(it)

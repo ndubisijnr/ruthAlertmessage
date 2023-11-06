@@ -485,7 +485,7 @@
             </div>
           </div>
 
-          <div id="customization" class="animate__animated animate__fadeIn" v-show="currentTab === 'Customization'">
+          <!-- <div id="customization" class="animate__animated animate__fadeIn" v-show="currentTab === 'Customization'">
 
             <div class="customization_wrapper">
               <div class="customization_sender">
@@ -513,7 +513,7 @@
               </div>
             </div>
           
-          </div>
+          </div> -->
 
           <div id="verifications" class="verifications  animate__animated animate__fadeIn" v-show="currentTab === 'Verification'">
           <business-verification v-if="verification_Type ==='business'"  :is-component="false" :in-route="false"></business-verification>
