@@ -2,6 +2,7 @@
     <div class="nav_wrapper" id="header">
         <div class="nav">
             <slot name="children"></slot>
+            
         </div>
     </div>
   
@@ -20,22 +21,18 @@ export default {
 <style scoped>
 .nav_wrapper{
   width: 100%;
-  padding-left:5.5rem;
-  padding-right:5.5rem;
-  background: transparent;
+  background: #FFF;
+  padding: 0 5.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .nav{
   height: 72px;
   display: inline-block;
   /*position: relative;*/
-  padding: 0.75rem 2rem;
-  align-items: center;
-  /*gap: 12.3125rem;*/
-  border-radius: 2.5rem;
-  background: #FFF;
-  margin: 2rem 0;
-  width: 100%;
+  padding: 1rem 0;
+  border-radius: 0;
   /* m1 */
   /* box-shadow: 0px 18px 40px 0px rgba(30, 30, 30, 0.08); */
 }

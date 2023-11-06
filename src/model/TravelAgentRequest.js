@@ -2,6 +2,7 @@ class TravelAgentRequest{
 
     static verifyBusiness =  {
         user_id: null,
+        verification_reason: null
 
     }
 

@@ -130,6 +130,9 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
                 if(responseData.success){
                     RuthdoAlert({title:'Successful', icon:'success'})
                     // do nothing
+                }else{
+                    RuthdoAlert({title:responseData.data, icon:'error'})
+  
                 }
             }).catch(e => {
                 catchErrorHandler(e)

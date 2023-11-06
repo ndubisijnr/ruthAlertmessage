@@ -31,7 +31,8 @@ export const useFlightStore = defineStore('flightStore', {
         invoicePayload:null,
         showingPaymentMethod:false,
         flightResults:null,
-        wallet:null
+        wallet:null,
+        filteredFlightResult:[]
     }),
 
     getters: {
@@ -58,11 +59,21 @@ export const useFlightStore = defineStore('flightStore', {
         getWallet: state => state.wallet,
         getBookingStage: () => {return localStorage.bookingStage},
         getProgressNav:() => {return localStorage.progressNav},
+        getFilteredFlight:state  => state.filteredFlightResult.slice().sort((a, b) => a - b).reverse()
 
 
     },
 
     actions: {
+
+        commitFilteredFlightResult(payload){
+            this.filteredFlightResult.push(payload)
+        },
+
+        deleteFliteredFlightResult(payload){
+            this.filteredFlightResult = payload
+
+        },
 
         handleGetAirport(){
             return FlightService.airports(storeUtils.fireAway().global?.getTenant_id).then(async response => {
@@ -104,6 +115,7 @@ export const useFlightStore = defineStore('flightStore', {
                 }
             }
            }catch(err){
+            this.loading = false
             catchErrorHandler(err)
            }
         },

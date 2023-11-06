@@ -23,10 +23,10 @@
               </div>
               <div>
 
-                <on-boarding-input-vue label="Email Address" @inputValue="(value) => model.email = value" :type="'email'"></on-boarding-input-vue>
+                <on-boarding-input-vue label="Email Address" placeholder="Email Address" @inputValue="(value) => model.email = value" :type="'email'"></on-boarding-input-vue>
 
 
-                <on-boarding-input-vue label="Password" :type="'password'" :id="'login_password'" @inputValue="(value) => model.password = value"></on-boarding-input-vue>
+                <on-boarding-input-vue label="Password" placeholder="Password" :type="'password'" :id="'login_password'" @inputValue="(value) => model.password = value"></on-boarding-input-vue>
 
                 <div class="remember_me">
 <!--                  <div style="display: flex;align-items: center;gap:0.62rem">-->
@@ -198,6 +198,7 @@ line-height: 1.1875rem; /* 135.714% */
     width: auto;
    height: auto;
    position: absolute;
+   top: 13rem;
 }
 
 @media (max-width: 1024px) {

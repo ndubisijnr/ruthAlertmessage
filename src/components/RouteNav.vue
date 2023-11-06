@@ -13,6 +13,7 @@
 
 <script>
 import router, {routes} from "../router";
+import dashboardRoute from "../router/routes/dashboardRoute";
 
 
 export default {
@@ -39,7 +40,7 @@ export default {
 
 
     getAllRoute() {
-      let route = routes.map((item) => item)
+      let route = dashboardRoute.map((item) => item)
       let link = router.currentRoute.value.fullPath.split("/")[1]
       let filteredRoute = route.filter(it => it.path.includes(link))
       filteredRoute.pop()
@@ -70,7 +71,7 @@ export default {
   width: auto;
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0;
   margin-bottom: 1.94rem;
   gap: 0.5rem;
 }

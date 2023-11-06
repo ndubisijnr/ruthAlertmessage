@@ -1,0 +1,55 @@
+ filterObject(obj, filterValue) {
+            const filteredValues = [];
+            const parentObjects = [];
+            // console.log(obj)
+
+            function filterValue(currentObj, parentObj = null) {
+                for (const key in currentObj) {
+                    const value = currentObj[key];
+                    if (value === filterValue) {
+                        filteredValues.push(value);
+                        parentObjects.push(parentObj);
+                    }
+
+                    if (typeof value === 'object') {
+                        filterValue(value, currentObj);
+                    }
+                }
+            }
+
+            // function filterValue(currentObj, parentObj = null) {
+
+
+            //     console.log('this is the value we are looking for: ', args)
+            //     args.forEach((arg, index) => {
+            //         if (currentObj === arg) {
+            //             console.log('this is the value i got: ', currentObj)
+            //             filteredValues.push(currentObj);
+            //         } else if (typeof currentObj === 'object') {
+
+            //             for (const key in currentObj) {
+            //                 console.log('current object that is been looped is:', key, '=>', currentObj)
+            //                 // console.log(value)
+            //                 if (currentObj[key] == arg){                               
+            //                         filteredValues.push(currentObj);
+            //                         parentObjects.push(parentObj);
+            //                     }
+
+            //                 if (typeof currentObj === 'object') {
+            //                     filterValue(currentObj[key], currentObj);
+            //                 }
+
+            //             }
+            //         }
+            //     })
+
+            // }
+
+            filterValue(obj);
+
+            console.log('-----------------------')
+            console.log(parentObjects)
+            console.log('-----------------------')
+            console.log(filteredValues)
+            return filteredValues;
+        },

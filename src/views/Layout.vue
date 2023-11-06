@@ -76,11 +76,13 @@
           </div>
 
           <div class="m7-0">
+            
             <img src="../assets/notification.svg" class="notification_icon">
+       
             <div  class="profile" @click="showDrop" >
               <div class="profile-icon" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : null"> <p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
               <img src="../assets/Icons/Arrows/Down.svg" />
-          </div>
+            </div>
             <div v-show="showDropDown" id="dropdown" class="dropDown animate__animated animate__fadeIn">
             <div class="dropDown-inner-head">
               <div class="icon-dropdown" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : null"><p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
@@ -115,6 +117,8 @@
             </div>
 
           </div>
+
+           
 
           </div>
 
@@ -196,7 +200,7 @@ export default {
 
 .active{
   border-radius: 1.25rem;
-  /* background: var(--app-nav-active); */
+  background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
   text-decoration: none;
   transition: ease 2s;
 }
@@ -394,19 +398,16 @@ a:hover{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /*gap: 12.31rem;*/
+  gap: 10.38rem;
   width: 100%;
 }
 
 .dashboard_content{
-  margin: 0;
-  width: 100%;
   position: relative;
-  padding:0 1rem;
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-
+  padding: 0 10.94rem;
+  width: 100%;
 }
 
 

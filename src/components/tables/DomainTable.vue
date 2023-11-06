@@ -32,7 +32,7 @@
       </thead>
       <tbody class="tr" v-if="data?.length > 0">
         <tr v-for="h in fields" :key="h.key" class="table-cell">
-          <td  class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : filteredResult.length > 0 ? filteredResult : data">
+          <td  @click="table_row_onclick_action(j)" class="table-row" v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : filteredResult.length > 0 ? filteredResult : data">
                <!-- template {domain status}  -->
                <span class="connected" :class="{'pending':j.active !== 1}" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
 
@@ -98,7 +98,6 @@
 
 
                 <div v-if="h.id === 'travel_agent_action'">
-                  <p class="menu-item" @click="readAgent(j)">Manage Agent</p>
                   <p class="menu-item deactivate">Deactivate Agent</p>
 
                 </div>
@@ -111,12 +110,12 @@
 
             <!-- template {team member full name}  -->
 
-            <span v-else-if="h.label.toLowerCase() === 'name'">{{j.first_name}} {{j.last_name}}</span>
+            <span  v-else-if="h.label.toLowerCase() === 'name'">{{j.first_name}} {{j.last_name}}</span>
 
 
             <!-- template {bookings user fullname} -->
 
-            <span v-else-if="h.label === 'Customer’s Name'">{{j.contact_first_name}} {{j.contact_last_name}}</span>
+            <span  v-else-if="h.label === 'Customer’s Name'">{{j.contact_first_name}} {{j.contact_last_name}}</span>
 
              <!-- template {bookings status} -->
 
@@ -132,7 +131,7 @@
 
             <!-- template {team member agent type}  -->
 
-            <span v-else-if="h.label.toLowerCase() === 'status'">{{j.type}}</span>
+            <span  v-else-if="h.label.toLowerCase() === 'status'">{{j.type}}</span>
 
 
             <!-- template {agent balance}  -->
@@ -141,10 +140,13 @@
 
 
             <!-- template {roles number}  -->
-            <span v-else-if="h.label.toLowerCase() === 'no.of member'">{{j?.users?.length}}</span>
+            <span  v-else-if="h.label.toLowerCase() === 'no.of member'">{{j?.users?.length}}</span>
 
             <!-- template {roles number}  -->
             <span v-else-if="h.key === 'created_at'">{{convertToWord(j?.created_at)}}</span>
+
+             <!-- template {is_coporate number}  -->
+             <span v-else-if="h.key === 'is_corporate'">{{ j.is_corporate === 'true' ? 'Coorporate' : 'Personal' }}</span>
 
 
             <!-- template {permission number}  -->
@@ -182,6 +184,7 @@ import paginate from "../../mixins/paginate";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
+import router from "../../router";
 
 export default {
   name: "DomainTable",
@@ -215,6 +218,14 @@ export default {
 
     },
 
+    table_row_onclick_action(obj){
+      if(this.getCurrentRoute.toLowerCase() === 'travel agents'){
+        this.readAgent(obj)
+      }
+
+    },
+    
+
     confirmDeactiveAgent(){
       this.$emit('agentDeactive', true)
     },
@@ -228,12 +239,17 @@ export default {
   computed:{
     getTotalPage(){
         return Math.ceil(Number(this.data?.length) / Number(this.itemsPerPage))
+    },
+
+    getCurrentRoute(){
+      return router.currentRoute.value.name
     }
 }
 }
 </script>
 
 <style scoped>
+
 .empty_area{
   justify-content: center;
   align-items: center;
@@ -418,7 +434,7 @@ export default {
 }
 
 .table {
-  border-collapse: collapse;
+  /* border-collapse: collapse; */
   width: 100%;
   margin: 0 auto;
 
@@ -435,6 +451,7 @@ export default {
   line-height: 1.75rem; /* 175% */
   text-align: start;
   width: 100%;
+  padding-left: 1rem;
 }
 
 .th {
@@ -465,7 +482,6 @@ export default {
 
 .table-cell {
   flex: 1;
-  padding-left:1rem;
 
 }
 
@@ -494,7 +510,13 @@ export default {
   align-items: center;
   justify-content: start;
   gap: 0.5rem;
+  text-transform: capitalize;
+  padding-left: 1rem;
 
+}
+
+.table-row span:hover{
+  cursor: pointer;
 }
 
 @media (max-width: 1024px) {

@@ -19,7 +19,7 @@ export const useTransactionStore = defineStore('transactionStore', {
         getUserWallet: state => state.userWallet,
         getSingleTransaction: state => state.singleTransaction,
         getTransactions: state => state.transactions,
-        getTransactionSummary:state => state.transactionSummary
+        getTransactionSummary:state => state.transactionSummary 
     },
 
     actions: {

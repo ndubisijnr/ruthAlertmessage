@@ -2,14 +2,17 @@
   <booking-index v-slot:booking_children>
         <div class="booking-div animate__animated animate__fadeIn">
           <div class="booking-div-inner-wrapper">
-            <div style="display: flex">
-              <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}">Book Flight</div>
-              <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}">Find Hotels</div>
-              <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}">Visa</div>
-              <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}">Insurance</div>
+            <div class="booking-div-head">
+              <div class="service_nav">
+                <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}">Book Flight</div>
+                <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}">Find Hotels</div>
+                <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}">Visa</div>
+                <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}">Insurance</div>
+              </div>
             </div>
 
-            <div v-if="activeService === 'Flight'">
+            <div class="booking-div-body">
+              <div v-if="activeService === 'Flight'">
               <div class="booking-nav">
               <p class="booking-nav-item" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
@@ -25,14 +28,17 @@
                   <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                     <div class="group-inputs">
                       <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
-                        <div class="airportsDropDown">
+                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" placeholder="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
+                        <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
+                          <!-- <div>
+                            <input placeholder="serch cities" />
+                          </div> -->
                           <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
                       </div>
                       <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
-                        <div class="airportsDropDown">
+                        <on-boarding-input is-fake-loading="true" placeholder="To" autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                        <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
                           <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
                       </div>
@@ -202,21 +208,25 @@
             </div>
           </div>
 
+              </div>
+
+              <div v-else class="coming_soon">
+                <coming-soon :page="activeService"></coming-soon>
+
+              </div>
+
             </div>
 
-            <div v-else class="coming_soon">
-              <coming-soon :page="activeService"></coming-soon>
-
-            </div>
            
-        </div>
+           
+          </div>
         </div>
   </booking-index>
 
 </template>
 
 <script>
-import ComingSoon from "../ComingSoon.vue"
+import ComingSoon from "../ComingSoon.vue";
 import BookingIndex from "../../views/dashboard/Index.vue"
 import Layout from "../../views/Layout.vue";
 import router from "../../router";
@@ -355,8 +365,8 @@ export default {
       }else{
         this.filteredAirportFrom = this.getAirports.filter(it => {
           // let searchQuery = Object.values(it).map(i => i).toLocaleString()
-          return it.city_code === this.fromQuery.toUpperCase() || it.city.toLowerCase() === this.fromQuery.toLowerCase()
-        })
+          return it.city_code === this.fromQuery.toUpperCase() || it.city.toLowerCase() === this.fromQuery.toLowerCase() || it.country.toLowerCase() === this.fromQuery.toLowerCase()
+        }) 
       }
 
     },
@@ -365,9 +375,8 @@ export default {
       if(this.toQuery.length < 1){
         this.filteredAirportTo.length = 0
       }else{
-        this.filteredAirportTo = this.getAirports.filter(it => {
-          // let searchQuery = Object.values(it).map(i => i).toLocaleString()
-          return it.city_code === this.toQuery.toUpperCase() || it.city.toLowerCase() === this.toQuery.toLowerCase()
+        this.filteredAirportTo = this.getAirports.filter(it => {      
+          return it.country.toLowerCase() === this.toQuery.toLowerCase() || it.city.toLowerCase() === this.toQuery.toLowerCase() || it.city_code === this.toQuery.toUpperCase()
         })
       }
 
@@ -439,9 +448,24 @@ export default {
 </script>
 
 <style scoped>
+.booking-div-head{
+  display: flex;
+  height: 7.25rem;
+  align-items: end;
+}
+
+.service_nav{
+  display: flex;
+  margin-left:5.31rem;
+}
+
+.booking-div-body{
+  margin:0 5.31rem;
+}
+
 .coming_soon{
 
-  margin: 10rem auto;
+  margin: 1rem 0;
 }
 .minus-button{
   width:30px;
@@ -472,14 +496,21 @@ export default {
 }
 
 .selected-item{
-  padding: 0.25rem 0 0.25rem 0;
+  padding: 1rem 0 0.25rem 0;
   /* border: solid; */
+  color: var(--black-text-01, #1D1E2C);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
 }
 .per_airport{
   padding: 0.5rem;
   border-bottom:solid var(--app-defautl-primary-light);
   width: 100%;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .nav-a1{
@@ -528,8 +559,8 @@ export default {
 }
 .class_label{
   position: absolute;
-  top: 0;
-  color:  #2D3139;
+  top: 5px;
+  color: #575A65;
 
   /* sanslight/12px/Regular */
   font-family: 'Product Sans';
@@ -1165,7 +1196,9 @@ export default {
 }
 
 .booking-div-inner-wrapper{
-  margin: 4rem 0;
+  width: 68.125rem;
+  height: auto;
+  padding-bottom:3.94rem;
 }
 
 .booking-nav-item{
@@ -1182,7 +1215,9 @@ export default {
 }
 
 .booking-div{
-  margin: 0 3rem;
+  margin: 0 0;
+  width: 100%;
+  background-color: #FFF;
 }
 
 .booking-nav{

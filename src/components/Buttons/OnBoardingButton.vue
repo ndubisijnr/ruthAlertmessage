@@ -1,5 +1,5 @@
 <template>
-  <button :id="id" :type="type ? type : 'button'" :style="{fontSize:fontsize ? fontsize : '14px', border:border ? border :'1px solid  #2C6CAC',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#2C6CAC', color:color ? color : '#FFF', height:height ? height : '3.50rem'}"
+  <button :id="id" :type="type ? type : 'button'" :style="{fontSize:fontsize ? fontsize : '14px', border:border ? border :'1px solid  #2C6CAC',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#2C6CAC', color:color ? color : '#FFF', height:height ? height : '3.50rem', padding:padding}"
    class="on_boarding_button" :class="{'disabled':disabled || loading}" :disabled="disabled">
       <svg v-if="filter_icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 24" fill="none">
       <path d="M22.5 7.25H16.5C16.09 7.25 15.75 6.91 15.75 6.5C15.75 6.09 16.09 5.75 16.5 5.75H22.5C22.91 5.75 23.25 6.09 23.25 6.5C23.25 6.91 22.91 7.25 22.5 7.25Z" fill="#89128A"/>
@@ -20,7 +20,7 @@ export default {
   components:{
       SpinnerLoader
   },
-  props:['textNode','filter_icon','disabled', 'type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading', 'fontsize']
+  props:['textNode','filter_icon','disabled','padding','type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading', 'fontsize']
 }
 </script>
 
@@ -35,6 +35,7 @@ export default {
   width:26.25rem;
   transition-duration: 0.4s;
   -webkit-transition-duration: 0.4s; /* Safari */
+  position: relative;
 }
 
 
@@ -91,18 +92,7 @@ export default {
   background-color: #3A3A3A;
 }
 
-.on_boarding_button:after {
-  content: "";
-  display: block;
-  /* position: absolute; */
-  border-radius: 4em;
-  left: 0;
-  top:0;
-  opacity: 0;
-  transition: all 0.5s;
-  box-shadow: 0 0 10px 40px white;
-  border: solid;
-}
+/* */
 
 /* .on_boarding_button:active:after {
   box-shadow: 0 0 0 0 white;
@@ -113,6 +103,36 @@ export default {
   opacity: 1;
   transition: 0s;
 } */
+
+.on_boarding_button:active {
+  top: 1px;
+}
+
+.on_boarding_button:after {
+  content: "";
+  display: block;
+  position: absolute;
+  /* border-radius: 4em; */
+  left: 0;
+  top:0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+  box-shadow: 0 0 10px 40px rgb(8, 166, 198);
+
+  /* box-shadow: 0 0 10px 40px white; */
+}
+
+.on_boarding_button:active:after {
+  box-shadow: 0 0 0 0 white;
+  position: absolute;
+  border-radius: 4em;
+  left: 0;
+  top:0;
+  opacity: 1;
+  transition: 0s;
+}
 
 .on_boarding_button:active {
   top: 1px;

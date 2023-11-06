@@ -1,174 +1,147 @@
 <template>
   <index v-slot:children>
     <div>
-      <div>
-        <p class="business_information">Document Verification</p>
-        <div class="business_information_card">
-          <div>
-            <p class="txt-1">Company Document</p>
-            <p class="txt-2">Corporate  Affairs Commission - CAC</p>
-          </div>
+      <p class="business_information">Document Verification</p>
 
-          <div v-if="!getTravelAgent.cac_document" class="component_wrapper">
+   
+      <div class="document_verification_wrapper">
+          <div class="business_information_card">
 
-            <p>Nothing to show</p>
-            <!-- display something -->
-
-          </div>
-
-          <div v-else class="doc_pending_wrapper">
-            <div class="doc_pending">
-              <div style="display: flex;gap: 0.75rem;align-items: center">
-                <img class="img-uploaded" id="company_image_preview" :src="getTravelAgent?.cac_document" />
-                <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
+            <div>
+              <div>
+                <p class="txt-1">Company Document</p>
+                <p class="txt-2">Corporate  Affairs Commission - CAC</p>
               </div>
-              <a :href="getTravelAgent?.cac_document" target="_blank"> <on-boarding-button color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button></a>
-              <div class="approve-area">
-              <p class="approve">{{getTravelAgent?.is_cac_verified === 'true' ? 'Approved' : 'Approve' }}</p>
-                <svg v-if="getTravelAgent?.is_cac_verified === 'true'" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                  <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
-                  <g filter="url(#filter0_d_2183_96383)">
-                    <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                      <feOffset dy="2"/>
-                      <feGaussianBlur stdDeviation="5"/>
-                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
-                    </filter>
-                  </defs>
-                </svg>
-                <div v-else>
-                  <svg v-if="checkedCAC" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                    <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
-                    <g filter="url(#filter0_d_2183_96383)">
-                      <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
-                    </g>
-                    <defs>
-                      <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                        <feOffset dy="2"/>
-                        <feGaussianBlur stdDeviation="5"/>
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
-                      </filter>
-                    </defs>
-                  </svg>
-                  <svg @click="handleApprove('cac')" v-else xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                    <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
-                    <g filter="url(#filter0_d_2183_96401)">
-                      <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
-                    </g>
-                    <defs>
-                      <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                        <feOffset dy="2"/>
-                        <feGaussianBlur stdDeviation="5"/>
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
-                      </filter>
-                    </defs>
-                  </svg>
-                </div>
+
+              <div v-if="!getTravelAgent.cac_document" class="component_wrapper">
+
+                <p>Nothing to show</p>
+                <!-- display something -->
 
               </div>
 
-            </div>
-          </div>
-
-
-
-          <div class="personal-docs">
-            <p class="txt-1">Personal Document</p>
-            <p class="txt-2">Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
-          </div>
-
-          <div v-if="!getTravelAgent.id_document" class="component_wrapper">
-
-            <p>Nothing to show</p>
-
-          </div>
-
-          <div v-else class="doc_pending_wrapper">
-            <div class="doc_pending">
-              <div style="display: flex;gap: 0.75rem;align-items: center">
-                <img class="img-uploaded"  :src="getTravelAgent?.id_document" />
-                <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
-              </div>
-              <a :href="getTravelAgent?.id_document" target="_blank"> <on-boarding-button color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button></a>
-              <div class="approve-area">
-                <p class="approve">{{getTravelAgent?.is_id_verified === 'true' ? 'Approved' : 'Approve' }}</p>
-                <svg v-if="getTravelAgent?.is_id_verified === 'true'" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                  <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
-                  <g filter="url(#filter0_d_2183_96383)">
-                    <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                      <feOffset dy="2"/>
-                      <feGaussianBlur stdDeviation="5"/>
-                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
-                    </filter>
-                  </defs>
-                </svg>
-                <div v-else>
-                  <svg v-if="checkedDOC" xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                    <rect x="46" y="33" width="46" height="26" rx="13" transform="rotate(180 46 33)" fill="#2C6CAC"/>
-                    <g filter="url(#filter0_d_2183_96383)">
-                      <ellipse cx="33.5" cy="20" rx="11.5" ry="12" transform="rotate(180 33.5 20)" fill="white"/>
-                    </g>
-                    <defs>
-                      <filter id="filter0_d_2183_96383" x="12" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                        <feOffset dy="2"/>
-                        <feGaussianBlur stdDeviation="5"/>
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96383"/>
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96383" result="shape"/>
-                      </filter>
-                    </defs>
-                  </svg>
-                  <svg v-else @click="handleApprove('id')"  xmlns="http://www.w3.org/2000/svg" width="55" height="44" viewBox="0 0 55 44" fill="none">
-                    <rect x="55" y="33" width="46" height="26" rx="13" transform="rotate(180 55 33)" fill="#E4E8F1"/>
-                    <g filter="url(#filter0_d_2183_96401)">
-                      <ellipse cx="21.5" cy="20" rx="11.5" ry="12" transform="rotate(180 21.5 20)" fill="white"/>
-                    </g>
-                    <defs>
-                      <filter id="filter0_d_2183_96401" x="0" y="0" width="43" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                        <feOffset dy="2"/>
-                        <feGaussianBlur stdDeviation="5"/>
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2183_96401"/>
-                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2183_96401" result="shape"/>
-                      </filter>
-                    </defs>
-                  </svg>
+              <div v-else class="doc_pending_wrapper">
+                <div class="doc_pending">
+                  <div style="display: flex;gap: 0.75rem;align-items: center">
+                    <iframe class="img-uploaded" :src="getTravelAgent?.cac_document" title="Company Document"></iframe>
+                    <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
+                  </div>
+                  <on-boarding-button @click="viewDocuments(getTravelAgent?.cac_document)" color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button>
+                  
                 </div>
               </div>
 
+              <div class="reason_area">
+                <p class="action">Actions</p>
+                <div style="display: flex;gap: 1rem;margin-bottom: 1rem;">
+                  <div style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="cacModel.is_cac_verified !== 'true'" @click="cacModel.is_cac_verified='true'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="cacModel.is_cac_verified === 'true'" @click="cacModel.is_cac_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Approved</label>
+                  </div>
+                  <div  style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="cacModel.is_cac_verified !== 'pending'" @click="cacModel.is_cac_verified='pending'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="cacModel.is_cac_verified === 'pending'" @click="cacModel.is_cac_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Pending</label>
+                  </div>
+                  <div  style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="cacModel.is_cac_verified !== 'false'" @click="cacModel.is_cac_verified='false'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="cacModel.is_cac_verified === 'false'" @click="cacModel.is_cac_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Decline</label>
+                  </div>
+                </div>
+                <div>
+                  <input class="verification_reason" v-model="cacModel.verification_reason" placeholder="Reason for Action">
+                </div>
+
+              
+              </div>
+<!-- 
+              <div>
+                  <OnBoardingButton @click="handleApprove('cac')" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
+              </div> -->
+
             </div>
+            <div>
+
+              <div class="personal-docs">
+                <p class="txt-1">Personal Document</p>
+                <p class="txt-2">Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
+              </div>
+
+              <div v-if="!getTravelAgent.id_document" class="component_wrapper">
+
+                <p>Nothing to show</p>
+
+              </div>
+
+              <div v-else class="doc_pending_wrapper">
+                <div class="doc_pending">
+                  <div style="display: flex;gap: 0.75rem;align-items: center">
+                    <iframe class="img-uploaded" :src="getTravelAgent?.id_document" title="Personal Document"></iframe>
+                    <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
+                  </div>
+                  <on-boarding-button @click="viewDocuments(getTravelAgent?.id_document)" color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button>
+
+                </div>
+              </div>
+
+              <div class="reason_area">
+                <p class="action">Actions</p>
+                <div style="display: flex;gap: 1rem;margin-bottom: 1rem;">
+                  <div style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="docModel.is_id_verified !== 'true'" @click="docModel.is_id_verified='true'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="docModel.is_id_verified === 'true'" @click="docModel.is_id_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Approved</label>
+                  </div>
+                  <div  style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="docModel.is_id_verified !== 'pending'" @click="docModel.is_id_verified='pending'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="docModel.is_id_verified === 'pending'" @click="docModel.is_id_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Pending</label>
+                  </div>
+                  <div  style="display: flex;gap:0.5rem;align-items: center;">
+                    <svg v-if="docModel.is_id_verified !== 'false'" @click="docModel.is_id_verified='false'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11.5" fill="#EAF0F7" stroke="#C0D3E6"/>
+                    </svg>
+                    <svg v-if="docModel.is_id_verified === 'false'" @click="docModel.is_id_verified=null" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM12 20.25C10.3683 20.25 8.77326 19.7661 7.41655 18.8596C6.05984 17.9531 5.00242 16.6646 4.378 15.1571C3.75358 13.6496 3.5902 11.9908 3.90853 10.3905C4.22685 8.79016 5.01259 7.32015 6.16637 6.16637C7.32016 5.01259 8.79017 4.22685 10.3905 3.90852C11.9909 3.59019 13.6497 3.75357 15.1571 4.37799C16.6646 5.00242 17.9531 6.05984 18.8596 7.41655C19.7661 8.77325 20.25 10.3683 20.25 12C20.2475 14.1873 19.3775 16.2843 17.8309 17.8309C16.2843 19.3775 14.1873 20.2475 12 20.25ZM18 12C18 13.1867 17.6481 14.3467 16.9888 15.3334C16.3295 16.3201 15.3925 17.0892 14.2961 17.5433C13.1997 17.9974 11.9933 18.1162 10.8295 17.8847C9.66558 17.6532 8.59648 17.0818 7.75736 16.2426C6.91825 15.4035 6.3468 14.3344 6.11529 13.1705C5.88378 12.0067 6.0026 10.8003 6.45673 9.7039C6.91085 8.60754 7.67989 7.67047 8.66658 7.01118C9.65328 6.35189 10.8133 6 12 6C13.5908 6.00174 15.1159 6.63444 16.2407 7.75928C17.3656 8.88412 17.9983 10.4092 18 12Z" fill="#2C6CAC"/>
+                    </svg>
+                    <label>Decline</label>
+                  </div>
+                </div>
+                <div>
+                  <input class="verification_reason" v-model="docModel.verification_reason" placeholder="Reason for Action">
+                </div>
+              </div>
+              <div>
+                  <OnBoardingButton @click="handleApprove()" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
+                </div>
+              </div>
+
           </div>
-
-
-        </div>
 
       </div>
-    </div>
+  </div>
   </index>
 </template>
 
@@ -185,22 +158,50 @@ export default {
       getFirstLettersOfFirstAndLastName,
       convertToWord,
       model:TravelAgentRequest.verifyBusiness,
-      checkedCAC:false,
-      checkedDOC:false
+      cacModel:{
+        verification_reason:null,
+        is_cac_verified:null
+      },
+      docModel:{
+        verification_reason:null,
+        is_id_verified:null
+      },
     }
   },
   components:{OnBoardingButton, Index},
   methods:{
-    handleApprove(type){
+    viewDocuments(value){
+      // <a :href="getTravelAgent?.cac_document" target="_blank">
+         const href = document.createElement('a')
+         href.setAttribute('href', value)
+         href.setAttribute('target', '_blank')
+         setTimeout(() => {
+          href.click()
+         },500)
+        
+    },
+
+    async handleApprove(document_to_verify){
       this.model.user_id = this.getTravelAgent.id
-      if(type === 'id'){
-        this.checkedDOC = true
-        this.model.is_id_verified = 'true'
+      if(document_to_verify === 'id'){       
+        this.model.is_id_verified = this.docModel.is_id_verified
+        this.model.verification_reason = this.docModel.verification_reason
       }else{
-        this.checkedCAC = true
-        this.model.is_cac_verified = 'true'
+        this.model.is_cac_verified = this.cacModel.is_cac_verified
+        this.model.verification_reason = this.cacModel.verification_reason
       }
-      storeUtils.fireAway().travelAgent?.handleVerifyBusiness()
+      await storeUtils.fireAway().travelAgent?.handleVerifyBusiness()
+      Object.keys(this.docModel).forEach(key => {
+        return this.docModel[key] = null
+      })
+
+      Object.keys(this.cacModel).forEach(key => {
+        return this.cacModel[key] = null
+      })
+
+      Object.keys(this.model).forEach(key => {
+        return this.model[key] = null
+      })
 
     }
   },
@@ -231,6 +232,37 @@ export default {
 </script>
 
 <style scoped>
+
+.document_verification_wrapper{
+  width: 58rem;
+  height: auto;
+  flex-shrink: 0;
+}
+.action{
+  color: var(--primary-main, #2C6CAC);
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  margin-bottom: 0.37rem;
+}
+.reason_area{
+  margin: 1.5rem 0;
+}
+.verification_reason{
+  display: flex;
+  width: 31.3125rem;
+  padding: 1.125rem;
+  align-items: flex-start;
+  gap: 0.625rem;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  border: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);
+}
+
 a{
   text-decoration: none;
 }
@@ -294,15 +326,17 @@ a{
   position: relative;
 }
 .doc_pending{
-  display: inline-flex;
+  display: flex;
   padding: 1.5rem;
+  width: 31.375rem;
+  height: 8.25rem;
+  justify-content: start;
   align-items: center;
-  width: 49.375rem;
-  justify-content: space-around;
   gap: 4.875rem;
   border-radius: 0.375rem;
   border: 1px solid  #E0E6ED;
   position: relative;
+  margin-top: 1.5rem;
 
 }
 
@@ -321,7 +355,9 @@ a{
 
 .img-uploaded{
   width: 4rem;
-  height: 2.65rem;
+  height: 4rem;
+  border: none;
+
 }
 
 .doc_type{

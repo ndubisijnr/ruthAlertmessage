@@ -1,13 +1,13 @@
 <template>
   <booking-index v-slot:booking_children>
     <div class="flight-result animate__animated animate__fadeIn">
-      <div><p>Selected Flight</p></div>
+    
 
       <!-- {{ getSelectedFlight }} -->
     
       <div class="breaker1"></div>
 
-      <div class="intro_summary_wrapper">
+      <!-- <div class="intro_summary_wrapper">
 
       <div class="into-summary" v-for="(i, index) in getSelectedFlight.outbound" :key="index">
         <div class="into-summary-item">
@@ -48,9 +48,9 @@
 
       </div>
 
-    </div>
+    </div> -->
 
-    <div v-if="getSelectedFlight.inbound.length > 0"  class="intro_summary_wrapper">
+    <!-- <div v-if="getSelectedFlight.inbound.length > 0"  class="intro_summary_wrapper">
 
 
       <div class="into-summary" v-for="(i, index) in getSelectedFlight.inbound" :key="index">
@@ -59,12 +59,12 @@
             <p  class="into-summary-item-p">{{convertToWord(i.departure_time)}}</p>
           </div>
 
-          <div  style="display: flex;justify-content: end;">
+          <div style="display: flex;justify-content: end;">
             <p class="duration">{{ convertDurationToWords(i.duration) }}</p>
           </div>
 
           <div>
-            <p  class="into-summary-item-p">{{convertToWord(i.arrival_time)}}</p>
+            <p class="into-summary-item-p">{{convertToWord(i.arrival_time)}}</p>
           </div>
        
          
@@ -93,213 +93,215 @@
 
       </div>
 
-      </div>
+      </div> -->
 
 
-
-
-      <div style="display: flex;flex-direction: column;margin-top: 2rem;margin-bottom: 1.44rem">
-      <div class="travellers-info">
-        <div class="adding-travellers-info">
-          <div class="contact-details">
-            <p class="contact_details">Contact Details</p>
-            <div class="group-inputs">
-              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_first_name = value" label="First Name"></on-boarding-input>
-              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_last_name = value" label="Last Name"></on-boarding-input>
+      <div class="travellers_wrapper">
+        <div class="travellers-info">
+          <div class="adding-travellers-info">
+            <div class="contact-details">
+              <p class="contact_details">Contact Details</p>
+             
+              <div class="group-inputs">
+                <on-boarding-input :default-value="getUser?.email" width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
+                <on-boarding-input  placeholder="phone number" width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone" type="tel"></on-boarding-input>
+              </div>
             </div>
-            <div class="group-inputs">
-              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
-              <on-boarding-input width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
+
+            <div style="margin-bottom: 6rem;" v-for="(w, index) in passengers" :key="index">
+
+          
+            <div class="contact-details">
+              <p class="contact_details">Passenger Details</p>
             </div>
+
+            <div class="simple-info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
+              </svg>
+              <p> 
+                Use all given names and surnames exactly as they appear in your
+                passport/ID to avoid boarding complications.
+              </p>
+            </div>
+
+            <div class="form">
+                <!-- <div v-for="(w, index) in passengers" :key="index"> -->
+            
+                <!-- passengerList -->
+            
+                <p class="key">{{ w.passenger_type }} </p>
+
+                <div>
+                  <div class="title">
+                    <div class="title-item">
+                      <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? w.title = 'mr' : null" :checked="w.title==='mr'" />
+                      <span>Mr</span>
+                    </div>
+                    <div class="title-item">
+                      <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? w.title = 'mrs' : null" :checked="w.title==='mrs'"/>
+                      <span>Mrs</span>
+                    </div>
+                    <div class="title-item">
+                      <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? w.title = 'ms' : null" :checked="w.title==='ms'"/>
+                      <span> Ms</span>
+                    </div>
+                  </div>
+
+                  <div class="input-area">
+                      <div class="group-inputs no_gap">
+                        <on-boarding-input style="border-bottom-right-radius: 0;border-top-right-radius: 0;border-right: none;" placeholder="First Name" autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => w.first_name = value"/>
+                        <on-boarding-input style="border-radius: 0; border-right: none;border-left: none;" placeholder="Middle Name" autocomplete="off" width="100%" label="Middle Name" class="" />
+                        <on-boarding-input style="border-bottom-left-radius: 0;border-top-left-radius: 0;border-left: none;" placeholder="Last Name" autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => w.last_name = value" />
+                      </div>
+                      <div class="group-inputs">
+                        <!-- <div class="choose_document_type" style="position: relative;">
+                            <label class="class_label">Gender</label>
+                            <p class="selected-item">{{ w?.gender }}</p>
+                            <div  v-if="showGender && index === showingGenderIndex" class="dropDown">
+                              <div class="passenger-type">
+                                  <p class="passenger-type-text-1" @click="w.gender = 'male', showGender = !showGender">Male</p>
+                                </div>
+                                <div class="passenger-type" style="border: none">
+                                  <p class="passenger-type-text-1" @click="w.gender = 'female',showGender = !showGender">Female</p>
+                                </div>
+                            </div>
+                            <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                          </div> -->
+
+                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-else="w.passenger_type === 'adult'" :max_date="getYYYYMMDDFormat(dobMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+
+                      </div>
+
+                      <!-- <div class="group-inputs">
+                        <on-boarding-input autocomplete="off" width="100%" label="Email" class="" @inputValue="(value) => w.email = value"/>
+
+                        <on-boarding-input autocomplete="off" width="100%" label="Phone Number" class="" @inputValue="(value) => w.phone_number = value" />
+                      </div> -->
+
+                      <!-- <div style="display: flex;justify-content: end;">
+                        <div class="remove_button" @click="removePassengers(i.id)">
+                          Remove Passanger
+                        </div>
+                      </div> -->
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="simple-info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
+              </svg>
+              <p> Covid 19 protocols: You can find some of the special requirements for any destination via the link below
+                or directly on your airline's website.
+                Please also consult your local health authorities for updated information.</p>
+              </div>  -->
+            <!-- </div> -->
           </div>
 
-        <div style="margin-bottom: 6rem;" v-for="(w, index) in passengers" :key="index">
+
+
+
+            <!-- <div class="add-new-flight" @click="passengers.length < getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  ? addPassenger() : null" :class="{'disabled':passengers.length === getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0) }">
+                <img src="../../assets/Cards/add.svg" width="20" />
+                <p>Add New Passenger</p>
+            </div> -->
 
         
-         
-
-          <div class="contact-details">
-            <p class="contact_details">Passenger Details</p>
-          </div>
-
-          <div class="simple-info">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
-            </svg>
-            <p> Use all given names and surnames exactly as they appear in your
-              passport/ID to avoid boarding complications.</p>
-          </div>
 
 
-          <div class="form">
-            <!-- <div v-for="(w, index) in passengers" :key="index"> -->
-          
-            <!-- passengerList -->
-          
-              <p class="key">{{ w.passenger_type }} </p>
+            <div class="">
+              <p class="contact_details">Paying Now, or Later</p>
 
-              <div>
-                <div class="title" v-if="w.passenger_type === 'adult'">
-                  <div class="title-item">
-                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? w.title = 'mr' : null" :checked="w.title==='mr'" />
-                    <span>Mr</span>
-                  </div>
-                  <div class="title-item">
-                    <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? w.title = 'mrs' : null" :checked="w.title==='mrs'"/>
-                    <span>Mrs</span>
-                  </div>
-                  <div class="title-item">
-                    <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? w.title = 'ms' : null" :checked="w.title==='ms'"/>
-                    <span> Ms</span>
-                  </div>
-                </div>
+              <p class="text-1">To reserve your flights, click <span class="span-1">"Book on Hold." </span>
+                You will then be given complete instructions on how to make payment whenever you are ready during the stipulated time. 
+                Please mention your booking reference.
+                Until payment is confirmed, the advertised fare / pricing is not guaranteed.</p>
 
-                <div class="input-area">
-                    <div class="group-inputs">
-                      <on-boarding-input autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => w.first_name = value"/>
 
-                      <on-boarding-input autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => w.last_name = value" />
+                <div :class="{'onHold':showBookHold}">
+                    <div class="choose_document_type" style="position: relative;">
+                          <p class="book_on_hold">Book on Hold</p>
+                          <svg v-if="!showBookHold" @click="showBookHold = !showBookHold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M16.8 12.0005C16.8 12.7005 16.53 13.4005 16 13.9305L9.48001 20.4505C9.19001 20.7405 8.71001 20.7405 8.42001 20.4505C8.13001 20.1605 8.13001 19.6805 8.42001 19.3905L14.94 12.8705C15.42 12.3905 15.42 11.6105 14.94 11.1305L8.42001 4.61047C8.13001 4.32047 8.13001 3.84047 8.42001 3.55047C8.71001 3.26047 9.19001 3.26047 9.48001 3.55047L16 10.0705C16.53 10.6005 16.8 11.3005 16.8 12.0005Z" fill="#292D32"/>
+                          </svg> 
+                          <svg @click="showBookHold = !showBookHold" v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z" fill="#292D32"/>
+                          </svg>                  
                     </div>
-                    <div class="group-inputs">
-                      <div class="choose_document_type" style="position: relative;">
-                          <label class="class_label">Gender</label>
-                          <p class="selected-item">{{ w?.gender }}</p>
-                          <div  v-if="showGender && index === showingGenderIndex" class="dropDown">
-                            <div class="passenger-type">
-                                <p class="passenger-type-text-1" @click="w.gender = 'male', showGender = !showGender">Male</p>
-                              </div>
-                              <div class="passenger-type" style="border: none">
-                                <p class="passenger-type-text-1" @click="w.gender = 'female',showGender = !showGender">Female</p>
-                              </div>
-                          </div>
-                          <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+
+
+                    <div v-if="showBookHold">
+                          <p class="dropDown_p">Hold price and space and you have the flexibility to pay at a later date, 
+                            Hold price and space and you have the flexibility to pay at a later date
+                          </p>
+                    </div>
+                </div>
+              
+
+                <OnBoardingButton  style="margin-top:4rem;margin-bottom: 8.87rem;border: none;" @click="proceedToPayment" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Continue"></OnBoardingButton>
+            
+            
+            </div>
+
+          </div>
+
+          <div class="booking_summary">
+            <div class="booking_summary_header">
+              <p class="booking_summary_header-summary">Booking Summary</p>
+            </div>
+            <div class="booking_summary_body">
+              <div class="airline_details">
+                <img :src="getSelectedFlight?.outbound[0].airline_details?.logo" class="logo" />
+                <p class="airline_name">{{getSelectedFlight?.outbound[0].airline_details?.name}}</p>
+            </div>
+
+            <div class="airline_info">
+                <!-- <div class="actual-result-item-info">
+                  <div>
+                    <p class="dest"> {{convertToWord(getSelectedFlight.outbound[0].departure_time.split('T')[0])}}</p>
+                    <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].departure_time)}}</p>
+                    <p class="dest">LOS</p>
+                  </div>
+                  <div class="more-flight-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="16" viewBox="0 0 197 16" fill="none">
+                      <path d="M196.354 8.35355C196.549 8.15829 196.549 7.84171 196.354 7.64645L193.172 4.46447C192.976 4.2692 192.66 4.2692 192.464 4.46447C192.269 4.65973 192.269 4.97631 192.464 5.17157L195.293 8L192.464 10.8284C192.269 11.0237 192.269 11.3403 192.464 11.5355C192.66 11.7308 192.976 11.7308 193.172 11.5355L196.354 8.35355ZM0 8.5H1.96V7.5H0V8.5ZM5.88 8.5H9.8V7.5H5.88V8.5ZM13.72 8.5H17.64V7.5H13.72V8.5ZM21.56 8.5H25.48V7.5H21.56V8.5ZM29.4 8.5H33.32V7.5H29.4V8.5ZM37.24 8.5H41.16V7.5H37.24V8.5ZM45.08 8.5H49V7.5H45.08V8.5ZM52.92 8.5H56.84V7.5H52.92V8.5ZM60.76 8.5H64.68V7.5H60.76V8.5ZM68.6 8.5H72.52V7.5H68.6V8.5ZM76.44 8.5H80.36V7.5H76.44V8.5ZM84.28 8.5H88.2V7.5H84.28V8.5ZM92.12 8.5H96.04V7.5H92.12V8.5ZM99.96 8.5H103.88V7.5H99.96V8.5ZM107.8 8.5H111.72V7.5H107.8V8.5ZM115.64 8.5H119.56V7.5H115.64V8.5ZM123.48 8.5H127.4V7.5H123.48V8.5ZM131.32 8.5H135.24V7.5H131.32V8.5ZM139.16 8.5H143.08V7.5H139.16V8.5ZM147 8.5H150.92V7.5H147V8.5ZM154.84 8.5H158.76V7.5H154.84V8.5ZM162.68 8.5H166.6V7.5H162.68V8.5ZM170.52 8.5H174.44V7.5H170.52V8.5ZM178.36 8.5H182.28V7.5H178.36V8.5ZM186.2 8.5H190.12V7.5H186.2V8.5ZM194.04 8.5H196V7.5H194.04V8.5ZM196.707 8.70711C197.098 8.31658 197.098 7.68342 196.707 7.29289L190.343 0.928932C189.953 0.538408 189.319 0.538408 188.929 0.928932C188.538 1.31946 188.538 1.95262 188.929 2.34315L194.586 8L188.929 13.6569C188.538 14.0474 188.538 14.6805 188.929 15.0711C189.319 15.4616 189.953 15.4616 190.343 15.0711L196.707 8.70711ZM0 9H1.96V7H0V9ZM5.88 9H9.8V7H5.88V9ZM13.72 9H17.64V7H13.72V9ZM21.56 9H25.48V7H21.56V9ZM29.4 9H33.32V7H29.4V9ZM37.24 9H41.16V7H37.24V9ZM45.08 9H49V7H45.08V9ZM52.92 9H56.84V7H52.92V9ZM60.76 9H64.68V7H60.76V9ZM68.6 9H72.52V7H68.6V9ZM76.44 9H80.36V7H76.44V9ZM84.28 9H88.2V7H84.28V9ZM92.12 9H96.04V7H92.12V9ZM99.96 9H103.88V7H99.96V9ZM107.8 9H111.72V7H107.8V9ZM115.64 9H119.56V7H115.64V9ZM123.48 9H127.4V7H123.48V9ZM131.32 9H135.24V7H131.32V9ZM139.16 9H143.08V7H139.16V9ZM147 9H150.92V7H147V9ZM154.84 9H158.76V7H154.84V9ZM162.68 9H166.6V7H162.68V9ZM170.52 9H174.44V7H170.52V9ZM178.36 9H182.28V7H178.36V9ZM186.2 9H190.12V7H186.2V9ZM194.04 9H196V7H194.04V9Z" fill="#9DA8B6"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="dest">{{convertToWord(getSelectedFlight.outbound[0].arrival_time.split('T')[0])}}</p>
+                    <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].arrival_time)}}</p>
+                    <p class="dest">LOS</p>
+                  </div>
+                </div> -->
+                <div class="actual-result-item-info-2">
+                  <div v-for="(i, index) in getSelectedFlight?.price_summary" :key="index" class="extra-charge-info">
+                      <div style="margin-bottom: 0.38rem;">
+                        <div style="display: flex;gap: 0.5rem;align-items: center;">
+                          <p class="dest">{{i.passenger_type}} </p>
+                          <p style="text-transform: lowercase;border: solid;border-radius: 50%;width:18px;height:auto;text-align: center;">{{i.quantity}}</p>
                         </div>
-
-                        <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                        <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                        <DataPicker v-else="w.passenger_type === 'adult'" :max_date="getYYYYMMDDFormat(dobMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-
-                    </div>
-
-                    <div class="group-inputs">
-                      <on-boarding-input autocomplete="off" width="100%" label="Email" class="" @inputValue="(value) => w.email = value"/>
-
-                      <on-boarding-input autocomplete="off" width="100%" label="Phone Number" class="" @inputValue="(value) => w.phone_number = value" />
-                    </div>
-
-                    <!-- <div style="display: flex;justify-content: end;">
-                      <div class="remove_button" @click="removePassengers(i.id)">
-                        Remove Passanger
                       </div>
-                    </div> -->
+                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">
+                        <p class="dest">Base Fare</p>
+                        <p class="">₦ {{formatAmount(i.total_price)}}</p>
+                      </div>
+                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">
+                        <p class="dest">Tax Fare</p>
+                        <p class="">₦ {{formatAmount(i.total_price)}}</p>
+                      </div>
+                  </div>
+                  
                 </div>
-              </div>
             </div>
-            <div class="simple-info">
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
-            </svg>
-            <p> Covid 19 protocols: You can find some of the special requirements for any destination via the link below
-              or directly on your airline's website.
-              Please also consult your local health authorities for updated information.</p>
-            </div> 
-          <!-- </div> -->
-
-         
-
-        </div>
-
-
-
-
-          <!-- <div class="add-new-flight" @click="passengers.length < getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  ? addPassenger() : null" :class="{'disabled':passengers.length === getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0) }">
-              <img src="../../assets/Cards/add.svg" width="20" />
-              <p>Add New Passenger</p>
-          </div> -->
-
-      
-
-
-          <div class="">
-            <p class="contact_details">Paying Now, or Later</p>
-
-            <p class="text-1">To reserve your flights, click <span class="span-1">"Book on Hold." </span>
-              You will then be given complete instructions on how to make payment whenever you are ready during the stipulated time. 
-              Please mention your booking reference.
-               Until payment is confirmed, the advertised fare / pricing is not guaranteed.</p>
-
-
-               <div :class="{'onHold':showBookHold}">
-                  <div class="choose_document_type" style="position: relative;">
-                        <p>Book on Hold</p>
-                        <svg v-if="!showBookHold" @click="showBookHold = !showBookHold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <path d="M16.8 12.0005C16.8 12.7005 16.53 13.4005 16 13.9305L9.48001 20.4505C9.19001 20.7405 8.71001 20.7405 8.42001 20.4505C8.13001 20.1605 8.13001 19.6805 8.42001 19.3905L14.94 12.8705C15.42 12.3905 15.42 11.6105 14.94 11.1305L8.42001 4.61047C8.13001 4.32047 8.13001 3.84047 8.42001 3.55047C8.71001 3.26047 9.19001 3.26047 9.48001 3.55047L16 10.0705C16.53 10.6005 16.8 11.3005 16.8 12.0005Z" fill="#292D32"/>
-                        </svg> 
-                        <svg @click="showBookHold = !showBookHold" v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z" fill="#292D32"/>
-                        </svg>                  
-                  </div>
-
-
-                  <div v-if="showBookHold">
-                        <p class="dropDown_p">Hold price and space and you have the flexibility to pay at a later date, 
-                          Hold price and space and you have the flexibility to pay at a later date
-                        </p>
-                  </div>
-               </div>
-             
-
-                <OnBoardingButton style="margin-top:4rem;margin-bottom: 8.87rem;" @click="proceedToPayment" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Continue"></OnBoardingButton>
-          
-          
+            </div>
+            <div class="booking_summary_footer">
+              <p class="total">Total</p>
+              <p class="amount">₦ {{ formatAmount(getSelectedFlight?.amount) }}</p>
+            </div>
           </div>
-
         </div>
-
-        <div class="booking_summary">
-              <div class="booking_summary_header">
-                <p class="booking_summary_header-summary">Booking Summary</p>
-              </div>
-              <div class="booking_summary_body">
-                <div class="airline_details">
-                  <img :src="getSelectedFlight?.outbound[0].airline_details?.logo" class="logo" />
-                  <p class="airline_name">{{getSelectedFlight?.outbound[0].airline_details?.name}}</p>
-                </div>
-
-                <div class="airline_info">
-                  <!-- <div class="actual-result-item-info">
-                    <div>
-                      <p class="dest"> {{convertToWord(getSelectedFlight.outbound[0].departure_time.split('T')[0])}}</p>
-                      <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].departure_time)}}</p>
-                      <p class="dest">LOS</p>
-                    </div>
-                    <div class="more-flight-info">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="16" viewBox="0 0 197 16" fill="none">
-                        <path d="M196.354 8.35355C196.549 8.15829 196.549 7.84171 196.354 7.64645L193.172 4.46447C192.976 4.2692 192.66 4.2692 192.464 4.46447C192.269 4.65973 192.269 4.97631 192.464 5.17157L195.293 8L192.464 10.8284C192.269 11.0237 192.269 11.3403 192.464 11.5355C192.66 11.7308 192.976 11.7308 193.172 11.5355L196.354 8.35355ZM0 8.5H1.96V7.5H0V8.5ZM5.88 8.5H9.8V7.5H5.88V8.5ZM13.72 8.5H17.64V7.5H13.72V8.5ZM21.56 8.5H25.48V7.5H21.56V8.5ZM29.4 8.5H33.32V7.5H29.4V8.5ZM37.24 8.5H41.16V7.5H37.24V8.5ZM45.08 8.5H49V7.5H45.08V8.5ZM52.92 8.5H56.84V7.5H52.92V8.5ZM60.76 8.5H64.68V7.5H60.76V8.5ZM68.6 8.5H72.52V7.5H68.6V8.5ZM76.44 8.5H80.36V7.5H76.44V8.5ZM84.28 8.5H88.2V7.5H84.28V8.5ZM92.12 8.5H96.04V7.5H92.12V8.5ZM99.96 8.5H103.88V7.5H99.96V8.5ZM107.8 8.5H111.72V7.5H107.8V8.5ZM115.64 8.5H119.56V7.5H115.64V8.5ZM123.48 8.5H127.4V7.5H123.48V8.5ZM131.32 8.5H135.24V7.5H131.32V8.5ZM139.16 8.5H143.08V7.5H139.16V8.5ZM147 8.5H150.92V7.5H147V8.5ZM154.84 8.5H158.76V7.5H154.84V8.5ZM162.68 8.5H166.6V7.5H162.68V8.5ZM170.52 8.5H174.44V7.5H170.52V8.5ZM178.36 8.5H182.28V7.5H178.36V8.5ZM186.2 8.5H190.12V7.5H186.2V8.5ZM194.04 8.5H196V7.5H194.04V8.5ZM196.707 8.70711C197.098 8.31658 197.098 7.68342 196.707 7.29289L190.343 0.928932C189.953 0.538408 189.319 0.538408 188.929 0.928932C188.538 1.31946 188.538 1.95262 188.929 2.34315L194.586 8L188.929 13.6569C188.538 14.0474 188.538 14.6805 188.929 15.0711C189.319 15.4616 189.953 15.4616 190.343 15.0711L196.707 8.70711ZM0 9H1.96V7H0V9ZM5.88 9H9.8V7H5.88V9ZM13.72 9H17.64V7H13.72V9ZM21.56 9H25.48V7H21.56V9ZM29.4 9H33.32V7H29.4V9ZM37.24 9H41.16V7H37.24V9ZM45.08 9H49V7H45.08V9ZM52.92 9H56.84V7H52.92V9ZM60.76 9H64.68V7H60.76V9ZM68.6 9H72.52V7H68.6V9ZM76.44 9H80.36V7H76.44V9ZM84.28 9H88.2V7H84.28V9ZM92.12 9H96.04V7H92.12V9ZM99.96 9H103.88V7H99.96V9ZM107.8 9H111.72V7H107.8V9ZM115.64 9H119.56V7H115.64V9ZM123.48 9H127.4V7H123.48V9ZM131.32 9H135.24V7H131.32V9ZM139.16 9H143.08V7H139.16V9ZM147 9H150.92V7H147V9ZM154.84 9H158.76V7H154.84V9ZM162.68 9H166.6V7H162.68V9ZM170.52 9H174.44V7H170.52V9ZM178.36 9H182.28V7H178.36V9ZM186.2 9H190.12V7H186.2V9ZM194.04 9H196V7H194.04V9Z" fill="#9DA8B6"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <p class="dest">{{convertToWord(getSelectedFlight.outbound[0].arrival_time.split('T')[0])}}</p>
-                      <p class="time"> {{convertTo12HourFormat(getSelectedFlight.outbound[0].arrival_time)}}</p>
-                      <p class="dest">LOS</p>
-                    </div>
-                  </div> -->
-                  <div class="actual-result-item-info-2">
-                    <div class="extra-charge-info" v-for="(i, index) in getSelectedFlight?.price_summary" :key="index">
-                      <p class="dest">{{i.passenger_type}} <span style="text-transform: lowercase;">x</span> {{i.quantity}}</p>
-                      <p>₦ {{formatAmount(i.total_price)}}</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div class="booking_summary_footer">
-                <p class="total">Total</p>
-                <p class="amount">₦ {{ formatAmount(getSelectedFlight?.amount) }}</p>
-              </div>
-            </div>
-      </div>
-
       </div>
     </div>
   </booking-index>
@@ -310,7 +312,6 @@
 import BookingIndex from "../../views/dashboard/Index.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import storeUtils from "../../utils/storeUtils";
-import router from "../../router";
 import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
 import DataPicker from "../Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest";
@@ -361,14 +362,18 @@ export default {
         };
 
         // Create a new passenger object with a unique ID
-        if(value === 'child' || value === 'infant'){
-          if(newPassenger.gender === 'male'){
-            newPassenger.title = 'mr'
+        if(value === 'child' || value === 'held_infant' || 'adult'){
+          if(newPassenger.title === 'mrs' || newPassenger.title === 'ms'){
+            newPassenger.gender = 'female'
           }else{
-            newPassenger.title = 'ms'
+            newPassenger.gender = 'male'
           }
            
         }
+
+        newPassenger.email = this.getUser?.email
+        newPassenger.phone_number = this.bookFlightModal?.phone_number
+
         
 
       this.passengers.push(newPassenger);
@@ -392,6 +397,9 @@ export default {
 
     proceedToPayment(){
       this.bookFlightModal.passengers = this.passengers
+      this.bookFlightModal.contact_first_name = this.getUser?.first_name
+      this.bookFlightModal.contact_last_name = this.getUser?.last_name
+      this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
       storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
     },
 
@@ -438,6 +446,31 @@ export default {
 </script>
 
 <style scoped>
+.book_on_hold{
+  color: var(--neutrals-onlock-berry, #1D242E);
+  /* 16px/bold */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+}
+.booking_summary_header-summary{
+  color: #2D3139;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 150% */
+}
+
+.travellers_wrapper{
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  margin-bottom: 1.44rem;
+  justify-content: space-between;
+}
 .into-summary-item-p{
   color: #1D1E2C;
   font-family: 'Product Sans';
@@ -458,6 +491,18 @@ export default {
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */
 
+}
+
+.airline_name{
+  color: var(--black-text-03, #444854);
+  text-align: center;
+
+  /* subtext/medium/14px */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 171.429% */
 }
 
 .key{
@@ -513,9 +558,9 @@ export default {
 }
 
 .intro_summary_wrapper{
-  border-bottom:solid #DFE6ED;
   padding-bottom: 2.5rem;
   margin-bottom: 1.75rem;
+  border: solid;
 }
 .into-summary{
   width: 100%;
@@ -582,6 +627,7 @@ line-height: 1.5rem; /* 150% */
   border-radius: 0.5rem;
   border: 1px solid var(--primary-main, #2C6CAC);
   margin-bottom: 4rem;
+  background-color: #FFF;
 
 }
 .title{
@@ -670,6 +716,7 @@ align-items: center;
   gap: 1.5rem;
   align-items: start;
   width: auto;
+  justify-content: space-between;
 }
 
 .adding-travellers-info{
@@ -700,8 +747,12 @@ align-items: center;
 .extra-charge-info{
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  align-items: space-between;
+  border-bottom: solid #E5E9F2;
+  /* margin: 0.5rem 0; */
+  padding: 0.5rem 0;
+  flex-direction: column;
 }
 
 a{
@@ -897,6 +948,7 @@ a{
   border-radius: 0.375rem;
   border: 1px solid  #EFF2F7;
   margin-bottom: 1rem;
+  background-color: #FFF;
 
 }
 
@@ -924,6 +976,11 @@ a{
   justify-content: center;
   gap: 1.5rem;
 }
+
+.no_gap{
+  gap: 0;
+}
+
 .stops{
   color:  #444854;
   font-family: 'Product Sans';
@@ -1043,9 +1100,6 @@ a{
   display: block;
   width: 100%;
   align-items: center;
-  margin-top: 1rem;
-  border-bottom: solid #DFE6ED;
-  padding-bottom: 1rem;
 }
 
 .actual-result{
@@ -1132,7 +1186,7 @@ a{
 }
 
 .breaker1{
-  width: 67.125rem;
+  width: 100%;
   height: 0.0625rem;
   background: #DFE6ED;
   margin-top: 0.56rem;
@@ -1182,7 +1236,8 @@ a{
 }
 
 .flight-result{
-  margin: 0 1.5rem;
+  margin: 0;
+  
 }
 
 .destination_type{

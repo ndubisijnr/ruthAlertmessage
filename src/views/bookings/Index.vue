@@ -187,6 +187,8 @@ a{
 .overall{
   display: flex;
   justify-content: center;
+  width: 100%;
+  margin-top: 4.5rem;
 }
 
 .filter{

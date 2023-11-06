@@ -73,12 +73,12 @@ label{
   position: absolute;
   z-index: 999999;
   top: 0;
-  color:  #2D3139;
+  color: #575A65;
   padding-top: 0.5rem;
 
   /* sanslight/12px/Regular */
   font-family:'Product Sans';
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */

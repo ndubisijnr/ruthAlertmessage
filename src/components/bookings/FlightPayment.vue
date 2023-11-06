@@ -1,8 +1,20 @@
 <template>
     <FlightPaymentModal :reference="getBookedFlight.reference" :balance="getWallet.balance" :user="getUser?.first_name + ' ' + getUser?.last_name " v-if="isPaying" @close="close"></FlightPaymentModal>
     <booking-index v-slot:booking_children>
-    <div class="wrapper  animate__animated animate__fadeIn">
+    <div class="flight_wrapper  animate__animated animate__fadeIn">
         <!-- {{ getBookedFlight }} -->
+
+        <div class="progress-or">
+                <div class="progress-or-item" v-for="(i, index) in bookingProgress">
+                  <p class="stage" :class="{'activeStage':getBookingStage === i || progressNav.includes(i)}">{{ i }}</p>
+                  <div style="display: flex;align-items: center;justify-content: start">
+                    <div class="circle" :class="{'activeProgress': getBookingStage === i || progressNav.includes(i)}">{{index + 1}}</div>
+                    <div class="line" v-if="index !== bookingProgress.length - 1">
+                      <div :class="{'progress':progressNav.includes(i)}"></div>
+                    </div>
+                  </div>
+                </div>
+        </div>
 
         <div class="payment-wrapper">
            
@@ -49,17 +61,69 @@
 
                 <div style="width: 100%;display: flex;flex-direction: column;gap: 1.5rem;">
                     <OnBoardingButton @click="isPaying = true" btn-width="100%" textNode="Pay Now"></OnBoardingButton>
-                    <OnBoardingButton btn-width="100%" color="#2C6CAC" background="transparent" textNode="Print Iternery"></OnBoardingButton>
-                    <OnBoardingButton @click="clearStorage" btn-width="100%" color="#2C6CAC" border="none" background="transparent" textNode="Make New Booking"></OnBoardingButton>
+                    <!-- <OnBoardingButton btn-width="100%" color="#2C6CAC" background="transparent" textNode="Print Iternery"></OnBoardingButton> -->
+                    <OnBoardingButton @click="clearStorage" btn-width="100%" color="#2C6CAC" border="none" background="transparent" textNode="Create New Booking"></OnBoardingButton>
                 </div>
 
             </div>
 
+
+         
+
+        </div>
+        <div style="width: 47.1875rem;display: flex;justify-content: center;align-items: center;">
+            <div class="fare_rules">
+                            <div
+                                style="width: 100%;display:flex;align-items: center;gap: 0.5rem;margin-bottom: 0.5rem;justify-content: space-between;">
+                                <div style="display:flex;align-items: center;gap: 0.5rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24"
+                                        fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.07617 19.4238C7.06104 21.409 9.69482 22.5 12.5 22.5C15.3052 22.5 17.9434 21.409 19.9238 19.4238C21.9087 17.4387 23 14.8055 23 12C23 9.19455 21.9087 6.55719 19.9238 4.57617C17.9434 2.59103 15.3052 1.5 12.5 1.5C9.69482 1.5 7.05664 2.59103 5.07617 4.57617C3.09131 6.55719 2 9.19455 2 12C2 14.8055 3.09131 17.4428 5.07617 19.4238ZM11.1875 6.75C11.1875 6.02399 11.7734 5.4375 12.5 5.4375C13.2266 5.4375 13.8125 6.02399 13.8125 6.75V13.3125C13.8125 14.0385 13.2266 14.625 12.5 14.625C11.7734 14.625 11.1875 14.0385 11.1875 13.3125V6.75ZM13.8125 17.25C13.8125 16.524 13.2266 15.9375 12.5 15.9375C11.7734 15.9375 11.1875 16.524 11.1875 17.25C11.1875 17.976 11.7734 18.5625 12.5 18.5625C13.2266 18.5625 13.8125 17.976 13.8125 17.25Z"
+                                            fill="#1D1E2C" />
+                                    </svg>
+                                    <p class="fare_rule_h">Fare Rule</p>
+                                </div>
+
+                                <svg style="cursor:pointer" @click="toogleFareRules=!toogleFareRules"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 16.0972L6.35159 10.4488L8.04839 8.75198L12 12.7036L15.9516 8.75198L17.6484 10.4488L12 16.0972ZM12 2.40039C6.69838 2.40039 2.39998 6.69759 2.39998 12.0004C2.39998 17.302 6.69838 21.6004 12 21.6004C17.3016 21.6004 21.6 17.302 21.6 12.0004C21.6 6.69759 17.3016 2.40039 12 2.40039Z"
+                                        fill="#1D1E2C" />
+                                </svg>
+                            </div>
+
+                            <div v-if="toogleFareRules">
+                                <li class="fare_rule_p">Penalty Applies - Check Rules</li>
+                                <li class="fare_rule_p"> On some airlines, changes are not permitted on a ticket in case
+                                    of no-show and the ticket(s) have no value and cannot be refunded</li>
+                                <li class="fare_rule_p"> Extra baggaga will result to extra charges</li>
+                                <li class="fare_rule_p"> Please ensure that you have a valid visa before your
+                                    international travel. Wakanow will not be held liable by airport authorities if you
+                                    have not fulfilled your visa requirements.</li>
+                                <li class="fare_rule_p"> Tickets to Kuala Lumpur must not exceed 14 days, this simply
+                                    means all tickets booked to Kuala Lumpur may be less than 14 days but must not be
+                                    more than 14 days.</li>
+                                <li class="fare_rule_p"> Egypt Air tickets cannot be booked for one way routes, there
+                                    should be a RESTRICTION on bookings, NO ONE WAY on Egypt Air.</li>
+                                <li class="fare_rule_p"> If you or anyone accompanying you has a serious health issue,
+                                    please call us before booking.</li>
+                                <li class="fare_rule_p"> In the case of cancellation, amount paid for insurance will be
+                                    non-refundable. This is applicable if insurance is booked along with a ticket.</li>
+                                <li class="fare_rule_p"> Refunds will be processed within 6 - 8 weeks</li>
+                                <li class="fare_rule_p"> A maximum of one infant is allowed to travel with one adult.
+                                </li>
+                            </div>
+            </div>
         </div>
 
-        <div style="margin: 2.5rem 0;">
+       
+
+       
+
+        <!-- <div style="margin: 2.5rem 0;">
             <p class="text">Flight Details</p>
-            <!-- {{ getSelectedFlight }} -->
       
             <div class="payment-wrapper">
                 <div>
@@ -129,7 +193,7 @@
             </div>
         </div>
         </div>
-    </div>
+        </div> -->
     </div>
 
     </booking-index>
@@ -154,17 +218,14 @@ export default{
             convertDurationToWords,
             convertToWord,
             convertTo12HourFormat,
-            formatAmount
+            formatAmount,
+            bookingProgress:['Flight Result','Traveller’s Info','Payment Confirmation'],
+            toogleFareRules:false
+
         }
     },
     methods:{
-        clearStorage(){
-      localStorage.progressNav = JSON.stringify([])
-      localStorage.removeItem('bookedFlight')
-      localStorage.removeItem('selectedFlight')
-      localStorage.removeItem('flightResults')
-      localStorage.bookingStage = "Flight Search"
-    },
+  
         close(value){
             this.isPaying = value
         },
@@ -198,6 +259,14 @@ export default{
         return storeUtils.fireAway().flight?.getWallet
        },
 
+       getBookingStage(){
+            return storeUtils.fireAway().flight?.getBookingStage
+        },
+
+        progressNav(){
+            return storeUtils.fireAway().flight?.getProgressNav
+        },
+
        getUser(){
         const user = JSON.parse(localStorage?.user)
         return user
@@ -219,7 +288,39 @@ export default{
 
 
 <style scoped>
+@import "../../views/dashboard/style.css";
 
+.fare_rules{
+  display: inline-flex;
+  padding: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary-1, #D5E2EE);
+  background: #F9FAFC;
+  width: 100%;
+  margin-top: 2rem;
+ 
+}
+.fare_rule_h{
+    color: var(--black-text-01, #1D1E2C);
+
+    /* Subtext/14px/Regular */
+    font-family:'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem; /* 171.429% */
+}
+.fare_rule_p{
+  color: var(--black-text-03, #444854);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%; /* 1.6rem */
+}
 .key{
     color: var(--black-text-03, #444854);
     /* Body/16px/Regular */
@@ -241,10 +342,17 @@ export default{
     line-height: 1.75rem; /* 175% */
 }
 
-.wrapper{
+.flight_wrapper{
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 1rem;
+    background: #FFF;
+
+    /* Shadows / Modals */
+    box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+    padding-bottom: 6.75rem;
+    margin-bottom: 5.13rem;
 
 }
 .payment-wrapper-body{

@@ -10,7 +10,7 @@
                 <p class="balance" style="margin-top: 0.75rem;">N2,456,122.05</p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
-                  <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
+                 <router-link :to="`/add/funds/${getUser?.access_token?.slice(0,20)}`"> <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button></router-link>
               </div>
             </div>
           </div>
@@ -102,6 +102,14 @@ export default {
   name: "Index",
   components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards},
 
+  computed:{
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
+    },
+  },
+
   mounted(){
     storeUtils.fireAway().transaction.handleGetTransactionSummary()
     storeUtils.fireAway().transaction.handleGetUserTransaction()
@@ -112,6 +120,9 @@ export default {
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .get-started{
   width: 100%;
   height: 12.5rem;
@@ -177,6 +188,7 @@ line-height: normal;
 .overall{
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 
