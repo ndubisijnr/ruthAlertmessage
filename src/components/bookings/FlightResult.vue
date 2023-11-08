@@ -44,9 +44,16 @@
       </div> -->
       <div class="result_area">
         <FlightFliter></FlightFliter>
-        <OneWayCard></OneWayCard>
+        <section v-if="getFlightResult[0]?.inbound.length > 0 ">
+          <RoundTripCard></RoundTripCard>
+        </section>
+        <section v-else>
+          <OneWayCard></OneWayCard> 
+        </section>
+     
+    
        
-        </div>
+      </div>
      
    
     </div>
@@ -58,70 +65,19 @@
 import BookingIndex from "../../views/dashboard/Index.vue";
 import FlightFliter from "../../components/fliterComponents/FlightFliter.vue"
 import OneWayCard from "../flightCards/OneWayCard.vue";
+import RoundTripCard from "../flightCards/RoundTripCard.vue"
+import storeUtils from "../../utils/storeUtils";
 
 export default {
   name: "FlightResult",
-  components:{BookingIndex,FlightFliter,OneWayCard},
+  components:{BookingIndex,FlightFliter,OneWayCard,RoundTripCard},
   data(){
     return{
     }
   },
   methods:{
 
-    flightSkelentonLoader(){
-      
-    },
-
-    extractAirlineDetails(obj) {
-      const airlineDetails = [];
-
-        function searchForAirlineDetails(obj) {
-        for (const key in obj) {
-          if (typeof obj[key] === 'object') {
-            if (key === 'airline_details' && !airlineDetails.includes(obj[key].name)) {
-                
-              airlineDetails.push(obj[key]);
-            }
-            searchForAirlineDetails(obj[key]);
-          }
-        }
-      }
-      searchForAirlineDetails(obj);
-             
-      return airlineDetails;
-    },
-
-    revealDetails_departure(){
-      document.getElementById('departure').classList.remove('u-hide')
-      document.getElementById('return').classList.add('u-hide')
-      this.active = 'departure'
-    },
-
-    getAirportNamesByCityCode(city_code){
-      const airports = JSON.parse(localStorage?.airports)
-      if(airports){
-        const airportName = airports.filter(it => it.city_code === city_code)[0]?.name
-        return airportName
-      }
-    },
-
-    getCityByCityCode(city_code){
-      const airports = JSON.parse(localStorage?.airports)
-      if(airports){
-        const cityName = airports.filter(it => it.city_code === city_code)[0]?.city
-        return cityName
-      }
-    },
-
-    revealDetails_return(){
-      document.getElementById('departure').classList.add('u-hide')
-      document.getElementById('return').classList.remove('u-hide')
-      this.active = 'return'
-    },
-
-    selectFlight(obj){
-      storeUtils.fireAway().flight?.commitSelectedFlight(obj)
-    }
+   
   },
 
   computed:{
@@ -146,28 +102,7 @@ export default {
       return router.currentRoute.value.name
     },
 
-    getBusinessProfile(){
-      if(localStorage.businessProfile){
-        const business = JSON.parse(localStorage?.businessProfile)
-        return business
-      }
-
-    },
-
-    getBookingStage(){
-      return storeUtils.fireAway().flight?.getBookingStage
-    },
-
-    getBookingSum(){
-      return storeUtils.fireAway().booking?.getBookingSummary
-    },
-
-    getLoadingBooking(){
-      return storeUtils.fireAway().booking?.getLoadingBooking
-    },
-    getBookings(){
-      return storeUtils.fireAway().booking?.getBookings
-    },
+   
     getUser(){
       if(localStorage.user){
         return JSON.parse(localStorage.user)
