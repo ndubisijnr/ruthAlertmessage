@@ -44,10 +44,10 @@
       </div> -->
       <div class="result_area">
         <FlightFliter></FlightFliter>
-        <section v-if="getFlightResult[0]?.inbound.length > 0 ">
+        <section style="width: 100%;" v-if="getFlightResult[0]?.inbound.length > 0 ">
           <RoundTripCard></RoundTripCard>
         </section>
-        <section v-else>
+        <section style="width: 100%;" v-else>
           <OneWayCard></OneWayCard> 
         </section>
      
@@ -154,7 +154,8 @@ export default {
   display: flex;
   gap: 1.75rem;
   align-items: start;
-  justify-content: space-between;
+  justify-content: start;
+  width: 100%;
 
 }
 .best_offer{

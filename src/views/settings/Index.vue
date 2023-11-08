@@ -500,16 +500,22 @@
                       <a class="customization_tab_li" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
                     </ul>
                   </div>
+
+
+                  <div v-if="customization==='style'">
+                    <div>
+                      <color-picker v-model:pureColor="pureColor" v-model:gradientColor="gradientColor"/>
+                    </div>
+                  </div>
                 </div>
 
 
               </div>
               <div class="customization_reciever">
-                <div class="cover">
 
-                  <iframe src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" width="1200" height="1000" style="transform: scale(1);border: none;transform-origin: 0 0;"></iframe>
-                
-                </div>
+                <iframe src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
+
+
               </div>
             </div>
           
@@ -552,6 +558,9 @@ import EditBankAccount from "../../components/modals/EditBankAccount.vue";
 import SettingsSkeletonsLoader from "../../components/loaders/SettingsSkeletonsLoader.vue";
 import EditRole from "../../components/modals/EditRole.vue";
 import Dashboard from "../dashboard/Index.vue"
+import { ref } from "vue";
+import {ColorPicker} from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 export default {
   name: "Settings",
@@ -572,11 +581,14 @@ export default {
     EditBankAccount,
     SettingsSkeletonsLoader,
     ChangePassword,
-    EditRole
+    EditRole,
+    ColorPicker
   },
 
   data(){
     return{
+      pureColor:"red",
+      gradientColor:"linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
       currentTab:this.getCurrentRouteParams,
       verificationType:'business',
       model:SettingsRequest.updateBusinessProfile,
@@ -910,6 +922,9 @@ export default {
 
 
   mounted() {
+    const pureColor = ref("red");
+    const gradientColor = ref("linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)");
+
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
     storeUtils.fireAway().settings?.getDomainsAction()
@@ -918,6 +933,9 @@ export default {
     storeUtils.fireAway().settings?.readMarkupSettings()
     storeUtils.fireAway().settings?.readAllMembers()
     storeUtils.fireAway().settings?.readBanksAccount()
+
+    return { pureColor, gradientColor }
+
   }
 }
 </script>
@@ -925,13 +943,28 @@ export default {
 <style scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
 
+#customization{
+  position:relative;
+  width: 100%;
+}
+
+.navigation-links{
+  display: flex !important;
+}
+
+.customization_sender{
+  border: solid;
+  width: 100%;
+}
+
 .customization_wrapper{
   display: flex;
-  gap:5.19rem;
+  /* gap:5.19rem; */
   border: solid;
   justify-content: space-between;
-  width: 68.625rem;
+  width: 100%;
   margin: 2.75rem 0;
+  position:relative;
 }
 
 .customization_tab_li{
@@ -974,11 +1007,16 @@ export default {
 }
 
 .customization_reciever{
-  width: 35.1875rem;
-  height: 45.6875rem;
+  width: 500px;
   flex-shrink: 0;
   background: var(--primary-1, #D5E2EE);
   margin-top: 1rem;
+  /* transform: scale(.5); */
+  transform-origin: 100px 100px;
+  border: solid;
+  /* position: absolute;
+  top: -100px;
+  right: 0; */
   
 }
 
@@ -1713,7 +1751,7 @@ m-2{
 }
 
 .settings-wrapper-navs{
-  width: auto;
+  width: 68.586rem;
   margin: 4rem 5.5rem;
 }
 
