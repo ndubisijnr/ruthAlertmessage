@@ -408,6 +408,8 @@ a:hover{
   display: flex;
   padding: 0 10.94rem;
   width: 100%;
+  overflow-x: hidden;
+
 }
 
 

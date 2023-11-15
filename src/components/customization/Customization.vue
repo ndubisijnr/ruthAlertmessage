@@ -117,11 +117,11 @@ export default {
 
 
     </div>
-    <div class="customization_reciever">
+    <div class="customization_reciever" :style="customization === 'style' ? {width: '700px'} : null">
 
 
-      <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
-      <iframe v-if="customization === 'template'" src="http://localhost:5173//eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
+      <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;"></iframe>
+      <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'http://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'http://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'http://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;"></iframe>
 
 
 
@@ -251,16 +251,10 @@ export default {
 }
 
 .customization_reciever{
-  width: 500px;
-  flex-shrink: 0;
-  background: var(--primary-1, #D5E2EE);
-  margin-top: 1rem;
-  /* transform: scale(.5); */
-  transform-origin: 100px 100px;
-  /* position: absolute;
-  top: -100px;
-  right: 0; */
-
+  width: 35.1875rem;
+  height: 45.6875rem;
+  background: #D5E2EE;
+  padding: 2.04875rem 3.625rem 2.0625rem 3.5625rem;
 }
 
 </style>

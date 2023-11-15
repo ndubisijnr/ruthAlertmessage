@@ -1663,7 +1663,8 @@ m-2{
 
 .settings-wrapper-navs{
   width: 68.586rem;
-  margin: 4rem 5.5rem;
+  //width: 100%;
+  margin: 4rem 0;
 }
 
 .accounts-header{
