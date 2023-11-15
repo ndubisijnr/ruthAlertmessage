@@ -7,6 +7,7 @@ import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import Template1 from "@/assets/Template1.svg"
 import Template2 from "@/assets/Template2.svg"
 import Template3 from "@/assets/Template3.png"
+import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "Customization",
@@ -15,6 +16,7 @@ export default {
     return{
       customization:'add_favicon',
       model:CustomizationRequest.saveCustomization,
+      selectedTemplateIndex:0,
       templates:[
         {
           name:"Template 1",
@@ -29,6 +31,15 @@ export default {
           preview:Template3
         }
       ]
+    }
+  },
+  computed:{
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.getCustom_theme
     }
   }
 }
@@ -62,6 +73,7 @@ export default {
 
         </div>
 
+
         <div v-if="customization==='template'">
           <div style="margin-top: 2.5rem">
             <p class="favicon">Templates</p>
@@ -69,13 +81,13 @@ export default {
           </div>
 
           <div class="template_wrapper">
-            <div class="template" v-for="(i, index) in templates" :key="index">
+            <div class="template" v-for="(i, index) in templates" :key="index" :style="selectedTemplateIndex === index ? {border:'solid 1px',borderColor:custom_theme ? custom_theme.color : default_theme.color} : null">
 
               <img :src="i.preview" style="width: 3.25rem;height: 5rem;" alt="template" />
 
 
               <div class="template_footer">
-                <input type="radio" />
+                <input type="radio" style="cursor: pointer" @click="selectedTemplateIndex = index" :checked="selectedTemplateIndex === index"/>
                 <p>{{ i.name }}</p>
               </div>
             </div>
@@ -96,9 +108,9 @@ export default {
         </div>
 
 
-        <div style="margin-top: 3rem;">
-          <on-boarding-button text-node="Save Changes"></on-boarding-button>
-          <on-boarding-button text-node="Cancel" background="transparent" color="#000"></on-boarding-button>
+        <div style="margin-top: 3rem;width: 100%">
+          <on-boarding-button text-node="Save Changes" btn-width="100%"></on-boarding-button>
+          <on-boarding-button text-node="Cancel" btn-width="100%" background="transparent" color="#000"></on-boarding-button>
 
         </div>
       </div>
@@ -107,7 +119,10 @@ export default {
     </div>
     <div class="customization_reciever">
 
-      <iframe src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
+
+      <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
+      <iframe v-if="customization === 'template'" src="http://localhost:5173//eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
+
 
 
     </div>
@@ -138,7 +153,6 @@ export default {
   align-items: center;
   gap: 0.75rem;
   border-radius: 0.625rem;
-  border: 1px solid var(--primary-main, #2C6CAC);
   background: #E8E8E8;
 }
 
