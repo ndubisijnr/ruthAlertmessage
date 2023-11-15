@@ -117,20 +117,22 @@ export default {
 
 
     </div>
-    <div class="customization_reciever" :style="customization === 'style' ? {width: '700px'} : null">
 
-
-      <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;"></iframe>
-      <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'http://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'http://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'http://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;"></iframe>
-
-
-
+    <div class="receiver_wrapper">
+      <div class="customization_reciever" :style="customization === 'style' ? {width: '700px'} : null">
+        <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;"></iframe>
+        <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'http://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'http://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'http://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;"></iframe>
+      </div>
     </div>
   </div>
 
 </template>
 
 <style scoped>
+.receiver_wrapper{
+  overflow-x: scroll;
+}
+
 
 .template_footer{
   display: flex;

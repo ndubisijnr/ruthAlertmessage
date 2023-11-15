@@ -80,6 +80,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar-thumb{
+  background-color: red;
+}
+
 @media (max-width: 1024px) {
   body{
     font-size: 0.8rem !important;
