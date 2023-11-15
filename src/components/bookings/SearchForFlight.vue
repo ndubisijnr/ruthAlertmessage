@@ -4,10 +4,10 @@
           <div class="booking-div-inner-wrapper">
             <div class="booking-div-head">
               <div class="service_nav">
-                <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}">Book Flight</div>
-                <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}">Find Hotels</div>
-                <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}">Visa</div>
-                <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}">Insurance</div>
+                <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Book Flight</div>
+                <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Find Hotels</div>
+                <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Visa</div>
+                <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Insurance</div>
               </div>
             </div>
 
@@ -433,6 +433,13 @@ export default {
         return JSON.parse(localStorage.user)
       }
     },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.getCustom_theme
+    }
 
 
   },

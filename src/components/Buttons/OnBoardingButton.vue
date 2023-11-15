@@ -1,5 +1,5 @@
 <template>
-  <button :id="id" :type="type ? type : 'button'" :style="{fontSize:fontsize ? fontsize : '14px', border:border ? border :'1px solid  #2C6CAC',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : '#2C6CAC', color:color ? color : '#FFF', height:height ? height : '3.50rem', padding:padding}"
+  <button :id="id" :type="type ? type : 'button'" :style="{fontSize:fontsize ? fontsize : '14px', border:border ? border :'none',width:btnWidth ? btnWidth : null, backgroundColor:background ? background : custom_theme ? custom_theme.color : default_theme.color, color:color ? color : '#FFF', height:height ? height : '3.50rem', padding:padding}"
    class="on_boarding_button" :class="{'disabled':disabled || loading}" :disabled="disabled">
       <svg v-if="filter_icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 24" fill="none">
       <path d="M22.5 7.25H16.5C16.09 7.25 15.75 6.91 15.75 6.5C15.75 6.09 16.09 5.75 16.5 5.75H22.5C22.91 5.75 23.25 6.09 23.25 6.5C23.25 6.91 22.91 7.25 22.5 7.25Z" fill="#89128A"/>
@@ -15,12 +15,22 @@
 
 <script>
 import SpinnerLoader from "../loaders/SpinnerLoader.vue";
+import storeUtils from "@/utils/storeUtils";
 export default {
     name: "OnBoardingButton",
   components:{
       SpinnerLoader
   },
-  props:['textNode','filter_icon','disabled','padding','type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading', 'fontsize']
+  props:['textNode','filter_icon','disabled','padding','type', 'id', 'btnWidth', 'background', 'color', 'height','border', 'loading', 'fontsize'],
+  computed:{
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.getCustom_theme
+    }
+  }
 }
 </script>
 

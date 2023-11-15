@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}">
     <div class="m5-0">
       <div class="inner_wrapper">
         <div class="select_account_type">
@@ -18,8 +18,24 @@
 </template>
 
 <script>
+import {lightenColor} from "@/mixins/themeUtils";
+import storeUtils from "@/utils/storeUtils";
 export default {
-  name: "Layout"
+  name: "Layout",
+  data(){
+    return{
+      lightenColor
+    }
+  },
+  computed:{
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.getCustom_theme
+    }
+  }
 }
 </script>
 
@@ -102,7 +118,7 @@ export default {
 }
 .wrapper{
   min-height: 100vh;
-  background: var(--app-defautl-primary-light);
+  //background: var(--app-defautl-primary-light);
   display: flex;
   width: 100%;
   position: relative;

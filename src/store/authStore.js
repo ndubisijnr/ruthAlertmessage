@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('authStore', {
             this.loading = true
             try {
 
-                const response = await AuthService.initiateLogin(storeUtils.fireAway().global?.getTenant_id, payload)
+                const response = await AuthService.initiateLogin(storeUtils.fireAway().global.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {
                     localStorage.user = JSON.stringify(responseData.data)

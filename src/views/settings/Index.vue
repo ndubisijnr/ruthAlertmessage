@@ -485,41 +485,9 @@
             </div>
           </div>
 
-          <!-- <div id="customization" class="animate__animated animate__fadeIn" v-show="currentTab === 'Customization'">
-
-            <div class="customization_wrapper">
-              <div class="customization_sender">
-
-                <div>
-                  <p class="customization_header">Customization</p>
-
-                  <div class="customization_tab">
-                    <ul class="customization_tab_ul">
-                      <a class="customization_tab_li" @click="customization='add_favicon'" :class="{'active_customization_tab_li':customization==='add_favicon'}">Add Favicon</a>
-                      <a class="customization_tab_li" @click="customization='style'" :class="{'active_customization_tab_li':customization==='style'}">Choose Color Style</a>
-                      <a class="customization_tab_li" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
-                    </ul>
-                  </div>
-
-
-                  <div v-if="customization==='style'">
-                    <div>
-                      <color-picker v-model:pureColor="pureColor" v-model:gradientColor="gradientColor"/>
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
-              <div class="customization_reciever">
-
-                <iframe src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1000px;height: 700px;"></iframe>
-
-
-              </div>
-            </div>
-          
-          </div> -->
+          <div id="customization" class="customization_wrapper animate__animated animate__fadeIn" v-show="currentTab === 'Customization'">
+            <Customization></Customization>
+          </div>
 
           <div id="verifications" class="verifications  animate__animated animate__fadeIn" v-show="currentTab === 'Verification'">
           <business-verification v-if="verification_Type ==='business'"  :is-component="false" :in-route="false"></business-verification>
@@ -559,8 +527,7 @@ import SettingsSkeletonsLoader from "../../components/loaders/SettingsSkeletonsL
 import EditRole from "../../components/modals/EditRole.vue";
 import Dashboard from "../dashboard/Index.vue"
 import { ref } from "vue";
-import {ColorPicker} from "vue3-colorpicker";
-import "vue3-colorpicker/style.css";
+import Customization from "@/components/customization/Customization.vue";
 
 export default {
   name: "Settings",
@@ -582,7 +549,7 @@ export default {
     SettingsSkeletonsLoader,
     ChangePassword,
     EditRole,
-    ColorPicker
+    Customization
   },
 
   data(){
@@ -610,7 +577,6 @@ export default {
       addAccount:false,
       localDropdown:false,
       activeManageRole:"team",
-      customization:"add_favicon",
       bankIndex:null,
       bankName:null,
       paymentType:'bank',
@@ -952,73 +918,18 @@ export default {
   display: flex !important;
 }
 
-.customization_sender{
-  border: solid;
-  width: 100%;
-}
 
 .customization_wrapper{
   display: flex;
-  /* gap:5.19rem; */
-  border: solid;
   justify-content: space-between;
-  width: 100%;
   margin: 2.75rem 0;
   position:relative;
-}
-
-.customization_tab_li{
-  color: var(--black-text-05, #9DA8B6);
-  text-align: center;
-  font-family: 'Product Sans';
-  font-size: 0.9rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.75rem; /* 175% */
-  padding: 0.38rem 0.5rem;
-  cursor: pointer;
-}
-
-.active_customization_tab_li{
-  color: var(--primary-main, #2C6CAC);
-  
-  border-bottom: solid #2C6CAC;
-  /* width: 6.18875rem; */
-}
-
-.customization_header{
-  color: var(--primary-colors-dark-head, #272833);
-  /* bold/24px */
-  font-family: 'Product Sans';
-  font-size: 1.5rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.75rem; /* 116.667% */
-}
-
-.customization_tab_ul{
-  display: inline-flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  list-style: none;
-  padding: 0;
+  gap: 5.19rem;
   width: 100%;
-  margin-top: 2rem;
+
 }
 
-.customization_reciever{
-  width: 500px;
-  flex-shrink: 0;
-  background: var(--primary-1, #D5E2EE);
-  margin-top: 1rem;
-  /* transform: scale(.5); */
-  transform-origin: 100px 100px;
-  border: solid;
-  /* position: absolute;
-  top: -100px;
-  right: 0; */
-  
-}
+
 
 
 .cover{

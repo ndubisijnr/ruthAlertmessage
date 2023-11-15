@@ -1,12 +1,13 @@
 <template>
-    <div class="wrapper">
-        <div class="top-angle"></div>
-        <div class="bottom-angle"></div>
+    <div class="wrapper" :style="{background:custom_theme ? lightenColor(custom_theme?.color) : lightenColor(default_theme.color)}">
+        <div class="top-angle" :style="{background:custom_theme ? toGradient(custom_theme.color,'220') : toGradient(default_theme.color, '220')}"></div>
+        <div class="bottom-angle" :style="{background:custom_theme ? toGradient(custom_theme.color, '107') : toGradient(default_theme.color,'107')}"></div>
 
         <div class="m5-0">
             <div class="inner_wrapper">
                 <div class="select_account_type">
                     <div class="logo_area">
+                        <!-- users logo or travel_yakata_logo -->
                         <img src="../../assets/TravelYakataLogo.png" style="width: 12.0625rem;height: 5.95919rem;" />
                     </div>
 
@@ -22,14 +23,34 @@
 
 <script>
 import storeUtils from "../../utils/storeUtils";
+import {toGradient, lightenColor} from "@/mixins/themeUtils";
 
 export default {
     name:"CompleteRegistrationLayout",
+
+    data(){
+      return{
+        toGradient,
+        lightenColor
+      }
+    },
+
+    computed:{
+      default_theme(){
+        return storeUtils.fireAway().theme.getDefault_theme
+      },
+
+      custom_theme(){
+        return storeUtils.fireAway().theme.getCustom_theme
+      }
+    },
 
     mounted() {
       if(!localStorage.tenant_id){
         storeUtils.fireAway().global?.getTenant()
       }
+
+      storeUtils.fireAway().theme.getCustomization()
     }
 
 }
@@ -64,6 +85,7 @@ export default {
     height: 52.00rem;
     padding: 3.5rem;
     gap: 327px;
+    border: solid;
 
 }
 
@@ -75,6 +97,7 @@ export default {
         justify-content: start;
         gap: 1rem;
         height: auto;
+      display: block;
 
     }
 }
@@ -90,7 +113,7 @@ export default {
     top: 70%;
     right: -20%;
     bottom: -10%;
-    background:var(--app-default-secondary-linear-gradaint1);
+    //background:var(--app-default-secondary-linear-gradaint1);
     z-index: 1
 }
 
@@ -103,19 +126,19 @@ export default {
 .top-angle {
   width: 69.45238rem;
   height: 27.51469rem;
-    transform: rotate(150.931deg);
-    flex-shrink: 0;
-     background: var(--app-default-secondary-linear-gradaint2);
-    position: fixed;
-    top:0;
-    left: -35%;
-    z-index: 1;
+  transform: rotate(150.931deg);
+  flex-shrink: 0;
+  //background: var(--app-default-secondary-linear-gradaint2);
+  position: fixed;
+  top:0;
+  left: -35%;
+  z-index: 1;
 
 }
 
 .wrapper{
     min-height: 100vh;
-    background: var(--app-defautl-primary-light);
+    //background: var(--app-defautl-primary-light);
     display: inline-block;
     width: 100%; 
     position: relative;
