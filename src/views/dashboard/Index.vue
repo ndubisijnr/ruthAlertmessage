@@ -2,9 +2,9 @@
    <layout v-slot:child-content>
     <div class="dashboard_wrapper">
      <div class="mb" v-if="getCurrentRoute === 'Dashboard'">
-      <div style="margin: 4rem 0;">
+      <div>
         <div v-if="getCurrentRoute === 'Dashboard'">
-          <h3 class="user-name" > Hello {{getUser?.first_name}} </h3>
+<!--          <h3 class="user-name" > Hello {{getUser?.first_name}} </h3>-->
 
           <div class="get-started" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document">
             <div class="with-tiqwa">
