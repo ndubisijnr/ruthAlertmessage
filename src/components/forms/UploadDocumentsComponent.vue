@@ -4,7 +4,7 @@
         <img src="./close_icon.svg" style="cursor: pointer"  @click="selectedImage = null" alt="favicon_preview"/>
       </div>
       <div>
-        <p class="upload_files">Upload  your website favicon to distinguish your site.</p>
+        <p class="upload_files">{{title}}</p>
       </div>
 
         <div class="upload_area">
@@ -21,7 +21,7 @@
                 </clipPath>
               </defs>
             </svg>
-            <input type="file" accept="image/jpeg" id="favicon" @change="handleFileChange" hidden />
+            <input type="file" accept="/*" :id="id" @change="handleFileChange" hidden />
             <p class="drop">Drop your files here or <span class="click_here" @click="handleChange">click here</span> to upload</p>
             <p class="recomend">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
           </section>
@@ -37,6 +37,7 @@
 <script>
 export default {
     name:"UploadDocumentsComponent",
+    props:['title', 'id'],
     data(){
       return{
         selectedImage: null
@@ -60,7 +61,7 @@ export default {
       },
 
       handleChange(){
-        const input = document.getElementById('favicon')
+        const input = document.getElementById(`${this.id}`)
         input.click()
       }
     }

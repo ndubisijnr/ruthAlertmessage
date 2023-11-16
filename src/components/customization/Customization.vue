@@ -68,7 +68,7 @@ export default {
             <p class="upload_favicon">Upload custom favicon</p>
           </div>
 
-          <upload-documents-component></upload-documents-component>
+          <upload-documents-component id="favicon" title="Upload  your website favicon to distinguish your site."></upload-documents-component>
 
 
         </div>

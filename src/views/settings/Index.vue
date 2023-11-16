@@ -66,7 +66,7 @@
                 <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
                 <a :class="{'active':currentTab === 'Markup'}" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
                 <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="currentTab = 'Customization'">Customization</a>
-                <a :class="{'active':currentTab === 'Verification'}" href="#Verification" @click="currentTab = 'Verification'">Verification</a>
+<!--                <a :class="{'active':currentTab === 'Verification'}" href="#Verification" @click="currentTab = 'Verification'">Verification</a>-->
               </ul>
             </div>
 
