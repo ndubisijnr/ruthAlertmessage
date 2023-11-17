@@ -97,6 +97,8 @@ export default {
       storeUtils.fireAway().auth?.getBusinessProfile()
 
     })
+    if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization()
+
   }
 
 

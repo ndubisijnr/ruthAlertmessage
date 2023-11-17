@@ -50,7 +50,7 @@ export default {
         storeUtils.fireAway().global?.getTenant()
       }
 
-      storeUtils.fireAway().theme.getCustomization()
+      if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization()
     }
 
 }

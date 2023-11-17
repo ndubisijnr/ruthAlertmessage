@@ -54,10 +54,10 @@ export const useCustomizationStore = defineStore('customizationStore', {
         // },
         //
 
-        async saveCustomization(){
+        async saveCustomization(payload){
             this.loading = true
             try{
-                const response = await customization.saveCustomizationSettings(storeUtils.fireAway().global?.getTenant_id, customizationRequest.saveCustomization)
+                const response = await customization.saveCustomizationSettings(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
                 this.loading = false
                 if(responseData.success){
@@ -65,6 +65,7 @@ export const useCustomizationStore = defineStore('customizationStore', {
                 }
 
             }catch(err){
+                this.loading = false
                 catchErrorHandler(err)
             }
 

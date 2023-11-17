@@ -16,6 +16,9 @@ export default {
     return{
       customization:'add_favicon',
       model:CustomizationRequest.saveCustomization,
+      color:null,
+      favicon:null,
+      template_id:null,
       selectedTemplateIndex:0,
       templates:[
         {
@@ -33,6 +36,15 @@ export default {
       ]
     }
   },
+  methods:{
+    saveCustomization(){
+      // this.model
+      if(this.color) this.model.color = this.color;
+      if(this.favicon) this.model.favicon = this.favicon;
+      if(this.template_id) this.model.template_id = this.template_id;
+      storeUtils.fireAway().theme.saveCustomization(this.model)
+    }
+  },
   computed:{
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme
@@ -40,6 +52,10 @@ export default {
 
     custom_theme(){
       return storeUtils.fireAway().theme.getCustom_theme
+    },
+
+    getLoading(){
+      return storeUtils.fireAway().theme.getLoading
     }
   }
 }
@@ -103,13 +119,13 @@ export default {
               you choose here.</p>
           </div>
           <div>
-            <color-picker v-model="model.color" is-widget  />
+            <color-picker v-model:pure-color="color" format="hex" is-widget  />
           </div>
         </div>
 
 
         <div style="margin-top: 3rem;width: 100%">
-          <on-boarding-button text-node="Save Changes" btn-width="100%"></on-boarding-button>
+          <on-boarding-button @click="saveCustomization" text-node="Save Changes" :loading="getLoading" btn-width="100%"></on-boarding-button>
           <on-boarding-button text-node="Cancel" btn-width="100%" background="transparent" color="#000"></on-boarding-button>
 
         </div>
@@ -120,8 +136,8 @@ export default {
 
     <div class="receiver_wrapper">
       <div class="customization_reciever" :style="customization === 'style' ? {width: '700px'} : null">
-        <iframe v-if="customization === 'style'" src="http://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;"></iframe>
-        <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'http://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'http://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'http://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;"></iframe>
+        <iframe v-if="customization === 'style'" src="https://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;" sandbox="allow-scripts"></iframe>
+        <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'https://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'https://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'https://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;" sandbox="allow-scripts allow-same-origin"></iframe>
       </div>
     </div>
   </div>

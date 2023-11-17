@@ -1,9 +1,5 @@
 class CustomizationRequest {
-    static saveCustomization = {
-        favicon:null,
-        color:null,
-        template_id:null,
-    }
+    static saveCustomization = {}
 
 }
 export default CustomizationRequest

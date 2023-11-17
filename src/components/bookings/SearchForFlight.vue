@@ -4,18 +4,18 @@
           <div class="booking-div-inner-wrapper">
             <div class="booking-div-head">
               <div class="service_nav">
-                <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Book Flight</div>
-                <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Find Hotels</div>
-                <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Visa</div>
-                <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : null">Insurance</div>
+                <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Book Flight</div>
+                <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Find Hotels</div>
+                <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Visa</div>
+                <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Insurance</div>
               </div>
             </div>
 
             <div class="booking-div-body">
               <div v-if="activeService === 'Flight'">
               <div class="booking-nav">
-              <p class="booking-nav-item" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
-              <p class="booking-nav-item" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
+              <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
+              <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
               <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
               <p class="booking-nav-item" style="cursor:not-allowed !important">Multi City</p>
 
@@ -528,7 +528,6 @@ export default {
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
-  color: var(--app-default-primary);
   cursor: pointer;
 
   /* Medium/16px */
@@ -930,8 +929,7 @@ export default {
 }
 
 .activeDestType{
-  border-bottom:2px solid var(--app-default-primary);
-  color:var(--app-default-primary) !important;
+  border-bottom:2px solid;
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;

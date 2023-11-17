@@ -6,10 +6,10 @@
         <div v-if="getCurrentRoute === 'Dashboard'">
 <!--          <h3 class="user-name" > Hello {{getUser?.first_name}} </h3>-->
 
-          <div class="get-started" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document">
+          <div class="get-started" :style="{background:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document">
             <div class="with-tiqwa">
               <div>
-                <h3 class="with-tiqwa-h">Get started with Tiqwa 🎉</h3>
+                <h3 class="with-tiqwa-h">Hello {{getUser?.first_name}}, get started with Tiqwa 🎉</h3>
                 <p class="with-tiqwa-p">Please complete your setup to access your full TIQWA services, </p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
@@ -98,6 +98,7 @@ import Layout from "../Layout.vue";
 import RouteNav from "../../components/RouteNav.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
+import {lightenColor} from "@/mixins/themeUtils";
 
 
 export default {
@@ -109,6 +110,7 @@ export default {
       card,
       showing:false,
       currentProgressIndex:1,
+      lightenColor
     }
   },
 
@@ -138,6 +140,13 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.getCustom_theme
     },
    
 
