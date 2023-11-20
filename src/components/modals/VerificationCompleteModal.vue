@@ -17,6 +17,7 @@
 <script>
 import Layout from "./Layout.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
+import storeUtils from "@/utils/storeUtils";
 
 export default {
   name:"VerificationCompleteModal",
@@ -36,7 +37,14 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage?.user)
       }
-    }
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.custom_theme
+    },
   },
 
 

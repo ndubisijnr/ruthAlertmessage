@@ -85,7 +85,7 @@ export default {
     height: 52.00rem;
     padding: 3.5rem;
     gap: 327px;
-    border: solid;
+
 
 }
 

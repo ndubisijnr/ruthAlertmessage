@@ -13,6 +13,8 @@ export const useAuthStore = defineStore('authStore', {
         user:null,
         businessProfile:null,
         stage: 'email',
+        wasCustomization:false
+
 
 
     }),
@@ -21,7 +23,8 @@ export const useAuthStore = defineStore('authStore', {
         getLoading:state => state.loading,
         getErrors:state => state.errors,
         User:state => state.user,
-        getStage:state => state.stage
+        getStage:state => state.stage,
+        getIfWasCustomization:state => state.wasCustomization
 
     },
 
@@ -65,6 +68,7 @@ export const useAuthStore = defineStore('authStore', {
                 const response = await AuthService.initiateLogin(storeUtils.fireAway().global.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {
+                    if(responseData.customizations) this.wasCustomization = true;
                     localStorage.user = JSON.stringify(responseData.data)
                     this.token = responseData.data.access_token
                     localStorage.token = responseData.data.access_token
@@ -72,6 +76,7 @@ export const useAuthStore = defineStore('authStore', {
                     await storeUtils.fireAway().settings?.getDomainsAction()
                     localStorage.bookingStage = 'Flight Search'
                     localStorage.progressNav = JSON.stringify([])
+                    localStorage.theme = JSON.stringify(responseData.data.customizations)
                     this.loading = false
                     if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
                         if(responseData.data.is_corporate === 'true'){
@@ -81,10 +86,7 @@ export const useAuthStore = defineStore('authStore', {
                         }
                     }else{
                         await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
-                        await storeUtils.fireAway().flight?.handleGetAirport()
-
                     }
-
                 }
             }catch (err){
                 this.loading = false

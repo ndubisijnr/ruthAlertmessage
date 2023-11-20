@@ -1,6 +1,6 @@
 <template>
   <booking-index v-slot:booking_children>
-        <div class="booking-div animate__animated animate__fadeIn">
+        <div :style="{borderColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}" class="booking-div animate__animated animate__fadeIn">
           <div class="booking-div-inner-wrapper">
             <div class="booking-div-head">
               <div class="service_nav">
@@ -28,16 +28,13 @@
                   <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                     <div class="group-inputs">
                       <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" placeholder="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
+                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
                         <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
-                          <!-- <div>
-                            <input placeholder="serch cities" />
-                          </div> -->
                           <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
                       </div>
                       <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true" placeholder="To" autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                        <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
                         <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
                           <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                         </div>
@@ -104,7 +101,7 @@
                             <div class="passenger-type">
                               <div style="display: flex;flex-direction: column">
                                 <p class="passenger-type-text-1">Adults</p>
-                                <p class="text-2">18 and above</p>
+                                <p class="text-2">12+ and above</p>
                               </div>
 
                               <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
@@ -117,7 +114,7 @@
                             <div class="passenger-type">
                               <div style="display: flex;flex-direction: column">
                                 <p class="passenger-type-text-1">Children</p>
-                                <p class="text-2">17 and below</p>
+                                <p class="text-2">2-12</p>
                               </div>
 
                               <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
@@ -169,11 +166,11 @@
                               <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
                             </div>
                             <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business',showClass = !showClass">Business</p>
+                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business',showClass = !showClass">Premium Economy</p>
                             </div>
 
                             <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Economy',showClass = !showClass">Business Economy</p>
+                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Economy',showClass = !showClass">Business Class</p>
                             </div>
 
                             <div class="passenger-type" style="border: none">
@@ -201,7 +198,7 @@
                 </div> -->
 
                   <div class="form-area-footer">
-                    <on-boarding-button :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button :loading="getLoading" :disabled="getLoading || !shouldSearch()" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
                   </div>
 
                 </div>
@@ -235,6 +232,7 @@ import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest"
+import {lightenColor} from "@/mixins/themeUtils";
 
 export default {
   name: "SearchForFlight",
@@ -257,6 +255,7 @@ export default {
       flightModel:FlightRequest.flight,
       passenger_disable_buttons:false,
       sum:null,
+      lightenColor,
       multiCityFlight:[
         { 
           departure_date: null,
@@ -266,6 +265,23 @@ export default {
     }
   },
   methods:{
+    shouldSearch(){
+      if (this.activeDestType === 'round_trip') {
+        const keys_to_check_for_round_trip = ['adults', 'departure_date', 'return_date', 'destination', 'origin'];
+
+        // Check if all keys in keys_to_check_for_round_trip exist in flightModel and have truthy values
+        return  keys_to_check_for_round_trip.every(key => key in this.flightModel && this.flightModel[key]);
+
+      }
+      if (this.activeDestType === 'one_way') {
+        const keys_to_check_for_round_trip = ['adults', 'departure_date', 'origin'];
+
+        // Check if all keys in keys_to_check_for_round_trip exist in flightModel and have truthy values
+        return  keys_to_check_for_round_trip.every(key => key in this.flightModel && this.flightModel[key]);
+
+      }
+    },
+
     passengerSelectionControl(clickedPassenger, button_type){
       if(clickedPassenger === 'adult' && button_type === 'add')
         ++this.flightModel.adults
@@ -365,7 +381,7 @@ export default {
       }else{
         this.filteredAirportFrom = this.getAirports.filter(it => {
           // let searchQuery = Object.values(it).map(i => i).toLocaleString()
-          return it.city_code === this.fromQuery.toUpperCase() || it.city.toLowerCase() === this.fromQuery.toLowerCase() || it.country.toLowerCase() === this.fromQuery.toLowerCase()
+          return it.city_code === this.fromQuery.toUpperCase() || it.city.toLowerCase() === this.fromQuery.toLowerCase() || it.country.toLowerCase() === this.fromQuery.toLowerCase() || it.iata_code.toLowerCase() === this.fromQuery.toLowerCase()
         }) 
       }
 
@@ -376,7 +392,7 @@ export default {
         this.filteredAirportTo.length = 0
       }else{
         this.filteredAirportTo = this.getAirports.filter(it => {      
-          return it.country.toLowerCase() === this.toQuery.toLowerCase() || it.city.toLowerCase() === this.toQuery.toLowerCase() || it.city_code === this.toQuery.toUpperCase()
+          return it.country.toLowerCase() === this.toQuery.toLowerCase() || it.city.toLowerCase() === this.toQuery.toLowerCase() || it.city_code === this.toQuery.toUpperCase() || it.iata_code.toLowerCase() === this.toQuery.toLowerCase()
         })
       }
 
@@ -386,6 +402,7 @@ export default {
     getCurrentRoute(){
       return router.currentRoute.value.name
     },
+
 
     passengerNumber(){
       return this.flightModel.adults + this.flightModel.children + this.flightModel.infants
@@ -438,7 +455,7 @@ export default {
     },
 
     custom_theme(){
-      return storeUtils.fireAway().theme.getCustom_theme
+      return storeUtils.fireAway().theme.custom_theme
     }
 
 
@@ -593,6 +610,11 @@ export default {
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
   cursor: pointer;
+}
+
+.passenger-type-text-1:hover{
+  transform: scale(1);
+  font-size: 1.1rem;
 }
 
 .text-2{
@@ -1223,6 +1245,9 @@ export default {
   margin: 0 0;
   width: 100%;
   background-color: #FFF;
+  border: 0.3px solid;
+  border-radius: 1rem;
+
 }
 
 .booking-nav{

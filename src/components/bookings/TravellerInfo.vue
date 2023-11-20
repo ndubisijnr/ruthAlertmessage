@@ -104,7 +104,7 @@
              
               <div class="group-inputs">
                 <on-boarding-input :default-value="getUser?.email" width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
-                <on-boarding-input  placeholder="phone number" width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone" type="tel"></on-boarding-input>
+                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
               </div>
             </div>
 
@@ -150,9 +150,9 @@
 
                   <div class="input-area">
                       <div class="group-inputs no_gap">
-                        <on-boarding-input style="border-bottom-right-radius: 0;border-top-right-radius: 0;border-right: none;" placeholder="First Name" autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => w.first_name = value"/>
-                        <on-boarding-input style="border-radius: 0; border-right: none;border-left: none;" placeholder="Middle Name" autocomplete="off" width="100%" label="Middle Name" class="" />
-                        <on-boarding-input style="border-bottom-left-radius: 0;border-top-left-radius: 0;border-left: none;" placeholder="Last Name" autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => w.last_name = value" />
+                        <on-boarding-input style="border-bottom-right-radius: 0;border-top-right-radius: 0;border-right: none;" autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => w.first_name = value"/>
+                        <on-boarding-input style="border-radius: 0; border-right: none;border-left: none;" autocomplete="off" width="100%" label="Middle Name" class="" />
+                        <on-boarding-input style="border-bottom-left-radius: 0;border-top-left-radius: 0;border-left: none;" autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => w.last_name = value" />
                       </div>
                       <div class="group-inputs">
                         <!-- <div class="choose_document_type" style="position: relative;">
@@ -280,7 +280,7 @@
                       <div style="margin-bottom: 0.38rem;">
                         <div style="display: flex;gap: 0.5rem;align-items: center;">
                           <p class="dest">{{i.passenger_type}} </p>
-                          <p style="text-transform: lowercase;border: solid;border-radius: 50%;width:18px;height:auto;text-align: center;">{{i.quantity}}</p>
+                          <p style="text-transform: lowercase;border-radius: 50%;width:18px;height:auto;text-align: center;">X {{i.quantity}}</p>
                         </div>
                       </div>
                       <div style="display: flex;gap: 0.5rem;justify-content: space-between;">

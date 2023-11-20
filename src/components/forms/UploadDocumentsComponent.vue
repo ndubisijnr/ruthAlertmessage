@@ -35,12 +35,15 @@
 </template>
 
 <script>
+import storeUtils from "@/utils/storeUtils";
+
 export default {
     name:"UploadDocumentsComponent",
     props:['title', 'id'],
     data(){
       return{
-        selectedImage: null
+        selectedImage: null,
+        uploadFile:null
       }
     },
     methods:{
@@ -48,22 +51,32 @@ export default {
         const file = event.target.files[0];
 
         if (file) {
+           this.$emit('file', file)
+
           // Use FileReader to read the selected file as a data URL
           const reader = new FileReader();
 
           reader.onload = (e) => {
             // Update the selectedImage data property with the data URL
             this.selectedImage = e.target.result;
+
           };
 
           reader.readAsDataURL(file);
         }
       },
 
+      // await this.triggerUpload(this.uploadModel)
+
       handleChange(){
         const input = document.getElementById(`${this.id}`)
         input.click()
-      }
+      },
+
+      async triggerUpload(){
+        await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
+      },
+
     }
 
 

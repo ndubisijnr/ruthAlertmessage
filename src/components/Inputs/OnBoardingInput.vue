@@ -4,7 +4,7 @@
       <span class="hide_show" v-if="type === 'password'" @click="hideShow" id="hideShow"></span>
       <span class="add-info" v-if="info">{{ info }}</span>
       <div style="position: relative;width: 100%">
-        <!-- <label class="label" :class="{'focused':isFocused}">{{ label }}</label> -->
+         <label class="label" :class="{'focused':isFocused}">{{ label }}</label>
         <div style="position: relative;">
           <div v-if="type == 'tel'" style="position: absolute;display: flex;top: 1.25rem;left: 1.25rem;align-items: center;cursor: pointer;gap: 0.25rem;">
             <div style="display: flex;gap: 0.5rem;">
@@ -18,8 +18,8 @@
             </svg>
           </div>
           
-          <input :id="id" :autocomplete="autocomplete" :max="max" required :style="[style, width ?  { width: width,paddingLeft:type == 'tel' ? '7rem' : null} : null]"
-            :type="type" class="formInput" :placeholder="type == 'tel' ? null : placeholder" :class="{ 'focused': isFocused }" :readonly="readonly"
+          <input :id="id" @keydown="validate" :name="name" :autocomplete="autocomplete" :max="max" required :style="[style, width ?  {width: width,paddingLeft:type === 'tel' ? '7rem' : null} : null, isFocused ? {border:custom_theme ? custom_theme.color : default_theme.color,outlineColor:custom_theme ? `${custom_theme.color} !important` : default_theme.color, caretColor:custom_theme ? custom_theme.color : default_theme.color} : null]"
+            :type="type" class="formInput" :placeholder="type === 'tel' ? null : placeholder" :class="{ 'focused': isFocused }" :readonly="readonly"
             v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut" @input="emitValue" />
           <div class="loader">
             <spinner-loader v-if="isTyping && isFakeLoading"></spinner-loader>
@@ -51,11 +51,12 @@
 
 <script>
 import SpinnerLoader from '../loaders/SpinnerLoader.vue'
+import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "OnBoardingInput",
   components: { SpinnerLoader },
-  props: ['type', 'defaultValue', 'value', 'style', 'max', 'isFakeLoading', 'autocomplete', 'className', 'label', 'width', 'id', 'error', 'required', 'errorInput', 'placeholder', 'readonly', 'info'],
+  props: ['type', 'defaultValue', 'isvalidate', 'value', 'name', 'style', 'max', 'isFakeLoading', 'autocomplete', 'className', 'label', 'width', 'id', 'error', 'required', 'errorInput', 'placeholder', 'readonly', 'info'],
   data() {
     return {
       inputValue: null,
@@ -81,6 +82,18 @@ export default {
       this.isFocused = false
     },
 
+    validate(){
+      if(this.isvalidate){
+        let inputs = document.querySelectorAll('.formInput');
+        inputs.forEach(item => {
+          if(item.value === null || item.value === ''){
+            console.log(`${item.id} is empty`)
+          }
+        })
+      }
+
+    },
+
     hideShow() {
       const id = document.getElementById(`${this.id}`)
       const hideshow = document.getElementById('hideShow')
@@ -94,6 +107,16 @@ export default {
       }
     },
 
+  },
+
+  computed:{
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.custom_theme
+    },
   },
 
   mounted() {
@@ -139,6 +162,7 @@ export default {
   /*position: absolute;*/
 }
 
+
 .error_message {
   border: solid #FF1F1F;
 }
@@ -162,24 +186,27 @@ export default {
   width: 100%;
 }
 
-.formInput {
+
+.formInput{
   height: 4rem;
   font-size: 1rem;
   border-radius: 0.375rem;
-  border: 1px solid #E0E6ED;
-  padding-left: 1.25rem;
+  border: 1px solid  #E0E6ED;
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
   margin-bottom: 1rem;
-  width: 26rem;
-  background-color: transparent;
+  width:100%;
+  //background: transparent;
 }
+
+
 
 /* .groupedformInput{} */
 
-.formInput.focused {
-  padding-left: 1.25rem;
-  border: 1px solid var(--app-default-primary);
+.formInput.focused{
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
   border-radius: 0.375rem;
-  outline: var(--app-default-primary);
 
 }
 
@@ -195,41 +222,41 @@ export default {
 
 }
 
-.label.focused {
-  position: absolute;
-  top: 0.3rem;
-  left: 1.25rem;
+
+.label.focused{
+  position:absolute;
+  top:-0.5rem;
+  left:1.25rem;
   width: auto;
-  height: 1.50rem;
-  font-size: 0.88rem;
+  height:1.50rem;
+  font-size:0.88rem;
   padding-bottom: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   text-transform: capitalize;
-  line-height: 1.5rem;
-  /* 171.429% */
+  line-height: 1.5rem; /* 171.429% */
   font-style: normal;
   font-weight: 300;
-  color: #575A65;
+  color:  #575A65;
   transition: ease-in-out .2s;
   background-color: white;
+  z-index: 999;
 }
 
-.label {
-  position: absolute;
-  top: .5rem;
-  left: 1.25rem;
+.label{
+  position:absolute;
+  top:.5rem;
+  left:1.25rem;
   width: auto;
-  height: 1.50rem;
-  font-size: 1rem;
+  height:1.50rem;
+  font-size:1rem;
   text-transform: capitalize;
-  line-height: 1.7rem;
-  /* 171.429% */
+  line-height: 1.7rem; /* 171.429% */
   font-style: normal;
   font-weight: 300;
-  color: #575A65;
+  color:  #575A65;
   transition: ease-in .2s;
-  /*border: solid;*/
+  z-index: 999;
 }
 
 @media (max-width:1024px) {

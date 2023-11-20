@@ -65,7 +65,7 @@
                 <a :class="{'active':currentTab === 'Notifications'}" href="#Notifications" @click="currentTab = 'Notifications'">Notifications</a>
                 <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
                 <a :class="{'active':currentTab === 'Markup'}" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
-                <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="currentTab = 'Customization'">Customization</a>
+                <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="currentTab = 'Customization', isEditing=true">Customization</a>
 <!--                <a :class="{'active':currentTab === 'Verification'}" href="#Verification" @click="currentTab = 'Verification'">Verification</a>-->
               </ul>
             </div>
@@ -91,14 +91,14 @@
                       </div>
 
                       <on-boarding-input width="100%" :placeholder="getUser.email" label="Email address"></on-boarding-input>
-                      <on-boarding-input width="100%" label="Phone number" :placeholder="getUser.phone" @inputValue="value => model1.phone = value"></on-boarding-input>
+                      <on-boarding-input isvalidate="true" width="100%" label="Phone number" :placeholder="getUser.phone" @inputValue="value => model1.phone = value"></on-boarding-input>
                     </form>
                     <div class="change_password">
                       <div>
                         <p class="change_password-p">Change Password</p>
                         <p class="change_password-sub">You can change your password here!</p>
                       </div>
-                      <on-boarding-button @click="changePassword=true" color="#2C6CAC" text-node="Change Password" btn-width="10rem" height="3rem" background="#EAF0F7" border="none"></on-boarding-button>
+                      <on-boarding-button @click="changePassword=true" text-node="Change Password" btn-width="10rem" height="3rem" :background="lightenColor(custom_theme ? custom_theme.color : default_theme?.color)" border="none"></on-boarding-button>
                     </div>
                     <div style="display:flex;justify-content: end">
                       <OnBoardingButton @click="handleUpdateProfile" :loading="loading" :disabled="loading" border="none" :textNode="'Save Changes'" :btnWidth="'11.0625rem'"></OnBoardingButton>
@@ -129,8 +129,8 @@
             </div>
             <div id="teams" class="teams  animate__animated animate__fadeIn" v-show="currentTab === 'Teams'">
               <div class="manage-roles">
-                <p :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>
-                <p class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>
+                <p :style="activeManageRole === 'team'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>
+                <p :style="activeManageRole === 'permissions'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>
               </div>
 
               <div class="teams-header" >
@@ -314,7 +314,7 @@
                 <div>
                   <div class="payment-choice">
       <!--              <p class="payment-m-s" style="cursor: not-allowed">Payment  Gateway</p>-->
-                    <p class="payment-m-s" :class="{'payment_type_active':paymentType === 'bank'}" style="cursor: pointer" @click="paymentType = 'bank'">Bank Account</p>
+                    <p class="payment-m-s" :style="paymentType === 'bank' ? {borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'payment_type_active':paymentType === 'bank'}" style="cursor: pointer" @click="paymentType = 'bank'">Bank Account</p>
                   </div>
 
                   <div v-if="paymentType === 'bank'">
@@ -453,8 +453,8 @@
                       <div style="">
                         <p class="doc_type"> {{ IntMarkUpPlaceHolder }}</p>
                         <div class="doc_type_options" v-show="intDropdown">
-                          <p class="doc_type_item" @click="IntMarkUpPlaceHolder='fixed',toggleIntDropdown(),markupModel.international_markup_type = 'fixed'">fixed</p>
-                          <p class="doc_type_item" @click="IntMarkUpPlaceHolder='percentage',toggleIntDropdown(),markupModel.international_markup_type = 'percentage'">percentage</p>
+                          <p class="doc_type_item" @click="IntMarkUpPlaceHolder='Fixed',toggleIntDropdown(),markupModel.international_markup_type = 'Fixed'">fixed</p>
+                          <p class="doc_type_item" @click="IntMarkUpPlaceHolder='Percentage',toggleIntDropdown(),markupModel.international_markup_type = 'Percentage'">percentage</p>
 
                         </div>
 
@@ -530,6 +530,7 @@ import EditRole from "../../components/modals/EditRole.vue";
 import Dashboard from "../dashboard/Index.vue"
 import { ref } from "vue";
 import Customization from "@/components/customization/Customization.vue";
+import {lightenColor} from "@/mixins/themeUtils";
 
 export default {
   name: "Settings",
@@ -573,6 +574,7 @@ export default {
       updateRole:false,
       searchQuery:null,
       editBankAccount:false,
+      isEditing:false,
       show:true,
       intDropdown:false,
       addDomain:false,
@@ -583,6 +585,7 @@ export default {
       bankName:null,
       paymentType:'bank',
       inModal:false,
+      lightenColor,
       // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
       error:{
         name:null,
@@ -794,14 +797,41 @@ export default {
     setLocalPerRou(value){
       this.markupModel.domestic_markup_per_route = value,
       this.getMarkup.domestic_markup_per_route = value
+    },
+
+    preventNav(e){
+      if(!this.isEditing) return;
+      e.preventDefault();
+      e.returnValue = ""
     }
 
+
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.preventNav);
+  },
+
+  beforeRouteLeave(to, from, next){
+    if(this.isEditing){
+      if(!window.confirm("Are you sure? all unsaved changes won't reflect o.")){
+        return;
+      }
+    }
+    next()
   },
 
 
   computed:{
     getCurrentRoute(){
       return router.currentRoute.value.name
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.custom_theme
     },
 
     deleteLoading(){
@@ -890,9 +920,6 @@ export default {
 
 
   mounted() {
-    const pureColor = ref("red");
-    const gradientColor = ref("linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)");
-
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
     storeUtils.fireAway().settings?.getDomainsAction()
@@ -901,9 +928,6 @@ export default {
     storeUtils.fireAway().settings?.readMarkupSettings()
     storeUtils.fireAway().settings?.readAllMembers()
     storeUtils.fireAway().settings?.readBanksAccount()
-
-    return { pureColor, gradientColor }
-
   }
 }
 </script>
@@ -1196,8 +1220,6 @@ export default {
   align-items: center;
   gap: 0.5rem;
   border-radius: 1.25rem;
-  background:  var(--app-defautl-primary-light2) !important;
-  color:  var(--app-default-primary) !important;
   text-align: center;
   /* subtext/medium/14px */
   font-family: 'Product Sans';
@@ -1478,7 +1500,7 @@ m-2{
 }
 
 .payment_type_active{
-  border-bottom:0.125rem solid var(--app-default-primary);
+  border-bottom:0.125rem solid;
 
 }
 

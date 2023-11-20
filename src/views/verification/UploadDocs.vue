@@ -5,43 +5,44 @@
         <template v-slot:maker>
           <svg xmlns="http://www.w3.org/2000/svg" width="4" height="72" viewBox="0 0 4 72" fill="none">
             <rect width="4" height="62.348" rx="2" fill="#CDCED9"/>
-            <rect y="51.0898" width="4" height="20.9103" rx="2" fill="#2C6CAC"/>
+            <rect y="51.0898" width="4" height="20.9103" rx="2" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
           </svg>
         </template>
         <template v-slot:children>
             <div style="margin-bottom: 50px">
                 <div class="business_information">Document Upload</div>
+                <div style="margin-bottom: 1rem">
+                  <p class="txt-1" :style="{color:custom_theme ? custom_theme.color : default_theme.color}">Company Document</p>
+                  <p class="txt-2">Corporate  Affairs Commission - CAC</p>
+                </div>
 
-                <div class="business_information_card">
+                <div class="business_information_card" v-if="!getBusinessProfile.cac_document || isChangingCacDocument">
+
+
+                  <upload-documents-component @file="get_business_documents" id="business" title="Kindly upload your Certification of Incorporation" ></upload-documents-component>
                   <div>
-                      <p class="txt-1">Company Document</p>
-                      <p class="txt-2">Corporate  Affairs Commission - CAC</p>
+                    <on-boarding-button @click="saveBusinessDocument" text-node="Save" btn-width="100%" :disabled="!cac_document"></on-boarding-button>
                   </div>
-
-                  <input  id="compDoc" accept="/*" type="file" @change="handleUploadCompany($event.target.files)" hidden>
-
-                  <upload-documents-component id="business" title="Kindly upload your Certification of Incorporation" v-if="!getBusinessProfile.cac_document"></upload-documents-component>
+                </div>
 
                   <div v-else class="doc_pending_wrapper">
+                    <div  style="text-align: end">
+                      <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingCacDocument = true" alt="favicon_preview"/>
+                    </div>
                     <div class="doc_pending">
                       <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile.cac_document" />
                       <img v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
-                      <img src="../../assets/cancle.svg" @click="handleCompanylDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
-
                     </div>
                     <img  v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/pendingDoc.svg" />
                   </div>
 
-
-
                   <div class="personal-docs">
-                      <p class="txt-1">Personal Document</p>
+                      <p class="txt-1" :style="{color:custom_theme ? custom_theme.color : default_theme.color}">Personal Document</p>
                       <p class="txt-2">Kindly provide one of the following personal documents for verification purposes: Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
-                </div>
+                  </div>
 
-                  <input id="personalDoc" accept="/*" type="file" @change="handleUploadPersonal($event.target.files)" hidden>
 
-                  <div v-if="!getBusinessProfile.id_document">
+                  <div v-if="!getBusinessProfile.id_document || isChangingIdDocument">
 
                     <div class="choose_document_type" style="position: relative;width: 100%;">
 
@@ -58,15 +59,21 @@
                       <img src="../../assets/Monotone.svg" style="cursor: pointer" @click="toggleLocalDropdown" />
                     </div>
 
-                    <upload-documents-component id="personal" :title="`Kindly upload your ${LocalMarkUpPlaceHolder}`"></upload-documents-component>
+                    <upload-documents-component @file="get_personal_documents" id="personal" :title="`Kindly upload your ${LocalMarkUpPlaceHolder}`"></upload-documents-component>
+
+                    <div>
+                      <on-boarding-button text-node="Save" @click="savePersonalDocument" btn-width="100%" :disabled="!id_document"></on-boarding-button>
+                    </div>
 
                 </div>
 
                   <div v-else class="doc_pending_wrapper">
+                    <div  style="text-align: end">
+                      <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingIdDocument = true" alt="favicon_preview"/>
+                    </div>
                     <div class="doc_pending">
-                      <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile.id_document" />
+                      <a :href="getBusinessProfile.id_document" target="_blank"> <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile.id_document" /></a>
                       <img v-if="getBusinessProfile?.is_id_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
-                      <img src="../../assets/cancle.svg" @click="handlePersonalDoc" style="position:absolute;right: 0;top:0;cursor: pointer;width: 40px" />
 
                     </div>
                     <img v-if="getBusinessProfile?.is_id_verified === 'false'" src="../../assets/Settings/pendingDoc.svg" />
@@ -74,11 +81,6 @@
 
                 </div>
 
-                <div>
-                  <on-boarding-button text-node="Save" btn-width="100%"></on-boarding-button>
-                </div>
-                    
-             </div>
 
         </template>
 
@@ -95,6 +97,7 @@ import VerificationCompleteModal from "../../components/modals/VerificationCompl
 import router from "../../router";
 import UploadDocumentsComponent from "@/components/forms/UploadDocumentsComponent.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
+import {RuthdoAlert} from "ruthly";
 
 
 export default {
@@ -105,7 +108,11 @@ export default {
         uploadModel:AuthRequest.upload,
         LocalMarkUpPlaceHolder:"Choose Document Type",
         localDropdown:false,
-        show:true
+        show:false,
+        cac_document:null,
+        id_document:null,
+        isChangingIdDocument:false,
+        isChangingCacDocument:false,
 
       }
     },
@@ -123,51 +130,49 @@ export default {
       toggleLocalDropdown(){
         this.localDropdown = !this.localDropdown
       },
-        handlePersonalDoc(){
-          console.log('click')
-            const input = document.getElementById('personalDoc')
-            input.click()
-        },
 
-      handleCompanylDoc(){
-            const input = document.getElementById('compDoc')
-            input.click()
-        },
-
-      parentDisableShow(){
-        this.disableShow()
-      },
-
-
-      async triggerUpload1(obj){
-        await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
-      },
-
-      async triggerUpload2(obj){
-        await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
-      },
-
-      async handleUploadCompany(file){
-        this.uploadModel.type = null;
-        this.uploadModel.file = null;
-        if (!file.length) return;
+      get_business_documents(value){
         this.uploadModel.type = 'cac_document'
-        this.uploadModel.file = file[0]
-        await this.triggerUpload1(this.uploadModel)
+        this.cac_document = value
       },
 
-      async handleUploadPersonal(file){
-        this.uploadModel.type = null;
-        this.uploadModel.file = null;
-        if (!file.length) return;
+      get_personal_documents(value){
         this.uploadModel.type = 'id_document'
-        this.uploadModel.file = file[0]
-        await this.triggerUpload2(this.uploadModel)
-      }
+        this.id_document = value
+      },
+
+
+      async saveBusinessDocument(){
+        this.uploadModel.file = this.cac_document
+        await storeUtils.fireAway().auth?.handleUploadProfilePic(this.uploadModel)
+        await Object.keys(this.uploadModel).forEach(key => {
+          return this.uploadModel[key] = null
+        })
+      },
+
+      async savePersonalDocument(){
+         this.uploadModel.file = this.id_document
+        if(this.LocalMarkUpPlaceHolder !== "Choose Document Type"){
+          await storeUtils.fireAway().auth?.handleUploadProfilePic(this.uploadModel);
+        } else{
+          RuthdoAlert({title:"Please Choose Document Type", icon:'error'})
+        }
+        await Object.keys(this.uploadModel).forEach(key => {
+          return this.uploadModel[key] = null
+        })
+      },
+
 
     },
 
     computed:{
+      default_theme(){
+        return storeUtils.fireAway().theme.getDefault_theme
+      },
+
+      custom_theme(){
+        return storeUtils.fireAway().theme.custom_theme
+      },
       loading(){
         return storeUtils.fireAway().auth?.getLoading
       },
@@ -225,8 +230,8 @@ export default {
 }
 
 .img-uploaded{
-  width: 4rem;
-  height: 2.65rem;
+  width: 10rem;
+  height: 10rem;
 }
 
 .doc_type{
@@ -249,12 +254,13 @@ export default {
   width: 100%;
   margin: 0;
   padding: 1rem;
+  font-size: 0.9rem;
 
 }
 
 .doc_type_item:hover{
-  background: #89128A;
-  color: white;
+  font-size: 1rem;
+  transform: scale(1);
 }
 
 .doc_type_options{

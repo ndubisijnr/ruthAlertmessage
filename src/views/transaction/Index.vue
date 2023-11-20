@@ -10,7 +10,7 @@
                 <p class="balance" style="margin-top: 0.75rem;">N2,456,122.05</p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
-                 <router-link :to="`/add/funds/${getUser?.access_token?.slice(0,20)}`"> <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button></router-link>
+                 <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
               </div>
             </div>
           </div>

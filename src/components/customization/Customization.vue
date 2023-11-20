@@ -8,10 +8,15 @@ import Template1 from "@/assets/Template1.svg"
 import Template2 from "@/assets/Template2.svg"
 import Template3 from "@/assets/Template3.png"
 import storeUtils from "@/utils/storeUtils";
-
+import Template_1 from "../flightItenaryTemplate/Template1.vue"
+import Template_2 from "../flightItenaryTemplate/Template2.vue"
+import Template_3 from "../flightItenaryTemplate/Template3.vue"
+import DashboardPreview from "@/views/dashboard/DashboardPreview.vue";
 export default {
   name: "Customization",
-  components:{ColorPicker,UploadDocumentsComponent,OnBoardingButton},
+
+  components:{ColorPicker,UploadDocumentsComponent,OnBoardingButton, Template_1,Template_2,Template_3, DashboardPreview},
+
   data(){
     return{
       customization:'add_favicon',
@@ -23,35 +28,62 @@ export default {
       templates:[
         {
           name:"Template 1",
-          preview:Template1
+          preview:Template1,
+
         },
         {
           name:"Template 2",
-          preview:Template2
+          preview:Template2,
+
         },
         {
           name:"Template 3",
-          preview:Template3
+          preview:Template3,
+
         }
       ]
     }
   },
+
   methods:{
     saveCustomization(){
       // this.model
       if(this.color) this.model.color = this.color;
       if(this.favicon) this.model.favicon = this.favicon;
-      if(this.template_id) this.model.template_id = this.template_id;
+      if(this.getTemplateId) this.model.template_id = this.getTemplateId;
       storeUtils.fireAway().theme.saveCustomization(this.model)
+    },
+
+    file(value){
+      this.favicon = value
+    },
+
+    updateTemplate(index){
+      storeUtils.fireAway().theme.commitColor(index, 'template')
+
     }
   },
+
+  watch:{
+    'color'(newPayload){
+      if(newPayload){
+        storeUtils.fireAway().theme.commitColor(newPayload, 'color')
+      }
+    }
+  },
+
   computed:{
+    getTemplateId(){
+      if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
+      return storeUtils.fireAway().theme.custom_theme.template_id;
+
+    },
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme
     },
 
     custom_theme(){
-      return storeUtils.fireAway().theme.getCustom_theme
+      return storeUtils.fireAway().theme.custom_theme
     },
 
     getLoading(){
@@ -71,9 +103,9 @@ export default {
 
         <div class="customization_tab">
           <ul class="customization_tab_ul">
-            <a class="customization_tab_li" @click="customization='add_favicon'" :class="{'active_customization_tab_li':customization==='add_favicon'}">Add Favicon</a>
-            <a class="customization_tab_li" @click="customization='style'" :class="{'active_customization_tab_li':customization==='style'}">Choose Color Style</a>
-            <a class="customization_tab_li" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
+            <a class="customization_tab_li" :style="customization==='add_favicon' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null"  @click="customization='add_favicon'" :class="{'active_customization_tab_li':customization==='add_favicon'}">Add Favicon</a>
+            <a class="customization_tab_li" :style="customization==='style' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='style'" :class="{'active_customization_tab_li':customization==='style'}">Choose Color Style</a>
+            <a class="customization_tab_li" :style="customization==='template' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
           </ul>
         </div>
 
@@ -84,7 +116,7 @@ export default {
             <p class="upload_favicon">Upload custom favicon</p>
           </div>
 
-          <upload-documents-component id="favicon" title="Upload  your website favicon to distinguish your site."></upload-documents-component>
+          <upload-documents-component @file="file" id="favicon" title="Upload  your website favicon to distinguish your site."></upload-documents-component>
 
 
         </div>
@@ -97,13 +129,14 @@ export default {
           </div>
 
           <div class="template_wrapper">
-            <div class="template" v-for="(i, index) in templates" :key="index" :style="selectedTemplateIndex === index ? {border:'solid 1px',borderColor:custom_theme ? custom_theme.color : default_theme.color} : null">
+            <div class="template" v-for="(i, index) in templates" :key="index" :style="getTemplateId === ++index  ? {border:'solid 1px',borderColor:custom_theme ? custom_theme.color : default_theme.color} : null">
 
               <img :src="i.preview" style="width: 3.25rem;height: 5rem;" alt="template" />
 
 
+
               <div class="template_footer">
-                <input type="radio" style="cursor: pointer" @click="selectedTemplateIndex = index" :checked="selectedTemplateIndex === index"/>
+                <input type="radio" style="cursor: pointer;" @click="updateTemplate(index)" :checked="getTemplateId === index"/>
                 <p>{{ i.name }}</p>
               </div>
             </div>
@@ -135,9 +168,17 @@ export default {
     </div>
 
     <div class="receiver_wrapper">
-      <div class="customization_reciever" :style="customization === 'style' ? {width: '700px'} : null">
-        <iframe v-if="customization === 'style'" src="https://localhost:5173/dashboard/eyJ0eXAiOiJKV1QiLCJh" style="transform: scale(0.5);transform-origin: 0 0; width: 1200px;height: 1000px;border: none;" sandbox="allow-scripts"></iframe>
-        <iframe v-if="customization === 'template'" :src="selectedTemplateIndex === 0 ? 'https://localhost:5173/templates_1/eyJ0eXAiOiJKV1QiLCJh' : selectedTemplateIndex === 1 ? 'https://localhost:5173/templates_2/eyJ0eXAiOiJKV1QiLCJh' : 'https://localhost:5173/templates_3/eyJ0eXAiOiJKV1QiLCJh'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;" sandbox="allow-scripts allow-same-origin"></iframe>
+      <div class="customization_reciever">
+        <div v-if="customization === 'style'">
+          <Template_1></Template_1>
+<!--          <DashboardPreview></DashboardPreview>-->
+        </div>
+
+        <div v-if="customization === 'template'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
+          <Template_1 v-if="getTemplateId === 1"></Template_1>
+          <Template_2 v-if="getTemplateId === 2"></Template_2>
+          <Template_3 v-if="getTemplateId === 3"></Template_3>
+        </div>
       </div>
     </div>
   </div>
@@ -243,9 +284,7 @@ export default {
 }
 
 .active_customization_tab_li{
-  color: var(--primary-main, #2C6CAC);
-
-  border-bottom: solid #2C6CAC;
+  border-bottom: solid;
   /* width: 6.18875rem; */
 }
 
@@ -271,6 +310,7 @@ export default {
 .customization_reciever{
   width: 35.1875rem;
   height: 45.6875rem;
+  overflow: scroll;
   background: #D5E2EE;
   padding: 2.04875rem 3.625rem 2.0625rem 3.5625rem;
 }

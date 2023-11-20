@@ -28,7 +28,7 @@ export default {
     },
 
     custom_theme(){
-      return storeUtils.fireAway().theme.getCustom_theme
+      return storeUtils.fireAway().theme.custom_theme
     }
   }
 }

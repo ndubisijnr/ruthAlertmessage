@@ -603,6 +603,7 @@
     position: relative;
     width: 100%;
     background:transparent;
+    margin:3.25rem 0;
 }
 
 .curretravel_type_bookingnt-tab{
@@ -784,7 +785,6 @@
   
   .user-name{
     color: #000;
-   
     font-family: 'Product Sans';
     font-size: 2rem;
     font-style: normal;

@@ -4,7 +4,7 @@
      <div class="mb" v-if="getCurrentRoute === 'Dashboard'">
       <div>
         <div v-if="getCurrentRoute === 'Dashboard'">
-<!--          <h3 class="user-name" > Hello {{getUser?.first_name}} </h3>-->
+          <h3 class="user-name" style="margin-top: 1rem" v-show="getBusinessProfile?.id_document && getBusinessProfile?.cac_document"> Hello {{getUser?.first_name}} {{getUser?.last_name}} . </h3>
 
           <div class="get-started" :style="{background:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document">
             <div class="with-tiqwa">
@@ -13,7 +13,7 @@
                 <p class="with-tiqwa-p">Please complete your setup to access your full TIQWA services, </p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
-                <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Verification`"><on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button></router-link>
+                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button></router-link>
       <!--           <on-boarding-button btn-width="8rem" color="#2C6CAC" border="none" height="2.5rem" text-node="Skip for later" background="transparent"></on-boarding-button>-->
               </div>
             </div>
@@ -146,7 +146,7 @@ export default {
     },
 
     custom_theme(){
-      return storeUtils.fireAway().theme.getCustom_theme
+      return storeUtils.fireAway().theme.custom_theme
     },
    
 
@@ -170,6 +170,9 @@ export default {
 
     },
   },
+  mounted() {
+
+  }
 }
 </script>
 

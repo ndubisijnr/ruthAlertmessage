@@ -22,24 +22,24 @@
             <div class="choose-perm-options">
               <div class="choose-perm-options-item" @click="choosePermissions = 'full'">
                 <svg v-if="choosePermissions === 'full'" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
+                  <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                   <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-                  <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
+                  <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                 </svg>
                 <svg v-else  xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
+                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
                 </svg>
                 <p>Full Permission</p>
               </div>
               <div class="choose-perm-options-item" @click="choosePermissions = 'custom'">
                 <svg  v-if="choosePermissions === 'custom'"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
+                  <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                   <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-                  <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
+                  <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                 </svg>
 
                 <svg  v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
+                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
                 </svg>
 
                 <p>Custom Permission</p>
@@ -55,7 +55,7 @@
               <div class="permission-children">
                 <div class="role-options" v-for="j in i" :key="j.id" >
                   <svg v-if="selectedRole.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="24" height="24" rx="4" fill="#2C6CAC"/>
+                    <rect width="24" height="24" rx="4" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                     <g clip-path="url(#clip0_1281_18363)">
                       <path d="M10.2864 14.7196L18.1653 6.83984L19.3781 8.05184L10.2864 17.1436L4.83154 11.6887L6.04354 10.4767L10.2864 14.7196Z" fill="white"/>
                     </g>
@@ -66,7 +66,7 @@
                     </defs>
                   </svg>
                   <svg @click="pushRole(j.id)"  v-else  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="white" stroke="#C0CCDA"/>
+                    <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
                   </svg>
                   <p class="p-2">{{ j.name }}</p>
                 </div>
@@ -240,6 +240,13 @@ export default {
 
     getError(){
       return storeUtils.fireAway().global?.getError
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.custom_theme
     },
 
   },

@@ -1,14 +1,14 @@
 <template>
     <Layout>
         <template v-slot:children>
-            <div class="modal_child">
+            <div class="modal_child" :style="{borderColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}">
                 <div class="cancel" @click="cancel">
                     <img src="../../assets/cancle.svg" />
                 </div>
                 <div class="child_body">
                     <p class="p1">Sure you want to Skip Verification?</p>
 
-                    <p class="p2">Unlock Full Access</p>
+                    <p class="p2" :style="{color: custom_theme ? custom_theme.color : default_theme.color}">Unlock Full Access</p>
 
                     <p class="p3">
                         To fully enjoy all the features and benefits of our application, 
@@ -21,7 +21,7 @@
                 </div>
                 <div class="child_footer">
                     <div class="inner_child_footer">
-                        <OnBoardingButton :height="'2.75rem'" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancel'" :background="'transparent'" :color="'#2C6CAC'"></OnBoardingButton>
+                        <OnBoardingButton :height="'2.75rem'" :border="custom_theme ? custom_theme.color : default_theme.color" :btnWidth="'11.25rem'" @click="cancel" :textNode="'No, Cancel'" :background="'transparent'" :color="custom_theme ? custom_theme.color : default_theme.color"></OnBoardingButton>
                         <OnBoardingButton @click="skip"  :height="'2.75rem'" :btnWidth="'11.25rem'" :textNode="'Yes, Confirm'"></OnBoardingButton>
                     </div>
                 </div>
@@ -35,12 +35,19 @@
 import Layout from "./Layout.vue"
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import router from "../../router";
+import storeUtils from "@/utils/storeUtils";
+import {lightenColor} from "@/mixins/themeUtils";
 export default {
     name:"VerificationSkipModal",
     components:{
         Layout,
         OnBoardingButton
     },
+  data(){
+      return{
+        lightenColor
+      }
+  },
 
     methods:{
         cancel(){
@@ -58,7 +65,14 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
-    }
+    },
+      default_theme(){
+        return storeUtils.fireAway().theme.getDefault_theme
+      },
+
+      custom_theme(){
+        return storeUtils.fireAway().theme.custom_theme
+      },
   },
 
 }
@@ -78,7 +92,7 @@ justify-content: center;
 align-items: center;
 gap: 1.5rem;
 border-radius: 0.5rem;
-border: 1px solid  #DEE2E6;
+border: 1px solid;
 background:  #FFF;
 
 /* Shadow / Small */
@@ -122,7 +136,6 @@ line-height: 1.75rem; /* 140% */
 }
 
 .p2{
-    color:  var(--app-default-primary);
 
 /* 16px/bold */
 font-family:'Product Sans';

@@ -16,16 +16,11 @@
                     <div class="side-area">
                         <div class="inner-side-area" >
                             <slot name="maker"></slot>
-                            <div class="current-active" id="nav0" v-if="getCurrentRoute === 'UploadDocs'|| getCurrentRoute === 'BusinessInfo'">
-                                <router-link v-if="getUser.is_corporate === 'true'" :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p  class="item">Business Information</p></router-link>
+                            <div class="current-active" id="nav0">
+                                <router-link v-if="getUser.is_corporate === 'true'" :to="`/verification/business/${getUser?.access_token?.slice(0,20)}`"><p  class="item" :style="getCurrentRoute === 'BusinessInfo' ?{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color),padding:'0.3rem'}:null">Business Information</p></router-link>
                                 <p v-else  class="item" style="cursor:not-allowed" >Business Information</p>
-                                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><p class="item" >Document Upload</p></router-link>
+                                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><p class="item" :style="getCurrentRoute === 'UploadDocs' ?{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color),padding:'0.3rem'}:null">Document Upload</p></router-link>
                             </div>
-                          <div class="current-active" v-else>
-                            <p class="item" v-if="getUser.is_corporate === 'false'" style="cursor:not-allowed" >Business Information</p>
-                            <p class="item" v-else @click="switchToBusiness">Business Information</p>
-                            <p class="item" @click="switchToDoc">Document Upload</p>
-                          </div>
                            
                         </div>
                     </div>
@@ -45,6 +40,7 @@
 import VerificationSkipModal from '../../components/modals/VerificationSkipModal.vue';
 import storeUtils from "../../utils/storeUtils"
 import router from "../../router";
+import {lightenColor} from "@/mixins/themeUtils";
 
 export default {
     name:"Layout",
@@ -61,6 +57,7 @@ export default {
     },
 
     methods:{
+      lightenColor,
       switchToBusiness(){
         storeUtils.fireAway().global?.commitVerificationType('business')
       },
@@ -82,6 +79,13 @@ export default {
     },
 
     computed: {
+      default_theme(){
+        return storeUtils.fireAway().theme.getDefault_theme
+      },
+
+      custom_theme(){
+        return storeUtils.fireAway().theme.custom_theme
+      },
       getUser(){
         if(localStorage.user){
           return JSON.parse(localStorage.user)
@@ -97,7 +101,6 @@ export default {
       storeUtils.fireAway().auth?.getBusinessProfile()
 
     })
-    if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization()
 
   }
 
@@ -218,15 +221,15 @@ main{
     font-weight: 400;
     line-height: 1.75rem; /* 175% */
     cursor: pointer;
-      color: #393A4A;
-  background: transparent;
-  border: none;
+    color: #393A4A;
+    background: transparent;
+    border: none;
 }
 
 
 
 #nav0 a.router-link-exact-active {
-  background:  var(--app-defautl-primary-light);
+  //background:  var(--app-defautl-primary-light);
   color: white !important;
   text-align: center;
   width: auto;

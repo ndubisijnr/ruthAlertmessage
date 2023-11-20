@@ -42,7 +42,8 @@
       <!-- <div v-for="i in extractAirlineDetails(getFlightResult)">
         {{ i }}
       </div> -->
-      <div class="result_area">
+      <div style="width: 100%">
+        <div class="result_area">
         <FlightFliter></FlightFliter>
         <section style="width: 100%;" v-if="getFlightResult[0]?.inbound.length > 0 ">
           <RoundTripCard></RoundTripCard>
@@ -53,6 +54,7 @@
      
     
        
+      </div>
       </div>
      
    
@@ -155,7 +157,6 @@ export default {
   gap: 1.75rem;
   align-items: start;
   justify-content: start;
-  width: 100%;
 
 }
 .best_offer{
@@ -628,7 +629,6 @@ line-height: 1.75rem; /* 175% */
   border: 1px solid  #E5E9F2;
   height: auto;
   position: relative;
-  border: solid;
 
 }
 
@@ -774,6 +774,7 @@ line-height: 1.75rem; /* 175% */
 
 .flight-result{
   margin: 0 0;
+  width: 100%;
 }
 
 .destination_type{
