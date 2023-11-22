@@ -1,0 +1,41 @@
+{
+  "cli": {
+    "version": ">= 5.2.0"
+  },
+  "build": {
+    "production": {
+      "node": "18.18.2"
+    },
+
+    "development": {
+      "extends": "production",
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
+
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+
+    "preview3": {
+      "developmentClient": true
+    }
+
+  },
+  "submit": {
+    "production": {}
+  }
+}
