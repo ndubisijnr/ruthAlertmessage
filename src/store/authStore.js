@@ -78,6 +78,10 @@ export const useAuthStore = defineStore('authStore', {
                     localStorage.progressNav = JSON.stringify([])
                     localStorage.theme = JSON.stringify(responseData.data.customizations)
                     this.loading = false
+                    if(responseData.data.account_type === 'super_admin'){
+                        await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
+
+                    }else{
                     if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
                         if(responseData.data.is_corporate === 'true'){
                             await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
@@ -86,6 +90,7 @@ export const useAuthStore = defineStore('authStore', {
                         }
                     }else{
                         await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
+                    }
                     }
                 }
             }catch (err){
