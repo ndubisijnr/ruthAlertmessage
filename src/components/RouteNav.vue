@@ -2,11 +2,18 @@
   <div class="breadcrumb-sub">
     <!-- :to="i.name.includes('Booking') ? i.path.split(':')[0] + `${getUser?.access_token?.slice(0,20)}` : "  -->
     <!-- :to="`${i.path.split(':')[0]}${getUser?.access_token?.slice(0,20)}`"  -->
-    <span  v-for="(i, index) in getAllRoute" :key="i" >
-      <span class="current-path-sub" :class="{'current-tab':getCurrentRoute===i.name}"> {{ i.name }}
-        <img src="../assets/VerificationProcess/arrow-left.svg" />
+    <span  v-for="(i, index) in getAllRoute" :key="index" >
+          <router-link :to="getAllRoute.length - 1 === index && isSelectedFlight ? '' :i.path" v-if="getAllRoute[index].name !== getCurrentRoute">
+            <span  class="current-path-sub" :class="{'current-tab':getCurrentRoute===i.name}"> {{ i.name }}
+                <img src="../assets/VerificationProcess/arrow-left.svg" />
+            </span>
+         </router-link>
+          <span v-else class="current-path-sub" :class="{'current-tab':getCurrentRoute===i.name}"> {{ i.name }}
+                <img src="../assets/VerificationProcess/arrow-left.svg" />
+          </span>
       </span>
-    </span>
+<!--     {{getCurrentRoute}}-->
+
    <!-- <span class="">{{getCurrentRoute}}</span> -->
   </div>
 </template>
@@ -28,6 +35,11 @@ export default {
 
     getCurrentRoute(){
       return router.currentRoute.value.name
+    },
+
+    isSelectedFlight(){
+      const flight = localStorage.selectedFlight
+      if(!flight) return true;
     },
 
 

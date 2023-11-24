@@ -6,6 +6,10 @@ export default {
         return apiService.Client.post(`/api/${tenant_id}/flight/search`, payload)
     },
 
+    multiCitySearch(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/flight/multi_city/search`, payload)
+    },
+
     airports() {
         return apiService.Client.get(`/api/airports`)
     },

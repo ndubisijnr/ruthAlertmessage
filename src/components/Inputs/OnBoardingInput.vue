@@ -6,7 +6,7 @@
       <div style="position: relative;width: 100%">
          <label class="label" :class="{'focused':isFocused}">{{ label }}</label>
         <div style="position: relative;">
-          <div v-if="type == 'tel'" style="position: absolute;display: flex;top: 1.25rem;left: 1.25rem;align-items: center;cursor: pointer;gap: 0.25rem;">
+          <div v-if="type === 'tel'" style="position: absolute;display: flex;top: 1.25rem;left: 1.25rem;align-items: center;cursor: pointer;gap: 0.25rem;">
             <div style="display: flex;gap: 0.5rem;">
               <img src="../../assets/countries/ngn.svg" style="width: 1.5rem;height: 1.5rem;" />
               <span class="country_code"> +234</span>
@@ -17,8 +17,8 @@
                 fill="#292D32" />
             </svg>
           </div>
-          
-          <input :id="id" @keydown="validate" :name="name" :autocomplete="autocomplete" :max="max" required :style="[style, width ?  {width: width,paddingLeft:type === 'tel' ? '7rem' : null} : null, isFocused ? {border:custom_theme ? custom_theme.color : default_theme.color,outlineColor:custom_theme ? `${custom_theme.color} !important` : default_theme.color, caretColor:custom_theme ? custom_theme.color : default_theme.color} : null]"
+
+          <input  :id="id" @keydown="validate" :name="name" :autocomplete="autocomplete" :max="max" required :style="[style, width ?  {width: width,paddingLeft:type === 'tel' ? '7rem' : null} : null, isFocused ? {border:custom_theme ? custom_theme.color : default_theme.color,outlineColor:custom_theme ? `${custom_theme.color} !important` : default_theme.color, caretColor:custom_theme ? custom_theme.color : default_theme.color} : null]"
             :type="type" class="formInput" :placeholder="type === 'tel' ? null : placeholder" :class="{ 'focused': isFocused }" :readonly="readonly"
             v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut" @input="emitValue" />
           <div class="loader">
@@ -56,7 +56,7 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "OnBoardingInput",
   components: { SpinnerLoader },
-  props: ['type', 'defaultValue', 'isvalidate', 'value', 'name', 'style', 'max', 'isFakeLoading', 'autocomplete', 'className', 'label', 'width', 'id', 'error', 'required', 'errorInput', 'placeholder', 'readonly', 'info'],
+  props: ['type', 'defaultValue', 'isvalidate', 'inputType', 'value', 'name', 'style', 'max', 'isFakeLoading', 'autocomplete', 'className', 'label', 'width', 'id', 'error', 'required', 'errorInput', 'placeholder', 'readonly', 'info'],
   data() {
     return {
       inputValue: null,
@@ -73,6 +73,7 @@ export default {
 
       this.$emit('inputValue', this.inputValue)
     },
+
 
     handleFocus() {
       this.isFocused = true

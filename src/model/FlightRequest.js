@@ -13,6 +13,16 @@ class FlightRequest{
         with_markup: false
       }
 
+      static multiCity = {
+          destinations: [],
+          adults: 1,
+          cabin: "Economy",
+          children: 0,
+          infants: 0,
+          with_non_stops: false,
+          with_markup: false
+      }
+
 
       static bookFlight = {
         passengers: [],

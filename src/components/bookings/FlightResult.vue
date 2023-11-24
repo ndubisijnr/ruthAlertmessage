@@ -6,9 +6,9 @@
       <div class="breaker1"></div>
       <div style="display: flex;flex-direction: column;margin-top: 2rem;margin-bottom: 1.44rem">
         <div class="search-result-filter-area">
-        
+
           <div class="result-details-info">
-           
+
             <div class="filter-by">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M6.66663 4.79199C6.32496 4.79199 6.04163 4.50866 6.04163 4.16699V1.66699C6.04163 1.32533 6.32496 1.04199 6.66663 1.04199C7.00829 1.04199 7.29163 1.32533 7.29163 1.66699V4.16699C7.29163 4.50866 7.00829 4.79199 6.66663 4.79199Z" fill="#292D32"/>
@@ -42,19 +42,15 @@
       <!-- <div v-for="i in extractAirlineDetails(getFlightResult)">
         {{ i }}
       </div> -->
-      <div style="width: 100%">
-        <div class="result_area">
+      <div class="result_area">
         <FlightFliter></FlightFliter>
-        <section style="width: 100%;" v-if="getFlightResult[0]?.inbound.length > 0 ">
+
+        <section style="width:70rem;" v-if="getFlightResult[0]?.inbound.length > 0 ">
           <RoundTripCard></RoundTripCard>
         </section>
-        <section style="width: 100%;" v-else>
-          <OneWayCard></OneWayCard> 
+        <section style="width:70rem;" v-else>
+          <OneWayCard></OneWayCard>
         </section>
-     
-    
-       
-      </div>
       </div>
      
    
@@ -157,6 +153,7 @@ export default {
   gap: 1.75rem;
   align-items: start;
   justify-content: start;
+  width: 90rem;
 
 }
 .best_offer{
@@ -774,7 +771,7 @@ line-height: 1.75rem; /* 175% */
 
 .flight-result{
   margin: 0 0;
-  width: 100%;
+  width: 90rem;
 }
 
 .destination_type{

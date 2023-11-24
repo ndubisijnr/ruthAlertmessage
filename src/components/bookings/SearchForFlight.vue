@@ -14,10 +14,12 @@
             <div class="booking-div-body">
               <div v-if="activeService === 'Flight'">
               <div class="booking-nav">
+
               <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
               <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
-              <p class="booking-nav-item" style="cursor:not-allowed !important">Multi City</p>
+              <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="beginMultiCitySearch(); activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
+<!--                style="cursor:not-allowed !important"-->
 
             </div>
             <div class="one-round-way-multi-city">
@@ -47,36 +49,49 @@
                   </div>
 
                   <div class="multi-city" v-show="activeDestType === 'multiCity'">
-                    <div class="new_flight" v-for="(i, index) in multiCityFlight">
+                    <div class="new_flight" v-for="(b, index) in multiCityFlight">
                       <div class="new_flight_header">
-                        <p class="flight-index">Flight {{ index + 1 }}</p>
+                        <p class="flight-index" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color,color:custom_theme ? custom_theme.color : default_theme.color}">Flight {{ index + 1 }}</p>
                         <img src="../../assets/cancle.svg"  @click="close, removeFlight(index)" style="cursor: pointer"/>
                       </div>
                       <div class="new_flight_body">
                         <div class="group-inputs">
                           <div class="input-divs">
-                            <on-boarding-input autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"/>
-                            <div class="airportsDropDown">
-                              <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                            <on-boarding-input  :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
+                              <div class="airportsDropDown" v-show="multiCityActiveInput === `from_${index}`">
+                              <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                             </div>
-                          </div>   
+                          </div>
                           <div class="input-divs">
-                            <on-boarding-input autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
-                            <div class="airportsDropDown">
-                              <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                            <on-boarding-input input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
+                            <div class="airportsDropDown" v-show="multiCityActiveInput === `to_${index}`">
+                              <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                             </div>
-                          </div>                    
-                        </div>
-                        <div class="group-inputs">
-                          <data-picker icon-id="from_icon_multicity" id="from_multicity" label="Departure Date" />
-                        </div>
-                      </div>
+                          </div>
 
+                          <div class="input-divs">
+                            <div class="group-inputs">
+                              <data-picker :min_date="b.origin" @dateValue="updateMultiCityDateValue" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
 
-                    <div class="add-new-flight" @click="addFlight">
-                      <img src="../../assets/Cards/add.svg" width="20" />
-                      <p>Add another flight</p>
+                    <div class="add-new-flight" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color}" @click="beginMultiCitySearch">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="16" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                        <g clip-path="url(#clip0_305_1400)">
+                          <path d="M15.2379 15.2394V10.668H16.7617V15.2394H21.3332V16.7632H16.7617V21.3346H15.2379V16.7632H10.6665V15.2394H15.2379Z" fill="white"/>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_305_1400">
+                            <rect width="18.2857" height="18.2857" fill="white" transform="translate(6.85715 6.85742)"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                      <p>{{multiCityFlight.length > 0 ?'Add another flight' : 'Add new flight'}}</p>
                     </div>
 
                     <div class="group-inputs"> </div>
@@ -166,11 +181,11 @@
                               <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
                             </div>
                             <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business',showClass = !showClass">Premium Economy</p>
+                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
                             </div>
 
                             <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Economy',showClass = !showClass">Business Class</p>
+                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
                             </div>
 
                             <div class="passenger-type" style="border: none">
@@ -198,7 +213,9 @@
                 </div> -->
 
                   <div class="form-area-footer">
-                    <on-boarding-button :loading="getLoading" :disabled="getLoading || !shouldSearch()" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+
                   </div>
 
                 </div>
@@ -209,10 +226,9 @@
 
               <div v-else class="coming_soon">
                 <coming-soon :page="activeService"></coming-soon>
-
               </div>
 
-            </div>
+              </div>
 
            
            
@@ -249,22 +265,32 @@ export default {
       filteredAirportTo:[],
       fromQuery:null,
       toQuery:null,
+      multiCityFromQuery:null,
+      multiCityToQuery:null,
       formatteddateFrom:null,
       dateFrom:null,
       dateTo:null,
       flightModel:FlightRequest.flight,
+      multiflightModel:FlightRequest.multiCity,
       passenger_disable_buttons:false,
       sum:null,
       lightenColor,
-      multiCityFlight:[
-        { 
-          departure_date: null,
-        return_date: null,
-        destination: null}
-      ]
+      multiCityFlight:[],
+      multiCityActiveInput:null
     }
   },
   methods:{
+
+    beginMultiCitySearch(){
+      const multi_city_payload =
+          {
+            departure_date: null,
+            origin: null,
+            destination: null
+          }
+
+          this.multiCityFlight.push(multi_city_payload)
+      },
     shouldSearch(){
       if (this.activeDestType === 'round_trip') {
         const keys_to_check_for_round_trip = ['adults', 'departure_date', 'return_date', 'destination', 'origin'];
@@ -279,6 +305,30 @@ export default {
         // Check if all keys in keys_to_check_for_round_trip exist in flightModel and have truthy values
         return  keys_to_check_for_round_trip.every(key => key in this.flightModel && this.flightModel[key]);
 
+      }
+    },
+
+    multiCitySearchFrom(index){
+      this.multiCityActiveInput = `from_${index}`
+      if(this.multiCityFromQuery?.length < 1){
+        this.filteredAirportFrom.length = 0
+      }else{
+        this.filteredAirportFrom = this.getAirports.filter(it => {
+          // let searchQuery = Object.values(it).map(i => i).toLocaleString()
+          return it.city_code === this.multiCityFromQuery?.toUpperCase() || it.city.toLowerCase() === this.multiCityFromQuery?.toLowerCase() || it.country.toLowerCase() === this.multiCityFromQuery?.toLowerCase() || it.iata_code.toLowerCase() === this.multiCityFromQuery?.toLowerCase()
+        })
+      }
+    },
+
+    multiCitySearchTo(index){
+      this.multiCityActiveInput = `to_${index}`
+      if(this.multiCityToQuery.length < 1){
+        this.filteredAirportTo.length = 0
+      }else{
+        this.filteredAirportTo = this.getAirports.filter(it => {
+          // let searchQuery = Object.values(it).map(i => i).toLocaleString()
+          return it.city_code === this.multiCityToQuery.toUpperCase() || it.city.toLowerCase() === this.multiCityToQuery.toLowerCase() || it.country.toLowerCase() === this.multiCityToQuery.toLowerCase() || it.iata_code.toLowerCase() === this.multiCityToQuery.toLowerCase()
+        })
       }
     },
 
@@ -335,8 +385,20 @@ export default {
       this.formatteddateFrom = obj.formattedDate
       this.flightModel.return_date = obj.formattedDate
     },
+
+    updateMultiCityDateValue(obj){
+      this.dateFrom = obj.date
+      this.formatteddateFrom = obj.formattedDate
+      this.flightModel.return_date = obj.formattedDate
+    },
     
-    selectDestination(id, destination, code){
+    selectDestination(id, destination, code, index){
+      if(id === `multi_city_to_input_${index}`){
+        const inputElement = document.getElementById(id)
+        inputElement.value = destination
+        this.filteredAirportTo.length = 0
+      }
+
       if(id === 'from_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
@@ -344,7 +406,15 @@ export default {
         this.filteredAirportFrom.length = 0
       }
 
-      else{
+      if(id === `multi_city_from_input_${index}`){
+            const inputElement = document.getElementById(id)
+            inputElement.value = destination
+            this.filteredAirportFrom.length = 0
+          }
+
+
+
+      if(id === 'to_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
         this.flightModel.destination = code
@@ -366,13 +436,19 @@ export default {
 
     },
 
-    searchFlight(){
+    searchFlight(type){
       // console.log(this.flightModel)
-      storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
-        this.flightModel.departure_date = null
-        this.flightModel.return_date = null
+      if(type){
+        this.multiflightModel.destinations.push(this.multiCityFlight)
+        console.log(this.multiflightModel)
+      }
+      else{
+        storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
+          this.flightModel.departure_date = null
+          this.flightModel.return_date = null
+        })
+      }
 
-      })
     },
 
     filterAirportFrom(){
@@ -670,19 +746,18 @@ export default {
 
 .add-new-flight{
   display: flex;
-  width: 12rem;
+  width: 13rem;
   padding: 0.5rem 1rem;
   align-items: center;
   gap: 0.625rem;
-  color:  var(--app-default-primary);
   font-family: 'Product Sans';
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
   border-radius: 0.25rem;
-  background:  var(--app-defautl-primary-light);
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 .flight-index{
   display: flex;
@@ -692,8 +767,6 @@ export default {
   align-items: center;
   flex-shrink: 0;
   border-radius: 1.25rem;
-  background:  var(--app-defautl-primary-light);
-  color:  var(--app-default-primary);
   font-family: 'Product Sans';
   font-size: 1rem;
   font-style: normal;

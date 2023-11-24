@@ -328,7 +328,6 @@ a:hover{
 }
 
 
-
 .m7-0{
   display: flex;
   gap: 1.5rem;
@@ -421,10 +420,9 @@ a:hover{
   position: relative;
   min-height: 100vh;
   display: flex;
-  padding: 0 10.94rem;
+  padding: 0;
   width: 100%;
   overflow-x: hidden;
-
 }
 
 

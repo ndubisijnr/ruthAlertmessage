@@ -31,6 +31,7 @@ export default {
   height: 72px;
   display: inline-block;
   /*position: relative;*/
+  width: 90rem;
   padding: 1rem 0;
   border-radius: 0;
   /* m1 */

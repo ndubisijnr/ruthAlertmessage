@@ -1,7 +1,8 @@
 <template>
     <verification-skip-modal @cancel="cancel" v-show="storeUtils.fireAway().global?.getIsSkipping"></verification-skip-modal>
     <div class="wrapper">
-        <div v-if="getCurrentRoute === 'UploadDocs'|| getCurrentRoute === 'BusinessInfo'" class="inner-wrapper">
+       <!-- super admin is not been verified -->
+        <div>
             <header class="header">
               <div class="skip-div" @click="Skip">
                 <span>Skip</span>
