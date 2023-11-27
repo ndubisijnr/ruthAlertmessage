@@ -120,6 +120,33 @@ export const useFlightStore = defineStore('flightStore', {
            }
         },
 
+        async handleMultiCityFlightSearch(payload = FlightRequest.multiCity){
+            const user = JSON.parse(localStorage?.user)
+            this.loading = true
+            try{
+                const response = await FlightService.multiCitySearch(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                this.loading = false
+                if(responseData.success){
+                    if(responseData.data.length > 0){
+                        localStorage.flightResults = JSON.stringify(responseData.data)
+                        const bookingprogressarray = JSON.parse(localStorage.progressNav)
+                        bookingprogressarray.push('Search for Flight')
+                        localStorage.progressNav = JSON.stringify(bookingprogressarray)
+                        localStorage.bookingStage = 'Flight Result'
+                        console.log(responseData.data)
+                        window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0,20)}`
+                    }else{
+                        RuthdoAlert({title:"Couldn't find any flights at the moment", icon:"error"})
+                    }
+                }
+            }catch(err){
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+
         async handleBookFlight(payload, flight_id){
             const user = JSON.parse(localStorage?.user)
             this.bookingLoading = true
@@ -141,7 +168,7 @@ export const useFlightStore = defineStore('flightStore', {
             }
          },
 
-         async handleFlightPayment(booking_refrence){
+        async handleFlightPayment(booking_refrence){
             const user = JSON.parse(localStorage?.user)
             this.errors = null
             this.loading = true
@@ -163,7 +190,7 @@ export const useFlightStore = defineStore('flightStore', {
             }
          },
 
-         async handleGetWallet(){
+        async handleGetWallet(){
             const user = JSON.parse(localStorage?.businessProfile)
             console.log(user);
             try{

@@ -24,17 +24,27 @@
                 </svg>
                 <p>Show Pricing Calender</p>
             </div>
-            <div class="filter-by">
-              <p class="and-filter-by">Sort by</p>
-              <div class="seperator_1"></div>
-              <div class="filter-items">
-                <p class="filter-item">
-                  Cheapest
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 10.3448L5 6H11L8 10.3448Z" fill="#6A8297"/>
-                  </svg>
-                </p>
+            <div style="position: relative">
+              <div class="filter-by">
+                <p class="and-filter-by">Sort by</p>
+                <div class="seperator_1"></div>
+                <div>
+                  <div class="filter-items">
+                    <p class="filter-item">
+                      Cheapest
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 10.3448L5 6H11L8 10.3448Z" fill="#6A8297"/>
+                      </svg>
+                    </p>
+                  </div>
+                  <div class="filter-by-modal">
+                    <p class="filter-by-modal-p">Cheapest</p>
+                    <p class="filter-by-modal-p">Fastest</p>
+                    <p class="filter-by-modal-p">Best Value</p>
+                  </div>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -119,6 +129,40 @@ export default {
 </script>
 
 <style scoped>
+.filter-by-modal-p{
+  display: flex;
+  width: 12.4375rem;
+  padding: 0.625rem 1.25rem;
+  align-items: center;
+  gap: 0.875rem;
+  border-radius: 0rem 0rem 0.25rem 0.25rem;
+  background: #FFF;
+  color: #222;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+
+.filter-by-modal-p:hover{
+  font-size: 1.2rem;
+}
+
+.filter-by-modal{
+  flex-direction: column;
+  position: absolute;
+  z-index: 999999;
+  display: none;
+  /* m6 */
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+}
+
+.filter-by-modal:hover{
+  display: flex;
+}
 .fare_rules{
   display: inline-flex;
   padding: 1rem;
@@ -658,6 +702,10 @@ line-height: 1.75rem; /* 175% */
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.filter-items:hover ~ .filter-by-modal {
+  display: flex;
 }
 
 .result-details{

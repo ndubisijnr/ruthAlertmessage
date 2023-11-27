@@ -98,8 +98,12 @@ export default {
       return storeUtils.fireAway().theme.getCustom_theme
     }
   },
+  beforeMount() {
+    if(localStorage.token) router.push({name:'Dashboard',params: {token:localStorage.token.slice(0,20)}})
+  },
   mounted() {
      storeUtils.fireAway().flight?.handleGetAirport()
+
   }
 }
 </script>

@@ -73,7 +73,7 @@ body {
   background: #F9FAFC;
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-family:'Product Sans';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

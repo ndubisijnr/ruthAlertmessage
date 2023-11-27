@@ -119,7 +119,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
               </svg>
-              <p> 
+              <p style="font-size: 0.875rem;font-weight: 400;">
                 Use all given names and surnames exactly as they appear in your
                 passport/ID to avoid boarding complications.
               </p>
@@ -199,6 +199,22 @@
               </div>  -->
             <!-- </div> -->
           </div>
+
+            <div class="contact-details">
+              <div style="margin-bottom: 1rem">
+                <span class="contact_details">Passport Information</span><br />
+                <span style="font-size: 1rem; font-weight: 700;">Please ensure your passport is valid for at least 6 months from the departure date</span>
+              </div>
+
+              <div class="group-inputs">
+                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Passport Number"></on-boarding-input>
+                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => w.dob = obj.formattedDate"/>
+              </div>
+              <div class="group-inputs">
+                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Passport Nationality"></on-boarding-input>
+                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="Passport Issuing Country"></on-boarding-input>
+              </div>
+            </div>
 
 
 

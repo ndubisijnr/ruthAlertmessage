@@ -71,7 +71,7 @@
 
                           <div class="input-divs">
                             <div class="group-inputs">
-                              <data-picker :min_date="b.origin" @dateValue="updateMultiCityDateValue" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
+                              <data-picker :min_date="b.origin" @dateValue="obj => b.departure_date = obj.formattedDate" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
                             </div>
                           </div>
                         </div>
@@ -214,7 +214,7 @@
 
                   <div class="form-area-footer">
                     <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
-                    <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight" text-node="Search for Flights"></on-boarding-button>
+                    <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('one-round')" text-node="Search for Flights"></on-boarding-button>
 
                   </div>
 
@@ -276,7 +276,8 @@ export default {
       sum:null,
       lightenColor,
       multiCityFlight:[],
-      multiCityActiveInput:null
+      multiCityActiveInput:null,
+      thisDate:null
     }
   },
   methods:{
@@ -387,9 +388,9 @@ export default {
     },
 
     updateMultiCityDateValue(obj){
-      this.dateFrom = obj.date
-      this.formatteddateFrom = obj.formattedDate
-      this.flightModel.return_date = obj.formattedDate
+      this.thisDate = obj.formattedDate
+      // this.formatteddateFrom = obj.formattedDate
+      // this.flightModel.return_date = obj.formattedDate
     },
     
     selectDestination(id, destination, code, index){
@@ -411,8 +412,6 @@ export default {
             inputElement.value = destination
             this.filteredAirportFrom.length = 0
           }
-
-
 
       if(id === 'to_input'){
         const inputElement = document.getElementById(id)
@@ -438,9 +437,9 @@ export default {
 
     searchFlight(type){
       // console.log(this.flightModel)
-      if(type){
+      if(type === 'multiCity'){
         this.multiflightModel.destinations.push(this.multiCityFlight)
-        console.log(this.multiflightModel)
+        storeUtils.fireAway().flight?.handleMultiCityFlightSearch()
       }
       else{
         storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
