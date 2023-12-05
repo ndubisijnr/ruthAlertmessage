@@ -7,7 +7,7 @@
             <div class="with-tiqwa">
               <div>
                 <h3 class="wallet_balance">Total Wallet Balance</h3>
-                <p class="balance" style="margin-top: 0.75rem;">N2,456,122.05</p>
+                <p class="balance" style="margin-top: 0.75rem;">N 0.00</p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
                  <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
@@ -37,22 +37,22 @@
                       </svg>
                       <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
                   </div>
-                  <div class="filter">
-                    <div class="filter-div">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
-                      </svg>
-                      <span class="filter-span">Sort By</span>
-                    </div>
-                    <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
-                    <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking"></on-boarding-button>
-                  </div>
+<!--                  <div class="filter">-->
+<!--                    <div class="filter-div">-->
+<!--                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">-->
+<!--                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>-->
+<!--                      </svg>-->
+<!--                      <span class="filter-span">Sort By</span>-->
+<!--                    </div>-->
+<!--                    <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>-->
+<!--                    <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking"></on-boarding-button>-->
+<!--                  </div>-->
               </div>
 
               <div style="margin-top: 3.5rem">
               
                 <div class="table-wrapper">
-                  <domain-table :fields="bookingFields" :data="getBookings?.data" :empty-message="`You have no transactions yet!`">
+                  <domain-table :fields="transactionFields" :empty-message="`You have no transactions yet!`">
                     <template v-slot:emptyIcon>
                       <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                       <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
@@ -101,6 +101,20 @@ import storeUtils from "../../utils/storeUtils";
 export default {
   name: "Index",
   components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards},
+  data(){
+    return{
+      transactionFields:[
+        {key:"", label:"Admin Name"},
+        // {key:"contact_email", label:"Email"},
+        {key:"amount", label:"Ref ID"},
+        // {key:"id", label:"Ticket ID"},
+        {key:"", label:"Payment Method"},
+        {key:"created_at", label:"Amount"},
+        {key:"status", label:"Status"},
+        // {key:"Action", label:"Action",id:"member"},
+      ]
+    }
+  },
 
   computed:{
     getUser(){
