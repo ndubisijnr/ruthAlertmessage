@@ -200,7 +200,7 @@
             <!-- </div> -->
           </div>
 
-            <div class="contact-details">
+            <div class="contact-details" v-if="getSelectedFlight?.document_required">
               <div style="margin-bottom: 1rem">
                 <span class="contact_details">Passport Information</span><br />
                 <span style="font-size: 1rem; font-weight: 700;">Please ensure your passport is valid for at least 6 months from the departure date</span>

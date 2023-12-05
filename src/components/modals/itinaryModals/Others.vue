@@ -2,26 +2,42 @@
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import ItineraryRequest from "@/model/ItineraryRequest";
+import storeUtils from "@/utils/storeUtils";
 
 export default {
-  name: "Refund",
+  name: "Issurance",
   components: {OnBoardingButton, Layout},
   data(){
     return{
-      model:ItineraryRequest.submitRequest,
-      showClass:false,
-      selectedValue:null
+      model:ItineraryRequest.submitRequest
     }
   },
   computed:{
     getUser(){
       return JSON.parse(localStorage?.user)
-    }
+    },
+
+    getBookedFlight(){
+      return JSON.parse(localStorage?.bookedFlight)
+    },
+
+    getSelectedFlight(){
+      return JSON.parse(localStorage?.selectedFlight)
+    },
+
   },
   methods:{
     close(){
       this.$emit('close', false)
     },
+
+    submitRequest(){
+      this.model.type = "Others"
+      this.model.attachment = this.getBookedFlight?.tickets[0]?.ticket_number.toString()
+      this.model.booking_id = this.getSelectedFlight.id
+
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+    }
   }
 }
 </script>
@@ -30,7 +46,7 @@ export default {
   <layout v-slot:children>
     <div class="modal">
       <div class="modal-header">
-        <p class="add-team-member">Refund</p>
+        <p class="add-team-member">Others</p>
         <img src="../../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
       </div>
 
@@ -47,25 +63,8 @@ export default {
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input"/>
+                    <input class="form-input-input" readonly :value="getBookedFlight.pnr"/>
                 </div>
-                  <div>
-                    <p class="class_label">Request <span class="required">*</span></p>
-                  <div class="choose_document_type" style="position: relative;">
-                    <p class="selected-item">{{ selectedValue ? selectedValue : 'Select Options'}}</p>
-                    <div class="dropDown" v-show="showClass">
-                      <div class="doc_type_options">
-                        <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'get-fund-quote', showClass = !showClass, selectedValue='Get Refund Quote'">Get Refund Quote</p>
-                        </div>
-                        <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'request-for-refund', showClass = !showClass,selectedValue='Request for Refund'">Request for Refund</p>
-                        </div>
-                      </div>
-                    </div>
-                    <img @click="showClass = !showClass" src="../../../assets/Monotone.svg" style="cursor: pointer" />
-                  </div>
-                  </div>
               </div>
               <div>
                 <div  style="margin-bottom: 0.75rem">
@@ -76,7 +75,7 @@ export default {
                     <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                       <p class="label_text">Ticket Number</p>
                     </div>
-                      <input class="form-input-input"/>
+                      <input class="form-input-input" :value="getBookedFlight"/>
                   </div>
 
 
@@ -85,7 +84,7 @@ export default {
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                         <p class="label_text">Requested By <span class="required">*</span></p>
                       </div>
-                        <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name" readonly/>
+                        <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name"/>
                     </div>
                   </div>
                 </div>
@@ -96,7 +95,7 @@ export default {
 
           <div>
             <div style="margin-bottom: 0.75rem">
-              <label class="class_label">Refund Request <span class="required">*</span></label>
+              <label class="class_label">Request <span class="required">*</span></label>
 
             </div>
             <textarea class="comment_section" v-model="model.description" placeholder="Input your request here"></textarea>
@@ -107,7 +106,7 @@ export default {
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
 
-          <on-boarding-button border="none"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
+          <on-boarding-button border="none"  btn-width="7.4375rem" text-node="Submit" @click="submitRequest"></on-boarding-button>
         </div>
 
       </div>

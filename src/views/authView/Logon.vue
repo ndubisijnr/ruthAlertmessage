@@ -15,7 +15,7 @@
       </template>
       <template v-slot:children>
         <div class="improvise">
-          <div class="login_card">
+          <div class="login_card" id="login_card" @click="unHookCard">
             <div >
               <div class="get_started">
                 <p class="lets_get_started_h">Log In</p>
@@ -78,6 +78,14 @@ export default {
   },
 
   methods:{
+    unHookCard(){
+      const card = document.getElementById('login_card')
+      card.addEventListener('drag', () => {
+          card.style.cursor = 'grabbing'
+        console.log(card)
+      })
+
+    },
     handleClick(){
       storeUtils.fireAway().auth?.login()
     },

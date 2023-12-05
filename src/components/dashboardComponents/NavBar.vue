@@ -9,11 +9,11 @@
 </template>
 
 <script>
-// import {stickyHeader} from "../../mixins/sticky";
+import {stickyHeader} from "../../mixins/sticky";
 export default {
     name:"NavBar",
   mounted() {
-      // stickyHeader()
+      stickyHeader()
   }
 }
 </script>

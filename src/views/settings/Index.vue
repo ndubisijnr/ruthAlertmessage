@@ -515,7 +515,7 @@ import storeUtils from "../../utils/storeUtils";
 import {getFirstLettersOfFirstAndLastName} from "../../mixins/lettersExtractor";
 import AuthRequest from "../../model/AuthRequest";
 import AddTeamMember from "../../components/modals/AddTeamMember.vue";
-import DomainTable from "../../components/tables/DomainTable.vue";
+import DomainTable from "../../components/tables/BaseTable.vue";
 import {RuthdoAlert} from "ruthly";
 import SettingsRequest from "../../model/SettingsRequest";
 import AddNewRole from "../../components/modals/AddNewRole.vue";

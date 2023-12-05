@@ -55,11 +55,15 @@
       <div class="result_area">
         <FlightFliter></FlightFliter>
 
-        <section style="width:70rem;" v-if="getFlightResult[0]?.inbound.length > 0 ">
+        <section style="width:70rem;" v-if="getFlightResult[0]?.inbound?.length > 0 ">
           <RoundTripCard></RoundTripCard>
         </section>
-        <section style="width:70rem;" v-else>
+        <section style="width:70rem;" v-else-if="getFlightResult[0]?.inbound?.length < 1 ">
           <OneWayCard></OneWayCard>
+        </section>
+
+        <section v-else style="width:70rem;">
+          <MultiCityCard></MultiCityCard>
         </section>
       </div>
      
@@ -75,10 +79,12 @@ import FlightFliter from "../../components/fliterComponents/FlightFliter.vue"
 import OneWayCard from "../flightCards/OneWayCard.vue";
 import RoundTripCard from "../flightCards/RoundTripCard.vue"
 import storeUtils from "../../utils/storeUtils";
+import MultiCityCard from "@/components/flightCards/MultiCityCard.vue";
+import Whoosh from  '../../assets/mixkit-air-woosh-1489.wav'
 
 export default {
   name: "FlightResult",
-  components:{BookingIndex,FlightFliter,OneWayCard,RoundTripCard},
+  components:{BookingIndex,FlightFliter,OneWayCard,RoundTripCard,MultiCityCard},
   data(){
     return{
     }
@@ -120,6 +126,10 @@ export default {
   },
 
   mounted(){
+    const audio = new Audio(Whoosh)
+    audio.volume = 0.2
+    audio.play()
+
     // storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
     //   storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
   }

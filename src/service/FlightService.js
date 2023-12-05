@@ -37,6 +37,10 @@ export default {
     
     wallet(tenant_id, user_id){
         return apiService.Client.get(`/api/${tenant_id}/wallet/${user_id}?`)
+    },
+
+    confirmBookingPrice(tenant_id, booking_id){
+        return apiService.Client.get(`/api/${tenant_id}/flight/confirm/${booking_id}`)
     }
 
 

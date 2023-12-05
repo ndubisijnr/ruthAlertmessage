@@ -130,7 +130,7 @@
 <script>
 import Index from '../../views/travelAgents/Index.vue';
 import BookingsCards from '../bookings/BookingsCards.vue';
-import DomainTable from '../tables/DomainTable.vue';
+import DomainTable from '../tables/BaseTable.vue';
 import storeUtils from '../../utils/storeUtils';
 import BookingsRequest from '../../model/BookingsRequest';
 import OnBoardingButton from '../Buttons/OnBoardingButton.vue';

@@ -50,7 +50,7 @@ export const useGlobalStore = defineStore('globalStore', {
             // }
 
             try{
-                const response = await AuthService.getTenantId('travelease.localhost')
+                const response = await AuthService.getTenantId('test_business2.localhost')
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id

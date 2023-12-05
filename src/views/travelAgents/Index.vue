@@ -91,7 +91,7 @@
 import Layout from "../Layout.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
-import DomainTable from "../../components/tables/DomainTable.vue";
+import DomainTable from "../../components/tables/BaseTable.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 export default {
   name: "Index",

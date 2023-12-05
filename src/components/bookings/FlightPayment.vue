@@ -3,6 +3,11 @@
     <EmailItinerary @close="close" v-show="isEmailTemplate"></EmailItinerary>
     <ChooseASeat @close="close" v-show="isChooseSeat"></ChooseASeat>
     <CancelItinerary @close="close" v-show="isCancel"></CancelItinerary>
+    <issurance @close="close" v-show="isIssurance"></issurance>
+    <Refund @close="close" v-show="isRefund"></Refund>
+    <Exchange @close="close" v-show="isExchange"></Exchange>
+    <Void @close="close" v-show="isVoiding"></Void>
+  <Others @close="close" v-show="isOthers"></Others>
 
   <booking-index v-slot:booking_children>
     <div class="flight_wrapper  animate__animated animate__fadeIn">
@@ -171,7 +176,7 @@
           </div>
           <div class="action_plate">
             <div class="action_wrapper">
-              <div class="action_items">
+              <div class="action_items" @click="isIssurance=true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M15.8101 20.1795C15.5501 20.1795 15.2801 20.1695 14.9901 20.1395C14.4701 20.0995 13.8801 19.9995 13.2701 19.8495L11.5901 19.4495C6.98007 18.3595 5.47007 15.9195 6.55007 11.3195L7.53007 7.12953C7.75007 6.17953 8.01007 5.40953 8.33007 4.76953C10.0501 1.21953 13.3401 1.53953 15.6801 2.08953L17.3501 2.47953C19.6901 3.02953 21.1701 3.89953 22.0001 5.22953C22.8201 6.55953 22.9501 8.26953 22.4001 10.6095L21.4201 14.7895C20.5601 18.4495 18.7701 20.1795 15.8101 20.1795ZM13.1201 3.24953C11.4501 3.24953 10.3901 3.93953 9.68007 5.41953C9.42007 5.95953 9.19007 6.62953 8.99007 7.46953L8.01007 11.6595C7.12007 15.4395 8.15007 17.0895 11.9301 17.9895L13.6101 18.3895C14.1501 18.5195 14.6601 18.5995 15.1201 18.6395C17.8401 18.9095 19.1901 17.7195 19.9501 14.4495L20.9301 10.2695C21.3801 8.33953 21.3201 6.98953 20.7201 6.01953C20.1201 5.04953 18.9401 4.38953 17.0001 3.93953L15.3301 3.54953C14.5001 3.34953 13.7601 3.24953 13.1201 3.24953Z" fill="#2C6CAC"/>
                   <path d="M8.33005 22.2497C5.76005 22.2497 4.12005 20.7097 3.07005 17.4597L1.79005 13.5097C0.370052 9.10968 1.64005 6.62968 6.02005 5.20968L7.60005 4.69968C8.12005 4.53968 8.51005 4.42968 8.86005 4.36968C9.15005 4.30968 9.43005 4.41968 9.60005 4.64968C9.77005 4.87968 9.80005 5.17968 9.68005 5.43968C9.42005 5.96968 9.19005 6.63968 9.00005 7.47968L8.02005 11.6697C7.13005 15.4497 8.16005 17.0997 11.9401 17.9997L13.6201 18.3997C14.1601 18.5297 14.6701 18.6097 15.1301 18.6497C15.4501 18.6797 15.7101 18.8997 15.8001 19.2097C15.8801 19.5197 15.7601 19.8397 15.5001 20.0197C14.8401 20.4697 14.0101 20.8497 12.9601 21.1897L11.3801 21.7097C10.2301 22.0697 9.23005 22.2497 8.33005 22.2497ZM7.78005 6.21968L6.49005 6.63968C2.92005 7.78968 2.07005 9.46968 3.22005 13.0497L4.50005 16.9997C5.66005 20.5697 7.34005 21.4297 10.9101 20.2797L12.4901 19.7597C12.5501 19.7397 12.6001 19.7197 12.6601 19.6997L11.6001 19.4497C6.99005 18.3597 5.48005 15.9197 6.56005 11.3197L7.54005 7.12968C7.61005 6.80968 7.69005 6.49968 7.78005 6.21968Z" fill="#2C6CAC"/>
@@ -189,7 +194,7 @@
 <!--              </div>-->
             </div>
             <div class="action_wrapper">
-              <div class="action_items">
+              <div class="action_items" @click="isVoiding=true">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12.0101 22.7403C11.3801 22.7403 10.7601 22.5303 10.2701 22.1103L8.69012 20.7603C8.53012 20.6203 8.13012 20.4803 7.92012 20.4803H6.17012C4.69012 20.4803 3.49012 19.2803 3.49012 17.8003V16.0903C3.49012 15.8803 3.35012 15.4803 3.22012 15.3303L1.86012 13.7303C1.04012 12.7603 1.04012 11.2403 1.86012 10.2603L3.22012 8.66031C3.35012 8.51031 3.49012 8.11031 3.49012 7.90031V6.20031C3.49012 4.72031 4.69012 3.52031 6.17012 3.52031H7.90012C8.11012 3.52031 8.50012 3.37031 8.67012 3.23031L10.2501 1.88031C11.2301 1.05031 12.7601 1.05031 13.7401 1.88031L15.3201 3.23031C15.4801 3.37031 15.8901 3.51031 16.1001 3.51031H17.8001C19.2801 3.51031 20.4801 4.71031 20.4801 6.19031V7.89031C20.4801 8.10031 20.6301 8.49031 20.7701 8.66031L22.1201 10.2403C22.9601 11.2303 22.9501 12.7603 22.1201 13.7303L20.7701 15.3103C20.6301 15.4803 20.4901 15.8703 20.4901 16.0803V17.7803C20.4901 19.2603 19.2901 20.4603 17.8101 20.4603H16.1101C15.9001 20.4603 15.5101 20.6103 15.3301 20.7503L13.7501 22.1003C13.2601 22.5303 12.6301 22.7403 12.0101 22.7403ZM6.17012 5.02031C5.52012 5.02031 4.99012 5.55031 4.99012 6.20031V7.90031C4.99012 8.47031 4.73012 9.19031 4.36012 9.63031L3.00012 11.2303C2.66012 11.6403 2.66012 12.3603 3.00012 12.7603L4.35012 14.3503C4.71012 14.7603 4.98012 15.5103 4.98012 16.0803V17.7903C4.98012 18.4403 5.51012 18.9703 6.16012 18.9703H7.90012C8.46012 18.9703 9.20012 19.2403 9.64012 19.6103L11.2301 20.9703C11.6401 21.3203 12.3601 21.3203 12.7701 20.9703L14.3501 19.6203C14.8001 19.2403 15.5301 18.9803 16.0901 18.9803H17.7901C18.4401 18.9803 18.9701 18.4503 18.9701 17.8003V16.1003C18.9701 15.5403 19.2401 14.8103 19.6101 14.3603L20.9701 12.7703C21.3201 12.3603 21.3201 11.6403 20.9701 11.2303L19.6201 9.65031C19.2401 9.20031 18.9801 8.47031 18.9801 7.91031V6.20031C18.9801 5.55031 18.4501 5.02031 17.8001 5.02031H16.1001C15.5301 5.02031 14.7901 4.75031 14.3501 4.38031L12.7601 3.02031C12.3501 2.67031 11.6401 2.67031 11.2201 3.02031L9.65012 4.38031C9.20012 4.75031 8.47012 5.02031 7.90012 5.02031H6.17012Z" fill="#2C6CAC"/>
                 <path d="M12 16.8701C11.45 16.8701 11 16.4201 11 15.8701C11 15.3201 11.44 14.8701 12 14.8701C12.55 14.8701 13 15.3201 13 15.8701C13 16.4201 12.56 16.8701 12 16.8701Z" fill="#2C6CAC"/>
@@ -199,7 +204,7 @@
               <p class="itinerary-p">Void</p>
             </div>
             <div class="action_wrapper">
-              <div class="action_items">
+              <div class="action_items" @click="isExchange=true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 3.11 16.44 3.11 16.44M3.11 16.44H7.63M3.11 16.44V21.44M2 12C2 6.48 6.44 2 12 2C18.67 2 22 7.56 22 7.56M22 7.56V2.56M22 7.56H17.56" stroke="#2C6CAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -207,7 +212,7 @@
               <p class="itinerary-p">Exchange</p>
             </div>
             <div class="action_wrapper">
-              <div class="action_items">
+              <div class="action_items" @click="isRefund=true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M17.7402 22.75H12.2602C11.8502 22.75 11.5102 22.41 11.5102 22C11.5102 21.59 11.8502 21.25 12.2602 21.25H17.7402C19.4002 21.25 20.7502 19.9 20.7502 18.24V17.8H19.6002C18.0902 17.8 16.8102 16.68 16.6902 15.24C16.6102 14.41 16.9102 13.6 17.5102 13.01C18.0202 12.49 18.7202 12.2 19.4702 12.2H20.7402V11.51C20.7402 9.85001 19.3902 8.5 17.7302 8.5H6.25023C4.59023 8.5 3.24023 9.85001 3.24023 11.51V13.24C3.24023 13.65 2.90023 13.99 2.49023 13.99C2.08023 13.99 1.74023 13.65 1.74023 13.24V11.51C1.74023 9.02001 3.76023 7 6.25023 7H17.7302C20.2202 7 22.2402 9.02001 22.2402 11.51V12.95C22.2402 13.36 21.9002 13.7 21.4902 13.7H19.4702C19.1202 13.7 18.8002 13.83 18.5702 14.07C18.2802 14.35 18.1402 14.73 18.1802 15.11C18.2402 15.77 18.8702 16.3 19.5902 16.3H21.4902C21.9002 16.3 22.2402 16.64 22.2402 17.05V18.24C22.2502 20.73 20.2302 22.75 17.7402 22.75Z" fill="#2C6CAC"/>
                   <path d="M2.5 13.16C2.09 13.16 1.75 12.82 1.75 12.41V7.84006C1.75 6.35006 2.69 5.00001 4.08 4.47001L12.02 1.47001C12.84 1.16001 13.75 1.27005 14.46 1.77005C15.18 2.27005 15.6 3.08005 15.6 3.95005V7.75003C15.6 8.16003 15.26 8.50003 14.85 8.50003C14.44 8.50003 14.1 8.16003 14.1 7.75003V3.95005C14.1 3.57005 13.92 3.22003 13.6 3.00003C13.28 2.78003 12.9 2.73003 12.54 2.87003L4.60001 5.87003C3.79001 6.18003 3.24001 6.97006 3.24001 7.84006V12.41C3.25001 12.83 2.91 13.16 2.5 13.16Z" fill="#2C6CAC"/>
@@ -222,7 +227,7 @@
               <p class="itinerary-p">Refund</p>
             </div>
             <div class="action_wrapper">
-              <div class="action_items">
+              <div class="action_items" @click="isOthers=true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M17 20.75H7C2.59 20.75 1.25 19.41 1.25 15V14.5C1.25 14.09 1.59 13.75 2 13.75C2.96 13.75 3.75 12.96 3.75 12C3.75 11.04 2.96 10.25 2 10.25C1.59 10.25 1.25 9.91 1.25 9.5V9C1.25 4.59 2.59 3.25 7 3.25H17C21.41 3.25 22.75 4.59 22.75 9V10C22.75 10.41 22.41 10.75 22 10.75C21.04 10.75 20.25 11.54 20.25 12.5C20.25 13.46 21.04 14.25 22 14.25C22.41 14.25 22.75 14.59 22.75 15C22.75 19.41 21.41 20.75 17 20.75ZM2.75 15.16C2.77 18.6 3.48 19.25 7 19.25H17C20.34 19.25 21.15 18.66 21.24 15.66C19.81 15.32 18.75 14.03 18.75 12.5C18.75 10.97 19.82 9.68 21.25 9.34V9C21.25 5.43 20.58 4.75 17 4.75H7C3.48 4.75 2.77 5.4 2.75 8.84C4.18 9.18 5.25 10.47 5.25 12C5.25 13.53 4.18 14.82 2.75 15.16Z" fill="#2C6CAC"/>
                   <path d="M10 7.25C9.59 7.25 9.25 6.91 9.25 6.5V4C9.25 3.59 9.59 3.25 10 3.25C10.41 3.25 10.75 3.59 10.75 4V6.5C10.75 6.91 10.41 7.25 10 7.25Z" fill="#2C6CAC"/>
@@ -376,11 +381,15 @@ import { formatAmount } from "../../mixins/flightUtil";
 import EmailItinerary from "@/components/modals/itinaryModals/EmailItinerary.vue";
 import ChooseASeat from "@/components/modals/itinaryModals/ChooseASeat.vue";
 import CancelItinerary from "@/components/modals/itinaryModals/CancelItinerary.vue";
-
+import Issurance from "@/components/modals/itinaryModals/Issurance.vue";
+import Void from "@/components/modals/itinaryModals/Void.vue";
+import Exchange from "@/components/modals/itinaryModals/Exchange.vue";
+import Refund from "@/components/modals/itinaryModals/Refund.vue";
+import Others from "@/components/modals/itinaryModals/Others.vue";
 
 export default{
     name: "Flight Payment",
-    components:{BookingIndex, OnBoardingButton, FlightPaymentModal,EmailItinerary, ChooseASeat,CancelItinerary},
+    components:{BookingIndex,Others,OnBoardingButton,Void,Exchange,Refund, Issurance, FlightPaymentModal,EmailItinerary, ChooseASeat,CancelItinerary},
     data(){
         return{
             isPaying:false,
@@ -394,7 +403,12 @@ export default{
             actionClicked:false,
             isEmailTemplate:false,
             isChooseSeat:false,
-            isCancel:false
+            isCancel:false,
+            isIssurance:false,
+            isVoiding:false,
+            isRefund:false,
+            isExchange:false,
+            isOthers:false
 
         }
     },
@@ -409,7 +423,12 @@ export default{
             this.isPaying = value
             this.isEmailTemplate = value
             this.isChooseSeat = value
-          this.isCancel = value
+            this.isCancel = value
+            this.isIssurance = value
+            this.isRefund = value
+            this.isVoiding = value
+            this.isExchange=value
+            this.isOthers = value
         },
         getAirportNamesByCityCode(city_code){
           const airports = JSON.parse(localStorage?.airports)
@@ -463,6 +482,8 @@ export default{
     },
     mounted(){
         storeUtils.fireAway().flight?.handleGetWallet()
+        storeUtils.fireAway().flight?.handleGetItineraryRequest()
+        storeUtils.fireAway().flight?.handleGetFlightDetails(this.getBookedFlight?.reference)
     }
 }
 

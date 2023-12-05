@@ -76,7 +76,7 @@
 <script>
 import Index from '../../views/travelAgents/Index.vue';
 import storeUtils from '../../utils/storeUtils';
-import DomainTable from '../tables/DomainTable.vue';
+import DomainTable from '../tables/BaseTable.vue';
 import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
 
 export default{

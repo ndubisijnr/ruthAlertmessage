@@ -86,7 +86,7 @@
 import storeUtils from '../../utils/storeUtils';
 import Index from '../../views/travelAgents/Index.vue';
 import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
-import DomainTable from '../tables/DomainTable.vue';
+import DomainTable from '../tables/BaseTable.vue';
 import WalletTopUp from '../modals/WalletTopUp.vue';
 import WalletDedut from '../modals/WalletDedut.vue';
 

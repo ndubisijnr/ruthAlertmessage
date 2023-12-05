@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build_css_prod": "tailwindcss -i ./src/assets/tailwind.style.css -o ./dist/output.css --watch",
+    "build_css_dev": "tailwindcss -i ./src/assets/tailwind.style.css -o ./public/style.css --watch"
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^6.1.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
     "bootstrap-vue": "^2.23.1",
-    "i": "^0.3.7",
     "pinia": "^2.1.6",
     "ruthly": "^1.0.3",
     "vue": "^3.3.4",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
     "vite": "^4.4.6"
   }
 }

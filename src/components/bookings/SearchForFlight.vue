@@ -18,7 +18,7 @@
               <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
               <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
               <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
-              <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="beginMultiCitySearch(); activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
+              <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
 <!--                style="cursor:not-allowed !important"-->
 
             </div>
@@ -49,10 +49,10 @@
                   </div>
 
                   <div class="multi-city" v-show="activeDestType === 'multiCity'">
-                    <div class="new_flight" v-for="(b, index) in multiCityFlight">
+                    <div class="new_flight" v-for="(b, index) in flightModel.destinations ? flightModel.destinations : null">
                       <div class="new_flight_header">
-                        <p class="flight-index" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color,color:custom_theme ? custom_theme.color : default_theme.color}">Flight {{ index + 1 }}</p>
-                        <img src="../../assets/cancle.svg"  @click="close, removeFlight(index)" style="cursor: pointer"/>
+                        <p class="flight-index" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color,color:'#fff'}">Flight {{ index + 1 }}</p>
+                        <img src="../../assets/cancle.svg"  @click="removeFlight(index)" style="cursor: pointer"/>
                       </div>
                       <div class="new_flight_body">
                         <div class="group-inputs">
@@ -79,7 +79,7 @@
                       </div>
                     </div>
 
-                    <div class="add-new-flight" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color}" @click="beginMultiCitySearch">
+                    <div @click="beginMultiCitySearch" class="add-new-flight" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color}">
                       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                         <g clip-path="url(#clip0_305_1400)">
@@ -91,7 +91,7 @@
                           </clipPath>
                         </defs>
                       </svg>
-                      <p>{{multiCityFlight.length > 0 ?'Add another flight' : 'Add new flight'}}</p>
+                      <p style="color: #fff">{{multiCityFlight.length > 0 ?'Add another flight' : 'Add new flight'}}</p>
                     </div>
 
                     <div class="group-inputs"> </div>
@@ -277,7 +277,11 @@ export default {
       lightenColor,
       multiCityFlight:[],
       multiCityActiveInput:null,
-      thisDate:null
+      thisDate:null,
+      departure_date: null,
+      return_date: null,
+      destination: null,
+      origin: null,
     }
   },
   methods:{
@@ -289,8 +293,16 @@ export default {
             origin: null,
             destination: null
           }
+      if(this.flightModel.destinations){
+        this.flightModel.destinations.push(multi_city_payload)
+      }else{
+        this.flightModel.destinations = []
+        this.flightModel.destinations.push(multi_city_payload)
+      }
 
-          this.multiCityFlight.push(multi_city_payload)
+
+
+
       },
     shouldSearch(){
       if (this.activeDestType === 'round_trip') {
@@ -369,7 +381,7 @@ export default {
     },
 
     removeFlight(obj){
-      this.multiCityFlight = this.multiCityFlight.filter((it, index) => {
+      this.flightModel.destinations = this.flightModel.destinations.filter((it, index) => {
         return index !== obj
       })
 
@@ -378,13 +390,13 @@ export default {
     updateDateValue(obj){
       this.dateFrom = obj.date
       this.formatteddateFrom = obj.formattedDate
-      this.flightModel.departure_date = obj.formattedDate
+      this.departure_date = obj.formattedDate
     },
 
     updateDateValueTo(obj){
       this.dateFrom = obj.date
       this.formatteddateFrom = obj.formattedDate
-      this.flightModel.return_date = obj.formattedDate
+      this.return_date = obj.formattedDate
     },
 
     updateMultiCityDateValue(obj){
@@ -403,7 +415,7 @@ export default {
       if(id === 'from_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
-        this.flightModel.origin = code
+        this.origin = code
         this.filteredAirportFrom.length = 0
       }
 
@@ -416,7 +428,7 @@ export default {
       if(id === 'to_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
-        this.flightModel.destination = code
+        this.destination = code
         this.filteredAirportTo.length = 0
       }
 
@@ -436,15 +448,21 @@ export default {
     },
 
     searchFlight(type){
-      // console.log(this.flightModel)
+      console.log(this.flightModel)
       if(type === 'multiCity'){
-        this.multiflightModel.destinations.push(this.multiCityFlight)
-        storeUtils.fireAway().flight?.handleMultiCityFlightSearch()
+        storeUtils.fireAway().flight?.handleMultiCityFlightSearch(this.flightModel)
       }
       else{
+        this.flightModel.origin = this.origin
+        this.flightModel.destination = this.destination
+        this.flightModel.return_date = this.return_date
+        this.flightModel.departure_date = this.departure_date
+        this.flightModel.with_non_stops = false
+        this.flightModel.with_markup =  false
+
         storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
-          this.flightModel.departure_date = null
-          this.flightModel.return_date = null
+          this.departure_date = null
+          this.return_date = null
         })
       }
 
@@ -473,6 +491,7 @@ export default {
 
     }
   },
+
   computed:{
     getCurrentRoute(){
       return router.currentRoute.value.name
@@ -535,6 +554,7 @@ export default {
 
 
   },
+
 
   mounted() {
   
@@ -629,11 +649,13 @@ export default {
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
 }
+
 .activeSection{
   border-radius: 0.5rem 0.5rem 0rem 0rem;
   background: var(--app-default-primary);
   color: white;
 }
+
 .airportsDropDown{
   width: 100%;
   display: flex;

@@ -93,7 +93,7 @@
 <script>
 import Layout from "../Layout.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
-import DomainTable from "../../components/tables/DomainTable.vue";
+import DomainTable from "../../components/tables/BaseTable.vue";
 import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.vue";
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import storeUtils from "../../utils/storeUtils";
