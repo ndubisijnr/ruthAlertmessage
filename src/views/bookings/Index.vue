@@ -41,7 +41,6 @@
               </div>
 <!--              <json-excel class="btn btn-default" :data="getBookings?.data" />-->
 
-              <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
               <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking" @click="isFilterBooking=true"></on-boarding-button>
             </div>
           </div>
@@ -253,6 +252,7 @@ a{
   position: absolute;
   z-index: 999999;
   display: none;
+  width: 19rem;
   /* m6 */
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
 }

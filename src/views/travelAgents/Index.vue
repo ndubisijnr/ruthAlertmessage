@@ -41,7 +41,6 @@
                 </svg>
                 <span class="filter-span">Sort By</span>
               </div> -->
-              <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>
               <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button>
             </div>
         </div>
