@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "build_css_prod": "tailwindcss -i ./src/assets/tailwind.style.css -o ./dist/output.css --watch",
-    "build_css_dev": "tailwindcss -i ./src/assets/tailwind.style.css -o ./public/style.css --watch"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^6.1.0",

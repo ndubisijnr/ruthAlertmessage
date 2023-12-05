@@ -183,20 +183,11 @@ import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";
-import {
-  FwbA,
-  FwbTable,
-  FwbTableBody,
-  FwbTableCell,
-  FwbTableHead,
-  FwbTableHeadCell,
-  FwbTableRow,
-} from 'flowbite-vue';
 
 export default {
   name: "BaseTable",
   props:['data', 'fields','isPaginate','emptyMessage','filterQuery'],
-  components:{FwbA, FwbTableCell, FwbTableRow, FwbTableHeadCell, FwbTableBody, FwbTableHead, FwbTable, OnBoardingButton},
+  components:{OnBoardingButton},
 
   data(){
     return{
