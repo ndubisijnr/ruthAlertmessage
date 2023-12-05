@@ -8,6 +8,22 @@
     font-size: 0.8rem; 
    
   }
+
+/* Hide scrollbar thumb on WebKit browsers */
+body::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+/* For Firefox */
+body {
+    scrollbar-color: transparent transparent;
+}
+
+/* For Edge */
+body {
+    scrollbar-face-color: transparent;
+}
+
   
   
 
