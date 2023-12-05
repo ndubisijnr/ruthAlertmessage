@@ -80,6 +80,7 @@ import OneWayCard from "../flightCards/OneWayCard.vue";
 import RoundTripCard from "../flightCards/RoundTripCard.vue"
 import storeUtils from "../../utils/storeUtils";
 import MultiCityCard from "@/components/flightCards/MultiCityCard.vue";
+import Whoosh from  '../../assets/mixkit-air-woosh-1489.wav'
 
 export default {
   name: "FlightResult",
@@ -125,6 +126,10 @@ export default {
   },
 
   mounted(){
+    const audio = new Audio(Whoosh)
+    audio.volume = 0.2
+    audio.play()
+
     // storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
     //   storeUtils.fireAway().booking?.commitBookingStage('Flight Result')
   }
