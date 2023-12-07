@@ -11,7 +11,7 @@ export default {
     },
 
     getUserWallet(tenant_id, user_id){
-        return apiService.Client.get(`/api/${tenant_id}/wallet/${user_id ? user_id : null}?`)
+        return apiService.Client.get(`/api/${tenant_id}/wallet/${user_id}`)
     },
 
     getTransactionSummary(tenant_id, user_id){

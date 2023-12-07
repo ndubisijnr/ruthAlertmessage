@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import TransactionService from '../service/TransactionService'
 import storeUtils from '../utils/storeUtils'
 import TravelAgentsService from '../service/TravelAgentsService'
+import {catchErrorHandler} from "@/mixins/ErrorHandler";
+import {RuthdoAlert} from "ruthly";
 
 
 export const useTransactionStore = defineStore('transactionStore', {
@@ -16,7 +18,6 @@ export const useTransactionStore = defineStore('transactionStore', {
     getters: {
         getUserWallet:state => state.userWallet,
         getLoading: state => state.loading,
-        getUserWallet: state => state.userWallet,
         getSingleTransaction: state => state.singleTransaction,
         getTransactions: state => state.transactions,
         getTransactionSummary:state => state.transactionSummary 
@@ -24,8 +25,8 @@ export const useTransactionStore = defineStore('transactionStore', {
 
     actions: {
        
-        handleGetUserWallet(){
-            return TravelAgentsService.getUserWallet(storeUtils.fireAway().global?.getTenant_id).then(async response => {
+        handleGetUserWallet(user_id){
+            return TravelAgentsService.getUserWallet(storeUtils.fireAway().global?.getTenant_id, user_id).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
                    this.userWallet = responseData.data 
@@ -71,6 +72,22 @@ export const useTransactionStore = defineStore('transactionStore', {
                 catchErrorHandler(e)
             })
         },
+
+
+        async walletSetup(payload){
+            this.loading=true
+            try{
+                const response = await TransactionService.walletSetup(storeUtils.fireAway().global?.getTenant_id, payload)
+                this.loading=false
+                if(response.data.success){
+                    RuthdoAlert({title:'Success', icon:'success'})
+                }
+            }catch (err){
+                this.loading=false
+                catchErrorHandler(err)
+            }
+
+        }
 
 
     }

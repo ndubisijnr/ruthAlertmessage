@@ -1,4 +1,5 @@
 <template>
+  <WalletCreation v-if="isWallet && !getWallet?.wallet_number" @cancel="close"></WalletCreation>
   <layout v-slot:child-content>
     <div class="overall">
       <div class="booking-wrapper">
@@ -7,10 +8,20 @@
             <div class="with-tiqwa">
               <div>
                 <h3 class="wallet_balance">Total Wallet Balance</h3>
-                <p class="balance" style="margin-top: 0.75rem;">N 0.00</p>
+                <p class="balance" style="margin-top: 0.75rem;">N {{ getWallet?.balance }}</p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
                  <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
+              </div>
+            </div>
+            <div class="account_number_wrapper" v-if="getWallet?.wallet_number">
+              <svg style="position: absolute;top:10px;right: 10px;cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M11.1 22.75H6.9C2.99 22.75 1.25 21.01 1.25 17.1V12.9C1.25 8.99 2.99 7.25 6.9 7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V17.1C16.75 21.01 15.01 22.75 11.1 22.75ZM6.9 8.75C3.8 8.75 2.75 9.8 2.75 12.9V17.1C2.75 20.2 3.8 21.25 6.9 21.25H11.1C14.2 21.25 15.25 20.2 15.25 17.1V12.9C15.25 9.8 14.2 8.75 11.1 8.75H6.9Z" fill="#6A8297"/>
+                <path d="M17.1 16.75H16C15.59 16.75 15.25 16.41 15.25 16V12.9C15.25 9.8 14.2 8.75 11.1 8.75H8C7.59 8.75 7.25 8.41 7.25 8V6.9C7.25 2.99 8.99 1.25 12.9 1.25H17.1C21.01 1.25 22.75 2.99 22.75 6.9V11.1C22.75 15.01 21.01 16.75 17.1 16.75ZM16.75 15.25H17.1C20.2 15.25 21.25 14.2 21.25 11.1V6.9C21.25 3.8 20.2 2.75 17.1 2.75H12.9C9.8 2.75 8.75 3.8 8.75 6.9V7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V15.25Z" fill="#6A8297"/>
+              </svg>
+              <div>
+                <p class="account_number_label">Account Number</p>
+                <p class="number">{{ getWallet?.wallet_number }}</p>
               </div>
             </div>
           </div>
@@ -97,12 +108,13 @@ import DomainTable from "../../components/tables/BaseTable.vue";
 import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.vue";
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import storeUtils from "../../utils/storeUtils";
-
+import WalletCreation from "@/components/modals/WalletCreation.vue";
 export default {
   name: "Index",
-  components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards},
+  components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation},
   data(){
     return{
+      isWallet:true,
       transactionFields:[
         {key:"", label:"Admin Name"},
         // {key:"contact_email", label:"Email"},
@@ -116,18 +128,34 @@ export default {
     }
   },
 
+  methods:{
+    close(value){
+      this.isWallet = value
+    }
+  },
+
   computed:{
     getUser(){
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
     },
+
+    getWallet(){
+      return storeUtils.fireAway().transaction.getUserWallet
+    },
+
+    getBusinessProfile(){
+      if(localStorage.businessProfile){
+        return JSON.parse(localStorage.businessProfile)
+      }
+    }
   },
 
   mounted(){
     storeUtils.fireAway().transaction.handleGetTransactionSummary()
     storeUtils.fireAway().transaction.handleGetUserTransaction()
-    storeUtils.fireAway().transaction.handleGetUserWallet()
+    storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id)
 
   }
 }
@@ -137,6 +165,23 @@ export default {
 a{
   text-decoration: none;
 }
+
+.account_number_wrapper{
+  position: relative;
+  margin: 1.5rem;
+  display: flex;
+  width: 15.5rem;
+  height: 6.625rem;
+  padding: 1.5rem 1.25rem 1.5rem 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  border: 1px solid var(--primary-1, #D5E2EE);
+  background: var(--primary-05, #EAF0F7);
+}
 .get-started{
   width: 100%;
   height: 12.5rem;
@@ -145,9 +190,29 @@ a{
   display: flex;
   align-items: center;
   background-repeat: no-repeat;
+  justify-content: space-between;
   background-size: contain;
   background-position: right;
   background-color: var(--app-defautl-primary-light);
+}
+
+.account_number_label{
+  color:  #6A8297;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 0.75rem;
+}
+
+.number{
+  color:#6A8297;
+  font-family: 'Product Sans';
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 

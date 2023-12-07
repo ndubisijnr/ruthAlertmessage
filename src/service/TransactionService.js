@@ -14,4 +14,8 @@ export default {
     getATransactions(tenant_id, id) {
         return apiService.Client.get(`/api/${tenant_id}/wallet/transaction/${id}`)
     },
+
+    walletSetup(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/wallet/setup`,payload)
+    }
 }
