@@ -20,42 +20,41 @@
 
             <div>
                 <div class="min_card_history">
-                    <div class="min_card_header">
+                    <div class="min_card_header" @click="isUnissuedFlightsDisplayTrue=!isUnissuedFlightsDisplayTrue">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
                         </svg>
                         <p class="text_1">Unissued Flights</p>
                     </div>
-                    <div style="padding: 1.5rem;">
+                    <div v-if="isUnissuedFlightsDisplayTrue" style="padding: 1.5rem;">
                         <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
+<!--                          {{getAgentsBooking}}-->
                             <p class="time_line">Today </p>
-                    
-                            <div v-for="i in getAgentsBooking">   
-                
-                            <div v-if="formattedDate(i.created_at) === today(i.created_at)">
-                            
+                            <div v-for="i in getAgentsBooking">
+                              <div v-if="formattedDate(i.created_at) === today()">
+
                                 <div style="display: flex;justify-content: space-between;align-items: center;">
-                                        <div class="unissued_item">
-                                            <p class="time_booked">{{ i.created_at.split("T")[0] }}</p>
-                                            
-                                            <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
-                                        </div>
+                                  <div class="unissued_item">
+                                    <p class="time_booked">{{ convertToWord(i.created_at) }}</p>
 
-                                        <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
-                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+                                    <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
+                                  </div>
 
-                                        </div>
-                                    </div>
+                                  <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
+                                    <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                                    <OnBoardingButton @click="issueTicket(i.provider_reference)" btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                        </div>
+                    
+
                         </div>
                         <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
-                            <p class="time_line">Unissued Flight History</p>
+                            <p class="time_line">Yesterday</p>
                             <div v-for="i in getAgentsBooking">  
-                                
-                                
-                                <div v-if="formattedDate(i.created_at) !== today(i.created_at)">
+                                <div v-if="formattedDate(i.created_at) !== today()">
                                 
                                     <div style="display: flex;justify-content: space-between;align-items: center;">
                                         <div class="unissued_item">
@@ -83,9 +82,9 @@
 
                 <div class="min_card_history">
                     <div class="min_card_header">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>
-                        </svg>
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
+<!--                            <path d="M12.0005 7.20035C12.7005 7.20035 13.4005 7.47035 13.9305 8.00035L20.4505 14.5204C20.7405 14.8104 20.7405 15.2904 20.4505 15.5804C20.1605 15.8704 19.6805 15.8704 19.3905 15.5804L12.8705 9.06035C12.3905 8.58035 11.6105 8.58035 11.1305 9.06035L4.61047 15.5804C4.32047 15.8704 3.84047 15.8704 3.55047 15.5804C3.26047 15.2904 3.26047 14.8104 3.55047 14.5204L10.0705 8.00035C10.6005 7.47035 11.3005 7.20035 12.0005 7.20035Z" fill="#292D32"/>-->
+<!--                        </svg>-->
                         <p class="text_1">Flights History</p>
                     </div>
                     <div>
@@ -138,10 +137,14 @@ import { convertToWord } from '../../mixins/lettersExtractor';
 
 export default{
     name:"Flight_Bookings",
-    components:{OnBoardingButton},
+    components:{OnBoardingButton,    Index,
+      BookingsCards,
+      DomainTable,
+      },
 
     data(){
         return{
+           isUnissuedFlightsDisplayTrue:false,
             flight_history_data:[
                     {key:"", label:"Customer’s Name"},
                     {key:"amount", label:"Ticket Amount"},
@@ -156,23 +159,21 @@ export default{
       
     },
 
-    components:{
-    Index,
-    BookingsCards,
-    DomainTable,
-    OnBoardingButton
-},
 
     methods:{
         today(){
             if(this.getAgentsBooking){
                 const currentDate = new Date()
-                return currentDate.getTime()
+                return currentDate.getDay()
             }
         },
 
+       issueTicket(value){
+          storeUtils.fireAway().flight.handleIssueTicket(value)
+       },
+
         formattedDate(bookingDate){
-            return new Date(bookingDate).getTime()
+            return new Date(bookingDate).getDay()
         }
     },
 
@@ -301,6 +302,7 @@ line-height: normal;
     padding: 1.25rem 1.25rem 1.25rem 1.5rem;
     background-color: #EFF2F7;
     margin: 1rem 0;
+    cursor: pointer;
 }
 
 .card_wrapper{

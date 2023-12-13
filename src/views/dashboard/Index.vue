@@ -76,8 +76,8 @@
                   <div class="booking-info">
                     <div class="search-info-area">
                       <p class="search-info">Multi City</p>
-                      <p class="search-info">{{getFlightResult[0].price_summary[0].quantity}} Passengers</p>
-                      <p class="search-info">{{getFlightResult[0].routes[0].segments[0].cabin_type}}</p>
+                      <p class="search-info">{{getFlightResult[0]?.price_summary[0].quantity}} Passengers</p>
+                      <p class="search-info">{{getFlightResult[0]?.routes[0].segments[0].cabin_type}}</p>
                       <!-- <p class="search-info">{{ getFlightResult[0]?.outbound[0]?.cabin_type }}</p> -->
                     </div>
                   </div>

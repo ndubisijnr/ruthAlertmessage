@@ -46,9 +46,19 @@ export default {
     },
 
     mounted() {
-      if(!localStorage.tenant_id){
+      if(localStorage.tenant_id){
+        // localStorage.tenant_id = responseData.data[0].id
         storeUtils.fireAway().global?.getTenant()
+        if(localStorage.tenant_id === storeUtils.fireAway().global.getTenant_id){
+          // do nothing
+        }else{
+          localStorage.removeItem('tenant_id')
+          localStorage.tenant_id =storeUtils.fireAway().global.getTenant_id
+        }
+      }else{
+        localStorage.tenant_id =storeUtils.fireAway().global.getTenant_id
       }
+
 
       if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization()
     }

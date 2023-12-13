@@ -1,6 +1,7 @@
 <template>
+  <add-team-member v-if="isAddAgents" @close="close"></add-team-member>
   <layout v-slot:child-content>
-    <div class="wrapper" v-if="getCurrentRouteName !== 'Travel Agents'">
+    <div class="overall" style="margin: 0" v-if="getCurrentRouteName !== 'Travel Agents'">
       <div class="main-wrapper">
         <div  class="side-area-wrapper">
           <div class="side-area">
@@ -16,7 +17,7 @@
             </div>
           </div>
         </div>
-        <div class="inner-main-wrapper" >
+        <div class="inner-main-wrapper">
           <slot name="children"></slot>
         </div>
 
@@ -25,7 +26,7 @@
     </div>
     <div v-else class="overall" id="overall">
       <div class="booking-wrapper">
-        <p class="travel_agents_count">Travel Agents ({{ getMembers?.length }})</p>
+        <p class="travel_agents_count">Travel Agents ( {{ getMembers?.length }} )</p>
         <div class="search_filter">
             <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -41,7 +42,7 @@
                 </svg>
                 <span class="filter-span">Sort By</span>
               </div> -->
-              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button>
+              <on-boarding-button @click="isAddAgents=true" class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button>
             </div>
         </div>
         <div style="margin-top: 3.5rem">
@@ -88,12 +89,14 @@ import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
 import DomainTable from "../../components/tables/BaseTable.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
+import AddTeamMember from "@/components/modals/AddTeamMember.vue";
 export default {
   name: "Index",
-  component:{DomainTable,OnBoardingButton},
+  component:{DomainTable,OnBoardingButton,AddTeamMember},
   data(){
     return{
       active:"Business Information",
+      isAddAgents:false,
       navs:[
           {nav:'Business Information',route:'/agents/business-information'},
           {nav:'Flight Bookings',route: '/agents/flights'},
@@ -107,7 +110,7 @@ export default {
         {key:"name", label:"Name"},
         {key:"email", label:"Email Address"},
         {key:"created_at", label:"Date of Registration"},
-        {key:"phone", label:"Phone Number"},
+        // {key:"phone", label:"Phone Number"},
         {key:"is_corporate", label:"Office Type"},
         {key:"status", label:"Status"},
         {key:"wallet", label:"Wallet Balance"},
@@ -118,7 +121,13 @@ export default {
 
     }
   },
-  components:{OnBoardingButton, DomainTable, Layout},
+  components:{AddTeamMember, OnBoardingButton, DomainTable, Layout},
+
+  methods:{
+    close(value){
+      this.isAddAgents = value
+    }
+  },
 
   computed: {
     getCurrentRoute(){
@@ -154,15 +163,14 @@ export default {
 @import url('https://fonts.cdnfonts.com/css/apercu');
 
 .travel_agents_count{
-  color: var(--black-text-04, #575A65);
-
+  color:  #575A65;
 /* bold/24px */
-font-family: 'Product Sans';
-font-size: 1.5rem;
-font-style: normal;
-font-weight: 700;
-line-height: 1.75rem; /* 116.667% */
-margin-bottom: 2.94rem;
+  font-family: 'Product Sans';
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 116.667% */
+  margin-bottom: 2.94rem;
 }
 @media (max-width: 1024px) {
   .payment-choice{
@@ -365,12 +373,14 @@ a{
   text-decoration: none !important;
 }
 .wrapper{
-  min-width: 100%;
+  //min-width: 100%;
   background-color: #F9FAFC;
   min-height: 100vh;
   overflow: scroll;
   margin: 0 !important;
   padding: 0 !important;
+
+  border: solid crimson;
 
 
 }

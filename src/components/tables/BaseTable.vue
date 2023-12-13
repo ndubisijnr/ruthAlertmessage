@@ -220,6 +220,10 @@ export default {
       if(this.getCurrentRoute.toLowerCase() === 'travel agents'){
         this.readAgent(obj)
       }
+      if(this.getCurrentRoute.toLowerCase() === 'bookings'){
+        localStorage.managedBookings = JSON.stringify(obj)
+        router.push({path:`/bookings/details/${this.getUser?.access_token?.slice(0,20)}`})
+      }
 
     },
     
@@ -237,6 +241,11 @@ export default {
   computed:{
     getTotalPage(){
         return Math.ceil(Number(this.data?.length) / Number(this.itemsPerPage))
+    },
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
     },
 
     getCurrentRoute(){

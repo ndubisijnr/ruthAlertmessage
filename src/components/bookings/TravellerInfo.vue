@@ -268,10 +268,15 @@
               <p class="booking_summary_header-summary">Booking Summary</p>
             </div>
             <div class="booking_summary_body">
-              <div class="airline_details">
-                <img :src="getSelectedFlight?.outbound[0].airline_details?.logo" class="logo" />
+<!--              {{getSelectedFlight.routes[0].segments}}-->
+              <div class="airline_details" v-if="!getSelectedFlight.is_multicity">
+                <img :src="getSelectedFlight?.outbound[0]?.airline_details?.logo" class="logo" />
                 <p class="airline_name">{{getSelectedFlight?.outbound[0].airline_details?.name}}</p>
             </div>
+              <div v-else class="airline_details">
+                <img :src="getSelectedFlight.routes[0].segments[0]?.airline_details?.logo" class="logo" />
+                <p class="airline_name">{{getSelectedFlight.routes[0].segments[0].airline_details?.name}}</p>
+              </div>
 
             <div class="airline_info">
                 <!-- <div class="actual-result-item-info">

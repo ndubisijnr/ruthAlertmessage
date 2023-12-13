@@ -296,6 +296,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
+  text-transform: capitalize;
 }
 
 .p-2{

@@ -96,7 +96,7 @@ export default{
             viewingAgent:false,
             membersFields:[
         {key:"name", label:"Name"},
-        {key:"email", label:"Email Address"},
+        // {key:"email", label:"Email Address"},
         {key:"type", label:"Role"},
         {key:"created_at", label:"Date Added"},
         {key:"status", label:"Member Status"},

@@ -1,5 +1,6 @@
 <template>
-  <WalletCreation v-if="isWallet && !getWallet?.wallet_number" @cancel="close"></WalletCreation>
+  <WalletCreation v-if="isWallet && !getWallet?.wallet_number && !getLoading" @cancel="close"></WalletCreation>
+  <add-funds @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number"></add-funds>
   <layout v-slot:child-content>
     <div class="overall">
       <div class="booking-wrapper">
@@ -11,7 +12,7 @@
                 <p class="balance" style="margin-top: 0.75rem;">N {{ getWallet?.balance }}</p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">
-                 <on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
+                 <on-boarding-button @click="addFunds=true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
               </div>
             </div>
             <div class="account_number_wrapper" v-if="getWallet?.wallet_number">
@@ -109,12 +110,14 @@ import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.v
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import storeUtils from "../../utils/storeUtils";
 import WalletCreation from "@/components/modals/WalletCreation.vue";
+import AddFunds from "@/components/modals/AddFunds.vue";
 export default {
   name: "Index",
-  components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation},
+  components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation,AddFunds},
   data(){
     return{
       isWallet:true,
+      addFunds:false,
       transactionFields:[
         {key:"", label:"Admin Name"},
         // {key:"contact_email", label:"Email"},
@@ -131,6 +134,7 @@ export default {
   methods:{
     close(value){
       this.isWallet = value
+      this.addFunds = value
     }
   },
 
@@ -143,6 +147,10 @@ export default {
 
     getWallet(){
       return storeUtils.fireAway().transaction.getUserWallet
+    },
+
+    getLoading(){
+      return storeUtils.fireAway().transaction.getLoading
     },
 
     getBusinessProfile(){

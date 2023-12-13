@@ -41,6 +41,11 @@ export default {
 
     confirmBookingPrice(tenant_id, booking_id){
         return apiService.Client.get(`/api/${tenant_id}/flight/confirm/${booking_id}`)
+    },
+
+    issueTicket(tenant_id, booking_reference){
+        return apiService.Client.get(`/api/${tenant_id}/flight/issue/${booking_reference}`)
+
     }
 
 

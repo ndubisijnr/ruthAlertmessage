@@ -5,7 +5,7 @@ import ItineraryRequest from "@/model/ItineraryRequest";
 import storeUtils from "@/utils/storeUtils";
 
 export default {
-  name: "Issurance",
+  name: "Others",
   components: {OnBoardingButton, Layout},
   data(){
     return{
@@ -18,6 +18,7 @@ export default {
     },
 
     getBookedFlight(){
+      if (!localStorage.bookedFlight) return;
       return JSON.parse(localStorage?.bookedFlight)
     },
 
@@ -63,7 +64,7 @@ export default {
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input" readonly :value="getBookedFlight.pnr"/>
+                    <input class="form-input-input" readonly :value="getBookedFlight?.pnr"/>
                 </div>
               </div>
               <div>
@@ -84,7 +85,7 @@ export default {
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                         <p class="label_text">Requested By <span class="required">*</span></p>
                       </div>
-                        <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name"/>
+                        <input class="form-input-input" :value="getUser?.first_name+' '+getUser?.last_name"/>
                     </div>
                   </div>
                 </div>

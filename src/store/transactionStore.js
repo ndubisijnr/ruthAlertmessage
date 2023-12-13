@@ -26,13 +26,18 @@ export const useTransactionStore = defineStore('transactionStore', {
     actions: {
        
         handleGetUserWallet(user_id){
+            this.loading = true
             return TravelAgentsService.getUserWallet(storeUtils.fireAway().global?.getTenant_id, user_id).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
+                    this.loading = false
                    this.userWallet = responseData.data 
                     // do nothing
+                }else{
+                    this.loading = false
                 }
             }).catch(e => {
+                this.loading = false
                 catchErrorHandler(e)
             })
         },

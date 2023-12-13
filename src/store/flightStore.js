@@ -52,13 +52,13 @@ export const useFlightStore = defineStore('flightStore', {
         getAirport: state => state.airports,
         getAirlines: state => state.airlines,
         getFlights: state => state.flightSearchPayload,
-        getSelectedFlight: () => {return JSON.parse(localStorage?.selectedFlight)},
+        getSelectedFlight: () => {return localStorage?.selectedFlight ? JSON.parse(localStorage?.selectedFlight):[]},
         getSuccess:state => state.successMsg,
         getBookFlightDetails:state => state.bookedFlightDetails,
         getPaymentLoading:state => state.paymentLoading,
         getInvoicePayload:state => state.invoicePayload,
         getShowingPaymentMethod:state => state.showingPaymentMethod,
-        getFlightResults: () => {return JSON.parse(localStorage?.flightResults)},
+        getFlightResults: () => {return localStorage.flightResults ?  JSON.parse(localStorage?.flightResults) : []},
         getWallet: state => state.wallet,
         getBookingStage: () => {return localStorage.bookingStage},
         getProgressNav:() => {return localStorage.progressNav},
@@ -225,6 +225,8 @@ export const useFlightStore = defineStore('flightStore', {
             }
         },
 
+
+
         async handleGetItineraryRequest() {
             try {
                 const response = await ItineraryService.getItineraryRequest(storeUtils.fireAway().global?.getTenant_id)
@@ -237,15 +239,21 @@ export const useFlightStore = defineStore('flightStore', {
             }
         },
 
-        async handleSubmitItineraryRequest(payload) {
+        async handleIssueTicket(booking_reference) {
+            this.loading = true
             try {
-                const response = await ItineraryService.submitRequest(storeUtils.fireAway().global?.getTenant_id, payload)
+                const response = await FlightService.issueTicket(storeUtils.fireAway().global?.getTenant_id, booking_reference)
                 let responseData = response.data
                 if (responseData.success) {
+                    this.loading = false
                     RuthdoAlert({title: 'success', icon: 'success'})
                     console.log(responseData)
+                }else{
+                    this.loading = false
+                    RuthdoAlert({title: responseData.data, icon: 'error'})
                 }
             } catch (err) {
+                this.loading = false
                 catchErrorHandler(err)
             }
 
