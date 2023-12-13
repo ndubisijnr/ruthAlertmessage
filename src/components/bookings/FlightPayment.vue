@@ -1,13 +1,5 @@
 <template>
     <FlightPaymentModal :reference="getBookedFlight.reference" :balance="getWallet.balance" :user="getUser?.first_name + ' ' + getUser?.last_name " v-if="isPaying" @close="close"></FlightPaymentModal>
-    <EmailItinerary @close="close" v-show="isEmailTemplate"></EmailItinerary>
-    <ChooseASeat @close="close" v-show="isChooseSeat"></ChooseASeat>
-    <CancelItinerary @close="close" v-show="isCancel"></CancelItinerary>
-    <issurance @close="close" v-show="isIssurance"></issurance>
-    <Refund @close="close" v-show="isRefund"></Refund>
-    <Exchange @close="close" v-show="isExchange"></Exchange>
-    <Void @close="close" v-show="isVoiding"></Void>
-  <Others @close="close" v-show="isOthers"></Others>
 
   <booking-index v-slot:booking_children>
     <div class="flight_wrapper  animate__animated animate__fadeIn">
@@ -26,10 +18,11 @@
         </div>
 
 
+      <itenary-details-component :get-user="getUser" :get-booked-flight="getBookedFlight"></itenary-details-component>
 
-       
 
-       
+
+
 
         <!-- <div style="margin: 2.5rem 0;">
             <p class="text">Flight Details</p>
@@ -124,10 +117,11 @@ import Void from "@/components/modals/itinaryModals/Void.vue";
 import Exchange from "@/components/modals/itinaryModals/Exchange.vue";
 import Refund from "@/components/modals/itinaryModals/Refund.vue";
 import Others from "@/components/modals/itinaryModals/Others.vue";
+import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
 
 export default{
     name: "Flight Payment",
-    components:{BookingIndex,Others,OnBoardingButton,Void,Exchange,Refund, Issurance, FlightPaymentModal,EmailItinerary, ChooseASeat,CancelItinerary},
+    components:{BookingIndex,ItenaryDetailsComponent,Others,OnBoardingButton,Void,Exchange,Refund, Issurance, FlightPaymentModal,EmailItinerary, ChooseASeat,CancelItinerary},
     data(){
         return{
             isPaying:false,
@@ -139,17 +133,10 @@ export default{
             toogleFareRules:false,
             activeAction:null,
             actionClicked:false,
-            isEmailTemplate:false,
-            isChooseSeat:false,
-            isCancel:false,
-            isIssurance:false,
-            isVoiding:false,
-            isRefund:false,
-            isExchange:false,
-            isOthers:false
 
         }
     },
+
     methods:{
       showAction(e, action){
         e.stopPropagation()
@@ -195,6 +182,7 @@ export default{
       window.location = `/dashboard/${user?.access_token?.slice(0,20)}`
     }
     },
+
     computed:{
        getWallet(){
         return storeUtils.fireAway().flight?.getWallet

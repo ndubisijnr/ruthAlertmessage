@@ -1,9 +1,18 @@
 <script>
 import {convertDurationToWords, convertTo12HourFormat, convertToWord, formatAmount} from "@/mixins/flightUtil";
 import storeUtils from "@/utils/storeUtils";
+import CancelItinerary from "@/components/modals/itinaryModals/CancelItinerary.vue";
+import Exchange from "@/components/modals/itinaryModals/Exchange.vue";
+import Void from "@/components/modals/itinaryModals/Void.vue";
+import Refund from "@/components/modals/itinaryModals/Refund.vue";
+import EmailItinerary from "@/components/modals/itinaryModals/EmailItinerary.vue";
+import Issurance from "@/components/modals/itinaryModals/Issurance.vue";
+import Others from "@/components/modals/itinaryModals/Others.vue";
+import ChooseASeat from "@/components/modals/itinaryModals/ChooseASeat.vue";
 
 export default {
   name: "ItenaryDetailsComponent",
+  components: {ChooseASeat, Others, Issurance, EmailItinerary, Refund, Void, Exchange, CancelItinerary},
   props:['getUser','getBookedFlight','getSelectedFlight'],
   data(){
     return{
@@ -75,6 +84,14 @@ export default {
 </script>
 
 <template>
+  <EmailItinerary @close="close" v-show="isEmailTemplate"></EmailItinerary>
+  <ChooseASeat @close="close" v-show="isChooseSeat"></ChooseASeat>
+  <CancelItinerary @close="close" v-show="isCancel"></CancelItinerary>
+  <issurance @close="close" v-show="isIssurance"></issurance>
+  <Refund @close="close" v-show="isRefund"></Refund>
+  <Exchange @close="close" v-show="isExchange"></Exchange>
+  <Void @close="close" v-show="isVoiding"></Void>
+  <Others @close="close" v-show="isOthers"></Others>
   <div>
     <div class="payment-wrapper">
       <div class="payment-wrapper-header">

@@ -19,7 +19,7 @@ export default {
     background: #00000065;
     width: 100%;
     height: 100vh;
-    z-index: 999999;
+    z-index: 9999999999;
     position: fixed;
     bottom: 0;
     top: 0;
@@ -30,7 +30,7 @@ export default {
   height: 100vh;
   overflow: scroll;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
 
 }

@@ -68,17 +68,16 @@ export default {
         </div>
 
         <div>
-          {{airlineDetails}}
           <p class="travel_section_info">Payment Details</p>
           <div class="travel_section_info_box">
             <div style="display: flex;justify-content: space-between;width: 70%">
               <div>
                 <p class="key">Payment Date</p>
-                <p class="value">{{getFlights?.first_name}} {{getFlights?.last_name}}</p>
+                <p class="value">{{airlineDetails?.created_at}}</p>
               </div>
               <div>
-                <p class="key">Transaction Number</p>
-                <p class="value"></p>
+                <p class="key">Pnr Number</p>
+                <p class="value">{{airlineDetails?.pnr}}</p>
               </div>
               <div>
                 <p class="key">Amount</p>
@@ -86,7 +85,7 @@ export default {
               </div>
               <div>
                 <p class="key">Anchor Ref</p>
-                <p class="value"></p>
+                <p class="value">{{airlineDetails?.reference}}</p>
               </div>
               <div>
                 <p class="key">status</p>
@@ -108,7 +107,6 @@ export default {
     </div>
 
   </layout>
-
 </template>
 
 <style scoped>

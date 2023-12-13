@@ -4,7 +4,7 @@ export const stickyHeader = () => {
         if(window.scrollY > 220){
             navTop.style.position = 'fixed'
             navTop.style.top = '0'
-            navTop.style.zIndex = '999'
+            navTop.style.zIndex = '1'
             navTop.style.borderBottom = '1'
             navTop.style.borderBottomColor = '#A22C4D'
         }else{
