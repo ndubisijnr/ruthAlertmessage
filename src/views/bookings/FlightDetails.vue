@@ -3,6 +3,7 @@ import Layout from "@/views/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
+import router from "@/router";
 export default {
   name: "FlightDetails",
   components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
@@ -12,14 +13,25 @@ export default {
     }
   },
 
-  computed:{
-    getFlights(){
-      if(!this.data)return;
+  methods:{
+    goBack(){
+      router.push({name:"Bookings_Details"})
+    }
+  },
+
+  computed: {
+    getFlights() {
+      if (!this.data) return;
       return JSON.parse(this.data?.flight)?.passengers
     },
-    airlineDetails(){
-      if(!this.data)return;
+    airlineDetails() {
+      if (!this.data) return;
       return JSON.parse(this.data?.flight)
+    },
+    getUser() {
+      if (localStorage.user) {
+        return JSON.parse(localStorage.user)
+      }
     }
   },
 
@@ -33,79 +45,78 @@ export default {
 <template>
   <layout v-slot:child-content>
     <div class="overall">
-      <div class="wrapper">
-      <div class="breadcrumb">
+        <div class="wrapper">
+        <div class="breadcrumb">
 
-        <p class="breadcrumb_list">Manage Flight Bookings</p>
-        <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
-        </svg>
-          <p class="breadcrumb_list">{{ data?.contact_first_name }} {{data?.contact_last_name}}</p>
+          <p @click="goBack" class="breadcrumb_list">Manage Flight Bookings</p>
+          <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
+          </svg>
+            <p class="breadcrumb_list">{{ data?.contact_first_name }} {{data?.contact_last_name}}</p>
 
-      </div>
-
-       <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
-         <p class="flight_details">Flight Details</p>
-         <on-boarding-button btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
-       </div>
-
-
-        <div>
-          <p class="travel_section_info">Travellers Information</p>
-          <div class="travel_section_info_box">
-            <div v-for="(i, index) in getFlights" style="display: flex;gap: 5.81rem">
-              <section>
-                <p class="key">Customer Name</p>
-                <p class="value">{{i.first_name}} {{i.last_name}}</p>
-              </section>
-              <section>
-                <p class="key">Category</p>
-                <p class="value">{{i.passenger_type}}</p>
-              </section>
-            </div>
-
-          </div>
         </div>
 
-        <div>
-          <p class="travel_section_info">Payment Details</p>
-          <div class="travel_section_info_box">
-            <div style="display: flex;justify-content: space-between;width: 70%">
-              <div>
-                <p class="key">Payment Date</p>
-                <p class="value">{{airlineDetails?.created_at}}</p>
-              </div>
-              <div>
-                <p class="key">Pnr Number</p>
-                <p class="value">{{airlineDetails?.pnr}}</p>
-              </div>
-              <div>
-                <p class="key">Amount</p>
-                <p class="value">{{airlineDetails?.amount}}</p>
-              </div>
-              <div>
-                <p class="key">Anchor Ref</p>
-                <p class="value">{{airlineDetails?.reference}}</p>
-              </div>
-              <div>
-                <p class="key">status</p>
-                <p class="value">{{airlineDetails?.status}}</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <div>
-          <p class="travel_section_info">Itinerary Details</p>
+         <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
+           <p class="flight_details">Flight Details</p>
+           <on-boarding-button btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
+         </div>
 
           <div>
-            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+            <p class="travel_section_info">Travellers Information</p>
+            <div class="travel_section_info_box">
+              <div v-for="(i, index) in getFlights" style="display: flex;gap: 5.81rem">
+                <section>
+                  <p class="key">Customer Name</p>
+                  <p class="value">{{i.first_name}} {{i.last_name}}</p>
+                </section>
+                <section>
+                  <p class="key">Category</p>
+                  <p class="value">{{i.passenger_type}}</p>
+                </section>
+              </div>
 
+            </div>
           </div>
-        </div>
 
-    </div>
-    </div>
+          <div>
+            <p class="travel_section_info">Payment Details</p>
+            <div class="travel_section_info_box">
+              <div style="display: flex;justify-content: space-between;width: 70%">
+                <div>
+                  <p class="key">Payment Date</p>
+                  <p class="value">{{airlineDetails?.created_at}}</p>
+                </div>
+                <div>
+                  <p class="key">Pnr Number</p>
+                  <p class="value">{{airlineDetails?.pnr}}</p>
+                </div>
+                <div>
+                  <p class="key">Amount</p>
+                  <p class="value">{{airlineDetails?.amount}}</p>
+                </div>
+                <div>
+                  <p class="key">Anchor Ref</p>
+                  <p class="value">{{airlineDetails?.reference}}</p>
+                </div>
+                <div>
+                  <p class="key">status</p>
+                  <p class="value">{{airlineDetails?.status}}</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div>
+            <p class="travel_section_info">Itinerary Details</p>
+
+            <div>
+
+            </div>
+          </div>
+      </div>
+      </div>
+
+    <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
 
   </layout>
 </template>
@@ -116,7 +127,9 @@ export default {
   align-items: center;
   width: 100%;
   flex-direction: column;
+  position: relative;
 }
+
 .breadcrumb{
   display: flex;
   gap: 0.41rem;

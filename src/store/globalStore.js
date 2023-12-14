@@ -55,6 +55,7 @@ export const useGlobalStore = defineStore('globalStore', {
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id
                     this.tenant = responseData.data[0]
+                    localStorage.tenant_id = responseData.data[0].id
                 }
 
             }catch{

@@ -9,6 +9,7 @@ import EmailItinerary from "@/components/modals/itinaryModals/EmailItinerary.vue
 import Issurance from "@/components/modals/itinaryModals/Issurance.vue";
 import Others from "@/components/modals/itinaryModals/Others.vue";
 import ChooseASeat from "@/components/modals/itinaryModals/ChooseASeat.vue";
+import router from "@/router";
 
 export default {
   name: "ItenaryDetailsComponent",
@@ -33,6 +34,12 @@ export default {
       isExchange:false,
       isOthers:false
     }
+  },
+
+  computed:{
+    getCurrentRoute(){
+      return router.currentRoute.value.fullPath
+    },
   },
 
   methods:{
@@ -61,6 +68,8 @@ export default {
         return airportName
       }
     },
+
+
 
     getCityByCityCode(city_code){
       const airports = JSON.parse(localStorage?.airports)
@@ -92,7 +101,8 @@ export default {
   <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange"></Exchange>
   <Void :data="getBookedFlight" @close="close" v-show="isVoiding"></Void>
   <Others :data="getBookedFlight" @close="close" v-show="isOthers"></Others>
-  <div>
+
+  <div :style="getCurrentRoute.includes('bookings')  ? {marginLeft: '10.5rem',marginTop:'-5rem'} : null">
     <div class="payment-wrapper">
       <div class="payment-wrapper-header">
         <img src="../../assets/tiqwa_.gif"  style="width: 15.5rem;"/>

@@ -423,6 +423,7 @@ a:hover{
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+  flex-direction: column;
 }
 
 
