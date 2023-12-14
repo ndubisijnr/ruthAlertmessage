@@ -186,6 +186,10 @@ a{
 
 }
 
+.personal:hover{
+  background: #2C6CAC;
+ }
+
 @media (max-width: 1024px) {
   .b2{
     text-align: center;

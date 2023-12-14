@@ -97,6 +97,7 @@ export default {
         </div>
         <div>
           <p class="travel_section_info">Itinerary Details</p>
+
           <div>
             <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
 

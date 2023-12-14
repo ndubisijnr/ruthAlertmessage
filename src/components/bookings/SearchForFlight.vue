@@ -201,16 +201,18 @@
 
                   </div>
 
-                  <!-- <div class="form-area-checkbox">
+                  <div class="form-area-checkbox">
                   <div class="form-area-checkbox-item">
-                    <p>With Mark Up</p>
-                  
+                    <p class="txt-m">With Mark Up</p>
+                    <input style="cursor: pointer" id="withMarkUp" type="checkbox" @change="handleCheck('withMarkUp')">
+
                   </div>
                   <div class="form-area-checkbox-item">
-                    <p>Non-Stops Only</p>
-                 
+                    <p class="txt-m">Non-Stops Only</p>
+                    <input style="cursor: pointer" id="withNonStop" type="checkbox" @change="handleCheck('withNonStop')">
+
                   </div>
-                </div> -->
+                </div>
 
                   <div class="form-area-footer">
                     <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
@@ -285,6 +287,12 @@ export default {
     }
   },
   methods:{
+    handleCheck(value){
+      const withMarkup = document.getElementById('withMarkUp')
+      const withNonStops = document.getElementById('withNonStop')
+      if(value === 'withMarkUp') this.flightModel.with_markup = withMarkup.checked
+      if(value === 'withNonStop') this.flightModel.with_non_stops = withNonStops.checked
+    },
 
     beginMultiCitySearch(){
       const multi_city_payload =
@@ -567,6 +575,15 @@ export default {
 </script>
 
 <style scoped>
+.txt-m{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
 .booking-div-head{
   display: flex;
   height: 7.25rem;
@@ -813,6 +830,7 @@ export default {
 .form-area-checkbox-item{
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 .form-area-checkbox{
   display: flex;

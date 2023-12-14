@@ -7,6 +7,7 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "Others",
   components: {OnBoardingButton, Layout},
+  props:['data'],
   data(){
     return{
       model:ItineraryRequest.submitRequest
@@ -16,15 +17,9 @@ export default {
     getUser(){
       return JSON.parse(localStorage?.user)
     },
-
-    getBookedFlight(){
-      if (!localStorage.bookedFlight) return;
-      return JSON.parse(localStorage?.bookedFlight)
-    },
-
-    getSelectedFlight(){
-      return JSON.parse(localStorage?.selectedFlight)
-    },
+    getLoading (){
+      return storeUtils.fireAway().flight.getLoading
+    }
 
   },
   methods:{
@@ -34,8 +29,8 @@ export default {
 
     submitRequest(){
       this.model.type = "Others"
-      this.model.attachment = this.getBookedFlight?.tickets[0]?.ticket_number.toString()
-      this.model.booking_id = this.getSelectedFlight.id
+      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
+      this.model.booking_id = this.data?.id
 
       storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
     }
@@ -64,7 +59,7 @@ export default {
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input" readonly :value="getBookedFlight?.pnr"/>
+                    <input class="form-input-input" readonly :value="data?.pnr"/>
                 </div>
               </div>
               <div>
@@ -76,8 +71,10 @@ export default {
                     <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                       <p class="label_text">Ticket Number</p>
                     </div>
-                      <input class="form-input-input" :value="getBookedFlight"/>
+                      <input class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
                   </div>
+
+
 
 
                   <div>
@@ -107,7 +104,7 @@ export default {
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
 
-          <on-boarding-button border="none"  btn-width="7.4375rem" text-node="Submit" @click="submitRequest"></on-boarding-button>
+          <on-boarding-button border="none" :loading="getLoading" btn-width="7.4375rem" text-node="Submit" @click="submitRequest"></on-boarding-button>
         </div>
 
       </div>

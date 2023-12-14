@@ -87,11 +87,11 @@ export default {
   <EmailItinerary @close="close" v-show="isEmailTemplate"></EmailItinerary>
   <ChooseASeat @close="close" v-show="isChooseSeat"></ChooseASeat>
   <CancelItinerary @close="close" v-show="isCancel"></CancelItinerary>
-  <issurance @close="close" v-show="isIssurance"></issurance>
-  <Refund @close="close" v-show="isRefund"></Refund>
-  <Exchange @close="close" v-show="isExchange"></Exchange>
-  <Void @close="close" v-show="isVoiding"></Void>
-  <Others @close="close" v-show="isOthers"></Others>
+  <issurance :data="getBookedFlight" @close="close" v-show="isIssurance"></issurance>
+  <Refund :data="getBookedFlight" @close="close" v-show="isRefund"></Refund>
+  <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange"></Exchange>
+  <Void :data="getBookedFlight" @close="close" v-show="isVoiding"></Void>
+  <Others :data="getBookedFlight" @close="close" v-show="isOthers"></Others>
   <div>
     <div class="payment-wrapper">
       <div class="payment-wrapper-header">

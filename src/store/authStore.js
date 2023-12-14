@@ -41,9 +41,9 @@ export const useAuthStore = defineStore('authStore', {
        async register(payload=AuthRequest.register){
            this.loading = true
             if(router.currentRoute.value.params.user_type === "cooperate_manager"){
-                payload.is_corporate = true
+                payload.is_corporate = 'true'
             } else {
-                payload.is_corporate = false
+                payload.is_corporate = 'false'
             }
 
             try {

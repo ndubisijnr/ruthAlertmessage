@@ -2,10 +2,12 @@
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import ItineraryRequest from "@/model/ItineraryRequest";
+import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "Refund",
   components: {OnBoardingButton, Layout},
+  props:['data'],
   data(){
     return{
       model:ItineraryRequest.submitRequest,
@@ -16,12 +18,22 @@ export default {
   computed:{
     getUser(){
       return JSON.parse(localStorage?.user)
+    },
+    getLoading (){
+      return storeUtils.fireAway().flight.getLoading
     }
   },
   methods:{
     close(){
       this.$emit('close', false)
     },
+    submitRequest(){
+      this.model.type = "Refund"
+      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
+      this.model.booking_id = this.data?.id
+
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+    }
   }
 }
 </script>
@@ -47,7 +59,7 @@ export default {
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input"/>
+                    <input class="form-input-input" :value="data?.pnr"/>
                 </div>
                   <div>
                     <p class="class_label">Request <span class="required">*</span></p>
@@ -76,7 +88,7 @@ export default {
                     <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                       <p class="label_text">Ticket Number</p>
                     </div>
-                      <input class="form-input-input"/>
+                      <input class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
                   </div>
 
 
@@ -107,7 +119,7 @@ export default {
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
 
-          <on-boarding-button border="none"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
+          <on-boarding-button border="none" :loading="getLoading" @click="submitRequest"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
         </div>
 
       </div>

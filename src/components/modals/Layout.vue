@@ -30,7 +30,7 @@ export default {
   height: 100vh;
   overflow: scroll;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 
 }

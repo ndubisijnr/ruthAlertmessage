@@ -2,10 +2,12 @@
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import ItineraryRequest from "@/model/ItineraryRequest";
+import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "Issurance",
   components: {OnBoardingButton, Layout},
+  props:['data'],
   data(){
     return{
       model:ItineraryRequest.submitRequest
@@ -14,11 +16,47 @@ export default {
   computed:{
     getUser(){
       return JSON.parse(localStorage?.user)
+    },
+    getLoading (){
+      return storeUtils.fireAway().flight.getLoading
     }
   },
   methods:{
     close(){
       this.$emit('close', false)
+    },
+    submitRequest(){
+      this.model.type = "Issurance"
+      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
+      this.model.booking_id = this.data?.id
+
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+    },
+
+    uploadAttachment(){
+      const input = document.getElementById('attachment')
+      input.click()
+    },
+
+    handleFileChange(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        this.$emit('file', file)
+
+        // Use FileReader to read the selected file as a data URL
+        const reader = new FileReader();
+
+        console.log(reader)
+
+        // reader.onload = (e) => {
+        //   // Update the selectedImage data property with the data URL
+        //   this.selectedImage = e.target.result;
+        //
+        // };
+        //
+        // reader.readAsDataURL(file);
+      }
     },
   }
 }
@@ -45,7 +83,7 @@ export default {
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input" v-model="model.booking_id"/>
+                    <input class="form-input-input" :value="data?.pnr"/>
                 </div>
 
               </div>
@@ -58,8 +96,8 @@ export default {
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                         <p class="label_text">Payment Receipt</p>
                       </div>
-                        <input class="form-input-input" type="file" hidden/>
-                        <p class="choose-attachment">Choose Attachment</p>
+                        <input class="form-input-input" id="attachment" @change="handleFileChange" type="file" hidden/>
+                        <p class="choose-attachment" @click="uploadAttachment">Choose Attachment</p>
                     </div>
 
 
@@ -90,7 +128,7 @@ export default {
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
 
-          <on-boarding-button border="none"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
+          <on-boarding-button border="none" :loading="getLoading" @click="submitRequest"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
         </div>
 
       </div>

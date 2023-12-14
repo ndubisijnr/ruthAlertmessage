@@ -136,7 +136,7 @@
             :style="i.inbound.length > 0 ? { 'display': 'flex !important', 'align-items': 'center !important', 'height': '15.5rem !important' } : null">
             <div style="width: 100%;">
               <p class="amount">₦ {{ formatAmount(i.amount) }}</p>
-              <on-boarding-button @click="selectFlight(i)"
+              <on-boarding-button :loading="getConfirmBookingLoading && clickedIndex === index" :disabled="getConfirmBookingLoading" @click="selectFlight(i)"
                 btn-width="10rem"
                 text-node="Book Flight"></on-boarding-button>
             </div>
@@ -387,7 +387,7 @@
                   </svg>Extra baggage will result to extra charges</p>
   
                 <div class="book-flight-details-btn">
-                  <on-boarding-button @click="selectFlight(i)" btn-width="43.875rem"
+                  <on-boarding-button @click="selectFlight(i)" :loading="getConfirmBookingLoading && clickedIndex === index" :disabled="getConfirmBookingLoading" btn-width="43.875rem"
                     :text-node="`Book Flight for ₦ ${formatAmount(i.amount)}`"></on-boarding-button>
                 </div>
   
@@ -483,7 +483,9 @@
         paginate,
         isDepartureActive: false,
         isReturnActive: false,
-        toogleFareRules: false
+        toogleFareRules: false,
+        clickedIndex:null,
+
       }
     },
     methods: {
@@ -550,13 +552,14 @@
       },
   
       selectFlight(obj) {
-        setTimeout(() => {
-          storeUtils.fireAway().flight?.commitSelectedFlight(obj)
-        }, 500)
+        storeUtils.fireAway().flight.handleConfirmBookingPrice(obj.id)
       }
     },
   
     computed: {
+      getConfirmBookingLoading(){
+        return storeUtils.fireAway().flight.getConfirmingBookingLoading
+      },
   
       sortByCheapest() {
         let prizes = this.getFlightResult.map(it => it.amount)

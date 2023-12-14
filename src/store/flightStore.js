@@ -225,8 +225,6 @@ export const useFlightStore = defineStore('flightStore', {
             }
         },
 
-
-
         async handleGetItineraryRequest() {
             try {
                 const response = await ItineraryService.getItineraryRequest(storeUtils.fireAway().global?.getTenant_id)
@@ -268,6 +266,23 @@ export const useFlightStore = defineStore('flightStore', {
                     localStorage.bookedFlight = JSON.stringify(responseData.data)
                 }
             } catch (err) {
+                catchErrorHandler(err)
+            }
+
+        },
+
+
+        async handleSubmitItineraryRequest(payload) {
+            this.loading = true
+            try {
+                const response = await ItineraryService.submitRequest(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                this.loading = false
+                if (responseData.success) {
+                    RuthdoAlert({title:'success', icon:'error'})
+                }
+            } catch (err) {
+                this.loading = false
                 catchErrorHandler(err)
             }
 
