@@ -16,7 +16,7 @@
                   <p class="txt-2">Corporate  Affairs Commission - CAC</p>
                 </div>
 
-                <div class="business_information_card" v-if="!getBusinessProfile.cac_document || isChangingCacDocument">
+                <div class="business_information_card" v-if="!getBusinessProfile?.cac_document || isChangingCacDocument">
 
 
                   <upload-documents-component @file="get_business_documents" id="business" title="Kindly upload your Certification of Incorporation" ></upload-documents-component>
@@ -30,7 +30,7 @@
                       <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingCacDocument = true" alt="favicon_preview"/>
                     </div>
                     <div class="doc_pending">
-                      <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile.cac_document" />
+                      <img class="img-uploaded" id="company_image_preview" :src="getBusinessProfile?.cac_document" />
                       <img v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
                     </div>
                     <img  v-if="getBusinessProfile?.is_cac_verified === 'false'" src="../../assets/Settings/pendingDoc.svg" />
@@ -42,7 +42,7 @@
                   </div>
 
 
-                  <div v-if="!getBusinessProfile.id_document || isChangingIdDocument">
+                  <div v-if="!getBusinessProfile?.id_document || isChangingIdDocument">
 
                     <div class="choose_document_type" style="position: relative;width: 100%;">
 
