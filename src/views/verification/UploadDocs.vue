@@ -21,7 +21,7 @@
 
                   <upload-documents-component @file="get_business_documents" id="business" title="Kindly upload your Certification of Incorporation" ></upload-documents-component>
                   <div>
-                    <on-boarding-button @click="saveBusinessDocument" text-node="Save" btn-width="100%" :disabled="!cac_document"></on-boarding-button>
+                    <on-boarding-button @click="saveBusinessDocument" text-node="Save" btn-width="100%" :loading="loading" :disabled="!cac_document || loading"></on-boarding-button>
                   </div>
                 </div>
 
@@ -49,9 +49,9 @@
                       <div>
                         <p class="doc_type"> {{ LocalMarkUpPlaceHolder }}</p>
                         <div class="doc_type_options" v-show="localDropdown">
-                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Driver\'s License',toggleLocalDropdown(),uploadModel.type= 'Driver\'s License'">Driver's License</p>
-                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='International Passport', toggleLocalDropdown(),uploadModel.type= 'International Passport'" >International Passport</p>
-                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='NIN (National Identification Number) Slip', toggleLocalDropdown(),uploadModel.type = 'NIN (National Identification Number) Slip'" >NIN (National Identification Number) Slip</p>
+<!--                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Driver\'s License',toggleLocalDropdown()">Driver's License</p>-->
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='International Passport', toggleLocalDropdown()" >International Passport</p>
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='NIN (National Identification Number) Slip', toggleLocalDropdown()">NIN (National Identification Number) Slip</p>
 
                         </div>
 
@@ -62,7 +62,7 @@
                     <upload-documents-component @file="get_personal_documents" id="personal" :title="`Kindly upload your ${LocalMarkUpPlaceHolder}`"></upload-documents-component>
 
                     <div>
-                      <on-boarding-button text-node="Save" @click="savePersonalDocument" btn-width="100%" :disabled="!id_document"></on-boarding-button>
+                      <on-boarding-button text-node="Save" @click="savePersonalDocument" btn-width="100%" :loading="loading" :disabled="!id_document || loading"></on-boarding-button>
                     </div>
 
                 </div>
@@ -72,7 +72,7 @@
                       <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingIdDocument = true" alt="favicon_preview"/>
                     </div>
                     <div class="doc_pending">
-                      <a :href="getBusinessProfile.id_document" target="_blank"> <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile.id_document" /></a>
+                      <a :href="getBusinessProfile?.id_document" target="_blank"> <img class="img-uploaded" id="person_image_preview" :src="getBusinessProfile?.id_document" /></a>
                       <img v-if="getBusinessProfile?.is_id_verified === 'false'" src="../../assets/Settings/notVerified.svg" />
 
                     </div>
@@ -188,7 +188,7 @@ export default {
       }
     },
 
-  mounted() {
+    mounted() {
       if(this.getCurrentRoute === 'Settings'){
         this.show = false
       }

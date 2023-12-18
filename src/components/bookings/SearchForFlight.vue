@@ -13,221 +13,236 @@
 
             <div class="booking-div-body">
               <div v-if="activeService === 'Flight'">
-              <div class="booking-nav">
-
-              <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
-              <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
-              <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
-              <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
-<!--                style="cursor:not-allowed !important"-->
-
-            </div>
-            <div class="one-round-way-multi-city">
-              <div class="form-area">
-
-                <div class="form-area-body">
-
-                  <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
-                    <div class="group-inputs">
-                      <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
-                        <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
-                          <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
-                        </div>
-                      </div>
-                      <div class="input-divs">
-                        <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
-                        <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
-                          <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="group-inputs">
-                      <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
-                      <data-picker @dateValue="updateDateValueTo" :min_date="flightModel.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
-                    </div>
+                <div v-if="getBusinessProfile?.is_cac_verified === 'false' && getBusinessProfile?.is_id_verified === 'false'" style="display: flex;flex-direction: column;align-items: center;justify-content: center;transform: scale(.9);">
+                  <div>
+                    <img src="../../../src/assets/Cards/LAUNCH.svg">
                   </div>
+                  <div>
+                    <p style="color:  #0E0842;text-align: center;font-family: 'Product Sans';font-size: 1.25rem;font-style: normal;font-weight: 700;line-height: 1.75rem;">Hello dolly, to get started with Travel Yakata 🎉</p>
+                    <p style=" color: #575A65;text-align: center;font-family: 'Product Sans';font-size: 1rem;font-style: normal;font-weight: 400;line-height: 1.75rem; /* 175% */width: 24.125rem;">Please complete your setup to access your full Travel Yakata services</p>
+                  </div>
+                  <div>
+                    <router-link style="text-decoration: none" :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="11.25rem" height="3.5rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Complete Profile"></on-boarding-button></router-link>
+                  </div>
+                </div>
+                <div v-else>
+                  <div class="booking-nav">
 
-                  <div class="multi-city" v-show="activeDestType === 'multiCity'">
-                    <div class="new_flight" v-for="(b, index) in flightModel.destinations ? flightModel.destinations : null">
-                      <div class="new_flight_header">
-                        <p class="flight-index" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color,color:'#fff'}">Flight {{ index + 1 }}</p>
-                        <img src="../../assets/cancle.svg"  @click="removeFlight(index)" style="cursor: pointer"/>
-                      </div>
-                      <div class="new_flight_body">
+                    <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
+                    <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
+                    <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
+                    <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
+                    <!--                style="cursor:not-allowed !important"-->
+
+                  </div>
+                  <div class="one-round-way-multi-city">
+                    <div class="form-area">
+
+                      <div class="form-area-body">
+
+                        <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
+                          <div class="group-inputs">
+                            <div class="input-divs">
+                              <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
+                              <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
+                                <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                              </div>
+                            </div>
+                            <div class="input-divs">
+                              <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                              <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
+                                <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="group-inputs">
+                            <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
+                            <data-picker @dateValue="updateDateValueTo" :min_date="flightModel.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                          </div>
+                        </div>
+
+                        <div class="multi-city" v-show="activeDestType === 'multiCity'">
+                          <div class="new_flight" v-for="(b, index) in flightModel.destinations ? flightModel.destinations : null">
+                            <div class="new_flight_header">
+                              <p class="flight-index" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color,color:'#fff'}">Flight {{ index + 1 }}</p>
+                              <img src="../../assets/cancle.svg"  @click="removeFlight(index)" style="cursor: pointer"/>
+                            </div>
+                            <div class="new_flight_body">
+                              <div class="group-inputs">
+                                <div class="input-divs">
+                                  <on-boarding-input  :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
+                                  <div class="airportsDropDown" v-show="multiCityActiveInput === `from_${index}`">
+                                    <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                  </div>
+                                </div>
+                                <div class="input-divs">
+                                  <on-boarding-input input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
+                                  <div class="airportsDropDown" v-show="multiCityActiveInput === `to_${index}`">
+                                    <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                  </div>
+                                </div>
+
+                                <div class="input-divs">
+                                  <div class="group-inputs">
+                                    <data-picker :min_date="b.origin" @dateValue="obj => b.departure_date = obj.formattedDate" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+
+                          <div @click="beginMultiCitySearch" class="add-new-flight" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color}">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="16" cy="16" r="16" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                              <g clip-path="url(#clip0_305_1400)">
+                                <path d="M15.2379 15.2394V10.668H16.7617V15.2394H21.3332V16.7632H16.7617V21.3346H15.2379V16.7632H10.6665V15.2394H15.2379Z" fill="white"/>
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_305_1400">
+                                  <rect width="18.2857" height="18.2857" fill="white" transform="translate(6.85715 6.85742)"/>
+                                </clipPath>
+                              </defs>
+                            </svg>
+                            <p style="color: #fff">{{multiCityFlight.length > 0 ?'Add another flight' : 'Add new flight'}}</p>
+                          </div>
+
+                          <div class="group-inputs"> </div>
+
+                        </div>
+
                         <div class="group-inputs">
-                          <div class="input-divs">
-                            <on-boarding-input  :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
-                              <div class="airportsDropDown" v-show="multiCityActiveInput === `from_${index}`">
-                              <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+
+
+                          <div  class="choose_document_type" style="position: relative;">
+                            <label class="class_label">Passengers </label>
+                            <p style="color:#F00" v-if="flightModel.adults < 1 && flightModel.children < 1 && flightModel.infants < 1" class="selected-item">Please add passengers</p>
+                            <p  class="selected-item">
+                              {{ flightModel.adults > 0 ? `${flightModel.adults} Adult` : null}}
+                              {{flightModel.infants > 0 && flightModel.adults > 0 ? ',' : null}}
+                              {{ flightModel.infants > 0 ? `${flightModel.infants} Infants` : null}}
+                              {{flightModel.children > 0 &&  flightModel.adults > 0 && flightModel.infants > 0 ? 'and' : null }}
+                              {{ flightModel.children > 0 ? `${flightModel.children} ${flightModel.children > 1 ? 'Children' : 'child'} ` : null}}
+                            </p>
+                            <div v-if="showPassengers"  class="dropDown">
+                              <div class="doc_type_options">
+                                <div class="passenger-type">
+                                  <div style="display: flex;flex-direction: column">
+                                    <p class="passenger-type-text-1">Adults</p>
+                                    <p class="text-2">12+ and above</p>
+                                  </div>
+
+                                  <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                                    <button :disabled="flightModel.adults < 1" @click="passengerSelectionControl('adult', 'minus')" class="minus-button"> - </button>
+                                    <p class="text-2">{{ flightModel.adults }}</p>
+                                    <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('adult', 'add')" class="add-button"> + </button>
+                                  </div>
+
+                                </div>
+                                <div class="passenger-type">
+                                  <div style="display: flex;flex-direction: column">
+                                    <p class="passenger-type-text-1">Children</p>
+                                    <p class="text-2">2-12</p>
+                                  </div>
+
+                                  <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                                    <button :disabled="flightModel.children < 1" @click="passengerSelectionControl('children', 'minus')" class="minus-button"> - </button>
+                                    <p class="text-2">{{ flightModel.children }}</p>
+                                    <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('children', 'add')" class="add-button"> + </button>
+
+                                  </div>
+
+                                </div>
+                                <div class="passenger-type">
+                                  <div style="display: flex;flex-direction: column">
+                                    <p class="passenger-type-text-1">Infant</p>
+                                    <p class="text-2">0 - 2(years)</p>
+                                  </div>
+
+                                  <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                                    <button :disabled="flightModel.infants < 1" @click="passengerSelectionControl('infants', 'minus')" class="minus-button"> - </button>
+                                    <p class="text-2">{{ flightModel.infants }}</p>
+                                    <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('infants', 'add')" class="add-button"> + </button>
+
+                                  </div>
+
+                                </div>
+
+
+                                <div class="info-area">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z" fill="#1D1E2C"/>
+                                  </svg>
+                                  <p class="info-area-p">The age of a child must be valid for the duration of the journey. For example,
+                                    if a child celebrates a birthday during a trip,
+                                    please use their age on the return flight date.</p>
+                                </div>
+
+                              </div>
+
+
                             </div>
-                          </div>
-                          <div class="input-divs">
-                            <on-boarding-input input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
-                            <div class="airportsDropDown" v-show="multiCityActiveInput === `to_${index}`">
-                              <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
-                            </div>
+                            <img @click="showPassengers = !showPassengers, showClass = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
                           </div>
 
-                          <div class="input-divs">
-                            <div class="group-inputs">
-                              <data-picker :min_date="b.origin" @dateValue="obj => b.departure_date = obj.formattedDate" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
+                          <div class="choose_document_type" style="position: relative;">
+                            <label class="class_label">Class</label>
+                            <p class="selected-item">{{ flightModel.cabin }}</p>
+                            <div  v-if="showClass" class="dropDown">
+                              <div class="doc_type_options">
+                                <div class="passenger-type" style="width: 100%">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
+                                </div>
+                                <div class="passenger-type" style="border: none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
+                                </div>
+
+                                <div class="passenger-type" style="border: none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
+                                </div>
+
+                                <div class="passenger-type" style="border: none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class</p>
+                                </div>
+
+
+                              </div>
                             </div>
+                            <img @click="showClass = !showClass, showPassengers = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
                           </div>
+
+
+                        </div>
+
+                        <div class="form-area-checkbox">
+                          <div class="form-area-checkbox-item">
+                            <p class="txt-m">With Mark Up</p>
+                            <input style="cursor: pointer" id="withMarkUp" type="checkbox" @change="handleCheck('withMarkUp')">
+
+                          </div>
+                          <div class="form-area-checkbox-item">
+                            <p class="txt-m">Non-Stops Only</p>
+                            <input style="cursor: pointer" id="withNonStop" type="checkbox" @change="handleCheck('withNonStop')">
+
+                          </div>
+                        </div>
+
+                        <div class="form-area-footer">
+                          <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
+                          <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('one-round')" text-node="Search for Flights"></on-boarding-button>
+
                         </div>
 
                       </div>
                     </div>
-
-                    <div @click="beginMultiCitySearch" class="add-new-flight" :style="{backgroundColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color}">
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="16" cy="16" r="16" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-                        <g clip-path="url(#clip0_305_1400)">
-                          <path d="M15.2379 15.2394V10.668H16.7617V15.2394H21.3332V16.7632H16.7617V21.3346H15.2379V16.7632H10.6665V15.2394H15.2379Z" fill="white"/>
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_305_1400">
-                            <rect width="18.2857" height="18.2857" fill="white" transform="translate(6.85715 6.85742)"/>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                      <p style="color: #fff">{{multiCityFlight.length > 0 ?'Add another flight' : 'Add new flight'}}</p>
-                    </div>
-
-                    <div class="group-inputs"> </div>
-
-                </div>
-
-                  <div class="group-inputs">
-                   
-
-                      <div  class="choose_document_type" style="position: relative;">
-                        <label class="class_label">Passengers </label>
-                        <p style="color:#F00" v-if="flightModel.adults < 1 && flightModel.children < 1 && flightModel.infants < 1" class="selected-item">Please add passengers</p>
-                        <p  class="selected-item">
-                          {{ flightModel.adults > 0 ? `${flightModel.adults} Adult` : null}} 
-                          {{flightModel.infants > 0 && flightModel.adults > 0 ? ',' : null}} 
-                          {{ flightModel.infants > 0 ? `${flightModel.infants} Infants` : null}} 
-                          {{flightModel.children > 0 &&  flightModel.adults > 0 && flightModel.infants > 0 ? 'and' : null }}
-                          {{ flightModel.children > 0 ? `${flightModel.children} ${flightModel.children > 1 ? 'Children' : 'child'} ` : null}}
-                        </p>
-                        <div v-if="showPassengers"  class="dropDown">
-                          <div class="doc_type_options">
-                            <div class="passenger-type">
-                              <div style="display: flex;flex-direction: column">
-                                <p class="passenger-type-text-1">Adults</p>
-                                <p class="text-2">12+ and above</p>
-                              </div>
-
-                              <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                                <button :disabled="flightModel.adults < 1" @click="passengerSelectionControl('adult', 'minus')" class="minus-button"> - </button>
-                                <p class="text-2">{{ flightModel.adults }}</p>
-                                <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('adult', 'add')" class="add-button"> + </button>
-                              </div>
-
-                            </div>
-                            <div class="passenger-type">
-                              <div style="display: flex;flex-direction: column">
-                                <p class="passenger-type-text-1">Children</p>
-                                <p class="text-2">2-12</p>
-                              </div>
-
-                              <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                                <button :disabled="flightModel.children < 1" @click="passengerSelectionControl('children', 'minus')" class="minus-button"> - </button>
-                                <p class="text-2">{{ flightModel.children }}</p>
-                                <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('children', 'add')" class="add-button"> + </button>
-
-                              </div>
-
-                            </div>
-                            <div class="passenger-type">
-                              <div style="display: flex;flex-direction: column">
-                                <p class="passenger-type-text-1">Infant</p>
-                                <p class="text-2">0 - 2(years)</p>
-                              </div>
-
-                              <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
-                                <button :disabled="flightModel.infants < 1" @click="passengerSelectionControl('infants', 'minus')" class="minus-button"> - </button>
-                                <p class="text-2">{{ flightModel.infants }}</p>
-                                <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('infants', 'add')" class="add-button"> + </button>
-
-                              </div>
-
-                            </div>
-
-                            
-                            <div class="info-area">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z" fill="#1D1E2C"/>
-                              </svg>
-                              <p class="info-area-p">The age of a child must be valid for the duration of the journey. For example,
-                                if a child celebrates a birthday during a trip,
-                                please use their age on the return flight date.</p>
-                            </div>
-
-                          </div>
-
-
-                        </div>
-                        <img @click="showPassengers = !showPassengers, showClass = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
-                      </div>
-
-                      <div class="choose_document_type" style="position: relative;">
-                        <label class="class_label">Class</label>
-                        <p class="selected-item">{{ flightModel.cabin }}</p>
-                        <div  v-if="showClass" class="dropDown">
-                          <div class="doc_type_options">
-                            <div class="passenger-type" style="width: 100%">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
-                            </div>
-                            <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
-                            </div>
-
-                            <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
-                            </div>
-
-                            <div class="passenger-type" style="border: none">
-                              <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class</p>
-                            </div>
-
-
-                          </div>
-                        </div>
-                        <img @click="showClass = !showClass, showPassengers = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
-                      </div>
-                   
-
-                  </div>
-
-                  <div class="form-area-checkbox">
-                  <div class="form-area-checkbox-item">
-                    <p class="txt-m">With Mark Up</p>
-                    <input style="cursor: pointer" id="withMarkUp" type="checkbox" @change="handleCheck('withMarkUp')">
-
-                  </div>
-                  <div class="form-area-checkbox-item">
-                    <p class="txt-m">Non-Stops Only</p>
-                    <input style="cursor: pointer" id="withNonStop" type="checkbox" @change="handleCheck('withNonStop')">
-
-                  </div>
-                </div>
-
-                  <div class="form-area-footer">
-                    <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
-                    <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('one-round')" text-node="Search for Flights"></on-boarding-button>
-
                   </div>
 
                 </div>
-            </div>
-          </div>
-
               </div>
 
+
               <div v-else class="coming_soon">
-                <coming-soon :page="activeService"></coming-soon>
+                <ComingSoon :page="activeService"></ComingSoon>
               </div>
 
               </div>
@@ -1685,6 +1700,35 @@ export default {
 .booking-div-inner-wrapper{
   margin: 1rem 0;
 }
+
+  a{
+    text-decoration: none;
+  }
+
+  .d-coming-soon-p{
+    color:  #0E0842;
+    text-align: center;
+
+    /* Headings/20px/bold */
+    font-family: 'Product Sans';
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 140% */
+  }
+
+  .d-coming-soon-p2{
+    color: #575A65;
+    text-align: center;
+
+    /* Body/16px/Regular */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem; /* 175% */
+    width: 24.125rem;
+  }
 
 
 
