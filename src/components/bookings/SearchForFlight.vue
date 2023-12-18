@@ -18,7 +18,7 @@
                     <img src="../../../src/assets/Cards/LAUNCH.svg">
                   </div>
                   <div>
-                    <p style="color:  #0E0842;text-align: center;font-family: 'Product Sans';font-size: 1.25rem;font-style: normal;font-weight: 700;line-height: 1.75rem;">Hello dolly, to get started with Travel Yakata 🎉</p>
+                    <p style="color:  #0E0842;text-align: center;font-family: 'Product Sans';font-size: 1.25rem;font-style: normal;font-weight: 700;line-height: 1.75rem;">Hello {{getUser?.first_name}}, to get started with Travel Yakata 🎉</p>
                     <p style=" color: #575A65;text-align: center;font-family: 'Product Sans';font-size: 1rem;font-style: normal;font-weight: 400;line-height: 1.75rem; /* 175% */width: 24.125rem;">Please complete your setup to access your full Travel Yakata services</p>
                   </div>
                   <div>
@@ -322,9 +322,6 @@ export default {
         this.flightModel.destinations = []
         this.flightModel.destinations.push(multi_city_payload)
       }
-
-
-
 
       },
     shouldSearch(){

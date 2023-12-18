@@ -36,6 +36,7 @@
 
 <script>
 import storeUtils from "@/utils/storeUtils";
+import {RuthdoAlert} from "ruthly";
 
 export default {
     name:"UploadDocumentsComponent",
@@ -57,6 +58,8 @@ export default {
           const reader = new FileReader();
 
           reader.onload = (e) => {
+            let fileSize = e.total/1024
+            if(Math.ceil(fileSize) > 1024) RuthdoAlert({title:'File Size too large', icon:'error'});
             // Update the selectedImage data property with the data URL
             this.selectedImage = e.target.result;
 

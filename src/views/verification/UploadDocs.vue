@@ -50,8 +50,8 @@
                         <p class="doc_type"> {{ LocalMarkUpPlaceHolder }}</p>
                         <div class="doc_type_options" v-show="localDropdown">
 <!--                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='Driver\'s License',toggleLocalDropdown()">Driver's License</p>-->
-                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='International Passport', toggleLocalDropdown()" >International Passport</p>
-                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='NIN (National Identification Number) Slip', toggleLocalDropdown()">NIN (National Identification Number) Slip</p>
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='International Passport', toggleLocalDropdown(), uploadModel.type = 'id_document'" >International Passport</p>
+                          <p class="doc_type_item" @click="LocalMarkUpPlaceHolder='NIN (National Identification Number) Slip', toggleLocalDropdown(),uploadModel.type = 'id_document'">NIN (National Identification Number) Slip</p>
 
                         </div>
 
