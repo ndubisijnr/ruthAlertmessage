@@ -83,10 +83,10 @@ export const useAuthStore = defineStore('authStore', {
 
                     }else{
                     if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
-                        if(responseData.data.is_corporate === 'true'){
-                            await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
-                        }else{
+                        if(responseData.data.account_type === 'manager'){
                             await router.push({name: "UploadDocs", params: {token:responseData.data.access_token.slice(0,20)}})
+                        }else{
+                            await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
                         }
                     }else{
                         await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
@@ -127,12 +127,26 @@ export const useAuthStore = defineStore('authStore', {
                 let responseData = response.data
 
                 if(responseData.success){
-                    this.loading = false
                     this.token = responseData.data?.access_token
                     this.user=responseData.data
                     localStorage.user=JSON.stringify(responseData.data)
                     localStorage.token = responseData.data?.access_token
-                    await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
+                    await storeUtils.fireAway().auth?.getBusinessProfile()
+                    await storeUtils.fireAway().settings?.getDomainsAction()
+                    this.loading = false
+                    if(responseData.data.account_type === 'super_admin'){
+                        await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
+                    }else{
+                        if(!this.businessProfile.cac_document && !this.businessProfile.id_document){
+                            if(responseData.data.account_type === 'manager'){
+                                await router.push({name: "UploadDocs", params: {token:responseData.data.access_token.slice(0,20)}})
+                            }else{
+                                await router.push({name: "BusinessInfo", params: {token:responseData.data.access_token.slice(0,20)}})
+                            }
+                        }else{
+                            await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
+                        }
+                    }
                 }
             }
             catch (err) {

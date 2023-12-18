@@ -58,13 +58,13 @@
 
           </div>
             <div class="tab-nav">
-              <ul class="inner-tab-nav">
+              <ul class="inner-tab-nav" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {}:{justifyContent:'start'}">
                 <a :class="{'active':currentTab === 'Account'}" @click="currentTab = 'Account'" href="#Account">Account</a>
-                <a v-if="getUser.account_type === 'super_admin'" :class="{'active':currentTab === 'Domain'}" href="#Domain" @click="currentTab = 'Domain'">Domain</a>
-                <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Teams'}" @click="currentTab = 'Teams'" href="#Teams">Teams</a>
-                <a :class="{'active':currentTab === 'Notifications'}" href="#Notifications" @click="currentTab = 'Notifications'">Notifications</a>
-                <a v-if="getUser.account_type !== 'booker'" :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
-                <a :class="{'active':currentTab === 'Markup'}" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
+                <a v-if="getUser.account_type === 'super_admin' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Domain'}" href="#Domain" @click="currentTab = 'Domain'">Domain</a>
+                <a v-if="getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Teams'}" @click="currentTab = 'Teams'" href="#Teams">Teams</a>
+                <a :class="{'active':currentTab === 'Notifications'}" v-if="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Notifications" @click="currentTab = 'Notifications'">Notifications</a>
+                <a v-if="getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'"  :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
+                <a :class="{'active':currentTab === 'Markup'}" v-if="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
                 <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="currentTab = 'Customization', isEditing=true">Customization</a>
 <!--                <a :class="{'active':currentTab === 'Verification'}" href="#Verification" @click="currentTab = 'Verification'">Verification</a>-->
               </ul>

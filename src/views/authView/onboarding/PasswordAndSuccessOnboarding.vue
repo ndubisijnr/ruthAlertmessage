@@ -10,7 +10,7 @@
             <p class="lets_get_started_h success-h">Password reset successful!</p>
             <p class="lets_get_started_p success-p">The password to your account has been rest successful </p>
           </div>
-          <a href="/login"><on-boarding-button border="none" :id="'Go to login'" text-node="Next" ></on-boarding-button></a>
+          <a href="/"><on-boarding-button border="none" :id="'Go to login'" text-node="Proceed" ></on-boarding-button></a>
 
         </div>
       </div>

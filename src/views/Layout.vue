@@ -10,7 +10,10 @@
           <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
             <img src="../../src/assets/Cards/logo.svg" />
           </router-link>
-          <div class="navigation-links" id="nav">
+
+          <div v-if="getBusinessProfile?.is_cac_verified === 'false' && getBusinessProfile?.is_id_verified === 'false'" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {} : {width:'45%',borderWidth:1}"></div>
+
+          <div v-else  class="navigation-links" id="nav">
             <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
               <div class="links-item" :style="getCurrentRoute.includes('dashboard') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('dashboard')}">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -58,9 +61,9 @@
           </div>
 
           <div class="m7-0">
-            
+
             <img src="../assets/notification.svg" class="notification_icon">
-       
+
             <div  class="profile" @click="showDrop" >
               <div class="profile-icon" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"> <p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
               <img src="../assets/Icons/Arrows/Down.svg" />
@@ -82,7 +85,7 @@
                 <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Account`">Account Settings</router-link>
                 <img v-if="getCurrentRoute.includes('settings')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
               </div>
-              <div class="dropDown-item" v-if="getUser?.account_type !== 'super_admin'">
+              <div class="dropDown-item" v-if="getUser?.account_type !== 'super_admin' || getUser.account_type !== 'booker'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"/>
                 </svg>
@@ -110,7 +113,7 @@
 
           </div>
 
-           
+
 
           </div>
 
