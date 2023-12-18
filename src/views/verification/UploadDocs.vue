@@ -1,5 +1,5 @@
 <template>
-  <verification-complete-modal v-if="getBusinessProfile?.cac_document && getBusinessProfile?.id_document && show"></verification-complete-modal>
+  <verification-complete-modal v-if="getBusinessProfile?.cac_document && getBusinessProfile?.id_document"></verification-complete-modal>
 
   <layout :in_route="inRoute" :is-component="isComponent">
         <template v-slot:maker>
