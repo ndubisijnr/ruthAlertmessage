@@ -23,7 +23,7 @@
             </svg>
             <input type="file" accept="/*" :id="id" @change="handleFileChange" hidden />
             <p class="drop">Drop your files here or <span class="click_here" @click="handleChange">click here</span> to upload</p>
-            <p class="recomend">Upload the recommended format (JPEG, PDF or PNG). Maximum of 5MB</p>
+            <p class="recomend">Upload the recommended format (JPEG, PDF or PNG). Maximum of 1MB</p>
           </section>
           <section v-else>
             <img :src="selectedImage" width="100" />
@@ -59,9 +59,13 @@ export default {
 
           reader.onload = (e) => {
             let fileSize = e.total/1024
-            if(Math.ceil(fileSize) > 1024) RuthdoAlert({title:'File Size too large', icon:'error'});
-            // Update the selectedImage data property with the data URL
-            this.selectedImage = e.target.result;
+            if(Math.ceil(fileSize) > 1024){
+              RuthdoAlert({title:'File Size too large', icon:'error'})
+            }else{
+              // Update the selectedImage data property with the data URL
+              this.selectedImage = e.target.result;
+
+            }
 
           };
 
