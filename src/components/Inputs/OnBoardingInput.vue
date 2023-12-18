@@ -1,7 +1,7 @@
 <template>
   <div class="on_boarding_input">
     <div :style="info ? { width: '100%', display: 'flex', alignContent: 'center', position: 'relative' } : null">
-      <span class="hide_show" v-if="type === 'password'" @click="hideShow" id="hideShow"></span>
+      <span class="hide_show" v-if="type === 'password'" @click="hideShow" :id="`hideShow${id}`"></span>
       <span class="add-info" v-if="info">{{ info }}</span>
       <div style="position: relative;width: 100%">
          <label class="label" :class="{'focused':isFocused}">{{ label }}</label>
@@ -97,7 +97,7 @@ export default {
 
     hideShow() {
       const id = document.getElementById(`${this.id}`)
-      const hideshow = document.getElementById('hideShow')
+      const hideshow = document.getElementById(`hideShow${this.id}`)
       if (id.type === 'password') {
         id.type = 'text'
         hideshow.innerHTML = 'HIDE'
@@ -120,8 +120,12 @@ export default {
     },
   },
 
+  beforeMount() {
+
+  },
+
   mounted() {
-    const id = document.getElementById('hideShow')
+    const id = document.getElementById(`hideShow${this.id}`)
     if (id) id.innerHTML = 'SHOW'
     if (this.defaultValue) this.inputValue = this.defaultValue
   }
