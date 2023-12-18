@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="booking-wrapper">
-        <div>
+        <div v-if="activeService === 'Flight'">
           <div class="search_filter">
             <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -89,6 +89,9 @@
             </div>
           </div>
         </div>
+        <div v-else class="coming_soon">
+          <coming-soon :page="activeService"></coming-soon>
+        </div>
       </div>
     </div>
   </layout>
@@ -107,10 +110,13 @@ import stores from "../../store";
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.vue";
 import filterBookingModal from "@/components/modals/FilterBookingModal.vue";
+import ComingSoon from "@/components/ComingSoon.vue";
 
 export default {
   name: "Bookings",
-  components:{RouteNav,OnBoardingInput, filterBookingModal, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
+  components:{
+    ComingSoon,
+    RouteNav,OnBoardingInput, filterBookingModal, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
   data(){
     return{
       isFilterBooking:false,

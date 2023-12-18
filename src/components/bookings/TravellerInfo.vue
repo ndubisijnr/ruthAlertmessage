@@ -207,12 +207,17 @@
               </div>
 
               <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Passport Number"></on-boarding-input>
-                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => w.dob = obj.formattedDate"/>
+                <on-boarding-input  width="100%" @inputValue="value => documents.number = value" label="Passport Number"></on-boarding-input>
+                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => documents.expiry_date = obj.formattedDate"/>
               </div>
               <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Passport Nationality"></on-boarding-input>
-                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="Passport Issuing Country"></on-boarding-input>
+                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>
+                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => documents.issuing_date = obj.formattedDate"/>
+              </div>
+
+              <div class="group-inputs">
+                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>
+                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>
               </div>
             </div>
 
@@ -352,6 +357,15 @@ export default {
       passengers:[],
       passengerIdCounter:1,
       showingGenderIndex:null,
+      documents:{
+        number: null,
+        issuing_date: null,
+        expiry_date: null,
+        issuing_country: null,
+        nationality_country: null,
+        document_type: null,
+        holder: false
+      },
       showGender:false,
       isTitle:false,
       dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
@@ -362,6 +376,8 @@ export default {
     
     addPassenger(value) {
 
+
+
       const newPassenger = {
           passenger_type: value,
           first_name: null,
@@ -371,15 +387,7 @@ export default {
           title: null,
           email: null,
           phone_number: null,
-          // documents: {
-          //   number: "string",
-          //   issuing_date: "2022-09-09",
-          //   expiry_date: "2023-09-09",
-          //   issuing_country: "string",
-          //   nationality_country: "string",
-          //   document_type: "passport",
-          //   holder: false
-          // }
+
         };
 
         // Create a new passenger object with a unique ID
@@ -390,6 +398,10 @@ export default {
             newPassenger.gender = 'male'
           }
            
+        }
+
+        if(this.getSelectedFlight?.document_required){
+           newPassenger.documents = this.documents
         }
 
         newPassenger.email = this.getUser?.email

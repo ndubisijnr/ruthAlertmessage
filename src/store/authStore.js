@@ -128,10 +128,11 @@ export const useAuthStore = defineStore('authStore', {
 
                 if(responseData.success){
                     this.loading = false
-                    await router.push({name:"SuccessRegistrationCard", params:{token:responseData.data?.access_token?.slice(0,20)}})
                     this.token = responseData.data?.access_token
                     this.user=responseData.data
                     localStorage.user=JSON.stringify(responseData.data)
+                    localStorage.token = responseData.data?.access_token
+                    await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
                 }
             }
             catch (err) {

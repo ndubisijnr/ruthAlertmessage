@@ -11,7 +11,7 @@ import Others from "@/components/modals/itinaryModals/Others.vue";
 import ChooseASeat from "@/components/modals/itinaryModals/ChooseASeat.vue";
 import router from "@/router";
 
-export default {
+export default{
   name: "ItenaryDetailsComponent",
   components: {ChooseASeat, Others, Issurance, EmailItinerary, Refund, Void, Exchange, CancelItinerary},
   props:['getUser','getBookedFlight','getSelectedFlight'],
@@ -68,8 +68,6 @@ export default {
         return airportName
       }
     },
-
-
 
     getCityByCityCode(city_code){
       const airports = JSON.parse(localStorage?.airports)

@@ -202,7 +202,7 @@ export default{
        },
        getBookedFlight(){
         if(!localStorage.bookedFlight) return;
-        return  JSON.parse(localStorage?.bookedFlight)
+        return JSON.parse(localStorage?.bookedFlight)
        },
        getSelectedFlight(){
       return storeUtils.fireAway()?.flight?.getSelectedFlight
