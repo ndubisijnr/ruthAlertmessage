@@ -26,7 +26,10 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
         // }
     }
     else{
-        RuthdoAlert({title: exception?.response?.data.message ? exception?.response?.data.message : exception?.response?.data.data ? exception?.response?.data.data : exception?.response?.data, icon: 'error'})
+        RuthdoAlert({title:
+                exception?.response?.data.message ? exception?.response?.data.message
+                : exception?.response?.data.data ? exception?.response?.data.data
+                : exception?.response?.data ? exception.response?.data: exception.message, icon: 'error'})
     }
 
 

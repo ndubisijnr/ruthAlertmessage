@@ -2,14 +2,26 @@
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import storeUtils from "@/utils/storeUtils";
+import {lightenColor} from "@/mixins/themeUtils";
 export default {
   name: "PermissionModal",
   components:{OnBoardingButton, Layout},
 
   methods:{
+    lightenColor,
     close(){
       storeUtils.fireAway().global.commitUnauthorised(false)
     }
+  },
+
+  computed:{
+    custom_color(){
+      return storeUtils.fireAway().theme.custom_theme
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
   }
 }
 </script>
@@ -19,14 +31,15 @@ export default {
 
     <div class="invite-success">
       <div class="invite-success-body">
-        <img src="../../assets/invite_success.gif" class="invite-gif" />
+        <img src="../../assets/errrogif.gif" class="invite-gif" />
 
-        <h4 class="invite-h">Unauthorized</h4>
+        <h4 class="invite-h">Access Denied!</h4>
 
-        <p class="invite-p">You do not have permission to view this resource please contact your manager</p>
+        <p class="invite-p">You do not have access.
+          Please reach out to your manager for assistance.</p>
       </div>
 
-      <on-boarding-button @click="close" text-node="Continue" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>
+      <on-boarding-button @click="close" text-node="Close" :background="custom_color ? lightenColor(custom_color.color) : lightenColor(default_theme.color)" border="none" :color="custom_color"></on-boarding-button>
     </div>
 
   </layout>
@@ -46,7 +59,7 @@ export default {
   font-style: normal;
   font-weight: 900;
   line-height: normal;
-  width: 15.625rem;
+  width: 25.625rem;
 }
 
 .invite-success-body{
@@ -83,14 +96,16 @@ export default {
   font-style: normal;
   font-weight: 300;
   line-height: normal;
+  margin-top: 1.5rem;
+  width: 24.8125rem;
 }
 
 .invite-gif{
   display: flex;
-  width: 11.25rem;
-  height: 11.25rem;
+  width: 180px;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 .invite-success{
   display: flex;

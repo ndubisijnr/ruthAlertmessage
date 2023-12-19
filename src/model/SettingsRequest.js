@@ -54,6 +54,7 @@ class SettingsRequest {
     }
 
     static updateRole = {
+        id:null,
         name: null,
         permission_ids:null
     }

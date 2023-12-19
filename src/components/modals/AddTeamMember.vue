@@ -15,6 +15,7 @@
             <input id="invite-input" @keyup="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
             <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
             <div class="add-emails" >
+              {{emails}}
               <div class="emails" v-for="(i, index) in emails" :key="index">
                 <span >{{ellipsis(i, 18)}}</span>
                 <svg @click="removeEmail(index)" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -130,15 +131,22 @@ export default {
       if(this.emails.length < 1 && !this.inputValue) RuthdoAlert({title:"Please Add Emails", icon:"error"})
       else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
       else {
-        if (this.emails.length > 1) {
-          this.model.emails = this.emails
 
-        } else {
+        if(this.emails.includes(this.inputValue)){
+
+        }else{
           this.emails.push(this.inputValue)
-          this.model.emails =  this.emails
-
         }
-        storeUtils.fireAway().settings?.addTeamMembers(this.model)
+        // console.log(this.emails)
+        // if (this.emails.length > 0) {
+        //   // storeUtils.fireAway().settings?.addTeamMembers(this.model)
+        //
+        // } else {
+        //   this.emails.push(this.inputValue)
+        //   this.model.emails =  this.emails
+        //   console.log(this.model)
+        //
+        // }
       }
         //     .then(() => {
         //   if(this.getError === 'false'){
@@ -154,9 +162,14 @@ export default {
     },
 
     checkComma(){
-      if(this.inputValue.includes(',')) {
-        this.emails.push(this.inputValue.replace(',', ''))
-        this.inputValue = null
+      if(this.emails.includes(this.inputValue)){
+        console.log('includes')
+      }else{
+        if(this.inputValue.includes(',')) {
+          this.emails.push(this.inputValue.replace(',', ''))
+          this.inputValue = null
+        }
+
       }
 
     },

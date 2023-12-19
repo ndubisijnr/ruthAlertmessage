@@ -28,11 +28,15 @@ Client.interceptors.request.use(config => {
 })
 
 Client.interceptors.response.use(async response => {
-    if(response.status === 403) {
-        storeUtils.fireAway().global.commitUnauthorised(true)
-    }
+
     return response
-});
+}, error =>{
+        if(error.response.status === 403) {
+            storeUtils.fireAway().global.commitUnauthorised(true)
+        }
+        return error
+    }
+);
 
 appClientImgUpload.interceptors.request.use(config => {
     config.headers.Authorization = "Bearer" + " " + localStorage.token;

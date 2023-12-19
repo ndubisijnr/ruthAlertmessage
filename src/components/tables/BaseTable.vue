@@ -206,6 +206,7 @@ export default {
       storeUtils.fireAway().travelAgent?.handleGetUser(obj)
     },
     editRole(obj){
+      this.model.id = obj.id
       this.model.name = obj?.name
       this.model.permission_ids = obj?.permissions.map(item => item.id)
       this.$emit('updatingRole', true)

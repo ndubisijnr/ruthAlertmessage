@@ -63,7 +63,7 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         async getDomainsAction(){
             const user = JSON.parse(localStorage?.user)
-            if(user.account_type === 'super_admin'){
+            if(user.account_type === 'super_admin' || user.account_type === 'admin'){
                 this.domainLoading = true
                 try{
                     const response = await Domains.getDomains(storeUtils.fireAway().global?.getTenant_id)
@@ -209,13 +209,14 @@ export const useSettingsStore = defineStore('settingsStore', {
                 if(responseData.success){
                     this.rolesLoading = false
                     await storeUtils.fireAway().global?.commitError('false')
-                    await RuthdoAlert({title:responseData.data, icon:'success'})
+                    await RuthdoAlert({title:'Success', icon:'success'})
                     await storeUtils.fireAway().settings?.readAllRoles()
                     await storeUtils.fireAway().global?.commitError(null)
 
                     // standby
                 }
             }catch(err){
+                console.log(err)
                 this.rolesLoading = false
                 storeUtils.fireAway().global?.commitError('true')
                 catchErrorHandler(err)
