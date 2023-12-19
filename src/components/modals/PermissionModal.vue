@@ -1,9 +1,16 @@
 <script>
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
+import storeUtils from "@/utils/storeUtils";
 export default {
   name: "PermissionModal",
-  components:{OnBoardingButton, Layout}
+  components:{OnBoardingButton, Layout},
+
+  methods:{
+    close(){
+      storeUtils.fireAway().global.commitUnauthorised(false)
+    }
+  }
 }
 </script>
 

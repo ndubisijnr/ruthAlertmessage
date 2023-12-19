@@ -169,9 +169,8 @@ export default {
 
     <div class="receiver_wrapper">
       <div class="customization_reciever">
-        <div v-if="customization === 'style'">
-          <Template_1></Template_1>
-<!--          <DashboardPreview></DashboardPreview>-->
+        <div v-if="customization === 'style'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
+         <dashboard-preview></dashboard-preview>
         </div>
 
         <div v-if="customization === 'template'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
