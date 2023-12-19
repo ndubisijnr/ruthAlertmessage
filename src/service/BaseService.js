@@ -1,6 +1,5 @@
 import axios from "axios";
-
-
+import storeUtils from "@/utils/storeUtils";
 
 const Client = axios.create({
     baseURL: "https://b2b-api-dev.tiqwa.com/",
@@ -11,6 +10,7 @@ const Client = axios.create({
         "Content-Type": "application/json",
     }
 });
+
 
 export const appClientImgUpload = axios.create({
     baseURL:"https://b2b-api-dev.tiqwa.com/",
@@ -28,6 +28,9 @@ Client.interceptors.request.use(config => {
 })
 
 Client.interceptors.response.use(async response => {
+    if(response.status === 403) {
+        storeUtils.fireAway().global.commitUnauthorised(true)
+    }
     return response
 });
 

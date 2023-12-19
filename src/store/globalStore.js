@@ -9,7 +9,8 @@ export const useGlobalStore = defineStore('globalStore', {
         tenant_id:null,
         tenant:null,
         verificationType:'docs',
-        error:null
+        error:null,
+        isUnauthorised:false,
 
     }),
 
@@ -19,6 +20,7 @@ export const useGlobalStore = defineStore('globalStore', {
         Tenant:state => state.tenant,
         getVerificationType: state => state.verificationType,
         getError:state => state.error,
+        getIsUnauthorised:state => state.isUnauthorised
 
 
     },
@@ -29,6 +31,10 @@ export const useGlobalStore = defineStore('globalStore', {
         },
         commitError(value){
             this.error = value
+        },
+
+        commitUnauthorised(value){
+            this.isUnauthorised = value
         },
 
         commitVerificationType(value){

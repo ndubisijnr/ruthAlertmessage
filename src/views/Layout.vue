@@ -1,4 +1,5 @@
 <template>
+  <permission-modal v-if="getIsUnauthorised"></permission-modal>
   <div class="splash" v-if="loadingCus">
     <img style="width:12rem" class="animate__animated animate__fadeInDown" :src="getBusinessProfile.logo ? getBusinessProfile.logo : '../../src/assets/Cards/logo.svg'" />
   </div>
@@ -13,7 +14,7 @@
 
           <div v-if="getBusinessProfile?.is_cac_verified === 'false' && getBusinessProfile?.is_id_verified === 'false'" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {} : {width:'45%',borderWidth:1}"></div>
 
-          <div v-else  class="navigation-links" id="nav">
+          <div v-else class="navigation-links" id="nav">
             <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
               <div class="links-item" :style="getCurrentRoute.includes('dashboard') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('dashboard')}">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -72,7 +73,7 @@
             <div class="dropDown-inner-head">
               <div class="icon-dropdown" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"><p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
               <div>
-                <p class="first_last_name">{{getUser.first_name + ' ' + getUser.last_name}}</p>
+                <p class="first_last_name">{{getUser.first_name ? getUser.first_name : '' + ' ' + getUser.last_name ? getUser.last_name : ''}}</p>
                 <p class="email">{{ getUser.email }}</p>
               </div>
             </div>
@@ -85,7 +86,7 @@
                 <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Account`">Account Settings</router-link>
                 <img v-if="getCurrentRoute.includes('settings')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
               </div>
-              <div class="dropDown-item" v-if="getUser?.account_type !== 'super_admin' || getUser.account_type !== 'booker'">
+              <div class="dropDown-item" v-if="getUser?.account_type === 'manager'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"/>
                 </svg>
@@ -135,11 +136,12 @@ import {getFirstLettersOfFirstAndLastName} from "../mixins/lettersExtractor";
 import router from "../router";
 import MobileBottomNav from "../components/dashboardComponents/MobileBottomNav.vue";
 import {lightenColor} from "@/mixins/themeUtils";
+import PermissionModal from "@/components/modals/PermissionModal.vue";
 
 
 export default {
   name: "Layout",
-  components:{NavBar, MobileBottomNav},
+  components:{NavBar, MobileBottomNav,PermissionModal},
   data(){
     return{
       getFirstLettersOfFirstAndLastName,
@@ -180,6 +182,10 @@ export default {
         return business
       }
 
+    },
+
+    getIsUnauthorised(){
+      return storeUtils.fireAway().global.getIsUnauthorised
     },
 
     getCurrentRoute(){

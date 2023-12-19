@@ -632,10 +632,9 @@ export default {
     },
 
     doFilter(){
-      this.membersFilteredResult = this.getMembers.filter(it => it.first_name?.toLowerCase().includes(this.searchQuery)
-      ||it.last_name?.toLowerCase().includes(this.searchQuery) ||
-          it.email?.toLowerCase().includes(this.searchQuery) ||
-          it.type?.toLowerCase().includes(this.searchQuery))
+      this.membersFilteredResult = this.getMembers.filter(it => it.first_name?.toLowerCase()  === this.searchQuery
+      ||it.last_name?.toLowerCase() === this.searchQuery ||
+          it.email?.toLowerCase() === this.searchQuery)
     },
 
     deleteBank(value){
@@ -1725,7 +1724,7 @@ m-2{
 }
 .inner-tab-nav{
   display: inline-flex;
-  justify-content: space-between;
+  justify-content: start;
   gap: 1.5rem;
   list-style: none;
   padding: 0;
