@@ -3,10 +3,50 @@ import MobileBottomNav from "@/components/dashboardComponents/MobileBottomNav.vu
 import NavBar from "@/components/dashboardComponents/NavBar.vue";
 import storeUtils from "@/utils/storeUtils";
 import router from "@/router";
+import {lightenColor} from "@/mixins/themeUtils";
+import DataPicker from "@/components/Inputs/custom-date-picker/DataPicker.vue";
+import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
+import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
+import {getFirstLettersOfFirstAndLastName} from "../../mixins/flightUtil";
+import ComingSoon from "@/components/ComingSoon.vue";
+import FlightRequest from "@/model/FlightRequest";
 
 export default {
   name: "DashboardPreview",
-  components: {NavBar, MobileBottomNav},
+  methods: {getFirstLettersOfFirstAndLastName, lightenColor},
+  components: {ComingSoon, OnBoardingButton, OnBoardingInput, DataPicker, NavBar, MobileBottomNav},
+  data(){
+    return{
+      activeDestType:'round_trip',
+      destination_type:'round_trip',
+      activeService:'Flight',
+      multiCity:[],
+      showPassengers:false,
+      showClass:false,
+      filteredAirportFrom:[],
+      filteredAirportTo:[],
+      fromQuery:null,
+      toQuery:null,
+      multiCityFromQuery:null,
+      multiCityToQuery:null,
+      formatteddateFrom:null,
+      dateFrom:null,
+      dateTo:null,
+      flightModel:FlightRequest.flight,
+      multiflightModel:FlightRequest.multiCity,
+      passenger_disable_buttons:false,
+      sum:null,
+      lightenColor,
+      multiCityFlight:[],
+      multiCityActiveInput:null,
+      thisDate:null,
+      departure_date: null,
+      return_date: null,
+      destination: null,
+      origin: null,
+    }
+  },
+
   computed: {
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme
@@ -48,13 +88,9 @@ export default {
 
 <template>
   <div class="wrapper">
-    <nav-bar>
-      <div class="m6-0">
-
-        <img src="../../src/assets/Cards/logo.svg" />
-
-
-
+      <div class="inner-wrapper">
+        <div class="m6-0">
+        <img src="../../assets/Cards/logo.svg" />
         <div class="navigation-links" id="nav">
             <div class="links-item" :style="getCurrentRoute.includes('dashboard') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('dashboard')}">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -95,69 +131,1613 @@ export default {
               <span class="links">Transactions</span>
             </div>
         </div>
+        <div>
+          <div class="m7-0">
 
-<!--        <div class="m7-0">-->
+            <img src="../../assets/notification.svg" class="notification_icon">
 
-<!--          <img src="../assets/notification.svg" class="notification_icon">-->
-
-<!--          <div  class="profile" @click="showDrop" >-->
-<!--            <div class="profile-icon" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"> <p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>-->
-<!--            <img src="../assets/Icons/Arrows/Down.svg" />-->
-<!--          </div>-->
-<!--          <div v-show="showDropDown" id="dropdown" class="dropDown animate__animated animate__fadeIn">-->
-<!--            <div class="dropDown-inner-head">-->
-<!--              <div class="icon-dropdown" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"><p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>-->
-<!--              <div>-->
-<!--                <p class="first_last_name">{{getUser.first_name ? getUser.first_name : '' + ' ' + getUser.last_name ? getUser.last_name : ''}}</p>-->
-<!--                <p class="email">{{ getUser.email }}</p>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="dropDown-inner-main">-->
-<!--              <div class="dropDown-item">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">-->
-<!--                  <path d="M10.0005 18.8577C9.44219 18.8577 8.87552 18.7327 8.43385 18.4743L3.85052 15.8327C1.98385 14.5743 1.86719 14.3827 1.86719 12.4077V7.59101C1.86719 5.61601 1.97552 5.42435 3.80885 4.18268L8.42552 1.51602C9.30052 1.00768 10.6755 1.00768 11.5505 1.51602L16.1505 4.16602C18.0172 5.42435 18.1339 5.61601 18.1339 7.59101V12.3993C18.1339 14.3743 18.0255 14.566 16.1922 15.8077L11.5755 18.4743C11.1255 18.7327 10.5589 18.8577 10.0005 18.8577ZM10.0005 2.39102C9.65052 2.39102 9.30885 2.45768 9.06719 2.59935L4.48385 5.24935C3.12552 6.16602 3.12552 6.16602 3.12552 7.59101V12.3993C3.12552 13.8243 3.12552 13.8243 4.51719 14.766L9.06719 17.391C9.55885 17.6744 10.4505 17.6744 10.9422 17.391L15.5255 14.741C16.8755 13.8243 16.8755 13.8243 16.8755 12.3993V7.59101C16.8755 6.16602 16.8755 6.16602 15.4839 5.22435L10.9339 2.59935C10.6922 2.45768 10.3505 2.39102 10.0005 2.39102Z" fill="#1D1E2C"/>-->
-<!--                  <path d="M10 13.125C8.275 13.125 6.875 11.725 6.875 10C6.875 8.275 8.275 6.875 10 6.875C11.725 6.875 13.125 8.275 13.125 10C13.125 11.725 11.725 13.125 10 13.125ZM10 8.125C8.96667 8.125 8.125 8.96667 8.125 10C8.125 11.0333 8.96667 11.875 10 11.875C11.0333 11.875 11.875 11.0333 11.875 10C11.875 8.96667 11.0333 8.125 10 8.125Z" fill="#1D1E2C"/>-->
-<!--                </svg>-->
-<!--                <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Account`">Account Settings</router-link>-->
-<!--                <img v-if="getCurrentRoute.includes('settings')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>-->
-<!--              </div>-->
-<!--              <div class="dropDown-item" v-if="getUser?.account_type === 'manager'">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">-->
-<!--                  <path d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"/>-->
-<!--                </svg>-->
-<!--                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`">Document Verification</router-link>-->
-<!--                <img v-if="getCurrentRoute.includes('documents')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>-->
-<!--              </div>-->
-<!--              <div class="dropDown-item">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
-<!--                  <path d="M9.98999 22.78C9.38999 22.78 8.81999 22.48 8.42999 21.95L7.23001 20.35C7.23001 20.36 7.18 20.33 7.16 20.33H6.79001C3.37001 20.33 1.25 19.4 1.25 14.79V10.79C1.25 6.58001 3.82001 5.48001 5.98001 5.29001C6.22001 5.26001 6.50001 5.25 6.79001 5.25H13.19C16.81 5.25 18.73 7.17001 18.73 10.79V14.79C18.73 15.08 18.72 15.36 18.68 15.63C18.5 17.76 17.4 20.33 13.19 20.33H12.79L11.55 21.95C11.16 22.48 10.59 22.78 9.98999 22.78ZM6.79001 6.75C6.56001 6.75 6.34 6.76 6.13 6.78C3.81 6.98 2.75 8.25001 2.75 10.79V14.79C2.75 18.22 3.81001 18.83 6.79001 18.83H7.19C7.64 18.83 8.14999 19.08 8.42999 19.44L9.63 21.05C9.85001 21.35 10.13 21.35 10.35 21.05L11.55 19.45C11.84 19.06 12.3 18.83 12.79 18.83H13.19C15.73 18.83 17 17.76 17.19 15.48C17.22 15.24 17.23 15.02 17.23 14.79V10.79C17.23 8.00001 15.98 6.75 13.19 6.75H6.79001Z" fill="#1D1E2C"/>-->
-<!--                  <path d="M9.99023 14.1895C9.43023 14.1895 8.99023 13.7395 8.99023 13.1895C8.99023 12.6395 9.44023 12.1895 9.99023 12.1895C10.5402 12.1895 10.9902 12.6395 10.9902 13.1895C10.9902 13.7395 10.5502 14.1895 9.99023 14.1895Z" fill="#1D1E2C"/>-->
-<!--                  <path d="M13.1895 14.1895C12.6295 14.1895 12.1895 13.7395 12.1895 13.1895C12.1895 12.6395 12.6395 12.1895 13.1895 12.1895C13.7395 12.1895 14.1895 12.6395 14.1895 13.1895C14.1895 13.7395 13.7395 14.1895 13.1895 14.1895Z" fill="#1D1E2C"/>-->
-<!--                  <path d="M6.7998 14.1895C6.2398 14.1895 5.7998 13.7395 5.7998 13.1895C5.7998 12.6395 6.2498 12.1895 6.7998 12.1895C7.3498 12.1895 7.7998 12.6395 7.7998 13.1895C7.7998 13.7395 7.3498 14.1895 6.7998 14.1895Z" fill="#1D1E2C"/>-->
-<!--                  <path d="M17.9396 16.29C17.7396 16.29 17.5396 16.21 17.3996 16.06C17.2396 15.9 17.1697 15.67 17.1997 15.45C17.2297 15.24 17.2396 15.02 17.2396 14.79V10.79C17.2396 8.00001 15.9897 6.75 13.1997 6.75H6.79963C6.56963 6.75 6.34966 6.76 6.13966 6.78C5.91966 6.81 5.68964 6.72999 5.52964 6.57999C5.36964 6.41999 5.27963 6.20001 5.29963 5.98001C5.47963 3.82001 6.58963 1.25 10.7996 1.25H17.1997C20.8197 1.25 22.7396 3.17001 22.7396 6.79001V10.79C22.7396 15 20.1697 16.1 18.0097 16.29C17.9797 16.29 17.9596 16.29 17.9396 16.29ZM6.91966 5.25H13.1896C16.8096 5.25 18.7297 7.17001 18.7297 10.79V14.66C20.4297 14.24 21.2297 12.99 21.2297 10.79V6.79001C21.2297 4.00001 19.9796 2.75 17.1896 2.75H10.7897C8.58965 2.75 7.34966 3.55 6.91966 5.25Z" fill="#1D1E2C"/>-->
-<!--                </svg>-->
-<!--                <span>Support</span>-->
-<!--              </div>-->
-<!--              <div @click="signOut" class="dropDown-item">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
-<!--                  <path d="M15.2395 22.2705H15.1095C10.6695 22.2705 8.52953 20.5205 8.15953 16.6005C8.11953 16.1905 8.41953 15.8205 8.83953 15.7805C9.23953 15.7405 9.61953 16.0505 9.65953 16.4605C9.94953 19.6005 11.4295 20.7705 15.1195 20.7705H15.2495C19.3195 20.7705 20.7595 19.3305 20.7595 15.2605V8.74047C20.7595 4.67047 19.3195 3.23047 15.2495 3.23047H15.1195C11.4095 3.23047 9.92953 4.42047 9.65953 7.62047C9.60953 8.03047 9.25953 8.34047 8.83953 8.30047C8.41953 8.27047 8.11953 7.90047 8.14953 7.49047C8.48953 3.51047 10.6395 1.73047 15.1095 1.73047H15.2395C20.1495 1.73047 22.2495 3.83047 22.2495 8.74047V15.2605C22.2495 20.1705 20.1495 22.2705 15.2395 22.2705Z" fill="#292D32"/>-->
-<!--                  <path d="M15.0001 12.75H3.62012C3.21012 12.75 2.87012 12.41 2.87012 12C2.87012 11.59 3.21012 11.25 3.62012 11.25H15.0001C15.4101 11.25 15.7501 11.59 15.7501 12C15.7501 12.41 15.4101 12.75 15.0001 12.75Z" fill="#292D32"/>-->
-<!--                  <path d="M5.85043 16.0998C5.66043 16.0998 5.47043 16.0298 5.32043 15.8798L1.97043 12.5298C1.68043 12.2398 1.68043 11.7598 1.97043 11.4698L5.32043 8.11984C5.61043 7.82984 6.09043 7.82984 6.38043 8.11984C6.67043 8.40984 6.67043 8.88984 6.38043 9.17984L3.56043 11.9998L6.38043 14.8198C6.67043 15.1098 6.67043 15.5898 6.38043 15.8798C6.24043 16.0298 6.04043 16.0998 5.85043 16.0998Z" fill="#292D32"/>-->
-<!--                </svg>-->
-<!--                <span>Sign Out</span></div>-->
-<!--            </div>-->
-
-<!--          </div>-->
+            <div  class="profile" @click="showDrop" >
+              <div class="profile-icon" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"> <p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
+              <img src="../../assets/Icons/Arrows/Down.svg" />
+            </div>
 
 
 
-<!--        </div>-->
+          </div>
+        </div>
+      </div>
+      </div>
+      <div>
+        <h3 class="user-name" style="margin-top: 3.5rem" v-show="getBusinessProfile?.id_document && getBusinessProfile?.cac_document || getUser.account_type === 'super_admin'"> Hello, {{getUser?.first_name}} {{getUser?.last_name}}</h3>
+        <div class="get-started" :style="{background:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document && getUser.account_type !== 'super_admin'">
+          <div class="with-tiqwa">
+            <div>
+              <h3 class="with-tiqwa-h">Hello, {{getUser?.first_name}}, get started with Travel Yakata 🎉</h3>
+              <p class="with-tiqwa-p">Please complete your setup to access Travel Yakata services, </p>
+            </div>
+            <div style="display: flex;gap: 1rem;height: 2.5rem">
+              <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="10rem" color="#FFF" height="2.5rem" text-node="Complete Profile"></on-boarding-button></router-link>
+              <!--           <on-boarding-button btn-width="8rem" color="#2C6CAC" border="none" height="2.5rem" text-node="Skip for later" background="transparent"></on-boarding-button>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="booking-div-body">
+      <div v-if="activeService === 'Flight'">
+        <div>
+          <div class="booking-nav">
+
+            <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
+            <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
+            <p class="booking-nav-item" :style="activeDestType==='multiCity' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p>
+
+          </div>
+          <div class="one-round-way-multi-city">
+            <div class="form-area">
+
+              <div class="form-area-body">
+
+                <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
+                  <div class="group-inputs">
+                    <div class="input-divs">
+                      <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" />
+                    </div>
+                    <div class="input-divs">
+                      <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" />
+                    </div>
+                  </div>
+                  <div class="group-inputs">
+                    <data-picker :min_date="new Date()"  label="Departure Date"></data-picker>
+                    <data-picker :min_date="flightModel.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                  </div>
+                </div>
+
+                <div class="group-inputs">
+
+
+                  <div  class="choose_document_type" style="position: relative;">
+                    <label class="class_label">Passengers </label>
+                    <p style="color:#F00" v-if="flightModel.adults < 1 && flightModel.children < 1 && flightModel.infants < 1" class="selected-item">Please add passengers</p>
+                    <p  class="selected-item">
+                      {{ flightModel.adults > 0 ? `${flightModel.adults} Adult` : null}}
+                      {{flightModel.infants > 0 && flightModel.adults > 0 ? ',' : null}}
+                      {{ flightModel.infants > 0 ? `${flightModel.infants} Infants` : null}}
+                      {{flightModel.children > 0 &&  flightModel.adults > 0 && flightModel.infants > 0 ? 'and' : null }}
+                      {{ flightModel.children > 0 ? `${flightModel.children} ${flightModel.children > 1 ? 'Children' : 'child'} ` : null}}
+                    </p>
+                    <div v-if="showPassengers"  class="dropDown">
+                      <div class="doc_type_options">
+                        <div class="passenger-type">
+                          <div style="display: flex;flex-direction: column">
+                            <p class="passenger-type-text-1">Adults</p>
+                            <p class="text-2">12+ and above</p>
+                          </div>
+
+                          <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                            <button :disabled="flightModel.adults < 1" @click="passengerSelectionControl('adult', 'minus')" class="minus-button"> - </button>
+                            <p class="text-2">{{ flightModel.adults }}</p>
+                            <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('adult', 'add')" class="add-button"> + </button>
+                          </div>
+
+                        </div>
+                        <div class="passenger-type">
+                          <div style="display: flex;flex-direction: column">
+                            <p class="passenger-type-text-1">Children</p>
+                            <p class="text-2">2-12</p>
+                          </div>
+
+                          <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                            <button :disabled="flightModel.children < 1" @click="passengerSelectionControl('children', 'minus')" class="minus-button"> - </button>
+                            <p class="text-2">{{ flightModel.children }}</p>
+                            <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('children', 'add')" class="add-button"> + </button>
+
+                          </div>
+
+                        </div>
+                        <div class="passenger-type">
+                          <div style="display: flex;flex-direction: column">
+                            <p class="passenger-type-text-1">Infant</p>
+                            <p class="text-2">0 - 2(years)</p>
+                          </div>
+
+                          <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
+                            <button :disabled="flightModel.infants < 1" @click="passengerSelectionControl('infants', 'minus')" class="minus-button"> - </button>
+                            <p class="text-2">{{ flightModel.infants }}</p>
+                            <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('infants', 'add')" class="add-button"> + </button>
+
+                          </div>
+
+                        </div>
+
+
+                        <div class="info-area">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z" fill="#1D1E2C"/>
+                          </svg>
+                          <p class="info-area-p">The age of a child must be valid for the duration of the journey. For example,
+                            if a child celebrates a birthday during a trip,
+                            please use their age on the return flight date.</p>
+                        </div>
+
+                      </div>
+
+
+                    </div>
+                    <img @click="showPassengers = !showPassengers, showClass = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                  </div>
+
+                  <div class="choose_document_type" style="position: relative;">
+                    <label class="class_label">Class</label>
+                    <p class="selected-item">{{ flightModel.cabin }}</p>
+                    <div  v-if="showClass" class="dropDown">
+                      <div class="doc_type_options">
+                        <div class="passenger-type" style="width: 100%">
+                          <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
+                        </div>
+                        <div class="passenger-type" style="border: none">
+                          <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
+                        </div>
+
+                        <div class="passenger-type" style="border: none">
+                          <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
+                        </div>
+
+                        <div class="passenger-type" style="border: none">
+                          <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class</p>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <img @click="showClass = !showClass, showPassengers = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                  </div>
+
+
+                </div>
+
+                <div class="form-area-checkbox">
+                  <div class="form-area-checkbox-item">
+                    <p class="txt-m">With Mark Up</p>
+                    <input style="cursor: pointer" id="withMarkUp" type="checkbox" @change="handleCheck('withMarkUp')">
+
+                  </div>
+                  <div class="form-area-checkbox-item">
+                    <p class="txt-m">Non-Stops Only</p>
+                    <input style="cursor: pointer" id="withNonStop" type="checkbox" @change="handleCheck('withNonStop')">
+
+                  </div>
+                </div>
+
+                <div class="form-area-footer">
+                  <on-boarding-button v-if="activeDestType === 'multiCity'" :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('multiCity')" text-node="Search for Flights"></on-boarding-button>
+                  <on-boarding-button v-else :loading="getLoading" :disabled="getLoading" btn-width="100%" border="none" @click="searchFlight('one-round')" text-node="Search for Flights"></on-boarding-button>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
 
       </div>
-    </nav-bar>
+
+
+      <div v-else class="coming_soon">
+        <ComingSoon :page="activeService"></ComingSoon>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <style scoped>
+.splash{
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background: #fff;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#nav a.router-link-exact-active {
+  border-radius: 1.25rem;
+  /* background: var(--app-nav-active); */
+//background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  text-decoration: none;
+  transition: ease 2s;
+}
+
+.active{
+  border-radius: 1.25rem;
+//background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  text-decoration: none;
+  transition: ease 2s;
+}
+
+a{
+  text-decoration: none;
+  color: #181818;
+}
+
+.notification_icon{
+  display: block;
+}
+
+a:hover{
+  color: var(--app-default-primary);
+}
+
+.dropDown-inner-main{
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-left: 1.5rem;
+  padding-top:1rem;
+  padding-bottom: 1.94rem;
+}
+
+.dropDown-inner-head{
+  display: flex;
+  justify-content: start;
+  gap: 1rem;
+  border-bottom: 1px solid #EFF2F7;
+  align-items: center;
+  padding-left: 1.5rem;
+  padding-top:1.5rem;
+  padding-bottom: 1rem;
+
+}
+
+.first_last_name{
+  text-transform: capitalize;
+  color:  #0F0F0F;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem; /* 150% */
+}
+.dropDown-item{
+  display: flex;
+  justify-content: start;
+  gap:1.5rem;
+  color:  #1D1E2C;
+  font-family: "Product San";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.email{
+  color:  #0F0F0F;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem; /* 128.571% */
+}
+
+
+.dropDown{
+  width: 19.9375rem;
+  height: auto;
+  flex-shrink: 0;
+  position: absolute;
+  border-radius: 1rem;
+  background: #FFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.12);
+  left: -100px;
+  top: 50px;
+  z-index: 9999999999;
+}
+
+
+.links-item{
+  align-items: center;
+  display: flex;
+  padding: 0.62rem;
+  gap:0.75rem;
+  justify-content: center;
+  transition: ease 2s;
+}
+
+.links{
+  color: #000;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.navigation-links{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+
+.m7-0{
+  display: flex;
+  gap: 1.5rem;
+  /*float: right;*/
+  position: relative;
+}
+
+.profile{
+  display: flex;
+  width: 5.9375rem;
+  padding: 0.625rem  0.625rem 0.875rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.3125rem;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 1px solid  #EFF2F7;
+  cursor: pointer;
+  position: relative;
+}
+
+
+
+
+
+.profile-icon{
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border-radius: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.003rem;
+  background-position: center;
+  background-size: cover;
+}
+
+.icon-dropdown{
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  background:  var(--app-default-primary);
+  border-radius: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.003rem;
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 1024px) {
+
+}
+
+.wrapper{
+  width: 100%;
+  background-color: #F9FAFC;
+  min-height: 100vh;
+
+}
+
+
+.inner-wrapper{
+  width: 100%;
+  display: inline-block;
+
+}
+.m6-0{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10.38rem;
+  width: 100%;
+}
+
+.dashboard_content{
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  flex-direction: column;
+}
+
+
+@media (max-width:1024px) {
+  .navigation-links{
+    display: none;
+  }
+
+  .notification_icon{
+    display: none;
+  }
+
+  .m6-0{
+    justify-content: space-between;
+  }
+
+  .dashboard_content{
+    /* padding-left:1.5rem;
+    padding-right: 1.5rem; */
+    /* padding: 0; */
+    margin-bottom: 100px;
+    justify-content: flex-start;
+
+  }
+
+
+}
+
+.txt-m{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.booking-div-head{
+  display: flex;
+  height: 7.25rem;
+  align-items: end;
+}
+
+.service_nav{
+  display: flex;
+  margin-left:5.31rem;
+}
+
+.booking-div-body{
+  margin:0 5.31rem;
+}
+
+.coming_soon{
+
+  margin: 1rem 0;
+}
+.minus-button{
+  width:30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.add-button{
+  width:30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFFFFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.selected-item{
+  padding: 1rem 0 0.25rem 0;
+  /* border: solid; */
+  color: var(--black-text-01, #1D1E2C);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+.per_airport{
+  padding: 0.5rem;
+  border-bottom:solid var(--app-defautl-primary-light);
+  width: 100%;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-a1{
+  display: flex;
+  width: 8rem;
+  padding: 0.25rem 0.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  cursor: pointer;
+
+  /* Medium/16px */
+  font-family:'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+
+.activeSection{
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  background: var(--app-default-primary);
+  color: white;
+}
+
+.airportsDropDown{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  top: 80%;
+  background: #FFF;
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+  position: absolute;
+  z-index: 999999999;
+}
+.input-divs{
+  position: relative;
+  width: 100%;
+  border: solid;
+}
+.airportsDropDown{
+  position: absolute;
+}
+.class_label{
+  position: absolute;
+  top: 5px;
+  color: #575A65;
+
+  /* sanslight/12px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem; /* 166.667% */
+
+}
+.passenger-type{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.37rem;
+}
+
+.passenger-type-text-1{
+  color: #222;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+}
+
+.passenger-type-text-1:hover{
+  transform: scale(1);
+  font-size: 1.1rem;
+}
+
+.text-2{
+  color: #222;
+
+  /* Subtext/14px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+.passenger-type:nth-child(2){
+  border-bottom:solid #C0CCDA;
+  border-top: solid #C0CCDA;
+}
+.dropDown{
+  width: 17.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem;
+  gap: 1.25rem;
+  border-radius: 0.5rem;
+  top: 80%;
+  background: #FFF;
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+  position: absolute;
+  z-index: 999999999;
+}
+
+.show{
+  display: flex;
+}
+
+.info-area{
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.info-area-p{
+  color:  #575A65;
+  width: 100%;
+
+  /* Subtext/14px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+.add-new-flight{
+  display: flex;
+  width: 13rem;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  border-radius: 0.25rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+.flight-index{
+  display: flex;
+  width: 7.9375rem;
+  padding: 0.375rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+.new_flight_header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.new_flight{
+  display: inline-block;
+  padding: 1.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #D3DCE6;
+  width:100%;
+  margin-bottom: 1.5rem;
+}
+
+.form-area-checkbox-item{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.form-area-checkbox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.progress{
+  width: 100%;
+  background-color: var(--app-default-primary);
+  height: 0.25rem;
+  transition: 1s ease-in;
+}
+.u-hide{
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background:  #F9FAFC;
+
+}
+.book-flight-details-btn{
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  padding: 4rem;
+}
+.extra-baggage-p{
+  color:  #1D1E2C;
+
+  /* Subtext/14px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 171.429% */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+.price{
+  color:  #1D1E2C !important;
+
+  /* Headings/black/24px */
+  font-family: 'Product Sans';
+  font-size: 1.5rem !important;
+  font-style: normal;
+  font-weight: 900 !important;
+  line-height: 3.875rem !important;
+}
+
+.breaker-3{
+  width: 0.0625rem;
+  height: 2.25rem;
+  background: #E0E6ED;
+}
+
+.additional-details-info-item{
+  display: flex;
+  width: auto;
+  height: 2rem;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: start;
+
+}
+
+.text-1{
+  color:#575A65;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  /*line-height: 1.5rem; !* 150% *!*/
+
+}
+
+.text-2{
+  color: #1D1E2C;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  /*line-height: 1.75rem;*/
+
+
+}
+
+.additional-details-info{
+  display: flex;
+  justify-content: start;
+  border-top: solid #E0E6ED;
+  border-bottom: solid #E0E6ED;
+  width: 100%;
+  gap: 1.5rem;
+  height: 5.375rem;
+  align-items: center;
+  margin-top: 3.5rem;
+
+}
+
+.dropdown-details-div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  height: 5.75rem;
+
+}
+
+.depart_date-info{
+  display: flex;
+  align-items: center;
+  gap: 3.25rem;
+}
+
+.depart-date-info-stops{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 150% */
+}
+
+.depart-date{
+  color: #1D1E2C;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
+
+.actual-result-wrapper{
+  margin-bottom: 2.06rem;
+  border-radius: 0.25rem;
+  /*border: 1px solid  #E5E9F2;*/
+
+
+}
+
+.details{
+  border-radius: 0.25rem;
+  /*border: 1px solid  #E5E9F2;*/
+  padding: 1.5rem;
+
+
+
+}
+
+.component87{
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  border: 1px solid #E0E6ED;
+  background: #FFF;
+  margin-top: 2rem;
+  padding: 1.5rem;
+
+}
+
+.view-details{
+  color:#89128A;
+  width: 4.8125rem;
+  height: 1.5rem;
+
+  /* subtext/medium/14px */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 171.429% */
+  cursor: pointer;
+}
+
+.spiralLines-div{
+  position: absolute;
+  top: -100px;
+  right: -150px;
+  width: 30.47194rem;
+  height: 25.32919rem;
+  /*border: solid;*/
+  z-index: -1;
+}
+
+.choose_document_type{
+  display: flex;
+  width: 100%;
+  height: 4rem;
+  padding: 0.875rem 1.25rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid  #EFF2F7;
+  margin-bottom: 1rem;
+
+}
+
+.doc_type_options{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.37rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.form-area-footer{
+  margin-top: 4rem;
+}
+
+.group-inputs{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.stops{
+  color:  #444854;
+  font-family: 'Product Sans';
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem; /* 133.333% */
+}
+
+.activeDestType{
+  border-bottom:2px solid;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  font-family: 'Product Sans';
+
+}
+
+.more-flight-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.duration{
+  color:  #1D1E2C;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.dest{
+  color:  #444854;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem; /* 114.286% */
+}
+
+.logo-area{
+  display: flex;
+  width: 15.1875rem;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2rem;
+}
+
+.flight-name{
+  color:  #444854;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 150% */
+}
+
+.time{
+  color: #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.amount{
+  color:  #1D1E2C;
+  text-align: center;
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+  margin-bottom: 1.25rem;
+}
+
+.amount-book-area{
+  border-radius: 0.25rem;
+  background:  #F9FAFC;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  height: 15.888rem;
+  display: flex;
+  align-items: center;
+}
+
+.breaker-2{
+  width: 85%;
+  height: 0.1rem;
+  background: #E5E9F2;
+}
+
+.actual-result-item{
+  width: 100%;
+  height: 7rem;
+  flex-shrink: 0;
+  border-radius: 0rem 0rem 0.25rem 0.25rem;
+  background: #FFF;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left:1.5rem;
+  padding-right: 1.5rem;
+}
+
+.logo{
+  width: 2rem;
+  height: 2rem;
+}
+
+.actual-result-item-info{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  align-items: center;
+}
+
+.actual-result{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: 0.25rem;
+  border: 1px solid  #E5E9F2;
+  box-sizing: content-box;
+}
+
+.one-round-way-multi-city{
+  margin-top: 2rem;
+}
+
+.multi-city{
+
+}
+
+.search-result-filter-area{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.filter-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:  #1D1E2C;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.filter-items{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.result-details{
+  color: #2D3139;
+  font-family:'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 150% */
+  margin-bottom: 1rem;
+}
+
+.seperator_1{
+  width: 0.0625rem;
+  height: 2.5rem;
+  border: 1px solid  #EFF2F7;
+}
+
+.and-filter-by{
+  color: #6A8297;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem; /* 100% */
+}
+
+.result-details-info{
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.filter-by{
+  display: flex;
+  padding: 0rem 1rem;
+  align-items: center;
+  gap: 1.1875rem;
+  border-radius: 1rem;
+  border: 1px solid #EFF2F7;
+  background:  #FFF;
+}
+
+.breaker1{
+  width: 67.125rem;
+  height: 0.0625rem;
+  background: #DFE6ED;
+  margin-top: 0.56rem;
+}
+
+.dest-abv{
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dest-abv-it{
+  color: #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2rem; /* 133.333% */
+}
+
+.booking-info{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.search-info-area{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-info{
+  display: flex;
+  padding: 0.625rem 1.25rem;
+  align-items: flex-start;
+  width: auto !important;
+  gap: 0.625rem;
+  border-radius: 31.25rem;
+  background: #EFF2F7;
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 150% */
+}
+
+.flight-result{
+  margin: 0 1.5rem;
+}
+
+.destination_type{
+  margin: 0 2rem;
+  padding: 0.38rem;
+  color:  #1D1E2C;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
+
+.booking-div-inner-wrapper{
+  width: 68.125rem;
+  height: auto;
+  padding-bottom:3.94rem;
+}
+
+.booking-nav-item{
+  padding: 0.5rem;
+  cursor: pointer;
+  color:  #201F1E;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.booking-div{
+  margin: 0 0;
+  width: 100%;
+  background-color: #FFF;
+  border: 0.3px solid;
+  border-radius: 1rem;
+
+}
+
+.booking-nav{
+  display: flex;
+  border-bottom: 1px solid  #E5E9F2;
+  gap: 5rem;
+  margin-top: 2rem;
+}
+
+.progress-or{
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+}
+
+.stage{
+  color:  #9DA8B6;
+  text-align: left;
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+  margin-left: -2rem;
+}
+
+.activeProgress{
+  background: #89128A !important;
+}
+.activeStage{
+  color: #89128A !important;
+}
+
+
+.progress-or-item{
+}
+
+.circle{
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  background: #E5E9F2;
+  border-radius: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:  #FFF;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
+
+.line{
+  width: 9.8125rem;
+  height: 0.25rem;
+  flex-shrink: 0;
+  border-radius: 0.3125rem;
+  background: #E5E9F2;
+}
+
+.spiralLines{
+  width: inherit;
+  height: inherit;
+}
+
+.breadcrumb-sub{
+  height: 2.4rem;
+  width: 20.4rem;
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1.94rem;
+  gap: 0.5rem;
+}
+
+.current-path-sub{
+  color: #575A65;
+  text-align: center;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.create-booking-process{
+  width: 68.125rem;
+  height: auto;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.current-tab{
+  color:  #1D1E2C;
+  text-align: center;
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+}
+
+.one-way{
+  width: 100%;
+}
+
+
+
+.filter-div{
+  background: #FFFFFF;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.filter-span{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+.overall{
+  display: flex;
+  justify-content: center;
+}
+
+.filter{
+  display: flex;
+  gap: 1.25rem;
+}
+
+.search_filter{
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-wrapper{
+  overflow-x: scroll;
+  width: 68.625rem;
+}
+
+.booking-wrapper{
+  width: 68.625rem;
+  height: 54rem;
+  position: relative;
+}
+
+.search{
+  display: flex;
+  width: 19.4375rem;
+  padding: 0.5rem 5rem 0.5rem 1.25rem;
+  align-items: center;
+  gap: 1.0625rem;
+  flex-shrink: 0;
+  outline:none;
+  border-radius: 0.375rem;
+  border: 0.6px solid #E5E9F2;
+  background: #FFF;
+}
+
+.create-booking{
+  display: flex;
+  padding: 0.8125rem 0.6875rem 0.8125rem 1.5rem;
+  align-items: center;
+  border-radius: 0.25rem;
+  background:  #F8F1F8;
+  width: 15.9375rem;
+  height: 5rem;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.create-booking-p{
+  color:  #1D1E2C;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans' ;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.card-area{
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  overflow-x: scroll;
+  width: 100%;
+}
+
+.no-team-member-h{
+  color: #0E0842;
+  text-align: center;
+
+  /* Headings/20px/bold */
+  font-family: 'Product Sans';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+  text-transform: capitalize;
+}
+
+.no-team-member-sub{
+  color: #575A65;
+  text-align: center;
+
+  /* Body/16px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+}
+
+.no-team-member-text{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.no-team-member{
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  gap: 2.54rem;
+  margin: 4rem;
+}
+
+@media (max-width: 1024px) {
+  .booking-div{
+    margin: 0;
+    padding: 0.5rem;
+
+  }
+
+  .group-inputs{
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .card-area{
+    overflow-x: scroll;
+    width:1024px;
+  }
+
+  .search_filter{
+    flex-direction: column-reverse;
+  }
+
+  .search{
+    width: 80%;
+  }
+
+  .filter{
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin:10px 0;
+  }
+  .booking-nav{
+    display: flex;
+    border-bottom: 1px solid  #E5E9F2;
+    gap: 0;
+    margin-top: 2rem;
+  }
+
+  .booking-nav-item{
+    padding: 0;
+
+    font-size: 0.75rem;
+    width: 100%;
+    text-align: center;
+
+  }
+
+  .filter-div{
+    width: 80%;
+  }
+  .filter-btn{
+    width: 80% !important;
+  }
+
+  .booking-wrapper{
+    width: 100%;
+  }
+
+  .table-wrapper{
+    width: auto !important;
+  }
+
+
+
+  .nav-a1{
+
+    font-size: 0.75rem;
+
+  }
+
+  .booking-div-inner-wrapper{
+    margin: 1rem 0;
+  }
+
+  a{
+    text-decoration: none;
+  }
+
+  .d-coming-soon-p{
+    color:  #0E0842;
+    text-align: center;
+
+    /* Headings/20px/bold */
+    font-family: 'Product Sans';
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 140% */
+  }
+
+  .d-coming-soon-p2{
+    color: #575A65;
+    text-align: center;
+
+    /* Body/16px/Regular */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem; /* 175% */
+    width: 24.125rem;
+  }
+
+
+
+
+}
+
+::-webkit-scrollbar{
+  display: none;
+}
+
 
 </style>

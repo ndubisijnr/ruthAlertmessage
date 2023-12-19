@@ -13,19 +13,7 @@
 
             <div class="booking-div-body">
               <div v-if="activeService === 'Flight'">
-                <div v-if="getBusinessProfile?.is_cac_verified === 'false' && getBusinessProfile?.is_id_verified === 'false'" style="display: flex;flex-direction: column;align-items: center;justify-content: center;transform: scale(.9);">
-                  <div>
-                    <img src="../../../src/assets/Cards/LAUNCH.svg">
-                  </div>
-                  <div>
-                    <p style="color:  #0E0842;text-align: center;font-family: 'Product Sans';font-size: 1.25rem;font-style: normal;font-weight: 700;line-height: 1.75rem;">Hello {{getUser?.first_name}}, to get started with Travel Yakata 🎉</p>
-                    <p style=" color: #575A65;text-align: center;font-family: 'Product Sans';font-size: 1rem;font-style: normal;font-weight: 400;line-height: 1.75rem; /* 175% */width: 24.125rem;">Please complete your setup to access your full Travel Yakata services</p>
-                  </div>
-                  <div>
-                    <router-link style="text-decoration: none" :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="11.25rem" height="3.5rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Complete Profile"></on-boarding-button></router-link>
-                  </div>
-                </div>
-                <div v-else>
+                <div v-if="getUser.account_type === 'super_admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
                   <div class="booking-nav">
 
                     <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
@@ -238,6 +226,19 @@
                   </div>
 
                 </div>
+
+                <div v-else style="display: flex;flex-direction: column;align-items: center;justify-content: center;transform: scale(.9);">
+                  <div>
+                    <img src="../../../src/assets/Cards/LAUNCH.svg">
+                  </div>
+                  <div>
+                    <p style="color:  #0E0842;text-align: center;font-family: 'Product Sans';font-size: 1.25rem;font-style: normal;font-weight: 700;line-height: 1.75rem;">Hello {{getUser?.first_name}}, to get started with Travel Yakata 🎉</p>
+                    <p style=" color: #575A65;text-align: center;font-family: 'Product Sans';font-size: 1rem;font-style: normal;font-weight: 400;line-height: 1.75rem; /* 175% */width: 24.125rem;">Please complete your setup to access your full Travel Yakata services</p>
+                  </div>
+                  <div>
+                    <router-link style="text-decoration: none" :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`"><on-boarding-button btn-width="11.25rem" height="3.5rem" color="#2C6CAC" border="none" background="#EAF0F7" text-node="Complete Profile"></on-boarding-button></router-link>
+                  </div>
+                </div>
               </div>
 
 
@@ -245,10 +246,8 @@
                 <ComingSoon :page="activeService"></ComingSoon>
               </div>
 
-              </div>
+            </div>
 
-           
-           
           </div>
         </div>
   </booking-index>
