@@ -75,7 +75,7 @@
             <div class="menu" v-show="currentActionIndex === index && show">
               <!-- template {team} -->
               <div v-if="h.id === 'member'">
-                <p class="menu-item">Edit Member</p>
+                <p class="menu-item" @click="editTeamMember(j)">Edit Member</p>
                 <p class="menu-item deactivate">Deactivate Member</p>
 
               </div>
@@ -211,6 +211,10 @@ export default {
       this.model.permission_ids = obj?.permissions.map(item => item.id)
       this.$emit('updatingRole', true)
 
+    },
+
+    editTeamMember(obj){
+      this.$emit('updatingTeamMember', true)
     },
 
     table_row_onclick_action(obj){

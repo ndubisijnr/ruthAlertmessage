@@ -40,6 +40,7 @@
   </div>
   <change-password v-show="changePassword" @close="close"></change-password>
   <edit-role v-show="updateRole" @close="close"></edit-role>
+  <edit-team-member v-show="editTeamMember" @close="close"></edit-team-member>
 
   <!--  <account-deactivated></account-deactivated>-->
 <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
@@ -152,7 +153,7 @@
 
                 <div v-if="activeManageRole==='team'" >
                   <div v-if="getMembers?.length > 0" class="table-wrapper">
-                    <domain-table :is-paginate="true" :data="membersFilteredResult.length > 0 ? membersFilteredResult : getMembers" :fields="membersFields"></domain-table>
+                    <domain-table @updatingTeamMember="updateTeam" :is-paginate="true" :data="membersFilteredResult.length > 0 ? membersFilteredResult : getMembers" :fields="membersFields"></domain-table>
                   </div>
 
                   <div v-else class="no-team-member">
@@ -530,6 +531,7 @@ import Dashboard from "../dashboard/Index.vue"
 import { ref } from "vue";
 import Customization from "@/components/customization/Customization.vue";
 import {lightenColor} from "@/mixins/themeUtils";
+import EditTeamMember from "@/components/modals/EditTeamMember.vue";
 
 export default {
   name: "Settings",
@@ -551,7 +553,8 @@ export default {
     SettingsSkeletonsLoader,
     ChangePassword,
     EditRole,
-    Customization
+    Customization,
+    EditTeamMember
   },
 
   data(){
@@ -584,6 +587,7 @@ export default {
       bankName:null,
       paymentType:'bank',
       inModal:false,
+      editTeamMember:false,
       lightenColor,
       // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
       error:{
@@ -613,7 +617,7 @@ export default {
         {key:"type", label:"Role"},
         {key:"created_at", label:"Date Added"},
         {key:"status", label:"Member Status"},
-        // {key:"Action", label:"Action",id:"member"},
+        {key:"Action", label:"Action",id:"member"},
       ],
       showDeleteBankModal:false,
       showCannotDeleteModal:false,
@@ -630,6 +634,14 @@ export default {
 
     },
 
+
+
+    updateTeam(value){
+      console.log(value)
+      this.editTeamMember = value
+
+    },
+
     activateTab(value) {
       switch (value) {
         case 'Account':
@@ -642,7 +654,6 @@ export default {
           break;
         case 'Teams':
           this.currentTab = 'Teams';
-          storeUtils.fireAway().settings?.readAllMembers()
           break;
         case 'Notifications':
           this.currentTab = 'Notifications';
@@ -764,6 +775,7 @@ export default {
       this.bankIndex = null
       this.changePassword = value
       this.updateRole = value
+      this.editTeamMember = value
     },
 
     handleUpdateBizProfile(){
@@ -956,6 +968,8 @@ export default {
   mounted() {
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
+    storeUtils.fireAway().settings?.readAllMembers()
+
   }
 }
 </script>
