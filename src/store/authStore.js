@@ -228,7 +228,7 @@ export const useAuthStore = defineStore('authStore', {
         }
     },
 
-        async handleResetPassword(payload=AuthRequest.resetPassword){
+       async handleResetPassword(payload=AuthRequest.resetPassword){
         try{
             this.loading = true
             const response = await AuthService.resetPassword(storeUtils.fireAway().global?.getTenant_id,payload)
@@ -245,7 +245,7 @@ export const useAuthStore = defineStore('authStore', {
         }
     },
 
-        async handleChangePassword(payload=AuthRequest.changePassword){
+       async handleChangePassword(payload=AuthRequest.changePassword){
             try{
                 this.loading = true
                 const response = await AuthService.changePassword(storeUtils.fireAway().global?.getTenant_id,payload)
@@ -262,8 +262,7 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-
-        async handleChangeNewUserPassword(payload=AuthRequest.changePassword){
+       async handleChangeNewUserPassword(payload=AuthRequest.changePassword){
             try{
                 this.loading = true
                 const response = await AuthService.changeInvitedUserPassword(storeUtils.fireAway().global?.getTenant_id,payload)
@@ -280,6 +279,22 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
+       async handleDeactivateAccount(user_id){
+            try{
+                this.loading = true
+                const response = await AuthService.deActivateAccount(storeUtils.fireAway().global?.getTenant_id,user_id)
+                let responseData = response.data
+
+                if(responseData.success){
+                    this.loading = false
+                    this.stage = 'true'
+                }
+            }
+            catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
 
     }
 

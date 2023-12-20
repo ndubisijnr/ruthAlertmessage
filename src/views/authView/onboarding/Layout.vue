@@ -35,6 +35,9 @@ export default {
     custom_theme(){
       return storeUtils.fireAway().theme.getCustom_theme
     }
+  },
+  mounted() {
+    storeUtils.fireAway().global?.getTenant()
   }
 }
 </script>

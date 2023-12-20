@@ -76,7 +76,7 @@
               <!-- template {team} -->
               <div v-if="h.id === 'member'">
                 <p class="menu-item" @click="editTeamMember(j)">Edit Member</p>
-                <p class="menu-item deactivate">Deactivate Member</p>
+                <p class="menu-item deactivate" @click="deactivateTeamMember(j)">Deactivate Member</p>
 
               </div>
 
@@ -195,6 +195,7 @@ export default {
       show:false,
       inModal:false,
       model:SettingsRequest.updateRole,
+      model2:SettingsRequest.editMember
 
 
     }
@@ -210,11 +211,17 @@ export default {
       this.model.name = obj?.name
       this.model.permission_ids = obj?.permissions.map(item => item.id)
       this.$emit('updatingRole', true)
-
     },
 
     editTeamMember(obj){
+      this.model2.email = obj.email
+      this.model2.permission_ids = obj.permissions
       this.$emit('updatingTeamMember', true)
+      console.log(this.model2)
+    },
+
+    deactivateTeamMember(obj){
+      this.$emit('deactivatingTeamMember', {openModal:true, userId:obj.id})
     },
 
     table_row_onclick_action(obj){

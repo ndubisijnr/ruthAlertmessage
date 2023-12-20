@@ -15,7 +15,6 @@
             <input id="invite-input" @keyup="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
             <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
             <div class="add-emails" >
-              {{emails}}
               <div class="emails" v-for="(i, index) in emails" :key="index">
                 <span >{{ellipsis(i, 18)}}</span>
                 <svg @click="removeEmail(index)" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -29,26 +28,82 @@
         </div>
 
         <div class="choose-role">
-          <p class="choose-role-p">Choose Role</p>
-          <div class="role-options-wrapper">
-            <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">
-            <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-              <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-              <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
-            </svg>
-            <div style="display: flex;align-items: center;gap: 0.5rem">
-              <img src="../../assets/Image.png" class="role-image"/>
-              <div>
-                <p class="p-1">{{ i.name }}</p>
-                <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>
+          <div class="choose-role">
+            <p class="choose-role-p">Choose Permission</p>
+            <div class="choose-perm-options">
+              <div class="choose-perm-options-item" @click="choosePermissions = 'full'">
+                <svg v-if="choosePermissions === 'full'" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                  <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
+                  <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                </svg>
+                <svg v-else  xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                </svg>
+                <p>Full Permission</p>
+              </div>
+              <div class="choose-perm-options-item" @click="choosePermissions = 'custom'">
+                <svg  v-if="choosePermissions === 'custom'"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                  <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
+                  <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                </svg>
+
+                <svg  v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                </svg>
+
+                <p>Custom Permission</p>
               </div>
             </div>
+
+
+            <div v-show="choosePermissions === 'full'">
+              <img src="../../assets/full_permission.svg" style="width: 100%;" />
+            </div>
+
+            <div v-show="choosePermissions === 'custom'" v-for="(i, index) in getPermissions" :key="index">
+              <div class="permission-children">
+                <div class="role-options" v-for="j in i" :key="j.id" >
+                  <svg v-if="selectedRole.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="24" height="24" rx="4" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                    <g clip-path="url(#clip0_1281_18363)">
+                      <path d="M10.2864 14.7196L18.1653 6.83984L19.3781 8.05184L10.2864 17.1436L4.83154 11.6887L6.04354 10.4767L10.2864 14.7196Z" fill="white"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_1281_18363">
+                        <rect width="20.5714" height="20.5714" fill="white" transform="translate(1.71484 1.71484)"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <svg @click="pushRole(j.id)"  v-else  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+                  <p class="p-2">{{ j.name }}</p>
+                </div>
+              </div>
+            </div>
+
           </div>
-          </div>
+<!--          <div class="role-options-wrapper">-->
+<!--            <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">-->
+<!--            <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--              <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>-->
+<!--              <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>-->
+<!--              <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>-->
+<!--            </svg>-->
+<!--            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">-->
+<!--              <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>-->
+<!--            </svg>-->
+<!--            <div style="display: flex;align-items: center;gap: 0.5rem">-->
+<!--              <img src="../../assets/Image.png" class="role-image"/>-->
+<!--              <div>-->
+<!--                <p class="p-1">{{ i.name }}</p>-->
+<!--                <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          </div>-->
 
         </div>
       </div>
@@ -103,6 +158,8 @@ export default {
       activeSelectedIndex:null,
       model:SettingsRequest.inviteNewMember,
       emails:[],
+      selectedRole:[],
+      choosePermissions:null,
       ellipsis,
       options:[
           {
@@ -127,15 +184,34 @@ export default {
       this.$emit('close', false)
     },
 
+    pushRole(id){
+      this.selectedRole.push(id)
+      console.log(this.selectedRole)
+    },
+
+    removeRole(id){
+      this.selectedRole = this.selectedRole.filter(it =>{
+        return it !== id
+      })
+      console.log(this.selectedRole)
+    },
+
+
     inviteMember(){
       if(this.emails.length < 1 && !this.inputValue) RuthdoAlert({title:"Please Add Emails", icon:"error"})
-      else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
       else {
 
         if(this.emails.includes(this.inputValue)){
 
         }else{
           this.emails.push(this.inputValue)
+          this.model.permission_ids = this.selectedRole
+          this.model.emails =  this.emails
+          storeUtils.fireAway().settings?.addTeamMembers(this.model).then(() => {
+            if(this.getError === 'false'){
+              this.close(false)
+            }
+          })
         }
         // console.log(this.emails)
         // if (this.emails.length > 0) {
@@ -180,6 +256,18 @@ export default {
     handleFocusOut(){
       this.isFocused = false
     },
+    getAllPermissionsId(){
+      let i = []
+      let key;
+      for(key in this.getPermissions){
+        if(!this.selectedRole.includes(key)){
+          i.push(this.getPermissions[key].map(item => item.id).toString())
+        }
+      }
+      const array = i.flatMap(item => item.split(',')).map(item => Number(item))
+      this.selectedRole = array
+    },
+
 
     removeEmail(value){
       console.log(value)
@@ -195,6 +283,10 @@ export default {
     getRoles(){
       return storeUtils.fireAway().settings?.getAllRoles
     },
+    getPermissions(){
+      return storeUtils.fireAway().settings?.getPermissions
+    },
+
     getLoading(){
       return storeUtils.fireAway().settings?.teamLoading
     },
@@ -213,13 +305,52 @@ export default {
   },
 
   mounted() {
-     storeUtils.fireAway().settings?.readAllRoles()
+    storeUtils.fireAway().settings?.readAllPermissions().then(() => {
+      this.getAllPermissionsId()
+    })
+     // storeUtils.fireAway().settings?.readAllRoles()
   }
 
 }
 </script>
 
 <style scoped>
+
+.choose-perm-options-item{
+  display: flex;
+  width: 17rem;
+  height: 3.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.875rem;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 1px solid #E5E9F2;
+  background: #FFF;
+  cursor: pointer;
+}
+.choose-perm-options{
+  display: flex;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+  .choose-perm-options{
+    flex-direction: column;
+  }
+
+  .choose-perm-options-item{
+    width: 100%;
+  }
+
+  .permission-type-wrapper{
+    width: 100%;
+  }
+}
+
 .role-options-wrapper{
   height: 40vh;
   overflow-y: scroll;

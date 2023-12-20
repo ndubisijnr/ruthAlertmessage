@@ -56,7 +56,7 @@ export const useGlobalStore = defineStore('globalStore', {
             // }
 
             try{
-                const response = await AuthService.getTenantId('daisy_travels.localhost')
+                const response = await AuthService.getTenantId('focus_travels.localhost')
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id

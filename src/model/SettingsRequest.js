@@ -61,7 +61,12 @@ class SettingsRequest {
 
     static inviteNewMember = {
         emails: null,
-        role_id:null
+        permission_ids:null
+    }
+
+    static editMember = {
+        email: null,
+        permission_ids:null
     }
 
     static  createDomain = {

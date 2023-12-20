@@ -47,6 +47,10 @@ export default {
 
      changePassword(tenant_id,payload){
         return apiService.Client.post(`/api/${tenant_id}/auth/change_password`,payload)
+    },
+
+    deActivateAccount(tenant_id, user_id){
+        return apiService.Client.patch(`api/${tenant_id}/user/profile/${user_id}`)
     }
 
 

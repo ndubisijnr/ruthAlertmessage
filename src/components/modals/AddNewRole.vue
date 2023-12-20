@@ -73,40 +73,6 @@
               </div>
             </div>
 
-<!--            <div  v-for="(i, key, index) in getPermissions" :key="index">-->
-<!--              <div class="permission-type-wrapper">-->
-<!--                <div class="permission-type">-->
-<!--                  <svg @click="down(index)" v-if="dropdown === 'up'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
-<!--                    <path d="M12 7.19987C12.7 7.19987 13.4 7.46986 13.93 7.99986L20.45 14.5199C20.74 14.8099 20.74 15.2899 20.45 15.5799C20.16 15.8699 19.68 15.8699 19.39 15.5799L12.87 9.05986C12.39 8.57986 11.61 8.57986 11.13 9.05986L4.60998 15.5799C4.31998 15.8699 3.83998 15.8699 3.54998 15.5799C3.25998 15.2899 3.25998 14.8099 3.54998 14.5199L10.07 7.99986C10.6 7.46986 11.3 7.19987 12 7.19987Z" fill="#292D32"/>-->
-<!--                  </svg>-->
-<!--                  <svg @click="up(index)" v-if="dropdown === 'down'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
-<!--                    <path d="M12 16.8001C11.3 16.8001 10.6 16.5301 10.07 16.0001L3.55002 9.48014C3.26002 9.19014 3.26002 8.71014 3.55002 8.42014C3.84002 8.13014 4.32002 8.13014 4.61002 8.42014L11.13 14.9401C11.61 15.4201 12.39 15.4201 12.87 14.9401L19.39 8.42014C19.68 8.13014 20.16 8.13014 20.45 8.42014C20.74 8.71014 20.74 9.19014 20.45 9.48014L13.93 16.0001C13.4 16.5301 12.7 16.8001 12 16.8001Z" fill="#292D32"/>-->
-<!--                  </svg>-->
-<!--                  <p class="permission-type-p">{{ key}}</p>-->
-<!--                </div>-->
-<!--                <div class="permission-length">{{i.length}}</div>-->
-<!--              </div>-->
-<!--              <div v-if="activeIndex === index" class="permission-children">-->
-<!--                <div class="role-options" v-for="j in i" :key="j.id" >-->
-<!--                  <svg v-if="selectedRole.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--                    <rect width="24" height="24" rx="4" fill="#89128A"/>-->
-<!--                    <g clip-path="url(#clip0_1281_18363)">-->
-<!--                      <path d="M10.2864 14.7196L18.1653 6.83984L19.3781 8.05184L10.2864 17.1436L4.83154 11.6887L6.04354 10.4767L10.2864 14.7196Z" fill="white"/>-->
-<!--                    </g>-->
-<!--                    <defs>-->
-<!--                      <clipPath id="clip0_1281_18363">-->
-<!--                        <rect width="20.5714" height="20.5714" fill="white" transform="translate(1.71484 1.71484)"/>-->
-<!--                      </clipPath>-->
-<!--                    </defs>-->
-<!--                  </svg>-->
-<!--                  <svg @click="pushRole(j.id)"  v-else  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">-->
-<!--                  <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="white" stroke="#C0CCDA"/>-->
-<!--                </svg>-->
-<!--                <p class="p-2">{{ j.name }}</p>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            </div>-->
-
           </div>
         </div>
 
@@ -253,9 +219,7 @@ export default {
 
 
   mounted() {
-    storeUtils.fireAway().settings?.readAllPermissions().then(() => {
-      this.getAllPermissionsId()
-    })
+
   }
 }
 </script>
@@ -544,4 +508,5 @@ export default {
     width: 90%;
   }
 }
+
 </style>

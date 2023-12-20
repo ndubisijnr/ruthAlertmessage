@@ -181,6 +181,28 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
+        async updateTeamMember(payload){
+            this.teamLoading = true
+
+            try{
+                const response = await Teams.updateInvite(storeUtils.fireAway().global?.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.teamLoading = false
+                    await storeUtils.fireAway().settings?.readAllMembers()
+                    // standby
+                }
+
+            }catch(err){
+                this.teamLoading = false
+                catchErrorHandler(err)
+                await storeUtils.fireAway().global?.commitError(null)
+
+                // do nothing
+            }
+
+        },
+
         async createRole(payload=SettingsRequest.createRole){
             this.rolesLoading = true
             try{

@@ -41,6 +41,7 @@
   <change-password v-show="changePassword" @close="close"></change-password>
   <edit-role v-show="updateRole" @close="close"></edit-role>
   <edit-team-member v-show="editTeamMember" @close="close"></edit-team-member>
+  <deactivate-account-confirm v-show="isDeactivateAccount" :user_id="teamMemberId" @close="close"></deactivate-account-confirm>
 
   <!--  <account-deactivated></account-deactivated>-->
 <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
@@ -128,10 +129,10 @@
               </div>
             </div>
             <div id="teams" class="teams  animate__animated animate__fadeIn" v-show="currentTab === 'Teams'">
-              <div class="manage-roles">
-                <p :style="activeManageRole === 'team'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>
-                <p :style="activeManageRole === 'permissions'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>
-              </div>
+<!--              <div class="manage-roles">-->
+<!--                <p :style="activeManageRole === 'team'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>-->
+<!--                <p :style="activeManageRole === 'permissions'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>-->
+<!--              </div>-->
 
               <div class="teams-header" >
 
@@ -153,7 +154,7 @@
 
                 <div v-if="activeManageRole==='team'" >
                   <div v-if="getMembers?.length > 0" class="table-wrapper">
-                    <domain-table @updatingTeamMember="updateTeam" :is-paginate="true" :data="membersFilteredResult.length > 0 ? membersFilteredResult : getMembers" :fields="membersFields"></domain-table>
+                    <domain-table @updatingTeamMember="updateTeam" @deactivatingTeamMember="deactivateTeamMember" :is-paginate="true" :data="membersFilteredResult.length > 0 ? membersFilteredResult : getMembers" :fields="membersFields"></domain-table>
                   </div>
 
                   <div v-else class="no-team-member">
@@ -532,6 +533,7 @@ import { ref } from "vue";
 import Customization from "@/components/customization/Customization.vue";
 import {lightenColor} from "@/mixins/themeUtils";
 import EditTeamMember from "@/components/modals/EditTeamMember.vue";
+import deactivateAccountConfirm from "@/components/modals/DeactivateAccountConfirm.vue";
 
 export default {
   name: "Settings",
@@ -578,6 +580,7 @@ export default {
       editBankAccount:false,
       isEditing:false,
       show:true,
+      isDeactivateAccount:false,
       intDropdown:false,
       addDomain:false,
       addAccount:false,
@@ -588,6 +591,7 @@ export default {
       paymentType:'bank',
       inModal:false,
       editTeamMember:false,
+      teamMemberId:null,
       lightenColor,
       // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
       error:{
@@ -640,6 +644,11 @@ export default {
       console.log(value)
       this.editTeamMember = value
 
+    },
+
+    deactivateTeamMember(obj){
+      this.teamMemberId = obj.userId
+      this.isDeactivateAccount = obj.openModal
     },
 
     activateTab(value) {
@@ -776,6 +785,7 @@ export default {
       this.changePassword = value
       this.updateRole = value
       this.editTeamMember = value
+      this.isDeactivateAccount = value
     },
 
     handleUpdateBizProfile(){
@@ -969,6 +979,8 @@ export default {
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
     storeUtils.fireAway().settings?.readAllMembers()
+    storeUtils.fireAway().settings?.readAllPermissions()
+
 
   }
 }

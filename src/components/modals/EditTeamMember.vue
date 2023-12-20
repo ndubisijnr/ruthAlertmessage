@@ -1,79 +1,135 @@
 <template>
   <layout v-slot:children>
     <div v-if="getError !== 'false'" class="modal">
-    <div class="modal-header">
-      <p class="add-team-member">Edit Team Member</p>
-      <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
-    </div>
+      <div class="modal-header">
+        <p class="add-team-member">Edit Team Member</p>
+        <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
+      </div>
 
-    <div class="main">
-      <div class="modal-body">
+      <div class="main">
+        <div class="modal-body">
 
-        <div class="email-area">
-          <div class="on_boarding_input">
-            <label class="label" :class="{'focused':isFocused}">Email Address</label>
-            <input id="invite-input" readonly :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
-            <div class="add-emails" >
-              <div class="emails" v-for="(i, index) in emails" :key="index">
-                <span >{{ellipsis(i, 18)}}</span>
-                <svg @click="removeEmail(index)" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.89617 2.6781C6.94224 2.44942 9.05741 2.44942 11.1035 2.6781C12.2453 2.80571 13.1665 3.70532 13.3005 4.85165C13.5452 6.9434 13.5452 9.05653 13.3005 11.1483C13.1665 12.2946 12.2453 13.1942 11.1035 13.3218C9.05741 13.5505 6.94224 13.5505 4.89617 13.3218C3.75436 13.1942 2.83318 12.2946 2.69911 11.1483C2.45446 9.05653 2.45446 6.9434 2.69911 4.85165C2.83318 3.70532 3.75436 2.80571 4.89617 2.6781ZM5.64628 5.64641C5.84155 5.45114 6.15813 5.45114 6.35339 5.64641L7.99984 7.29286L9.64629 5.64641C9.84155 5.45115 10.1581 5.45115 10.3534 5.64641C10.5487 5.84167 10.5487 6.15826 10.3534 6.35352L8.70695 7.99996L10.3534 9.64641C10.5487 9.84167 10.5487 10.1583 10.3534 10.3535C10.1581 10.5488 9.84155 10.5488 9.64628 10.3535L7.99984 8.70707L6.3534 10.3535C6.15813 10.5488 5.84155 10.5488 5.64629 10.3535C5.45103 10.1583 5.45103 9.84167 5.64629 9.64641L7.29274 7.99996L5.64628 6.35351C5.45102 6.15825 5.45102 5.84167 5.64628 5.64641Z" fill="#2D3139"/>
-                </svg>
+          <div class="email-area">
+            <div class="on_boarding_input">
+              <label class="label" :class="{'focused':isFocused}">Email Address</label>
+              <input id="invite-input" disabled :class="{'focused':isFocused}" v-model="model.email"  type="email" class="formInput" placeholder="Start by typing an email address" />
+              <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
+              <div class="add-emails" >
+                <div class="emails" v-for="(i, index) in emails" :key="index">
+                  <span >{{ellipsis(i, 18)}}</span>
+                  <svg @click="removeEmail(index)" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.89617 2.6781C6.94224 2.44942 9.05741 2.44942 11.1035 2.6781C12.2453 2.80571 13.1665 3.70532 13.3005 4.85165C13.5452 6.9434 13.5452 9.05653 13.3005 11.1483C13.1665 12.2946 12.2453 13.1942 11.1035 13.3218C9.05741 13.5505 6.94224 13.5505 4.89617 13.3218C3.75436 13.1942 2.83318 12.2946 2.69911 11.1483C2.45446 9.05653 2.45446 6.9434 2.69911 4.85165C2.83318 3.70532 3.75436 2.80571 4.89617 2.6781ZM5.64628 5.64641C5.84155 5.45114 6.15813 5.45114 6.35339 5.64641L7.99984 7.29286L9.64629 5.64641C9.84155 5.45115 10.1581 5.45115 10.3534 5.64641C10.5487 5.84167 10.5487 6.15826 10.3534 6.35352L8.70695 7.99996L10.3534 9.64641C10.5487 9.84167 10.5487 10.1583 10.3534 10.3535C10.1581 10.5488 9.84155 10.5488 9.64628 10.3535L7.99984 8.70707L6.3534 10.3535C6.15813 10.5488 5.84155 10.5488 5.64629 10.3535C5.45103 10.1583 5.45103 9.84167 5.64629 9.64641L7.29274 7.99996L5.64628 6.35351C5.45102 6.15825 5.45102 5.84167 5.64628 5.64641Z" fill="#2D3139"/>
+                  </svg>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="choose-role">
+            <div class="choose-role">
+              {{selectedRole}}
+              <p class="choose-role-p">Choose Permission</p>
+              <div class="choose-perm-options">
+                <div class="choose-perm-options-item" @click="choosePermissions = 'full'">
+                  <svg v-if="choosePermissions === 'full'" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                    <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
+                    <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+                  <svg v-else  xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+                  <p>Full Permission</p>
+                </div>
+                <div class="choose-perm-options-item" @click="choosePermissions = 'custom'">
+                  <svg  v-if="choosePermissions === 'custom'"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                    <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
+                    <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+
+                  <svg  v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+
+                  <p>Custom Permission</p>
+                </div>
+              </div>
+
+
+              <div v-show="choosePermissions === 'full'">
+                <img src="../../assets/full_permission.svg" style="width: 100%;" />
+              </div>
+
+              {{selectedRole}}
+              <div v-show="choosePermissions === 'custom'" v-for="(i, index) in getPermissions" :key="index">
+                <div class="permission-children">
+                  <div class="role-options" v-for="j in i" :key="j.id">
+                    <svg v-if="selectedRole?.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="24" height="24" rx="4" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                      <g clip-path="url(#clip0_1281_18363)">
+                        <path d="M10.2864 14.7196L18.1653 6.83984L19.3781 8.05184L10.2864 17.1436L4.83154 11.6887L6.04354 10.4767L10.2864 14.7196Z" fill="white"/>
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1281_18363">
+                          <rect width="20.5714" height="20.5714" fill="white" transform="translate(1.71484 1.71484)"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <svg @click="pushRole(j.id)"  v-else  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
+                    </svg>
+                    <p class="p-2">{{ j.name }}</p>
+                  </div>
+                </div>
               </div>
 
             </div>
-          </div>
+            <!--          <div class="role-options-wrapper">-->
+            <!--            <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">-->
+            <!--            <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+            <!--              <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>-->
+            <!--              <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>-->
+            <!--              <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>-->
+            <!--            </svg>-->
+            <!--            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">-->
+            <!--              <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>-->
+            <!--            </svg>-->
+            <!--            <div style="display: flex;align-items: center;gap: 0.5rem">-->
+            <!--              <img src="../../assets/Image.png" class="role-image"/>-->
+            <!--              <div>-->
+            <!--                <p class="p-1">{{ i.name }}</p>-->
+            <!--                <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--          </div>-->
 
+          </div>
         </div>
 
-        <div class="choose-role">
-          <p class="choose-role-p">Choose Role</p>
-          <div class="role-options-wrapper">
-            <div class="role-options" v-for="(i, index) in getRoles" @click="select(index, i)">
-            <svg v-if="activeSelected && activeSelectedIndex === index"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="20" height="20" rx="10" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-              <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-              <rect x="5" y="5" width="10" height="10" rx="5" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" :stroke="custom_theme ? custom_theme.color : default_theme.color"/>
-            </svg>
-            <div style="display: flex;align-items: center;gap: 0.5rem">
-              <img src="../../assets/Image.png" class="role-image"/>
-              <div>
-                <p class="p-1">{{ i.name }}</p>
-                <p class="p-2" v-if="i.name === 'Super Admin'">Admins will have full access as you</p>
-              </div>
-            </div>
-          </div>
-          </div>
-
+        <div class="modal-footer">
+          <on-boarding-button border="none" :loading="getLoading" @click="inviteMember" :disabled="getLoading" btn-width="100%" text-node="Save"></on-boarding-button>
+          <on-boarding-button @click="close" btn-width="100%" color="#000" text-node="Cancel" background="transparent" border="none"></on-boarding-button>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <on-boarding-button border="none" :loading="getLoading" @click="inviteMember" :disabled="getLoading" btn-width="100%" text-node="Save"></on-boarding-button>
-        <on-boarding-button @click="close" btn-width="100%" color="#000" text-node="Cancel" background="transparent" border="none"></on-boarding-button>
       </div>
 
     </div>
 
+<!--    <div v-if="getError === 'false'" class="invite-success">-->
+<!--      <div class="invite-success-body">-->
+<!--        <img src="../../assets/invite_success.gif" class="invite-gif" />-->
 
+<!--        <h4 class="invite-h">Invite sent successful!</h4>-->
 
+<!--        <p class="invite-p">You have successfully sent an invite to your member</p>-->
+<!--      </div>-->
 
-  </div>
-
-    <div v-if="getError === 'false'" class="invite-success">
-      <div class="invite-success-body">
-        <img src="../../assets/invite_success.gif" class="invite-gif" />
-
-        <h4 class="invite-h">Invite sent successful!</h4>
-
-        <p class="invite-p">You have successfully sent an invite to your member</p>
-      </div>
-
-      <on-boarding-button @click="close" text-node="Continue" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>
-    </div>
+<!--      <on-boarding-button @click="close" text-node="Continue" background="#F8F1F8" border="none" color="#89128A"></on-boarding-button>-->
+<!--    </div>-->
 
   </layout>
 </template>
@@ -99,14 +155,17 @@ export default {
       isFocused:false,
       activeSelected:null,
       activeSelectedIndex:null,
-      model:SettingsRequest.inviteNewMember,
+      model:SettingsRequest.editMember,
       emails:[],
+      selectedRole:[],
+      choosePermissions:"custom",
+      currentPerm:[],
       ellipsis,
       options:[
-          {
-            type:"Owner",
-            can_do:"Admins will have full access as you"
-          },
+        {
+          type:"Owner",
+          can_do:"Admins will have full access as you"
+        },
         {
           type:"Viewer",
           can_do:"View product content"
@@ -125,16 +184,43 @@ export default {
       this.$emit('close', false)
     },
 
+    pushRole(id){
+      this.selectedRole.push(id)
+      console.log(this.selectedRole)
+    },
+
+    removeRole(id){
+      this.selectedRole = this.selectedRole.filter(it =>{
+        return it !== id
+      })
+      console.log(this.selectedRole)
+    },
+
+
     inviteMember(){
-      if(this.emails.length < 1 && !this.inputValue) RuthdoAlert({title:"Please Add Emails", icon:"error"})
-      else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
-      else {
-
-        if(this.emails.includes(this.inputValue)){
-
-        }else{
-          this.emails.push(this.inputValue)
+      this.model.permission_ids = this.selectedRole
+      console.log(this.model)
+      if(this.choosePermissions === 'full'){
+        this.getAllPermissionsId()
+      }
+      storeUtils.fireAway().settings?.updateTeamMember(this.model).then(() => {
+        if(this.getError === 'false'){
+          this.close(false)
         }
+      })
+      // createRole(){
+      //   if(this.model.name !== null){
+      //
+      //   }else{
+      //     RuthdoAlert({title:'Please give your role a name', icon:'error'})
+      //   }
+      //
+      // },
+      // storeUtils.fireAway().settings?.addTeamMembers(this.model).then(() => {
+      //   if(this.getError === 'false'){
+      //     this.close(false)
+      //   }
+      // })
         // console.log(this.emails)
         // if (this.emails.length > 0) {
         //   // storeUtils.fireAway().settings?.addTeamMembers(this.model)
@@ -145,16 +231,10 @@ export default {
         //   console.log(this.model)
         //
         // }
-      }
-        //     .then(() => {
-        //   if(this.getError === 'false'){
-        //     this.close(false)
-        //   }
-        // }))
-    },
+      },
 
     select(value, i){
-     this.activeSelected = true
+      this.activeSelected = true
       this.activeSelectedIndex = value
       this.model.role_id = i.id
     },
@@ -178,6 +258,10 @@ export default {
     handleFocusOut(){
       this.isFocused = false
     },
+    getAllPermissionsId(){
+      this.selectedRole = this.model.permission_ids?.map(it => it.id);
+    },
+
 
     removeEmail(value){
       console.log(value)
@@ -193,6 +277,10 @@ export default {
     getRoles(){
       return storeUtils.fireAway().settings?.getAllRoles
     },
+    getPermissions(){
+      return storeUtils.fireAway().settings?.getPermissions
+    },
+
     getLoading(){
       return storeUtils.fireAway().settings?.teamLoading
     },
@@ -211,13 +299,51 @@ export default {
   },
 
   mounted() {
-     storeUtils.fireAway().settings?.readAllRoles()
+    this.getAllPermissionsId()
+    console.log(this.selectedRole)
+    // storeUtils.fireAway().settings?.readAllRoles()
   }
 
 }
 </script>
 
 <style scoped>
+
+.choose-perm-options-item{
+  display: flex;
+  width: 17rem;
+  height: 3.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.875rem;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: 1px solid #E5E9F2;
+  background: #FFF;
+  cursor: pointer;
+}
+.choose-perm-options{
+  display: flex;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+  .choose-perm-options{
+    flex-direction: column;
+  }
+
+  .choose-perm-options-item{
+    width: 100%;
+  }
+
+  .permission-type-wrapper{
+    width: 100%;
+  }
+}
+
 .role-options-wrapper{
   height: 40vh;
   overflow-y: scroll;

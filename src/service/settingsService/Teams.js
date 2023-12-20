@@ -5,6 +5,10 @@ export default {
         return apiService.Client.post(`/api/${tenant_id}/user/invite`, payload)
     } ,
 
+    updateInvite(tenant_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/user/assign`, payload)
+    },
+
 
     getAllTeamMembers(tenant_id){
         return apiService.Client.get(`/api/${tenant_id}/user`)
