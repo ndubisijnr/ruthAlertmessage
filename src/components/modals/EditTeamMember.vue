@@ -5,10 +5,8 @@
         <p class="add-team-member">Edit Team Member</p>
         <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
       </div>
-
       <div class="main">
         <div class="modal-body">
-
           <div class="email-area">
             <div class="on_boarding_input">
               <label class="label" :class="{'focused':isFocused}">Email Address</label>
@@ -26,10 +24,9 @@
             </div>
 
           </div>
-
+          <h1 hidden="">{{xxx}}</h1>
           <div class="choose-role">
             <div class="choose-role">
-              {{selectedRole}}
               <p class="choose-role-p">Choose Permission</p>
               <div class="choose-perm-options">
                 <div class="choose-perm-options-item" @click="choosePermissions = 'full'">
@@ -63,7 +60,6 @@
                 <img src="../../assets/full_permission.svg" style="width: 100%;" />
               </div>
 
-              {{selectedRole}}
               <div v-show="choosePermissions === 'custom'" v-for="(i, index) in getPermissions" :key="index">
                 <div class="permission-children">
                   <div class="role-options" v-for="j in i" :key="j.id">
@@ -202,6 +198,8 @@ export default {
       console.log(this.model)
       if(this.choosePermissions === 'full'){
         this.getAllPermissionsId()
+        this.model.permission_ids = this.selectedRole
+        console.log(this.selectedRole)
       }
       storeUtils.fireAway().settings?.updateTeamMember(this.model).then(() => {
         if(this.getError === 'false'){
@@ -259,7 +257,16 @@ export default {
       this.isFocused = false
     },
     getAllPermissionsId(){
-      this.selectedRole = this.model.permission_ids?.map(it => it.id);
+      let i = []
+      let key;
+      for(key in this.getPermissions){
+        if(!this.selectedRole.includes(key)){
+          i.push(this.getPermissions[key].map(item => item.id).toString())
+        }
+      }
+      const array = i.flatMap(item => item.split(',')).map(item => Number(item))
+      this.selectedRole = array
+
     },
 
 
@@ -273,7 +280,22 @@ export default {
 
   },
 
+  watch:{
+    'model.permission_ids'(old, newValue){
+      console.log('watching')
+      if(newValue){
+        console.log(old, newValue)
+      }else{
+        console.log(old)
+      }
+    }
+  },
+
   computed:{
+    xxx(){
+      this.selectedRole = this.model.permission_ids?.map(it => it.id);
+      return this.selectedRole
+    },
     getRoles(){
       return storeUtils.fireAway().settings?.getAllRoles
     },
@@ -298,9 +320,8 @@ export default {
     }
   },
 
+
   mounted() {
-    this.getAllPermissionsId()
-    console.log(this.selectedRole)
     // storeUtils.fireAway().settings?.readAllRoles()
   }
 
