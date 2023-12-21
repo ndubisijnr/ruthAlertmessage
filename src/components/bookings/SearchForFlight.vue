@@ -27,7 +27,6 @@
                     <div class="form-area">
 
                       <div class="form-area-body">
-
                         <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                           <div class="group-inputs">
                             <div class="input-divs">
@@ -475,33 +474,34 @@ export default {
         storeUtils.fireAway().flight?.handleMultiCityFlightSearch(this.flightModel)
       }
       else{
-        if(!this.destination || !this.return_date){
-          RuthdoAlert({title:'Travel Dates is required', icon:'error'});
-          this.updateDateValue(null)
-        } else{
+        if(this.activeDestType === 'round_trip'){
+          this.flightModel.origin = this.origin
+          this.flightModel.destination = this.destination
+          this.flightModel.return_date = this.return_date
+          this.flightModel.departure_date = this.departure_date
+          this.flightModel.with_non_stops = false
+          this.flightModel.with_markup =  false
+          if(!this.destination || !this.return_date){
+            RuthdoAlert({title: 'Travel Dates is required', icon: 'error'});
+          } else {
+            storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
 
 
-          if(this.activeDestType === 'round_trip'){
-              this.flightModel.origin = this.origin
-              this.flightModel.destination = this.destination
-              this.flightModel.return_date = this.return_date
-              this.flightModel.departure_date = this.departure_date
-              this.flightModel.with_non_stops = false
-              this.flightModel.with_markup =  false
           }
-
-          if(this.activeDestType === 'one_way'){
-            this.flightModel.origin = this.origin
-            this.flightModel.destination = this.destination
-            this.flightModel.departure_date = this.departure_date
-            this.flightModel.return_date = null
-            this.flightModel.with_non_stops = false
-            this.flightModel.with_markup =  false
-          }
-
-          storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
         }
-
+        if(this.activeDestType === 'one_way'){
+          this.flightModel.origin = this.origin
+          this.flightModel.destination = this.destination
+          this.flightModel.departure_date = this.departure_date
+          this.flightModel.return_date = null
+          this.flightModel.with_non_stops = false
+          this.flightModel.with_markup =  false
+          if(!this.departure_date){
+            RuthdoAlert({title: 'Departure  Date is required', icon: 'error'});
+          }else{
+            storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
+          }
+        }
       }
 
     },

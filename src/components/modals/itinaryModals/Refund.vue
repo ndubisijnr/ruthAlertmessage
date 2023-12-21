@@ -88,7 +88,7 @@ export default {
                     <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                       <p class="label_text">Ticket Number</p>
                     </div>
-                      <input class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
+                      <input v-if="data?.tickets" class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
                   </div>
 
 

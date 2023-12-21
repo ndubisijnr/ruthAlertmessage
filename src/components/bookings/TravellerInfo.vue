@@ -429,9 +429,12 @@ export default {
     },
 
     proceedToPayment(){
+      const name = this.getBusinessProfile.name
+      let first_name = name.split(' ')[0]
+      let last_name = name.split(' ')[1]
       this.bookFlightModal.passengers = this.passengers
-      this.bookFlightModal.contact_first_name = this.getUser?.first_name
-      this.bookFlightModal.contact_last_name = this.getUser?.last_name
+      this.bookFlightModal.contact_first_name = this.getUser?.first_name ? this.getUser?.first_name : first_name
+      this.bookFlightModal.contact_last_name = this.getUser?.last_name ? this.getUser?.last_name : last_name
       this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
       storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
     },
@@ -459,6 +462,13 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
+    },
+    getBusinessProfile(){
+      if(localStorage.businessProfile){
+        const business = JSON.parse(localStorage?.businessProfile)
+        return business
+      }
+
     },
 
     getSelectedFlight(){
