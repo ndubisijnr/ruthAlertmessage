@@ -279,15 +279,16 @@ export const useAuthStore = defineStore('authStore', {
             }
         },
 
-       async handleDeactivateAccount(user_id){
+       async handleDeactivateAccount(user_id, payload={status:"deactivated"}){
             try{
                 this.loading = true
-                const response = await AuthService.deActivateAccount(storeUtils.fireAway().global?.getTenant_id,user_id)
+                const response = await AuthService.deActivateAccount(storeUtils.fireAway().global?.getTenant_id,user_id,payload)
                 let responseData = response.data
 
                 if(responseData.success){
                     this.loading = false
                     this.stage = 'true'
+                    storeUtils.fireAway().settings?.readAllMembers()
                 }
             }
             catch (err) {

@@ -12,7 +12,7 @@
         <div class="email-area">
           <div class="on_boarding_input">
             <label class="label" :class="{'focused':isFocused}">Email Address</label>
-            <input id="invite-input" @keyup="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
+            <input id="invite-input" @keyup="checkComma" autocomplete="off" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
             <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
             <div class="add-emails" >
               <div class="emails" v-for="(i, index) in emails" :key="index">

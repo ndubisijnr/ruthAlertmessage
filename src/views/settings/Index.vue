@@ -979,9 +979,6 @@ export default {
   mounted() {
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
-    storeUtils.fireAway().settings?.readAllPermissions()
-
-
   }
 }
 </script>
