@@ -87,12 +87,25 @@
                   <div class="personal-form-area">
                     <form>
                       <div class="grouped_input">
-                        <on-boarding-input width="100%" :placeholder="getUser.first_name" label="first name"></on-boarding-input>
-                        <on-boarding-input :placeholder="getUser.last_name" width="100%" label="last name"></on-boarding-input>
+                        <div class="on_boarding_input">
+                          <label class="label" :class="{'focused':isFocused}">First Name</label>
+                          <input id="first_name"  :class="{'focused':isFocused}" :value="getUser.first_name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                        </div>
+                        <div class="on_boarding_input">
+                          <label class="label" :class="{'focused':isFocused}">Last Name</label>
+                          <input id="last_name"  :class="{'focused':isFocused}"  :value="getUser.last_name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                        </div>
                       </div>
 
-                      <on-boarding-input width="100%" :placeholder="getUser.email" label="Email address"></on-boarding-input>
-                      <on-boarding-input isvalidate="true" width="100%" label="Phone number" :placeholder="getUser.phone" @inputValue="value => model1.phone = value"></on-boarding-input>
+                      <div class="on_boarding_input">
+                        <label class="label" :class="{'focused':isFocused}">Email</label>
+                        <input id="email"  :class="{'focused':isFocused}" :value="getUser.email" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" disabled />
+                      </div>
+
+                      <div class="on_boarding_input">
+                        <label class="label" :class="{'focused':isFocused}">Phone</label>
+                        <input id="phone"  :class="{'focused':isFocused}" :value="getUser.phone" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                      </div>
                     </form>
                     <div class="change_password">
                       <div>
@@ -556,12 +569,13 @@ export default {
     ChangePassword,
     EditRole,
     Customization,
-    EditTeamMember
+    EditTeamMember,
   },
 
   data(){
     return{
       pureColor:"red",
+      isFocused:false,
       gradientColor:"linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
       currentTab:this.getCurrentRouteParams,
       verificationType:'business',
@@ -638,6 +652,39 @@ export default {
 
     },
 
+    marry(value){
+      switch (value) {
+        case 'Account':
+          storeUtils.fireAway().settings?.getPersonalProfileAction()
+          break;
+        case 'Domain':
+          storeUtils.fireAway().settings?.getDomainsAction()
+          break;
+        case 'Teams':
+          storeUtils.fireAway().settings?.readAllMembers()
+          break;
+        case 'Notifications':
+          storeUtils.fireAway().settings?.readAllNotification()
+          break;
+        case 'Payment':
+          storeUtils.fireAway().settings?.readBanksAccount()
+          break;
+        case 'Markup':
+          storeUtils.fireAway().settings?.readMarkupSettings()
+          break;
+        case 'Customization':
+          this.currentTab = 'Customization';
+          break;
+        default:
+          this.currentTab = 'Account';
+      }
+    },
+    handleFocus(){
+      this.isFocused = true
+    },
+    handleFocusOut(){
+      this.isFocused = false
+    },
 
 
     updateTeam(value){
@@ -808,10 +855,14 @@ export default {
     },
 
     handleUpdateProfile(){
-        this.model1.first_name = this.model1.first_name ? this.model1.first_name : this.getUser.first_name
-        this.model1.last_name = this.model1.last_name ? this.model1.last_name : this.getUser.last_name
-        this.model1.email = this.model1.email ? this.model1.email : this.getUser.email
-        this.model1.phone = this.model1.phone ? this.model1.phone : this.getUser.phone
+        const first_name = document.getElementById('first_name')
+        const last_name = document.getElementById('last_name')
+        const email = document.getElementById('email')
+        const phone = document.getElementById('phone')
+        this.model1.first_name = first_name.value
+        this.model1.last_name = last_name.value
+        this.model1.email = email.value
+        this.model1.phone = phone.value
         storeUtils.fireAway().settings?.updateProfileAction()
     },
 
@@ -880,6 +931,7 @@ export default {
 
 
   computed:{
+
     getCurrentRoute(){
       return router.currentRoute.value.name
     },
@@ -977,7 +1029,7 @@ export default {
 
 
   mounted() {
-    setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
+    setTimeout(() => { this.currentTab = this.getCurrentRouteParams,  this.marry(this.getCurrentRouteParams) },500)
     storeUtils.fireAway().global?.commitError(null)
   }
 }
@@ -985,6 +1037,64 @@ export default {
 
 <style scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
+
+.on_boarding_input{
+  position:relative;
+  width: 100%;
+}
+
+.formInput{
+  height: 4rem;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border-radius: 0.375rem;
+  border: 1px solid  #E0E6ED;
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
+  margin-bottom: 1rem;
+  width:100%;
+}
+
+.label.focused{
+  position:absolute;
+  top:0.3rem;
+  left:1.25rem;
+  width: auto;
+  height:1.50rem;
+  font-size:0.88rem;
+  text-transform: capitalize;
+  line-height: 1.5rem; /* 171.429% */
+  font-style: normal;
+  font-weight: 300;
+  color:  #575A65;
+  transition: ease-in-out .2s;
+}
+
+.label{
+  position:absolute;
+  top:0.5rem;
+  left:1.25rem;
+  width: auto;
+  height:1.50rem;
+  font-size:1rem;
+  text-transform: capitalize;
+  line-height: 1.7rem; /* 171.429% */
+  font-style: normal;
+  font-weight: 300;
+  color:  #575A65;
+  transition: ease-in .2s;
+}
+
+/* .groupedformInput{} */
+
+.formInput.focused{
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
+  border: 1px solid var(--app-default-primary);
+  border-radius: 0.375rem;
+  outline: var(--app-default-primary);
+}
+
 
 #customization{
   position:relative;

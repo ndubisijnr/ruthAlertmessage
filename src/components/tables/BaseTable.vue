@@ -20,7 +20,8 @@
 
   </div>
 
-  <table class="table">
+
+  <table class="table"  >
 
     <thead class="th">
     <tr v-for="h in fields" :key="h.key" class="table-cell table-header">
@@ -62,9 +63,11 @@
               </span>
 
 
+
+
           <!-- template {actions}  -->
           <div v-else-if="h.label.toLowerCase() === 'action'">
-                <span @click="currentActionIndex = index, show=!show" style="cursor: pointer">
+                <span @click="currentActionIndex = index, show=!show" :style="j.type ==='manager' ? {cursor:'not-allowed'}:{cursor: 'pointer'}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="4" height="18" viewBox="0 0 4 18" fill="none">
                         <path d="M3.86744 2.58888C3.86751 2.83416 3.81928 3.07706 3.72549 3.3037C3.63169 3.53034 3.49418 3.73629 3.32079 3.90979C3.14741 4.08329 2.94155 4.22093 2.71497 4.31487C2.48838 4.40881 2.24552 4.4572 2.00024 4.45728C1.75495 4.45736 1.51206 4.40913 1.28541 4.31533C1.05877 4.22154 0.852823 4.08402 0.679326 3.91064C0.505829 3.73725 0.368183 3.53139 0.274244 3.30481C0.180305 3.07823 0.131915 2.83536 0.131836 2.59008C0.131677 2.09471 0.32831 1.61956 0.678478 1.26917C1.02865 0.918777 1.50366 0.721839 1.99904 0.72168C2.49441 0.721521 2.96955 0.918154 3.31995 1.26832C3.67034 1.61849 3.86728 2.09351 3.86744 2.58888Z" fill="black"/>
                         <path d="M2.00001 10.8665C3.03124 10.8665 3.86721 10.0305 3.86721 8.99928C3.86721 7.96805 3.03124 7.13208 2.00001 7.13208C0.968786 7.13208 0.132812 7.96805 0.132812 8.99928C0.132812 10.0305 0.968786 10.8665 2.00001 10.8665Z" fill="black"/>
@@ -74,7 +77,7 @@
 
             <div class="menu" v-show="currentActionIndex === index && show">
               <!-- template {team} -->
-              <div v-if="h.id === 'member'">
+              <div v-if="h.id === 'member'" v-show="j.type !== 'manager'">
                 <p class="menu-item" @click="editTeamMember(j)">Edit Member</p>
                 <p class="menu-item deactivate" @click="deactivateTeamMember(j)">Deactivate Member</p>
 
@@ -202,6 +205,10 @@ export default {
   },
 
   methods:{
+    closePop(){
+      console.log('click')
+    },
+
     readAgent(obj){
       localStorage.userWallet = JSON.stringify(obj.wallet)
       storeUtils.fireAway().travelAgent?.handleGetUser(obj)
@@ -217,7 +224,7 @@ export default {
       this.model2.email = obj.email
       this.model2.permission_ids = obj.permissions
       this.$emit('updatingTeamMember', true)
-      console.log(this.model2)
+      console.log(obj)
     },
 
     deactivateTeamMember(obj){
@@ -360,7 +367,6 @@ export default {
   /*border: solid;*/
   text-align: left;
   margin: 1.31rem;
-  text-transform: capitalize;
   cursor: pointer;
 }
 .activePage{
@@ -452,6 +458,7 @@ export default {
   /* border-collapse: collapse; */
   width: 100%;
   margin: 0 auto;
+  position: relative;
 
 }
 
@@ -507,7 +514,6 @@ export default {
   /*width: 100%;*/
   height: 3.5rem;
   text-align: justify-all;
-  text-transform:lowercase;
   color:  #1D1E2C;
 
   /* Body/16px/Regular */
@@ -525,7 +531,7 @@ export default {
   align-items: center;
   justify-content: start;
   gap: 0.5rem;
-  text-transform: capitalize;
+  //text-transform: ;
   padding-left: 1rem;
 
 }
