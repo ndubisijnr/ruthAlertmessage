@@ -21,14 +21,17 @@
   </div>
 
 
-  <table class="table"  >
+  <table class="table" >
 
     <thead class="th">
     <tr v-for="h in fields" :key="h.key" class="table-cell table-header">
       <th class="table-label">{{ h.label }}</th>
     </tr>
     </thead>
-    <tbody class="tr" v-if="data?.length > 0">
+    <tbody class="tr" v-if="data?.length">
+    <div v-if="data.length === 0">
+      <p>No User Found</p>
+    </div>
     <tr v-for="h in fields" :key="h.key" class="table-cell">
       <div v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
         <td  @click="table_row_onclick_action(j)" class="table-row px-6 py-3 " >
@@ -458,7 +461,6 @@ export default {
   /* border-collapse: collapse; */
   width: 100%;
   margin: 0 auto;
-  position: relative;
 
 }
 

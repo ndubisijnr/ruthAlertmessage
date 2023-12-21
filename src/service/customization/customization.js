@@ -10,6 +10,10 @@ export  default {
         return apiService.Client.post(`api/${tenant_id}/customizations`, payload)
     },
 
+    saveFaviconCustomizationSettings(tenant_id, payload){
+        return appClientImgUpload.post(`api/${tenant_id}/customizations`, payload)
+    },
+
     getAllTemplates(tenant_id){
         return apiService.Client.get(`api/${tenant_id}/customizations/templates`)
     }

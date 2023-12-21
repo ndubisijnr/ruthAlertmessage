@@ -51,7 +51,8 @@ export default {
       if(this.color) this.model.color = this.color;
       if(this.favicon) this.model.favicon = this.favicon;
       if(this.getTemplateId) this.model.template_id = this.getTemplateId;
-      storeUtils.fireAway().theme.saveCustomization(this.model)
+      storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {this.model = {}})
+
     },
 
     file(value){
