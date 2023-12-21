@@ -51,6 +51,9 @@ export const useCustomizationStore = defineStore('customizationStore', {
 
                 if(responseData.success){
                     this.custom_theme = responseData.data
+                    if(responseData.data.favicon){
+                        this.favicon = responseData.data.favicon
+                    }
                 }
 
             }catch(err){

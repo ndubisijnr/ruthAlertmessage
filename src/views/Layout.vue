@@ -185,6 +185,9 @@ export default {
 
     },
 
+    getFavicon(){
+      return storeUtils.fireAway().theme.favicon
+    },
     getIsUnauthorised(){
       return storeUtils.fireAway().global.getIsUnauthorised
     },
@@ -195,9 +198,15 @@ export default {
 
   },
   mounted() {
-    if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant()
-    if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization()
-    if(localStorage.tenant_id) storeUtils.fireAway().theme.handleGetTemplate()
+    if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant();
+    if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization();
+    if(localStorage.tenant_id) storeUtils.fireAway().theme.handleGetTemplate();
+    const favicon = document.getElementById('favicon');
+
+    if(this.getFavicon) favicon.href = this.getFavicon;
+
+    console.log(favicon)
+
   }
 
 }
