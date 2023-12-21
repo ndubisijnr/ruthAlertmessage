@@ -190,6 +190,7 @@ export const useSettingsStore = defineStore('settingsStore', {
                 if(responseData.success){
                     this.teamLoading = false
                     await storeUtils.fireAway().settings?.readAllMembers()
+                    RuthdoAlert({title:'success', icon:'success'})
                     // standby
                 }
 

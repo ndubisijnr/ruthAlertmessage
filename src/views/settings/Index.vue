@@ -63,11 +63,11 @@
               <ul class="inner-tab-nav" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {}:{justifyContent:'start'}">
                 <a :class="{'active':currentTab === 'Account'}" @click="activateTab('Account')" href="#Account">Account</a>
                 <a v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Domain'}" href="#Domain" @click="activateTab('Domain')">Domain</a>
-                <a v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Teams'}" @click="currentTab = 'Teams'" href="#Teams">Teams</a>
-                <a :class="{'active':currentTab === 'Notifications'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Notifications" @click="currentTab = 'Notifications'">Notifications</a>
-                <a v-if="getUser.account_type === 'super_admin' ||  getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'"  :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="currentTab = 'Payment'">Payment </a>
-                <a :class="{'active':currentTab === 'Markup'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Markup" @click="currentTab = 'Markup'">Markup</a>
-                <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="currentTab = 'Customization', isEditing=true">Customization</a>
+                <a v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Teams'}" @click="activateTab('Teams')" href="#Teams">Teams</a>
+                <a :class="{'active':currentTab === 'Notifications'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Notifications" @click="activateTab('Notifications')">Notifications</a>
+                <a v-if="getUser.account_type === 'super_admin' ||  getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'"  :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="activateTab('Payment')">Payment </a>
+                <a :class="{'active':currentTab === 'Markup'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Markup" @click="activateTab('Markup')">Markup</a>
+                <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="activateTab('Customization'), isEditing=true">Customization</a>
               </ul>
             </div>
 
@@ -663,6 +663,7 @@ export default {
           break;
         case 'Teams':
           this.currentTab = 'Teams';
+          storeUtils.fireAway().settings?.readAllMembers()
           break;
         case 'Notifications':
           this.currentTab = 'Notifications';
@@ -978,7 +979,6 @@ export default {
   mounted() {
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams },500)
     storeUtils.fireAway().global?.commitError(null)
-    storeUtils.fireAway().settings?.readAllMembers()
     storeUtils.fireAway().settings?.readAllPermissions()
 
 
