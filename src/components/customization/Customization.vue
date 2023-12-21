@@ -20,6 +20,7 @@ export default {
   data(){
     return{
       customization:'add_favicon',
+      isChangingCacDocument:false,
       model:CustomizationRequest.saveCustomization,
       color:null,
       favicon:null,
@@ -74,6 +75,9 @@ export default {
   },
 
   computed:{
+    getFavicon(){
+      return storeUtils.fireAway().theme.favicon
+    },
     getTemplateId(){
       if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
       return storeUtils.fireAway().theme.custom_theme.template_id;
@@ -117,7 +121,17 @@ export default {
             <p class="upload_favicon">Upload custom favicon</p>
           </div>
 
-          <upload-documents-component @file="file" id="favicon" title="Upload  your website favicon to distinguish your site."></upload-documents-component>
+
+          <div v-if="getFavicon && !isChangingCacDocument" class="doc_pending_wrapper">
+            <div  style="text-align: end">
+              <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingCacDocument = true" alt="favicon_preview"/>
+            </div>
+            <div class="doc_pending">
+              <img class="img-uploaded" id="company_image_preview" :src="getFavicon" />
+            </div>
+          </div>
+
+          <upload-documents-component v-else  @file="file" id="favicon" title="Upload  your website favicon to distinguish your site."></upload-documents-component>
 
 
         </div>
@@ -133,7 +147,6 @@ export default {
             <div class="template" v-for="(i, index) in templates" :key="index" :style="getTemplateId === ++index  ? {border:'solid 1px',borderColor:custom_theme ? custom_theme.color : default_theme.color} : null">
 
               <img :src="i.preview" style="width: 3.25rem;height: 5rem;" alt="template" />
-
 
 
               <div class="template_footer">
@@ -188,6 +201,30 @@ export default {
 <style scoped>
 .receiver_wrapper{
   overflow-x: scroll;
+}
+
+.doc_pending_wrapper{
+  display: flex;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.img-uploaded{
+  width: 10rem;
+  height: 10rem;
+}
+
+.doc_pending{
+  display: inline-flex;
+  padding: 1.5rem;
+  align-items: center;
+  width: 31.81rem;
+  justify-content: space-around;
+  gap: 4.875rem;
+  border-radius: 0.375rem;
+  border: 1px solid  #E0E6ED;
+  position: relative;
+
 }
 
 

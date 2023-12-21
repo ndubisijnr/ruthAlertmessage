@@ -201,11 +201,9 @@ export default {
     if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant();
     if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization();
     if(localStorage.tenant_id) storeUtils.fireAway().theme.handleGetTemplate();
-    const favicon = document.getElementById('favicon');
+    const favicon = document.getElementById('faviconIcon');
 
     if(this.getFavicon) favicon.href = this.getFavicon;
-
-    console.log(favicon)
 
   }
 
