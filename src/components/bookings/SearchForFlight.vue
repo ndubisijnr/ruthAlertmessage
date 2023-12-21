@@ -45,7 +45,7 @@
                           </div>
                           <div class="group-inputs">
                             <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
-                            <data-picker @dateValue="updateDateValueTo" :min_date="flightModel.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                            <data-picker :readonly="!this.departure_date ? 'readonly' : null" @dateValue="updateDateValueTo" :min_date="this.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
                           </div>
                         </div>
 
@@ -265,6 +265,8 @@ import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest"
 import {lightenColor} from "@/mixins/themeUtils";
+import {RuthdoAlert} from "ruthly";
+import {readonly} from "vue";
 
 export default {
   name: "SearchForFlight",
@@ -301,6 +303,7 @@ export default {
     }
   },
   methods:{
+    readonly,
     handleCheck(value){
       const withMarkup = document.getElementById('withMarkUp')
       const withNonStops = document.getElementById('withNonStop')
@@ -472,17 +475,33 @@ export default {
         storeUtils.fireAway().flight?.handleMultiCityFlightSearch(this.flightModel)
       }
       else{
-        this.flightModel.origin = this.origin
-        this.flightModel.destination = this.destination
-        this.flightModel.return_date = this.return_date
-        this.flightModel.departure_date = this.departure_date
-        this.flightModel.with_non_stops = false
-        this.flightModel.with_markup =  false
+        if(!this.destination || !this.return_date){
+          RuthdoAlert({title:'Travel Dates is required', icon:'error'});
+          this.updateDateValue(null)
+        } else{
 
-        storeUtils.fireAway().flight?.handleFlightSearch().then(() => {
-          this.departure_date = null
-          this.return_date = null
-        })
+
+          if(this.activeDestType === 'round_trip'){
+              this.flightModel.origin = this.origin
+              this.flightModel.destination = this.destination
+              this.flightModel.return_date = this.return_date
+              this.flightModel.departure_date = this.departure_date
+              this.flightModel.with_non_stops = false
+              this.flightModel.with_markup =  false
+          }
+
+          if(this.activeDestType === 'one_way'){
+            this.flightModel.origin = this.origin
+            this.flightModel.destination = this.destination
+            this.flightModel.departure_date = this.departure_date
+            this.flightModel.return_date = null
+            this.flightModel.with_non_stops = false
+            this.flightModel.with_markup =  false
+          }
+
+          storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
+        }
+
       }
 
     },
