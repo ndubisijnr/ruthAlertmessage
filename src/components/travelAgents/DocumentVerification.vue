@@ -1,6 +1,6 @@
 <template>
   <index v-slot:children>
-    <div>
+    <div style="margin-bottom: 5rem">
       <p class="business_information">Document Verification</p>
 
    
@@ -23,7 +23,7 @@
               <div v-else class="doc_pending_wrapper">
                 <div class="doc_pending">
                   <div style="display: flex;gap: 0.75rem;align-items: center">
-                    <iframe class="img-uploaded" :src="getTravelAgent?.cac_document" title="Company Document"></iframe>
+                    <img class="img-uploaded" :src="getTravelAgent?.cac_document" title="Company Document" />
                     <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
                   </div>
                   <on-boarding-button @click="viewDocuments(getTravelAgent?.cac_document)" color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button>
@@ -68,10 +68,10 @@
 
               
               </div>
-<!-- 
+
               <div>
-                  <OnBoardingButton @click="handleApprove('cac')" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
-              </div> -->
+                  <OnBoardingButton @click="handleApprove()" :loading="loading && !id" :disabled="loading" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
+              </div>
 
             </div>
             <div>
@@ -90,7 +90,7 @@
               <div v-else class="doc_pending_wrapper">
                 <div class="doc_pending">
                   <div style="display: flex;gap: 0.75rem;align-items: center">
-                    <iframe class="img-uploaded" :src="getTravelAgent?.id_document" title="Personal Document"></iframe>
+                    <img class="img-uploaded" :src="getTravelAgent?.id_document" title="Personal Document" />
                     <p class="uploaded-on">Uploaded on {{convertToWord(getTravelAgent?.created_at)}}</p>
                   </div>
                   <on-boarding-button @click="viewDocuments(getTravelAgent?.id_document)" color="#2C6CAC" btn-width="9rem" height="2.5rem" text-node="View Document" background="transparent"></on-boarding-button>
@@ -134,7 +134,7 @@
                 </div>
               </div>
               <div>
-                  <OnBoardingButton @click="handleApprove()" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
+                  <OnBoardingButton @click="handleApprove('id')" :disabled="loading" :loading="loading && id" text-node="Save" btn-width="8rem" height="2.5rem"></OnBoardingButton>
                 </div>
               </div>
 
@@ -157,7 +157,8 @@ export default {
     return{
       getFirstLettersOfFirstAndLastName,
       convertToWord,
-      model:TravelAgentRequest.verifyBusiness,
+      model:new TravelAgentRequest().verifyBusiness,
+      id:false,
       cacModel:{
         verification_reason:null,
         is_cac_verified:null
@@ -183,29 +184,25 @@ export default {
 
     async handleApprove(document_to_verify){
       this.model.user_id = this.getTravelAgent.id
-      if(document_to_verify === 'id'){       
+      if(document_to_verify === 'id'){
+        this.id=true
         this.model.is_id_verified = this.docModel.is_id_verified
         this.model.verification_reason = this.docModel.verification_reason
       }else{
+        this.id=false
         this.model.is_cac_verified = this.cacModel.is_cac_verified
         this.model.verification_reason = this.cacModel.verification_reason
       }
-      await storeUtils.fireAway().travelAgent?.handleVerifyBusiness()
-      Object.keys(this.docModel).forEach(key => {
-        return this.docModel[key] = null
-      })
+      await storeUtils.fireAway().travelAgent?.handleVerifyBusiness(this.model)
 
-      Object.keys(this.cacModel).forEach(key => {
-        return this.cacModel[key] = null
-      })
-
-      Object.keys(this.model).forEach(key => {
-        return this.model[key] = null
-      })
+      this.model = new TravelAgentRequest().verifyBusiness
 
     }
   },
   computed:{
+    loading(){
+      return storeUtils.fireAway().travelAgent.getLoading
+    },
     getUser(){
       if(localStorage.user){
         return JSON.parse(localStorage.user)
@@ -328,7 +325,7 @@ a{
 .doc_pending{
   display: flex;
   padding: 1.5rem;
-  width: 31.375rem;
+  width: auto;
   height: 8.25rem;
   justify-content: start;
   align-items: center;

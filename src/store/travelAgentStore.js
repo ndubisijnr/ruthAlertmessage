@@ -124,9 +124,11 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
             router.push({path:`/agents/document-verification/${user?.access_token?.slice(0,20)}`}).then()
         },
 
-        handleVerifyBusiness(payload=TravelAgentRequest.verifyBusiness){
+        handleVerifyBusiness(payload){
+            this.loading = true
             return TravelAgentsService.VerifyBusiness(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {
                 let responseData = response.data
+                this.loading = false
                 if(responseData.success){
                     RuthdoAlert({title:'Successful', icon:'success'})
                     // do nothing
@@ -135,6 +137,7 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
   
                 }
             }).catch(e => {
+                this.loading = false
                 catchErrorHandler(e)
             })
         },

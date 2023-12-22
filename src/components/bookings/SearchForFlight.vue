@@ -129,7 +129,7 @@
                                 <div class="passenger-type">
                                   <div style="display: flex;flex-direction: column">
                                     <p class="passenger-type-text-1">Children</p>
-                                    <p class="text-2">2-12</p>
+                                    <p class="text-2">2-11</p>
                                   </div>
 
                                   <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">

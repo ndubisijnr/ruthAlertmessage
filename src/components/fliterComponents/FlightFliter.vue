@@ -13,27 +13,29 @@
                 </div>
                 <div>
                     <div class="item_layout" style="margin-bottom: 1rem;">
+                      <input type="range" id="filter_by_amount" @change="doFilter('price')" v-model="max_input_value"
+                             :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]" />
                         <input style="z-index: 1" type="range" @change="doFilter('price')" id="filter_by_amount"
-                            v-model="min_input_value" :min="getInputRange[0]"
-                            :max="getInputRange[getInputRange.length - 1]" />
-                        <input type="range" id="filter_by_amount" @change="doFilter('price')" v-model="max_input_value"
-                            :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]" />
+                            v-model="min_input_value" :min="10000"
+                            :max="getInputRange[0]" />
+
                     </div>
                     <div class="range_value">
-                        <div style="display: flex;gap: 0.5rem; ">
-                            <p id="start_amount">min: ₦ {{ min_input_value ? formatAmount(min_input_value) :
-                                formatAmount(getInputRange[0]) }}</p>
-                            <div style="display: flex;gap: 0.5rem;"
-                                v-if="getInputRange[getInputRange.length - 1] / 2 >= min_input_value">
-                                <p>-</p>
-                                <p id="start_amount">₦ {{ min_input_value ? formatAmount(min_input_value) :
-                                    formatAmount(getInputRange[0]) }}</p>
-                            </div>
-                        </div>
-                        <div v-if="getInputRange[getInputRange.length - 1] / 2 <= min_input_value">
-                            <p id="end_amount">max: {{ max_input_value ? formatAmount(max_input_value) :
-                                formatAmount(getInputRange[getInputRange.length - 1]) }}</p>
-                        </div>
+                      <div style="display: flex;gap: 0.5rem; ">
+                        <p id="start_amount">min: ₦ {{ min_input_value ? formatAmount(min_input_value) :
+                            formatAmount(getInputRange[0]) }}</p>
+                        <!--                            <div style="display: flex;gap: 0.5rem;"-->
+                        <!--                                v-if="getInputRange[getInputRange.length - 1] / 2 >= min_input_value">-->
+                        <!--                                <p>-</p>-->
+                        <!--                                <p id="start_amount">₦ {{ min_input_value ? formatAmount(min_input_value) :-->
+                        <!--                                    formatAmount(getInputRange[0]) }}</p>-->
+                        <!--                            </div>-->
+                      </div>
+                      <div v-if="getInputRange[getInputRange.length - 1] / 2 <= min_input_value">
+                        <p id="end_amount">max: {{ max_input_value ? formatAmount(max_input_value) :
+                            formatAmount(getInputRange[getInputRange.length - 1]) }}</p>
+                      </div>
+
                     </div>
                 </div>
             </div>
@@ -355,12 +357,16 @@ export default {
 
 
             if (type == 'price') {
+              const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
+              const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+
+              console.log(minPrice, maxPrice)
+
+
                 if (Array.isArray(data)) {
                     data.filter((it) => {
                         const amount = it.amount;
-                        const minPrice = this.min_input_value;
-                        const maxPrice = this.max_input_value;
-
+                        console.log(amount)
                         if (amount >= minPrice && amount <= maxPrice) {
                             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
                             if(!isDuplicate){
@@ -376,7 +382,7 @@ export default {
                     });
 
                     // Now, commit the filtered flight results, for example:
-                    
+
                 }
             }
         }
@@ -415,6 +421,7 @@ export default {
     },
 
     mounted() {
+
         // this.filterByAmount()
         // this.filterObject(this.getFlightResult, 'Aero Contractors')
     }
