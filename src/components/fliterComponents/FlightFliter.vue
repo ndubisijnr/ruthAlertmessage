@@ -3,13 +3,13 @@
         <div>
             <div class="fliter_header">
                 <p class="fliter">Fliter</p>
-                <p class="clear_all">Clear all</p>
+                <p class="clear_all" @click="clear">Clear all</p>
             </div>
             <div class="breaker"></div>
             <div>
                 <div class="fliter_header">
                     <p class="fliter">Price</p>
-                    <p class="clear_all">Clear</p>
+                    <p class="clear_all" @click="clear">Clear</p>
                 </div>
                 <div>
                     <div class="item_layout" style="margin-bottom: 1rem;">
@@ -44,7 +44,7 @@
                 <div>
                     <div class="fliter_header">
                         <p class="fliter">Stops</p>
-                        <p class="clear_all">Clear</p>
+                        <p class="clear_all" @click="clear">Clear</p>
                     </div>
                     <div class="item_layout">
                         <input type="checkbox" @change="doFilter('stops', 0)" />
@@ -63,7 +63,7 @@
                 <div class="breaker"></div>
                 <div class="fliter_header">
                     <p class="fliter">Airlines</p>
-                    <p class="clear_all">Clear</p>
+                    <p class="clear_all" @click="clear">Clear</p>
                 </div>
 
                 <div v-for="i in fliterFuncComponents(getFlightResult, 'airline_details').all_airport">
@@ -80,7 +80,7 @@
             <div>
                 <div class="fliter_header">
                     <p class="fliter">Flexibility</p>
-                    <p class="clear_all">Clear</p>
+                    <p class="clear_all" @click="clear">Clear</p>
                 </div>
                 <div class="item_layout">
                     <input type="checkbox" @change="doFilter('flexibility', true)" />
@@ -115,6 +115,19 @@ export default {
     },
     methods: {
 
+        clear(){
+          this.fliterFlightResult = [];
+
+          this.max_input_value = 0;
+          this.min_input_value = 0
+
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+        },
+
         fliterFuncComponents(data) {
             // collect data
             let all_amount
@@ -145,7 +158,6 @@ export default {
             return results
 
         },
-
 
         fliterFunction(value) {
 
@@ -387,7 +399,6 @@ export default {
             }
         }
 
-
     },
     computed: {
         getFlightResult() {
@@ -498,6 +509,7 @@ input[type=checkbox] {
     font-style: normal;
     font-weight: 400;
     line-height: 1.875rem;
+  cursor: pointer;
     /* 166.667% */
 }
 

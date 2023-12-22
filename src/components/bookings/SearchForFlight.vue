@@ -143,27 +143,27 @@
                                 <div class="passenger-type">
                                   <div style="display: flex;flex-direction: column">
                                     <p class="passenger-type-text-1">Infant</p>
-                                    <p class="text-2">0 - 2(years)</p>
+                                    <p class="text-2">under 2(years)</p>
                                   </div>
 
                                   <div style="display: flex;justify-content: space-between;width: 40%;align-items: center">
                                     <button :disabled="flightModel.infants < 1" @click="passengerSelectionControl('infants', 'minus')" class="minus-button"> - </button>
                                     <p class="text-2">{{ flightModel.infants }}</p>
-                                    <button :disabled="passenger_disable_buttons" @click="passengerSelectionControl('infants', 'add')" class="add-button"> + </button>
+                                    <button :disabled="passenger_disable_buttons || infant_disable" @click="passengerSelectionControl('infants', 'add')" class="add-button"> + </button>
 
                                   </div>
 
                                 </div>
 
 
-                                <div class="info-area">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z" fill="#1D1E2C"/>
-                                  </svg>
-                                  <p class="info-area-p">The age of a child must be valid for the duration of the journey. For example,
-                                    if a child celebrates a birthday during a trip,
-                                    please use their age on the return flight date.</p>
-                                </div>
+<!--                                <div class="info-area">-->
+<!--                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">-->
+<!--                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z" fill="#1D1E2C"/>-->
+<!--                                  </svg>-->
+<!--                                  <p class="info-area-p">The age of a child must be valid for the duration of the journey. For example,-->
+<!--                                    if a child celebrates a birthday during a trip,-->
+<!--                                    please use their age on the return flight date.</p>-->
+<!--                                </div>-->
 
                               </div>
 
@@ -299,6 +299,7 @@ export default {
       return_date: null,
       destination: null,
       origin: null,
+      infant_disable:null
     }
   },
   methods:{
@@ -384,6 +385,15 @@ export default {
 
       // let sum = passenger_number.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
+      if(this.flightModel.adults ===  this.flightModel.infants){
+        this.infant_disable = true;
+      }else if(this.flightModel.adults <  this.flightModel.infants){
+        this.infant_disable = true;
+        --this.flightModel.infants
+      }
+      else{
+        this.infant_disable = false;
+      }
     
       if(this.passengerNumber == 9){
         this.passenger_disable_buttons = true
