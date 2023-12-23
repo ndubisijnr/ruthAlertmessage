@@ -112,7 +112,7 @@
 
           
             <div class="contact-details">
-              <p class="contact_details">Passenger Details</p>
+              <p class="contact_details">Passenger {{index+1}} Details</p>
             </div>
 
             <div class="simple-info">
@@ -169,9 +169,9 @@
                             <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
                           </div> -->
 
-                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                          <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                          <DataPicker v-else="w.passenger_type === 'adult'" :max_date="getYYYYMMDDFormat(dobMax)" label="Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Infant Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Child Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-else :start_date="getYYYYMMDDFormat(dobMax)" :max_date="getYYYYMMDDFormat(dobMax)" label="Adult Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
 
                       </div>
 
@@ -210,14 +210,42 @@
                 <on-boarding-input  width="100%" @inputValue="value => documents.number = value" label="Passport Number"></on-boarding-input>
                 <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => documents.expiry_date = obj.formattedDate"/>
               </div>
+
               <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>
-                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => documents.issuing_date = obj.formattedDate"/>
+                <div class="choose_document_type" style="position: relative;">
+                  <label class="class_label">Passport Nationality</label>
+                  <p class="selected-item">{{ selectedNationalityCountry ? selectedNationalityCountry :  countries[0].name }}</p>
+                  <div  v-if="showCountries && label === 'pn'" class="dropDown">
+                    <div class="doc_type_options">
+                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
+                        <p class="passenger-type-text-1" @click="documents.nationality_country = i.code, selectedNationalityCountry=i.name, showCountries=!showCountries">{{ i.name }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <img @click="showCountries = !showCountries, label = 'pn'" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                </div>
+
+                <div class="choose_document_type" style="position: relative;">
+                  <label class="class_label">Passport Issuing Country</label>
+                  <p class="selected-item">{{selectedIssuingCountry ? selectedIssuingCountry : countries[0].name }}</p>
+                  <div  v-if="showCountries && label === 'pic'" class="dropDown">
+                    <div class="doc_type_options">
+                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
+                        <p class="passenger-type-text-1" @click="documents.issuing_country = i.code, selectedIssuingCountry=i.name,showCountries=!showCountries">{{ i.name }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <img @click="showCountries = !showCountries, label = 'pic'" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                </div>
+
+
+<!--                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>-->
+<!--                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>-->
               </div>
 
               <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>
-                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>
+                <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
+                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => documents.issuing_date = obj.formattedDate"/>
               </div>
             </div>
 
@@ -304,19 +332,23 @@
                 <div class="actual-result-item-info-2">
                   <div v-for="(i, index) in getSelectedFlight?.price_summary" :key="index" class="extra-charge-info">
                       <div style="margin-bottom: 0.38rem;">
-                        <div style="display: flex;gap: 0.5rem;align-items: center;">
-                          <p class="dest">{{i.passenger_type}} </p>
-                          <p style="text-transform: lowercase;border-radius: 50%;width:18px;height:auto;text-align: center;">X {{i.quantity}}</p>
+                        <div style="display: flex;gap: 0.5rem;align-items: center;justify-content: space-between">
+                          <div style="display: flex;gap: 0.5rem;align-items: center;">
+                            <p class="dest">{{i.passenger_type}} </p>
+                            <p style="text-transform: lowercase;border-radius: 50%;width:18px;height:auto;text-align: center;">X {{i.quantity}}</p>
+                          </div>
+                          <p class="">₦ {{formatAmount(i.total_price)}}</p>
+
                         </div>
                       </div>
-                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">
-                        <p class="dest">Base Fare</p>
-                        <p class="">₦ {{formatAmount(i.total_price)}}</p>
-                      </div>
-                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">
-                        <p class="dest">Tax Fare</p>
-                        <p class="">₦ {{formatAmount(i.total_price)}}</p>
-                      </div>
+<!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
+<!--                        <p class="dest">Base Fare</p>-->
+<!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
+<!--                      </div>-->
+<!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
+<!--                        <p class="dest">Tax Fare</p>-->
+<!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
+<!--                      </div>-->
                   </div>
                   
                 </div>
@@ -341,6 +373,7 @@ import storeUtils from "../../utils/storeUtils";
 import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
 import DataPicker from "../Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest";
+import countries from "@/mixins/countries";
 import { formatAmount, getYYYYMMDDFormat, convertDurationToWords, convertToWord, convertTo12HourFormat } from "../../mixins/flightUtil";
 export default {
   name: "TravellerInfo",
@@ -348,6 +381,7 @@ export default {
   data(){
     return{
       showBookHold:false,
+      countries,
       bookFlightModal:FlightRequest.bookFlight,
       formatAmount,
       convertToWord,
@@ -356,6 +390,10 @@ export default {
       getYYYYMMDDFormat,
       passengers:[],
       passengerIdCounter:1,
+      showCountries:null,
+      label:null,
+      selectedIssuingCountry:null,
+      selectedNationalityCountry:null,
       showingGenderIndex:null,
       documents:{
         number: null,
@@ -363,7 +401,7 @@ export default {
         expiry_date: null,
         issuing_country: null,
         nationality_country: null,
-        document_type: null,
+        document_type: 'passport',
         holder: false
       },
       showGender:false,
@@ -506,6 +544,41 @@ export default {
   font-weight: 500;
   line-height: 1.5rem; /* 150% */
 }
+.passenger-type{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.37rem;
+}
+
+.selected-item{
+  padding: 1.3rem 0 0.25rem 0;
+  /* border: solid; */
+  color: var(--black-text-01, #1D1E2C);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+}
+
+.passenger-type-text-1{
+  color: #222;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+}
+
+.passenger-type-text-1:hover{
+  transform: scale(1);
+  font-size: 1.1rem;
+}
+
 
 .travellers_wrapper{
   display: flex;
@@ -524,12 +597,11 @@ export default {
 }
 .class_label{
   position: absolute;
-  top: 0;
+  top: 5px;
   color:  #2D3139;
-
   /* sanslight/12px/Regular */
   font-family: 'Product Sans';
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   font-style: normal;
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */
@@ -992,22 +1064,26 @@ a{
   border: 1px solid  #EFF2F7;
   margin-bottom: 1rem;
   background-color: #FFF;
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+
 
 }
 
 .doc_type_options{
   display: flex;
-  width: 36rem;
+  width: 16rem;
+  height: 200px;
   flex-direction: column;
   align-items: flex-start;
+  overflow-y: scroll;
+
   /*gap: 1.25rem;*/
-  border-radius: 0.5rem;
-  border: 1px solid  #F9FAFC;
-  background: #FFF;
-  left: 0;
+  //border-radius: 0.5rem;
+  //border: 1px solid  #F9FAFC;
+  //background: #FFF;
+  //left: 0;
   /*bottom: -60px;*/
   /* m4 */
-  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
 }
 
 .form-area-footer{

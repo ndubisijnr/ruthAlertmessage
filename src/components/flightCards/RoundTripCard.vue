@@ -1,15 +1,13 @@
 <template>
     <div>
-  
-    
       <div class="actual-result-wrapper"
-        v-for="(i, index) in getFilteredFlight.length ? paginate(getFilteredFlight, currentPage, itemsPerPage) : paginate(getFlightResult, currentPage, itemsPerPage)"
+        v-for="(i, index) in getFilteredFlight?.length ? paginate(getFilteredFlight, currentPage, itemsPerPage) : paginate(getFlightResult, currentPage, itemsPerPage)"
         :key="index">
         <div class="actual-result">
           <div class="best_offer" v-if="i.amount === sortByCheapest">Best Offer</div>
           <div style="width: 100%;" @click="showDetails(index)">
-              <div style="width: 100%;" v-if="i.outbound.length > 1" v-for="(x, itemindex) in i.outbound" :key="itemindex">
-                <div class="actual-result-item" v-if="itemindex === i.outbound.length - 1">
+              <div style="width: 100%;" v-if="i.outbound?.length > 1" v-for="(x, itemindex) in i.outbound" :key="itemindex">
+                <div class="actual-result-item" v-if="itemindex === i.outbound?.length - 1">
                   <div class="logo-area">
                     <img :src="i.outbound[0]?.airline_details.logo" class="logo" />
                     <p class="flight-name">{{ i.outbound[0]?.airline_details.name }}</p>
@@ -68,8 +66,8 @@
               </div>
               </div>
 
-              <div style="width: 100%;" v-if="i.inbound.length > 0" v-for="(x, index) in i.inbound" :key="index">
-              <div class="actual-result-item" v-if="index === i.inbound.length - 1">
+              <div style="width: 100%;" v-if="i.inbound?.length > 0" v-for="(x, index) in i.inbound" :key="index">
+              <div class="actual-result-item" v-if="index === i.inbound?.length - 1">
                   <div class="logo-area">
                   <img :src="i.inbound[0]?.airline_details.logo" class="logo" />
                   <p class="flight-name">{{ i.inbound[0]?.airline_details.name }}</p>
@@ -129,25 +127,25 @@
             <!-- <div style="width:8rem;display: flex;justify-content: center;">
                 <p class="view-details" @click="showDetails(index)">{{ showingDetails && currentShowingDetailsIndex == index ? 'Unview' : 'View Details' }}</p>
             </div> -->
-           
+
           </div>
-  
+
           <div class="amount-book-area"
-            :style="i.inbound.length > 0 ? { 'display': 'flex !important', 'align-items': 'center !important', 'height': '15.5rem !important' } : null">
+            :style="i.inbound?.length > 0 ? { 'display': 'flex !important', 'align-items': 'center !important', 'height': '15.5rem !important' } : null">
             <div style="width: 100%;">
               <p class="amount">₦ {{ formatAmount(i.amount) }}</p>
-              <on-boarding-button :loading="getConfirmBookingLoading && clickedIndex === index" :disabled="getConfirmBookingLoading" @click="selectFlight(i)"
+              <on-boarding-button :loading="getConfirmBookingLoading && clickedIndex === itemindex" :disabled="getConfirmBookingLoading" @click="selectFlight(i)"
                 btn-width="10rem"
                 text-node="Book Flight"></on-boarding-button>
             </div>
           </div>
         </div>
-  
-  
+
+
         <!-- Showing extra flight details -->
           <div v-show="showingDetails && currentShowingDetailsIndex === index" class="details">
             <div>
-             
+
               <div class="component87 animate__animated animate__fadeIn">
                 <div >
                   <div id="departure" class="dropdown-details-div">
@@ -175,7 +173,7 @@
                   </div>
 
                   <!-- extra stops details  -->
-  
+
                   <div style="width: inherit;display:flex;overflow-x: scroll;">
 
                     <!-- looping through multiple outbounds -->
@@ -254,8 +252,8 @@
 
                   </div>
                 </div>
-  
-                <div v-if="i.inbound.length > 0">
+
+                <div v-if="i.inbound?.length > 0">
                   <div class="dropdown-details-div">
                     <div class="depart_date-info">
                       <p class="depart-date">Return on {{
@@ -292,7 +290,7 @@
                             </p>
                             </div>
                             <div class="actual-result-item-info">
-    
+
                             <div class="more-flight-info">
                                 <span class="duration">
                                 {{ convertDurationToWords(i.total_outbound_duration) }}</span>
@@ -318,7 +316,7 @@
                                     <img :src="x.airline_details.logo" class="logo" />
                                     <p class="value">{{ x.airline_details.name }}</p>
                                     </div>
-        
+
                                 </div>
                                 <div class="inner-airline_details-item flight-no">
                                     <p class="key">Flight No: </p>
@@ -336,7 +334,7 @@
 
                         </div>
                       </div>
-  
+
                       <!-- <div v-if="i.inbound_stops > 0">
                             <div>
                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -347,11 +345,11 @@
                           </div> -->
                     </div>
                 </div>
-  
+
                   </div>
                 </div>
               </div>
-  
+
               <div>
                 <div class="additional-details-info">
                   <div class="additional-details-info-item">
@@ -368,7 +366,7 @@
                       <p class="text-1">Carry-on Baggage:<span class="text-2">1 cabin bag</span></p>
                     </div>
                     <div class="breaker-3"></div>
-  
+
                   </div>
                   <div class="additional-details-info-item">
                     <div style="display: flex;align-items: center;gap:0.5rem">
@@ -378,19 +376,19 @@
                     </div>
                   </div>
                 </div>
-  
+
                 <p class="extra-baggage-p"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                     viewBox="0 0 20 20" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                       d="M3.81348 16.1865C5.46753 17.8408 7.66235 18.75 10 18.75C12.3376 18.75 14.5361 17.8408 16.1865 16.1865C17.8406 14.5322 18.75 12.3379 18.75 10C18.75 7.66212 17.8406 5.46432 16.1865 3.81348C14.5361 2.15919 12.3376 1.25 10 1.25C7.66235 1.25 5.46387 2.15919 3.81348 3.81348C2.15942 5.46432 1.25 7.66212 1.25 10C1.25 12.3379 2.15942 14.5357 3.81348 16.1865ZM8.90625 5.625C8.90625 5.01999 9.39453 4.53125 10 4.53125C10.6055 4.53125 11.0938 5.01999 11.0938 5.625V11.0938C11.0938 11.6988 10.6055 12.1875 10 12.1875C9.39453 12.1875 8.90625 11.6988 8.90625 11.0938V5.625ZM11.0938 14.375C11.0938 13.77 10.6055 13.2812 10 13.2812C9.39453 13.2812 8.90625 13.77 8.90625 14.375C8.90625 14.98 9.39453 15.4688 10 15.4688C10.6055 15.4688 11.0938 14.98 11.0938 14.375Z"
                       fill="#1D1E2C" />
                   </svg>Extra baggage will result to extra charges</p>
-  
+
                 <div class="book-flight-details-btn">
                   <on-boarding-button @click="selectFlight(i)" :loading="getConfirmBookingLoading && clickedIndex === index" :disabled="getConfirmBookingLoading" btn-width="43.875rem"
                     :text-node="`Book Flight for ₦ ${formatAmount(i.amount)}`"></on-boarding-button>
                 </div>
-  
+
                 <div class="fare_rules">
                   <div
                     style="width: 100%;display:flex;align-items: center;gap: 0.5rem;margin-bottom: 0.5rem;justify-content: space-between;">
@@ -402,7 +400,7 @@
                       </svg>
                       <p class="fare_rule_h">Fare Rule</p>
                     </div>
-  
+
                     <svg style="cursor:pointer" @click="toogleFareRules = !toogleFareRules" xmlns="http://www.w3.org/2000/svg"
                       width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path fill-rule="evenodd" clip-rule="evenodd"
@@ -410,7 +408,7 @@
                         fill="#1D1E2C" />
                     </svg>
                   </div>
-  
+
                   <div v-if="toogleFareRules">
                     <li class="fare_rule_p">Penalty Applies - Check Rules</li>
                     <li class="fare_rule_p"> On some airlines, changes are not permitted on a ticket in case
@@ -433,14 +431,13 @@
                     </li>
                   </div>
                 </div>
-  
+
               </div>
             </div>
           </div>
          <!-- Showing extra flight details -->
       </div>
-  
-  
+
       <!-- paginate area -->
   
       <div class="paginate" v-if="getTotalPage > 1">
@@ -532,16 +529,14 @@
       getAirportNamesByCityCode(city_code) {
         const airports = JSON.parse(localStorage?.airports)
         if (airports) {
-          const airportName = airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.name
-          return airportName
+          return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.name
         }
       },
   
       getCityByCityCode(city_code) {
         const airports = JSON.parse(localStorage?.airports)
         if (airports) {
-          const cityName = airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.city
-          return cityName
+          return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.city
         }
       },
   
@@ -571,7 +566,7 @@
       },
   
       getTotalPage() {
-        return Math.ceil(Number(this.getFilteredFlight.length ? this.getFilteredFlight.length : this.getFlightResult.length) / Number(this.itemsPerPage))
+        return Math.ceil(Number(this.getFilteredFlight?.length ? this.getFilteredFlight?.length : this.getFlightResult?.length) / Number(this.itemsPerPage))
       },
   
       getFlightResult() {
@@ -611,7 +606,7 @@
   
       getFilteredFlight() {
   
-        return storeUtils.fireAway().flight?.getFilteredFlight
+        return storeUtils.fireAway().flight?.getFilteredFlight[0] // returns nested array
       }
   
     },

@@ -15,7 +15,6 @@
               <div v-if="activeService === 'Flight'">
                 <div v-if="getUser.account_type === 'super_admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
                   <div class="booking-nav">
-
                     <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
                     <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
                     <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
@@ -25,20 +24,19 @@
                   </div>
                   <div class="one-round-way-multi-city">
                     <div class="form-area">
-
                       <div class="form-area-body">
                         <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                           <div class="group-inputs">
                             <div class="input-divs">
                               <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
                               <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
-                                <p @click="selectDestination(id='from_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                <p @click="selectDestination('from_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                               </div>
                             </div>
                             <div class="input-divs">
                               <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
                               <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
-                                <p @click="selectDestination(id='to_input', destination=`${i.city} - ${i.name}`, code=`${i.city_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                <p @click="selectDestination('to_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                               </div>
                             </div>
                           </div>
@@ -59,13 +57,13 @@
                                 <div class="input-divs">
                                   <on-boarding-input  :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
                                   <div class="airportsDropDown" v-show="multiCityActiveInput === `from_${index}`">
-                                    <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                    <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.iata_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                                   </div>
                                 </div>
                                 <div class="input-divs">
                                   <on-boarding-input input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
                                   <div class="airportsDropDown" v-show="multiCityActiveInput === `to_${index}`">
-                                    <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.city_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                                    <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.iata_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                                   </div>
                                 </div>
 
@@ -446,6 +444,7 @@ export default {
       if(id === 'from_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
+
         this.origin = code
         this.filteredAirportFrom.length = 0
       }
@@ -459,6 +458,7 @@ export default {
       if(id === 'to_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
+
         this.destination = code
         this.filteredAirportTo.length = 0
       }
@@ -500,6 +500,8 @@ export default {
           }
         }
         if(this.activeDestType === 'one_way'){
+          console.log(this.origin)
+          console.log(this.destination)
           this.flightModel.origin = this.origin
           this.flightModel.destination = this.destination
           this.flightModel.departure_date = this.departure_date
@@ -509,6 +511,7 @@ export default {
           if(!this.departure_date){
             RuthdoAlert({title: 'Departure  Date is required', icon: 'error'});
           }else{
+            console.log(this.flightModel)
             storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
           }
         }

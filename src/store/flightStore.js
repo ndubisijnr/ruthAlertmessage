@@ -64,8 +64,6 @@ export const useFlightStore = defineStore('flightStore', {
         getProgressNav:() => {return localStorage.progressNav},
         getFilteredFlight:state  => state.filteredFlightResult.slice().sort((a, b) => a - b).reverse(),
         getConfirmingBookingLoading:state => state.confirmingBookingLoading
-
-
     },
 
     actions: {

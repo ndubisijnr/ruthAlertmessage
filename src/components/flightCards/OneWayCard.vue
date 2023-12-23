@@ -1,13 +1,11 @@
 <template>
-  
-  
-    <div class="actual-result-wrapper"
+   <div class="actual-result-wrapper"
       v-for="(i, index) in getFilteredFlight.length ? paginate(getFilteredFlight, currentPage, itemsPerPage) : paginate(getFlightResult, currentPage, itemsPerPage)"
       :key="index">
       <div class="actual-result">
         <div class="best_offer" v-if="i.amount === sortByCheapest">Best Offer</div>
         <div style="width: 100%" @click="showDetails(index)">
-          <div style="width: 100%" v-if="i.outbound.length > 1" v-for="(x, itemindex) in i.outbound" :key="itemindex">
+          <div style="width: 100%" v-if="i.outbound?.length > 1" v-for="(x, itemindex) in i.outbound" :key="itemindex">
             <div class="actual-result-item" v-if="itemindex === i.outbound.length - 1">
               <div class="logo-area">
                 <img :src="i.outbound[0]?.airline_details.logo" class="logo" />
@@ -35,7 +33,7 @@
                 </div>
 
               </div>
-             
+
             </div>
           </div>
 
@@ -75,7 +73,7 @@
         </div>
 
         <div class="amount-book-area"
-          :style="i.inbound.length > 0 ? { 'display': 'flex !important', 'align-items': 'center !important', 'height': '15.5rem !important' } : null">
+          :style="i.inbound?.length > 0 ? { 'display': 'flex !important', 'align-items': 'center !important', 'height': '15.5rem !important' } : null">
           <div style="width: 100%;">
             <p class="amount">₦ {{ formatAmount(i.amount) }}</p>
             <on-boarding-button :loading="getConfirmBookingLoading && index === clickedIndex " :disabled="getConfirmBookingLoading" @click="selectFlight(i), clickedIndex=index"
@@ -89,7 +87,7 @@
       <!-- Showing extra flight details -->
         <div v-show="showingDetails && currentShowingDetailsIndex === index" class="details">
           <div>
-           
+
             <div class="component87 animate__animated animate__fadeIn">
               <div >
                 <div id="departure" class="dropdown-details-div">
@@ -180,7 +178,7 @@
                 </div>
               </div>
 
-            
+
             </div>
 
             <div>
@@ -361,16 +359,14 @@ export default {
     getAirportNamesByCityCode(city_code) {
       const airports = JSON.parse(localStorage?.airports)
       if (airports) {
-        const airportName = airports.filter(it => it.city_code === city_code)[0]?.name
-        return airportName
+        return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.name
       }
     },
 
     getCityByCityCode(city_code) {
       const airports = JSON.parse(localStorage?.airports)
       if (airports) {
-        const cityName = airports.filter(it => it.city_code === city_code)[0]?.city
-        return cityName
+        return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.city
       }
     },
 
