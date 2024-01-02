@@ -640,7 +640,7 @@
 
 
 .dest-abv-it{
-    color: #FFF;
+    color: #0F0F0F !important;
     font-family: 'Product Sans';
     font-size: 1.5rem;
     font-style: normal;
@@ -649,13 +649,10 @@
   }
   
   .info_wrapper{
-    background: #1B2B42;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    display: inline-flex;
     padding: 1.5rem;
-    align-items: center;
     width: 100%;
   }
   

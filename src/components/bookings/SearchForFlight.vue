@@ -479,7 +479,6 @@ export default {
     },
 
     searchFlight(type){
-      console.log(this.flightModel)
       if(type === 'multiCity'){
         storeUtils.fireAway().flight?.handleMultiCityFlightSearch(this.flightModel)
       }
@@ -511,8 +510,11 @@ export default {
           if(!this.departure_date){
             RuthdoAlert({title: 'Departure  Date is required', icon: 'error'});
           }else{
-            console.log(this.flightModel)
-            storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
+            localStorage.flightModel = JSON.stringify(this.flightModel)
+            console.log(localStorage.flightModel)
+
+            storeUtils.fireAway().flight?.handleFlightSearch()
+
           }
         }
       }
@@ -684,6 +686,7 @@ export default {
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
 }
+
 .per_airport{
   padding: 0.5rem;
   border-bottom:solid var(--app-defautl-primary-light);
@@ -730,6 +733,7 @@ export default {
   position: absolute;
   z-index: 999999999;
 }
+
 .input-divs{
   position: relative;
   width: 100%;
@@ -750,6 +754,7 @@ export default {
   line-height: 1.25rem; /* 166.667% */
 
 }
+
 .passenger-type{
   display: flex;
   justify-content: space-between;

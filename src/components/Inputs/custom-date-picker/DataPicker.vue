@@ -6,7 +6,7 @@
   <VueDatePicker :max-date="max_date" :start-date="start_date" :min-date="min_date" :readonly="readonly" :model-value="inputDate" @update:model-value="setDate" :format="format" :enable-time-picker="false" auto-apply :clearable="false" position="left" :month-change-on-scroll="false">
   
     <template #dp-input="{ value, onInput, onEnter, onTab, onClear, onBlur, onKeypress, onPaste, isMenuOpen }">
-      <input type="text" class="data-picker-input" :value="value"  />
+      <input type="text" class="data-picker-input" :value="value ? value : start_date" :id="id" />
     </template>
     <template #input-icon>
     </template>
@@ -23,7 +23,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   name: "DataPicker",
-  props:['value', 'label', 'min_date', 'max_date', 'readonly','start_date'],
+  props:['value', 'label', 'min_date', 'max_date', 'readonly','start_date','id'],
   components:{VueDatePicker},
   data(){
     return{
