@@ -99,24 +99,22 @@
                   <!--                style="cursor:not-allowed !important"-->
 
                 </div>
-
-                {{storedFlightModel}}
                 <div class="search_flight_model" style="display: flex;margin: 1rem 0;gap:0.50rem">
 
                 <div style="width: 100%">
                   <on-boarding-input label="From" is-fake-loading="true" autocomplete="off" width="100%" id="search_model_from_input"  class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"></on-boarding-input>
                   <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
-                    <p @click="selectDestination('from_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                    <p @click="selectDestination('search_model_from_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                   </div>
                 </div>
                 <div style="width: 100%">
                     <on-boarding-input label="To" is-fake-loading="true" id="search_model_to_input" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}"></on-boarding-input>
                     <div class="airportsDropDown" v-if="this.filteredAirportTo.length > 0">
-                      <p @click="selectDestination('from_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
+                      <p @click="selectDestination('search_model_to_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                     </div>
                   </div>
                 <DataPicker :id="'departure_date_id'" :start_date="departure_date" label="Departure Date" :min_date="new Date()" @dateValue="updateDateValue"></DataPicker>
-                <DataPicker :id="'return_date_id'" label="Return Date" :start_date="return_date" v-if="activeDestType==='round_trip'" :min_date="departure_date" @dateValue="updateDateValueTo"></DataPicker>
+                  <DataPicker :id="'return_date_id'" label="Return Date" :start_date="return_date" v-if="activeDestType==='round_trip'" :min_date="departure_date" @dateValue="updateDateValueTo"></DataPicker>
                 <div  class="choose_document_type" style="position: relative;">
                   <label class="class_label">Passengers </label>
                   <p style="color:#F00" v-if="flightModel.adults < 1 && flightModel.children < 1 && flightModel.infants < 1" class="selected-item">Please add passengers</p>
@@ -185,36 +183,49 @@
 
 
                   </div>
-                  <img @click="showPassengers = !showPassengers, showClass = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                  <img @click="openDrop('passengers')" src="../../assets/Monotone.svg" style="cursor: pointer" />
                 </div>
                 <div class="choose_document_type" style="position: relative;">
                   <label class="class_label">Class</label>
                   <p class="selected-item">{{ flightModel.cabin }}</p>
                   <div  v-if="showClass" class="dropDown">
                     <div class="doc_type_options">
-                      <div class="passenger-type" style="width: 100%">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
+                      <div class="passenger-type" style="border: none">
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg></p>
                       </div>
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'Premium Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg></p>
                       </div>
 
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'Business Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg></p>
                       </div>
 
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class</p>
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'First Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg></p>
                       </div>
 
 
                     </div>
                   </div>
-                  <img @click="showClass = !showClass, showPassengers = false" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                  <img @click="openDrop('class')" src="../../assets/Monotone.svg" style="cursor: pointer" />
                 </div>
-                <on-boarding-button text-node="Search"></on-boarding-button>
+                <on-boarding-button text-node="Search" @click="reSearch" :disabled="getLoading" :loading="getLoading"></on-boarding-button>
               </div>
               </div>
+
               <slot name="booking_children"></slot>
 
 
@@ -238,6 +249,7 @@ import {lightenColor} from "@/mixins/themeUtils";
 import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
 import DataPicker from "@/components/Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "@/model/FlightRequest";
+import {RuthdoAlert} from "ruthly";
 
 
 export default {
@@ -248,6 +260,7 @@ export default {
       users:users,
       filteredAirportFrom:[],
       filteredAirportTo:[],
+      passenger_disable_buttons:false,
       card,
       showing:false,
       flightModel:FlightRequest.flight,
@@ -264,10 +277,104 @@ export default {
       dateFrom:null,
       departure_date: null,
       return_date: null,
+      origin:null,
+      destination:null
     }
   },
 
   methods:{
+    reSearch(){
+      console.log(this.flightModel)
+      if(this.activeDestType === 'round_trip'){
+        this.flightModel.origin = this.origin
+        this.flightModel.destination = this.destination
+        this.flightModel.return_date = this.return_date
+        this.flightModel.departure_date = this.departure_date
+        this.flightModel.with_non_stops = false
+        this.flightModel.with_markup =  false
+        if(!this.destination || !this.return_date){
+          RuthdoAlert({title: 'Travel Dates is required', icon: 'error'});
+        } else {
+          localStorage.flightModel = JSON.stringify(this.flightModel)
+          console.log(localStorage.flightModel)
+          storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
+        }
+      }
+      if(this.activeDestType === 'one_way'){
+        console.log(this.origin)
+        console.log(this.destination)
+        this.flightModel.origin = this.origin
+        this.flightModel.destination = this.destination
+        this.flightModel.departure_date = this.departure_date
+        this.flightModel.return_date = null
+        this.flightModel.with_non_stops = false
+        this.flightModel.with_markup =  false
+        if(!this.departure_date){
+          RuthdoAlert({title: 'Departure  Date is required', icon: 'error'});
+        }else{
+          localStorage.flightModel = JSON.stringify(this.flightModel)
+          console.log(localStorage.flightModel)
+
+          storeUtils.fireAway().flight?.handleFlightSearch()
+
+        }
+      }
+    },
+
+    passengerSelectionControl(clickedPassenger, button_type){
+      if(clickedPassenger === 'adult' && button_type === 'add')
+        ++this.flightModel.adults
+      else if(clickedPassenger === 'adult' && button_type === 'minus')
+        --this.flightModel.adults
+      else if(clickedPassenger === 'children' && button_type === 'add')
+        ++this.flightModel.children
+      else if(clickedPassenger === 'children' && button_type === 'minus')
+        --this.flightModel.children
+      else if(clickedPassenger === 'infants' && button_type === 'add')
+        ++this.flightModel.infants
+      else if(clickedPassenger === 'infants' && button_type === 'minus')
+        --this.flightModel.infants
+      else
+        return 0
+
+      // let sum = passenger_number.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+      if(this.flightModel.adults ===  this.flightModel.infants){
+        this.infant_disable = true;
+      }else if(this.flightModel.adults <  this.flightModel.infants){
+        this.infant_disable = true;
+        --this.flightModel.infants
+      }
+      else{
+        this.infant_disable = false;
+      }
+
+      if(this.passengerNumber == 9){
+        this.passenger_disable_buttons = true
+      }else{
+
+        this.passenger_disable_buttons = false
+      }
+
+    },
+
+    openDrop(value){
+      const editSearchDiv = document.getElementById('search_model')
+
+      if(value === 'class'){
+        this.showClass = !this.showClass,
+        this.showPassengers = false
+        if(this.showClass) editSearchDiv.classList.add('additional');
+        else editSearchDiv.classList.remove('additional');
+      }else{
+          this.showPassengers = !this.showPassengers,
+          this.showClass = false
+          if(this.showPassengers) editSearchDiv.classList.add('additional');
+          else editSearchDiv.classList.remove('additional');
+      }
+
+    },
+
     updateDateValue(obj){
       console.log(obj)
       this.dateFrom = obj?.date ? obj?.date : obj
@@ -276,9 +383,9 @@ export default {
     },
 
     updateDateValueTo(obj){
-      this.dateFrom = obj?.date
-      this.formatteddateFrom = obj?.formattedDate
-      this.return_date = obj?.formattedDate
+      this.dateFrom = obj?.date ? obj?.data : obj
+      this.formatteddateFrom = obj?.formattedDate ? obj?.formattedDate : obj
+      this.return_date = obj?.formattedDate ? obj?.formattedDate : obj
     },
 
     filterAirportFrom(){
@@ -311,7 +418,7 @@ export default {
         this.filteredAirportTo.length = 0
       }
 
-      if(id === 'from_input'){
+      if(id === 'search_model_from_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
 
@@ -325,7 +432,7 @@ export default {
         this.filteredAirportFrom.length = 0
       }
 
-      if(id === 'to_input'){
+      if(id === 'search_model_to_input'){
         const inputElement = document.getElementById(id)
         inputElement.value = destination
 
@@ -408,6 +515,10 @@ export default {
       }
     },
 
+    getLoading(){
+      return storeUtils.fireAway().flight?.getLoading
+    },
+
   },
 
 
@@ -419,7 +530,8 @@ export default {
   },
 
   mounted() {
-
+    if(!this.storedFlightModel.return_date) this.activeDestType = 'one_way';
+    else this.activeDestType = 'round_trip';
 
     const from = document.getElementById('search_model_from_input'),
         to = document.getElementById('search_model_to_input'),
@@ -430,6 +542,12 @@ export default {
       to.value = this.getCityByCityCode(this.storedFlightModel?.destination)
       this.updateDateValue(this.storedFlightModel?.departure_date)
       this.updateDateValueTo(this.storedFlightModel?.return_date)
+      this.origin = this.storedFlightModel?.origin
+      this.destination = this.storedFlightModel?.destination
+      this.flightModel.cabin = this.storedFlightModel?.cabin
+      this.flightModel.adults = this.storedFlightModel?.adults
+      this.flightModel.children = this.storedFlightModel?.children
+      this.flightModel.infants = this.storedFlightModel?.infants
       departure_date.value = this?.departure_date
       return_date.value = this?.return_date
     }
@@ -444,8 +562,104 @@ export default {
 .search_flight_model{
   //position: absolute;
   //flex-wrap: wrap;
-  z-index: 999;
+  z-index: 999999999;
   width: 100%;
+}
+
+.doc_type_options{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.37rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+
+.class_label{
+  position: absolute;
+  top: 5px;
+  color: #575A65;
+
+  /* sanslight/12px/Regular */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem; /* 166.667% */
+
+}
+
+.passenger-type{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.37rem;
+}
+
+.passenger-type-text-1{
+  color: #222;
+
+  /* medium/input/16px */
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem; /* 175% */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.passenger-type-text-1:hover{
+  transform: scale(1);
+  font-size: 1.1rem;
+}
+
+.text-2{
+  color: #222;
+
+  /* Subtext/14px/Regular */
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 171.429% */
+}
+
+.passenger-type:nth-child(2){
+  border-bottom:solid #C0CCDA;
+  border-top: solid #C0CCDA;
+}
+
+
+.minus-button{
+  width:30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.add-button{
+  width:30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: #201F1E;
+  color: #FFFFFF;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
 }
 
 .per_airport{
@@ -493,6 +707,10 @@ export default {
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
 }
 
+.additional{
+  height: 250px;
+}
+
 .info_wrapper{
   z-index: 2;
 }
@@ -510,7 +728,7 @@ export default {
 }
 
 .dropDown{
-  width: 17.625rem;
+  width: 17rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -521,7 +739,7 @@ export default {
   background: #FFF;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   position: absolute;
-  z-index: 999999999;
+  //z-index: 999999999999999999999;
 }
 
 .class_label{
@@ -563,9 +781,9 @@ export default {
   /* border: solid; */
   color: var(--black-text-01, #1D1E2C);
   font-family: 'Product Sans';
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 900;
   line-height: 1.75rem; /* 175% */
 }
 

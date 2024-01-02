@@ -1,5 +1,6 @@
 <template>
     <div class="fliter_wrapper">
+      {{fliterFlightResult.length}} {{filterValue}}
         <div>
             <div class="fliter_header">
                 <p class="fliter">Fliter</p>
@@ -171,199 +172,116 @@ export default {
             // args is an array of arguments
            // my own bagudu code
             if (type == 'airlines') {
-                if(!this.filterValue.includes(filterValue)){
-                  this.filterValue.push(filterValue); // push flight code values
-                } else{
-                  this.fliterFlightResult = []
-                  this.filterValue = this.filterValue.filter(it => {
-                    return it !== filterValue
-                  })
-                  storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                }
 
-                this.fliterFlightResult = data.filter((flight) =>
-                    this.filterValue.includes(flight.outbound[0].airline_details.code)
-                )
+              if (!this.filterValue.includes(filterValue)) {
+                this.filterValue.push(filterValue); // push flight code values
+              } else {
+                this.fliterFlightResult = [];
+                this.filterValue = this.filterValue.filter(it => it !== filterValue);
+                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult);
+              }
 
-                storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
+              this.fliterFlightResult = data.filter(flight =>
+                  this.filterValue.includes(flight.outbound[0]?.operating_airline)
+              );
+              // console.log(this.filterValue)
+              console.log(this.fliterFlightResult) // array
 
-
-                    // data.filter((it) => {
-                    //     //check if airline is not already in array
-                    //   let flight;
-                    //   flight = it.filter(flight => {
-                    //     const airlineCode = flight.outbound[0]?.airline_details?.code;
-                    //     return airlineCode && airlineCodes.includes(airlineCode);
-                    //   });
-                    //     // if (it.outbound.find(it => filterValue === it.operating_airline)){
-                    //     //   console.log(filterValue)
-                    //     //   console.log(it)
-                    //     //     const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                    //     //     if (!isDuplicate) {
-                    //     //         storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                    //     //     } else {
-                    //     //         flightToRemove.push(it)
-                    //     //         this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                    //     //             return a.id !== it.id
-                    //     //         })
-                    //     //         storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                    //     //     }
-                    //     // }
-                    //
-                    // })
-                    // console.log(filtered)
+              storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
 
             }
 
 
             if (type === 'flexibility') {
-                if (Array.isArray(data)) {
-                    data.filter((it) => {
-                        //check if airline is not already in array
-                        if (it.outbound.find(it => it.refundable == filterValue) || it.inbound.find(it => it.refundable == filterValue)) {
-                            const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                            console.log(it.outbound)
-                            if (!isDuplicate) {
-                                storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-
-                            } else {
-                                console.log(this.getFilteredFlight);
-
-                                flightToRemove.push(it)
-                                this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                                    return a.id !== it.id
-                                })
-                                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                            }
-
-                        } 
-
+              this.fliterFlightResult = data.filter(it =>  {
+                if(it.outbound[0].refundable === filterValue) {
+                  const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+                  if (!isDuplicate) {
+                    storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
+                  } else {
+                    console.log(this.getFilteredFlight);
+                    flightToRemove.push(it)
+                    this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+                      return a.id !== it.id
                     })
-
+                    storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+                  }
 
                 }
+              });
+
+              console.log(this.fliterFlightResult) // array
+
+
+
+              // if (Array.isArray(data)) {
+              //       data.filter((it) => {
+              //           //check if airline is not already in array
+              //           if (it.outbound.find(it => it.refundable == filterValue) || it.inbound.find(it => it.refundable == filterValue)) {
+              //               const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+              //               console.log(it.outbound)
+              //               if (!isDuplicate) {
+              //                   storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
+              //
+              //               } else {
+              //                   console.log(this.getFilteredFlight);
+              //
+              //                   flightToRemove.push(it)
+              //                   this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+              //                       return a.id !== it.id
+              //                   })
+              //                   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+              //               }
+              //
+              //           }
+              //
+              //       })
+              //
+              //
+              //   }
             }
 
 
             if (type === 'stops') {
                 console.log(filterValue)
-                if (Array.isArray(data)) {
-                    data.find((it) => {
-                        //more than 1 stops
-                        if(it.outbound_stops == filterValue || it.inbound_stops == filterValue){
-                            const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                            if (!isDuplicate) {
-                                storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                            } else {
-                                flightToRemove.push(it)
-                                this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                                    return a.id !== it.id
-                                })
-                                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+                // if (!this.filterValue.includes(filterValue)) {
+                //   this.filterValue.push(filterValue); // push flight code values
+                // } else {
+                //   this.fliterFlightResult = [];
+                //   this.filterValue = this.filterValue.filter(it => it !== filterValue);
+                //   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult);
+                // }
 
-                            }
-                        }
-                        
-                        if(it.outbound_stops > filterValue || it.inbound_stops > filterValue){
-                            if (!isDuplicate) {
-                                storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                            } else {
-                                flightToRemove.push(it)
-                                this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                                    return a.id !== it.id
-                                })
-                                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+                this.fliterFlightResult = data.filter(it => it.outbound_stops == filterValue);
+                console.log(this.filterValue)
+                console.log(this.fliterFlightResult)  // array
 
-                            }
-                        }
-                        
-
-                        // if (it.outbound_stops == filterValue || it.inbound_stops == filterValue) {
-                        //     console.log('true //no stops', filterValue, it.outbound_stops, it.inbound_stops)
-                        //     const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                        //     if (!isDuplicate) {
-                        //         storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                        //     } else {
-                        //         flightToRemove.push(it)
-                        //         this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                        //             return a.id !== it.id
-                        //         })
-                        //         storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-
-                        //     }
-                        // }
-                        // else if(it.outbound_stops < filterValue || it.inbound_stops < filterValue){
-                        //     console.log('true //no stops', filterValue, it.outbound_stops, it.inbound_stops)
-                        //     const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                        //     if (!isDuplicate) {
-                        //         storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                        //     } else {
-                        //         flightToRemove.push(it)
-                        //         this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                        //             return a.id !== it.id
-                        //         })
-                        //         storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-
-                        //     }
-                        // }
-                        
-                        // else{
-                        //     console.log('true //no stops', filterValue, it.outbound_stops, it.inbound_stops)
-                        //     const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                        //     if (!isDuplicate) {
-                        //         storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                        //     } else {
-                        //         flightToRemove.push(it)
-                        //         this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                        //             return a.id !== it.id
-                        //         })
-                        //         storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-
-                        //     }
-                        // }
-                        // else {
-                        //     if (it.outbound_stops == filterValue || it.inbound_stops == filterValue) {
-                        //         console.log('true  // 1 stops', filterValue)
-                        //         const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                        //         if (!isDuplicate) {
-                        //             storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                        //         } else {
-                        //             flightToRemove.push(it)
-                        //             this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                        //                 return a.id !== it.id
-                        //             })
-                        //             storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
-                        //         }
-                        //     } else { }
-
-                        //     if (it.outbound_stops == filterValue || it.inbound_stops == filterValue) {
-                        //         console.log('true  //more than 1 stops', filterValue)
-                        //         const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                        //         if (!isDuplicate) {
-                        //             storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                        //         } else {
-                        //             flightToRemove.push(it)
-                        //             this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                        //                 return a.id !== it.id
-                        //             })
-                        //             storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
-
-                        //         }
-                        //     } else { }
-
-
-                        // }
-
-                        //    return this.fliterFlightResult.push()
-
-                    })
-
-
-
-
-
-                    console.log(this.fliterFlightResult)
-                }
+                storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
+                // if (Array.isArray(data)) {
+                //     data.find((it) => {
+                //         //more than 1 stops
+                //         if(it.outbound_stops == filterValue || it.outbound_stops > filterValue){
+                //             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+                //             if (!isDuplicate) {
+                //                 storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
+                //             } else {
+                //                 flightToRemove.push(it)
+                //                 this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+                //                     return a.id !== it.id
+                //                 })
+                //                 storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+                //
+                //             }
+                //         }
+                //
+                //     })
+                //
+                //
+                //
+                //
+                //
+                //     console.log(this.fliterFlightResult)
+                // }
             }
 
 
@@ -409,7 +327,7 @@ export default {
 
       },
 
-        gtpOwn(filterValue){
+      gtpOwn(filterValue){
           const originalFlights =[...this.getFlightResult];
 
           if(!this.filterValue.includes(filterValue)){

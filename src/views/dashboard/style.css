@@ -625,7 +625,7 @@
     flex-shrink: 0;
     border-radius: 1rem;
     /* background: #FFF; */
-    z-index: 99;
+    /*z-index: 99;*/
     box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
     display: inline-block;
 

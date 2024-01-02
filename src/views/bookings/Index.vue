@@ -256,7 +256,7 @@ a{
 .filter-by-modal{
   flex-direction: column;
   position: absolute;
-  z-index: 999999;
+  //z-index: 999999;
   display: none;
   width: 19rem;
   /* m6 */

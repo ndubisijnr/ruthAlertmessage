@@ -62,14 +62,20 @@ export const useFlightStore = defineStore('flightStore', {
         getWallet: state => state.wallet,
         getBookingStage: () => {return localStorage.bookingStage},
         getProgressNav:() => {return localStorage.progressNav},
-        getFilteredFlight:state  => state.filteredFlightResult.slice().sort((a, b) => a - b).reverse(),
+        getFilteredFlight:state  => state.filteredFlightResult,
+        // .slice().sort((a, b) => a - b).reverse(),
         getConfirmingBookingLoading:state => state.confirmingBookingLoading
     },
 
     actions: {
 
         commitFilteredFlightResult(payload) {
-            this.filteredFlightResult.push(payload)
+            console.log("before ===> ", this.filteredFlightResult)
+
+            this.filteredFlightResult.push(...payload)
+
+            console.log("after ===> ", this.filteredFlightResult)
+
         },
 
         deleteFliteredFlightResult(payload) {

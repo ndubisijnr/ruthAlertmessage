@@ -1,5 +1,6 @@
 <template>
     <div>
+      {{getFilteredFlight}}
       <div class="actual-result-wrapper"
         v-for="(i, index) in getFilteredFlight?.length ? paginate(getFilteredFlight, currentPage, itemsPerPage) : paginate(getFlightResult, currentPage, itemsPerPage)"
         :key="index">
@@ -18,7 +19,7 @@
                         <p class="dest">{{ getCityByCityCode(i.outbound[0]?.airport_from) }}
                         ({{ i.outbound[0]?.airport_from }})</p>
                     </div>
-                    <div class="more-flight-info">
+                      <div class="more-flight-info">
                         <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="69" height="16" viewBox="0 0 69 16" fill="none">
                         <path
@@ -606,7 +607,7 @@
   
       getFilteredFlight() {
   
-        return storeUtils.fireAway().flight?.getFilteredFlight[0] // returns nested array
+        return storeUtils.fireAway().flight?.getFilteredFlight // returns nested array
       }
   
     },
@@ -1184,6 +1185,7 @@
     align-items: center;
     gap: 2.44rem;
     padding: 0 1.5rem;
+
   }
 
   .actual-result-item-inner-inner-info{

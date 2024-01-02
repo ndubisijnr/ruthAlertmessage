@@ -24,27 +24,29 @@
 <!--                </svg>-->
 <!--                <p>Show Pricing Calender</p>-->
 <!--            </div>-->
-            <div style="position: relative">
-              <div class="filter-by">
-                <p class="and-filter-by">Sort by</p>
-                <div class="seperator_1"></div>
-                <div>
-                  <div class="filter-items">
-                    <p class="filter-item">
-                      Cheapest
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 10.3448L5 6H11L8 10.3448Z" fill="#6A8297"/>
-                      </svg>
-                    </p>
-                  </div>
-                  <div class="filter-by-modal">
-                    <p class="filter-by-modal-p">Cheapest</p>
-                    <p class="filter-by-modal-p">Fastest</p>
-                    <p class="filter-by-modal-p">Best Value</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!--            <div style="position: relative">-->
+<!--              <div class="filter-by">-->
+<!--                <p class="and-filter-by">Sort by</p>-->
+<!--                <div class="seperator_1"></div>-->
+<!--                <div>-->
+<!--                  <div class="filter-items">-->
+<!--                    <p class="filter-item">-->
+<!--                      Cheapest-->
+<!--                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">-->
+<!--                        <path d="M8 10.3448L5 6H11L8 10.3448Z" fill="#6A8297"/>-->
+<!--                      </svg>-->
+<!--                    </p>-->
+<!--                  </div>-->
+<!--&lt;!&ndash;                  <div class="filter-by-modal">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="filter-by-modal-p">Cheapest <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">&ndash;&gt;-->
+<!--&lt;!&ndash;                      <circle cx="8" cy="8" r="8" fill="#159D54"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </svg></p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="filter-by-modal-p">Fastest</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                  </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
         </div>
       </div>
@@ -163,7 +165,6 @@ export default {
 .filter-by-modal{
   flex-direction: column;
   position: absolute;
-  z-index: 999999;
   display: none;
   /* m6 */
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
@@ -503,7 +504,6 @@ line-height: 1.75rem; /* 175% */
   width: 30.47194rem;
   height: 25.32919rem;
   /*border: solid;*/
-  z-index: -1;
 }
 .choose_document_type{
   display: flex;
@@ -972,7 +972,6 @@ line-height: 1.75rem; /* 175% */
   border-radius: 1rem;
   border: 1px solid  #D8B0D8;
   background: #FFF;
-  z-index: 99;
   box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
   position: relative;
 

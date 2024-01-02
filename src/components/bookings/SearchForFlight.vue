@@ -176,18 +176,31 @@
                             <div  v-if="showClass" class="dropDown">
                               <div class="doc_type_options">
                                 <div class="passenger-type" style="width: 100%">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                                    <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg></p>
+
                                 </div>
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy</p>
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'Premium Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                                    <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg></p>
                                 </div>
 
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class</p>
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'Business Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                                    <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg></p>
                                 </div>
 
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class</p>
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'First Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                                    <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg></p>
                                 </div>
 
 
@@ -493,9 +506,9 @@ export default {
           if(!this.destination || !this.return_date){
             RuthdoAlert({title: 'Travel Dates is required', icon: 'error'});
           } else {
+            localStorage.flightModel = JSON.stringify(this.flightModel)
+            console.log(localStorage.flightModel)
             storeUtils.fireAway().flight?.handleFlightSearch().then(() => {})
-
-
           }
         }
         if(this.activeDestType === 'one_way'){
@@ -772,6 +785,9 @@ export default {
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .passenger-type-text-1:hover{
@@ -794,6 +810,7 @@ export default {
   border-bottom:solid #C0CCDA;
   border-top: solid #C0CCDA;
 }
+
 .dropDown{
   width: 17.625rem;
   display: flex;
@@ -1088,6 +1105,7 @@ export default {
   gap: 0.37rem;
   padding: 0.5rem;
   width: 100%;
+  background: #FFF;
 }
 
 .form-area-footer{
