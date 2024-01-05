@@ -36,9 +36,17 @@ export const useFlightStore = defineStore('flightStore', {
         wallet:null,
         filteredFlightResult:[],
         confirmingBookingLoading:false,
+        searchParams:{
+            stops:[],
+            airlines:[],
+            flexibility:[],
+            prices:[]
+        }, 
     }),
 
     getters: {
+        getSearchParams: state => state.searchParams,
+        getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length || state.searchParams.prices.length,
         getTravellers: state => state.traveller,
         getQuery: state => state.query,
         getCheckout:state => state.checkout,
@@ -69,12 +77,36 @@ export const useFlightStore = defineStore('flightStore', {
 
     actions: {
 
+        appendFilterType(type, value){
+            switch(type){
+                case 'stops':
+                    !this.searchParams.stops.includes(value) ? this.searchParams.stops.push(value) : this.searchParams.stops = this.searchParams.stops.filter((a) => {return a !== value});
+                    break;
+                case 'airlines':
+                    !this.searchParams.airlines.includes(value) ? this.searchParams.airlines.push(value) : this.searchParams.airlines = this.searchParams.airlines.filter((a) => {return a !== value});
+                    break;
+                case 'flexibility':
+                    !this.searchParams.flexibility.includes(value) ? this.searchParams.flexibility.push(value) : this.searchParams.flexibility = this.searchParams.flexibility.filter((a) => {return a !== value});
+                    break;
+                default:
+                    break;
+                    
+            }
+        },
+
         commitFilteredFlightResult(payload) {
-            console.log("before ===> ", this.filteredFlightResult)
+            // console.log("before store ===> ", this.filteredFlightResult)
+            //TODO:refactor this
 
-            this.filteredFlightResult.push(...payload)
+            // this.filteredFlightResult.push(...payload);
+            this.filteredFlightResult = payload;
 
-            console.log("after ===> ", this.filteredFlightResult)
+
+            // this.filteredFlightResult = Array.from(
+            //     this.filteredFlightResult.reduce((idMap, obj) => idMap.set(obj.id, obj), new Map()).values()
+            // );
+
+            console.log("after store ===> ", this.filteredFlightResult)
 
         },
 

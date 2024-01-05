@@ -530,7 +530,7 @@ export default {
   },
 
   mounted() {
-    if(!this.storedFlightModel.return_date) this.activeDestType = 'one_way';
+    if(!this.storedFlightModel?.return_date) this.activeDestType = 'one_way';
     else this.activeDestType = 'round_trip';
 
     const from = document.getElementById('search_model_from_input'),

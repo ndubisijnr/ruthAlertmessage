@@ -1,40 +1,33 @@
 <template>
+    
     <div class="fliter_wrapper">
-      {{fliterFlightResult.length}} {{filterValue}}
         <div>
             <div class="fliter_header">
-                <p class="fliter">Fliter</p>
-                <p class="clear_all" @click="clear">Clear all</p>
+                <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.stops.length + getSearchParams.flexibility.length + getSearchParams.airlines.length}} )</span> <br />Fliter</p>
+                <OnBoardingButton class="clear_all" btn-width="5rem" height="2rem" text-node="Clear all" @click="clearAll" />
             </div>
             <div class="breaker"></div>
             <div>
                 <div class="fliter_header">
                     <p class="fliter">Price</p>
-                    <p class="clear_all" @click="clear">Clear</p>
+                    <!-- <p class="clear_all" @click="clear('price', [])">Clear</p> -->
                 </div>
                 <div>
                     <div class="item_layout" style="margin-bottom: 1rem;">
-                      <input type="range" id="filter_by_amount" @change="doFilter('price')" v-model="max_input_value"
-                             :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]" />
-                        <input style="z-index: 1" type="range" @change="doFilter('price')" id="filter_by_amount"
-                            v-model="min_input_value" :min="10000"
-                            :max="getInputRange[0]" />
+                        <input style="z-index: 1" type="range" @change="doFilter('price',min_input_value)" id="filter_by_amount"
+                            v-model="min_input_value" :min="getInputRange[getInputRange.length - 1]/2"
+                            :max="getInputRange[getInputRange.length - 1]" />
 
+                            <input type="range" id="filter_by_amount" @change="doFilter('price',max_input_value)" v-model="max_input_value"
+                                :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]/2" />
                     </div>
                     <div class="range_value">
                       <div style="display: flex;gap: 0.5rem; ">
-                        <p id="start_amount">min: ₦ {{ min_input_value ? formatAmount(min_input_value) :
-                            formatAmount(getInputRange[0]) }}</p>
-                        <!--                            <div style="display: flex;gap: 0.5rem;"-->
-                        <!--                                v-if="getInputRange[getInputRange.length - 1] / 2 >= min_input_value">-->
-                        <!--                                <p>-</p>-->
-                        <!--                                <p id="start_amount">₦ {{ min_input_value ? formatAmount(min_input_value) :-->
-                        <!--                                    formatAmount(getInputRange[0]) }}</p>-->
-                        <!--                            </div>-->
+                        <p id="start_amount"></p>
                       </div>
                       <div v-if="getInputRange[getInputRange.length - 1] / 2 <= min_input_value">
-                        <p id="end_amount">max: {{ max_input_value ? formatAmount(max_input_value) :
-                            formatAmount(getInputRange[getInputRange.length - 1]) }}</p>
+                        <p id="end_amount">max: ₦ {{ min_input_value ? formatAmount(min_input_value) :
+                            formatAmount(getInputRange[getInputRange.length - 1] / 2) }}</p>
                       </div>
 
                     </div>
@@ -44,8 +37,7 @@
             <div>
                 <div>
                     <div class="fliter_header">
-                        <p class="fliter">Stops</p>
-                        <p class="clear_all" @click="clear">Clear</p>
+                        <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.stops.length}} )</span> <br />Stops</p>
                     </div>
                     <div class="item_layout">
                         <input type="checkbox" @change="doFilter('stops', 0)" />
@@ -63,8 +55,8 @@
 
                 <div class="breaker"></div>
                 <div class="fliter_header">
-                    <p class="fliter">Airlines</p>
-                    <p class="clear_all" @click="clear">Clear</p>
+                    <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.airlines.length}} )</span> <br />Airlines</p>
+                    <!-- <p class="clear_all" @click="clear('airlines', [])">Clear</p> -->
                 </div>
 
                 <div  v-for="(i,index) in fliterFuncComponents(getFlightResult, 'airline_details').all_airport" :key="index">
@@ -80,8 +72,8 @@
             <div class="breaker"></div>
             <div>
                 <div class="fliter_header">
-                    <p class="fliter">Flexibility</p>
-                    <p class="clear_all" @click="clear">Clear</p>
+                    <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.flexibility.length}} )</span> <br />Flexibility</p>
+                    <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
                 </div>
                 <div class="item_layout">
                     <input type="checkbox" @change="doFilter('flexibility', true)" />
@@ -103,25 +95,39 @@ import InputRange from '../Inputs/InputRange.vue'
 // import { RuthdoAlert } from 'ruthly'
 import { formatAmount } from '../../mixins/flightUtil'
 import storeUtils from '../../utils/storeUtils'
+import OnBoardingButton from '../Buttons/OnBoardingButton.vue'
 export default {
     name: "FlightFliter",
-    components: { InputRange },
+    components: { InputRange, OnBoardingButton },
     data() {
         return {
             fliterFlightResult: [],
             formatAmount,
             min_input_value: 0,
-            max_input_value: 0,
-            filterValue:[]
+            max_input_value: 0,          
+            // filterValue:[],
+            // searchParams:[],
+            // stops: []
         }
     },
     methods: {
 
-        clear(){
-          this.fliterFlightResult = [];
+        clearAll(){
+            this.fliterFlightResult = [];
+            Object.keys(this.getSearchParams).forEach(key => {
+                this.getSearchParams[key] = []
+            })
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-          this.max_input_value = 0;
-          this.min_input_value = 0
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+            storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
+
+        },
+
+        clear(type, filterValue){
+          storeUtils.fireAway().flight?.appendFilterType(type, filterValue)
 
           const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -165,158 +171,212 @@ export default {
 
         },
 
-        doFilter(type, filterValue) {
-            const data = this.getFlightResult
-            const flightToRemove = []
+    
 
-            // args is an array of arguments
-           // my own bagudu code
-            if (type == 'airlines') {
+    filterFlights(array, stopsFilter, airlineCodes, flexibility, prices) {
+            const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
+            const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+            return array.filter(flight => {
+                // Check outbound stops
+                const meetsStopsCriteria =
+                !stopsFilter.length ||
+                (stopsFilter.includes(flight.outbound_stops) || (stopsFilter.includes(2) && flight.outbound_stops >= 2))
 
-              if (!this.filterValue.includes(filterValue)) {
-                this.filterValue.push(filterValue); // push flight code values
-              } else {
-                this.fliterFlightResult = [];
-                this.filterValue = this.filterValue.filter(it => it !== filterValue);
-                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult);
-              }
-
-              this.fliterFlightResult = data.filter(flight =>
-                  this.filterValue.includes(flight.outbound[0]?.operating_airline)
-              );
-              // console.log(this.filterValue)
-              console.log(this.fliterFlightResult) // array
-
-              storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
-
-            }
+                // Check operating airline
+                const meetsAirlineCriteria =
+                !airlineCodes.length ||
+                (flight.outbound.length > 0 && airlineCodes.includes(flight.outbound[0].operating_airline));
 
 
-            if (type === 'flexibility') {
-              this.fliterFlightResult = data.filter(it =>  {
-                if(it.outbound[0].refundable === filterValue) {
-                  const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                  if (!isDuplicate) {
-                    storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
-                  } else {
-                    console.log(this.getFilteredFlight);
-                    flightToRemove.push(it)
-                    this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                      return a.id !== it.id
-                    })
-                    storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                  }
+                // Check flexibility
+                const meetFlexibility = 
+                !flexibility.length || (flight.outbound.length > 0 && flexibility.includes(flight.outbound[0].refundable))
 
-                }
-              });
+                // // Check Prize
+                // const meetPrize = 
+                // !prices || (prices >= minPrice && prices <= maxPrice)
 
-              console.log(this.fliterFlightResult) // array
+                // Return true only if both criteria are met
+                return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
 
-
-
-              // if (Array.isArray(data)) {
-              //       data.filter((it) => {
-              //           //check if airline is not already in array
-              //           if (it.outbound.find(it => it.refundable == filterValue) || it.inbound.find(it => it.refundable == filterValue)) {
-              //               const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-              //               console.log(it.outbound)
-              //               if (!isDuplicate) {
-              //                   storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-              //
-              //               } else {
-              //                   console.log(this.getFilteredFlight);
-              //
-              //                   flightToRemove.push(it)
-              //                   this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-              //                       return a.id !== it.id
-              //                   })
-              //                   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-              //               }
-              //
-              //           }
-              //
-              //       })
-              //
-              //
-              //   }
-            }
-
-
-            if (type === 'stops') {
-                console.log(filterValue)
-                // if (!this.filterValue.includes(filterValue)) {
-                //   this.filterValue.push(filterValue); // push flight code values
-                // } else {
-                //   this.fliterFlightResult = [];
-                //   this.filterValue = this.filterValue.filter(it => it !== filterValue);
-                //   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult);
-                // }
-
-                this.fliterFlightResult = data.filter(it => it.outbound_stops == filterValue);
-                console.log(this.filterValue)
-                console.log(this.fliterFlightResult)  // array
-
-                storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
-                // if (Array.isArray(data)) {
-                //     data.find((it) => {
-                //         //more than 1 stops
-                //         if(it.outbound_stops == filterValue || it.outbound_stops > filterValue){
-                //             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                //             if (!isDuplicate) {
-                //                 storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-                //             } else {
-                //                 flightToRemove.push(it)
-                //                 this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                //                     return a.id !== it.id
-                //                 })
-                //                 storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                //
-                //             }
-                //         }
-                //
-                //     })
-                //
-                //
-                //
-                //
-                //
-                //     console.log(this.fliterFlightResult)
-                // }
-            }
-
-
-            if (type === 'price') {
-              const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
-              const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
-
-              console.log(minPrice, maxPrice)
-
-
-                if (Array.isArray(data)) {
-                    data.filter((it) => {
-                        const amount = it.amount;
-                        console.log(amount)
-                        if (amount >= minPrice && amount <= maxPrice) {
-                            const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-                            if(!isDuplicate){
-                                storeUtils.fireAway().flight?.commitFilteredFlightResult(it);
-                            }
-                            else{
-                                this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-                                    return a.id !== it.id
-                                })
-                                storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-                            }
-                        }
-                    });
-
-                    // Now, commit the filtered flight results, for example:
-
-                }
-            }
+            });
         },
 
+
+        doFilter(type, filterValue) {
+          const data = this.getFlightResult
+          storeUtils.fireAway().flight?.appendFilterType(type, filterValue)
+
+          console.log(type, filterValue)
+
+          this.fliterFlightResult = this.filterFlights(data, this.getSearchParams.stops, this.getSearchParams.airlines, this.getSearchParams.flexibility)
+
+          storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
+
+        },
+
+        //  doFilter(type, filterValue) {
+        //   let data;
+        //   const flightToRemove = []
+
+        //   if(type === 'stops' && !this.stops.includes(filterValue)) this.stops.push(filterValue)
+        //   else this.stops = this.stops.filter((a) => {return a !== filterValue})
+
+        //   if (!this.searchParams.includes(type)) this.searchParams.push(type); // push flight code values;
+
+        //   data = this.searchParams.length > 1 ? this.getFilteredFlight : this.getFlightResult // checks if there is an active filter
+
+        //   if (type === 'airlines') {
+
+        //     if (!this.filterValue.includes(filterValue)) {
+        //       this.filterValue.push(filterValue); // push flight code values
+        //     } else {
+        //       this.fliterFlightResult = [];
+        //       this.filterValue = this.filterValue.filter(it => it !== filterValue);
+        //     }
+
+        //     if(this.filterValue.length === 0) this.searchParams = []
+
+
+        //     this.fliterFlightResult = data.filter(flight =>
+        //         this.filterValue.includes(flight.outbound[0]?.operating_airline)
+        //     );
+
+
+        //     // console.log(this.filterValue)
+        //     console.log(this.fliterFlightResult) // array
+
+
+        //   }
+
+        //   if (type === 'flexibility') {
+        //     this.fliterFlightResult = data.filter(it =>  {
+        //       if(it.outbound[0].refundable === filterValue) {
+        //         const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+        //         if (!isDuplicate) {
+        //           storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
+        //         } else {
+        //           console.log(this.getFilteredFlight);
+        //           flightToRemove.push(it)
+        //           this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+        //             return a.id !== it.id
+        //           })
+        //           storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+        //         }
+
+        //       }
+        //     });
+
+        //     console.log(this.fliterFlightResult) // array
+
+
+
+        //     // if (Array.isArray(data)) {
+        //     //       data.filter((it) => {
+        //     //           //check if airline is not already in array
+        //     //           if (it.outbound.find(it => it.refundable == filterValue) || it.inbound.find(it => it.refundable == filterValue)) {
+        //     //               const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+        //     //               console.log(it.outbound)
+        //     //               if (!isDuplicate) {
+        //     //                   storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
+        //     //
+        //     //               } else {
+        //     //                   console.log(this.getFilteredFlight);
+        //     //
+        //     //                   flightToRemove.push(it)
+        //     //                   this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+        //     //                       return a.id !== it.id
+        //     //                   })
+        //     //                   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+        //     //               }
+        //     //
+        //     //           }
+        //     //
+        //     //       })
+        //     //
+        //     //
+        //     //   }
+        //   }
+
+        //   if (type === 'stops') {
+
+        //       if(this.stops.length === 0) {
+        //         this.searchParams = this.searchParams.filter(it => {return it !== 'stops'})
+        //         this.fliterFlightResult = []
+        //         storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
+        //       }
+        //       else{
+        //         console.log(data)
+        //         this.fliterFlightResult = data.filter(it =>
+        //         this.stops.includes(it.outbound_stops))
+
+        //         console.log(this.fliterFlightResult)
+               
+        //       }
+
+
+
+        //       // if (Array.isArray(data)) {
+        //       //     data.find((it) => {
+        //       //         //more than 1 stops
+        //       //         if(it.outbound_stops == filterValue || it.outbound_stops > filterValue){
+        //       //             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+        //       //             if (!isDuplicate) {
+        //       //                 storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
+        //       //             } else {
+        //       //                 flightToRemove.push(it)
+        //       //                 this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+        //       //                     return a.id !== it.id
+        //       //                 })
+        //       //                 storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+        //       //
+        //       //             }
+        //       //         }
+        //       //
+        //       //     })
+        //       //
+        //       //
+        //       //
+        //       //
+        //       //
+        //       //     console.log(this.fliterFlightResult)
+        //       // }
+        //   }
+
+        //   if (type === 'price') {
+        //     const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
+        //     const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+
+        //     console.log(minPrice, maxPrice)
+
+        //     if (Array.isArray(data)) {
+        //         data.filter((it) => {
+        //             const amount = it.amount;
+        //             console.log(amount)
+        //             if (amount >= minPrice && amount <= maxPrice) {
+        //                 const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
+        //                 if(!isDuplicate){
+        //                     storeUtils.fireAway().flight?.commitFilteredFlightResult(it);
+        //                 }
+        //                 else{
+        //                     this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
+        //                         return a.id !== it.id
+        //                     })
+        //                     storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
+        //                 }
+        //             }
+        //         });
+
+        //         // Now, commit the filtered flight results, for example:
+
+        //     }
+        //   }
+
+
+        // },
+
         //filterFlightsByAirlineCode
+       
         filterFlightsByAirlineCode(flights, airlineCodes) {
         if(Array.isArray(flights)){
           return flights.filter(flight => {
@@ -379,8 +439,7 @@ export default {
     },
     computed: {
         getFlightResult() {
-            const flightResult = JSON.parse(localStorage?.flightResults)
-            return flightResult
+            return JSON.parse(localStorage?.flightResults)
         },
 
 
@@ -395,13 +454,18 @@ export default {
 
         filterByAmount() {
             const input = document.getElementById('filter_by_amount').value
+            const input2 = document.getElementById('filter_by_amount2').value
+
             document.getElementById('start_amount').textContent = input.min
             document.getElementById('end_amount').textContent = input.max
         },
 
         getFilteredFlight() {
-
             return storeUtils.fireAway().flight?.getFilteredFlight
+        },
+
+        getSearchParams(){
+            return storeUtils.fireAway().flight?.getSearchParams
         }
 
 
@@ -417,6 +481,7 @@ export default {
     }
 }
 </script>
+
 <style scoped>
 @import './input_range.css';
 
@@ -450,7 +515,8 @@ input[type=checkbox] {
 .fliter_header {
     display: flex;
     justify-content: space-between;
-    margin: 1rem 0;
+    margin-bottom:.8rem;
+    margin-top: .2rem;
 }
 
 .fliter_wrapper {

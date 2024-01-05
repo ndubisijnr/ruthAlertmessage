@@ -1,7 +1,7 @@
 export const stickyHeader = () => {
     const navTop = document.getElementById('header')
     document.addEventListener('scroll',()=> {
-        if(window.scrollY > 220){
+        if(window.scrollY > 1000){
             navTop.style.position = 'fixed'
             navTop.style.top = '0'
             navTop.style.zIndex = '1'
