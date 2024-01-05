@@ -85,7 +85,7 @@
 
                 </div>
 
-                 <on-boarding-button @click="editSearch" height="auto" padding="0.5rem 1rem" btn-width="8rem" color="#2C6CAC" border="none" background="#EAF0F7" :text-node="edit ? 'Cancel' :'Edit Search'"></on-boarding-button>
+                 <on-boarding-button @click="editSearch" height="auto" padding="0.5rem 1rem" btn-width="8rem" :background="custom_theme ? custom_theme.color: lightenColor(default_theme.color)" :text-node="edit ? 'Cancel' :'Edit Search'"></on-boarding-button>
               
               </div>
               </div>
@@ -101,6 +101,7 @@
                 </div>
                 <div class="search_flight_model" style="display: flex;margin: 1rem 0;gap:0.50rem">
 
+                 
                 <div style="width: 100%">
                   <on-boarding-input label="From" is-fake-loading="true" autocomplete="off" width="100%" id="search_model_from_input"  class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom()}"></on-boarding-input>
                   <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
@@ -191,27 +192,27 @@
                   <div  v-if="showClass" class="dropDown">
                     <div class="doc_type_options">
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <circle cx="8" cy="8" r="8" fill="#159D54"/>
                           <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg></p>
                       </div>
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'Premium Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
-                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg></p>
-                      </div>
-
-                      <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'Business Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'premium_economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'premium_economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <circle cx="8" cy="8" r="8" fill="#159D54"/>
                           <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg></p>
                       </div>
 
                       <div class="passenger-type" style="border: none">
-                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'First Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'business',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'business'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                          <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg></p>
+                      </div>
+
+                      <div class="passenger-type" style="border: none">
+                        <p class="passenger-type-text-1" @click="flightModel.cabin = 'first',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'first'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <circle cx="8" cy="8" r="8" fill="#159D54"/>
                           <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg></p>
@@ -457,7 +458,7 @@ export default {
     getCityByCityCode(city_code){
       const airports = JSON.parse(localStorage?.airports)
       if(airports){
-        const cityName = airports.filter(it => it.city_code === city_code)[0]?.city
+        const cityName = airports.filter(it => it.iata_code === city_code)[0]?.city
         return cityName
       }
     },
@@ -560,8 +561,6 @@ export default {
 <style scoped>
 @import "style.css";
 .search_flight_model{
-  //position: absolute;
-  //flex-wrap: wrap;
   z-index: 999999999;
   width: 100%;
 }
@@ -713,6 +712,8 @@ export default {
 
 .info_wrapper{
   z-index: 2;
+  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+
 }
 .choose_document_type{
   display: flex;

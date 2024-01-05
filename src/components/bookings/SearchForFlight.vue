@@ -176,28 +176,28 @@
                             <div  v-if="showClass" class="dropDown">
                               <div class="doc_type_options">
                                 <div class="passenger-type" style="width: 100%">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'economy', showClass = !showClass">Economy <svg v-if="flightModel.cabin === 'economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <circle cx="8" cy="8" r="8" fill="#159D54"/>
                                     <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                   </svg></p>
 
                                 </div>
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Premium Economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'Premium Economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'premium_economy',showClass = !showClass">Premium Economy <svg v-if="flightModel.cabin === 'premium_economy'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <circle cx="8" cy="8" r="8" fill="#159D54"/>
                                     <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                   </svg></p>
                                 </div>
 
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'Business Class',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'Business Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'business',showClass = !showClass">Business Class <svg v-if="flightModel.cabin === 'business'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <circle cx="8" cy="8" r="8" fill="#159D54"/>
                                     <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                   </svg></p>
                                 </div>
 
                                 <div class="passenger-type" style="border: none">
-                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'First Class',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'First Class'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                  <p class="passenger-type-text-1" @click="flightModel.cabin = 'first',showClass = !showClass">First Class <svg v-if="flightModel.cabin === 'first'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <circle cx="8" cy="8" r="8" fill="#159D54"/>
                                     <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                   </svg></p>
@@ -213,11 +213,11 @@
                         </div>
 
                         <div class="form-area-checkbox">
-                          <div class="form-area-checkbox-item">
+                          <!-- <div class="form-area-checkbox-item">
                             <p class="txt-m">With Mark Up</p>
                             <input style="cursor: pointer" id="withMarkUp" type="checkbox" @change="handleCheck('withMarkUp')">
 
-                          </div>
+                          </div> -->
                           <div class="form-area-checkbox-item">
                             <p class="txt-m">Non-Stops Only</p>
                             <input style="cursor: pointer" id="withNonStop" type="checkbox" @change="handleCheck('withNonStop')">
@@ -314,11 +314,9 @@ export default {
     }
   },
   methods:{
-    readonly,
     handleCheck(value){
-      const withMarkup = document.getElementById('withMarkUp')
       const withNonStops = document.getElementById('withNonStop')
-      if(value === 'withMarkUp') this.flightModel.with_markup = withMarkup.checked
+      console.log(withNonStops.value)
       if(value === 'withNonStop') this.flightModel.with_non_stops = withNonStops.checked
     },
 
@@ -501,7 +499,6 @@ export default {
           this.flightModel.destination = this.destination
           this.flightModel.return_date = this.return_date
           this.flightModel.departure_date = this.departure_date
-          this.flightModel.with_non_stops = false
           this.flightModel.with_markup =  false
           if(!this.destination || !this.return_date){
             RuthdoAlert({title: 'Travel Dates is required', icon: 'error'});
@@ -518,7 +515,6 @@ export default {
           this.flightModel.destination = this.destination
           this.flightModel.departure_date = this.departure_date
           this.flightModel.return_date = null
-          this.flightModel.with_non_stops = false
           this.flightModel.with_markup =  false
           if(!this.departure_date){
             RuthdoAlert({title: 'Departure  Date is required', icon: 'error'});

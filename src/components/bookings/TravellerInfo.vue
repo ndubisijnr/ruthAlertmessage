@@ -108,6 +108,7 @@
               </div>
             </div>
 
+
             <div style="margin-bottom: 6rem;" v-for="(w, index) in passengers" :key="index">
 
           
@@ -169,9 +170,9 @@
                             <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
                           </div> -->
 
-                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date()" :min_date="getYYYYMMDDFormat(infantMax)" label="Infant Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date(new Date().setDate(new Date().getDate() - 1))" :min_date="getYYYYMMDDFormat(infantMax)" label="Infant Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
                           <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Child Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                          <DataPicker v-else :start_date="getYYYYMMDDFormat(dobMax)" :max_date="getYYYYMMDDFormat(dobMax)" label="Adult Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                          <DataPicker v-else :max_date="getYYYYMMDDFormat(dobMax)" label="Adult Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
 
                       </div>
 
@@ -188,7 +189,56 @@
                       </div> -->
                   </div>
                 </div>
+            </div>
+            <div class="contact-details" v-if="getSelectedFlight?.document_required">
+              <div style="margin-bottom: 1rem">
+                <span class="contact_details">Passport Information</span><br />
+                <span style="font-size: 1rem; font-weight: 700;">Please ensure your passport is valid for at least 6 months from the departure date</span>
               </div>
+
+              <div class="group-inputs">
+                <on-boarding-input  width="100%" @inputValue="value => w.documents.number = value" label="Passport Number"></on-boarding-input>
+              </div>
+
+              <div class="group-inputs">
+                <div class="choose_document_type" style="position: relative;">
+                  <label class="class_label">Passport Nationality</label>
+                  <p class="selected-item">{{ selectedNationalityCountry ? selectedNationalityCountry :  countries[0].name }}</p>
+                  <div  v-if="showCountries && label === 'pn' && index_ === index" class="dropDown">
+                    <div class="doc_type_options">
+                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
+                        <p class="passenger-type-text-1" @click="w.documents.nationality_country = i.code, selectedNationalityCountry=i.name, showCountries=!showCountries">{{ i.name }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <img @click="showCountries = !showCountries, label = 'pn',index_ = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                </div>
+
+                <div class="choose_document_type" style="position: relative;">
+                  <label class="class_label">Passport Issuing Country</label>
+                  <p class="selected-item">{{selectedIssuingCountry ? selectedIssuingCountry : countries[0].name }}</p>
+                  <div  v-if="showCountries && label === 'pic' && index_ === index" class="dropDown">
+                    <div class="doc_type_options">
+                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
+                        <p class="passenger-type-text-1" @click="w.documents.issuing_country = i.code, selectedIssuingCountry=i.name,showCountries=!showCountries">{{ i.name }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <img @click="showCountries = !showCountries, label = 'pic',index_ = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                </div>
+
+
+<!--                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>-->
+<!--                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>-->
+              </div>
+
+              <div class="group-inputs">
+                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => w.documents.expiry_date = obj.formattedDate"/>
+
+                <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
+                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => w.documents.issuing_date = obj.formattedDate"/>
+              </div>
+            </div>
               <!-- <div class="simple-info">
               <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
@@ -200,54 +250,7 @@
             <!-- </div> -->
           </div>
 
-            <div class="contact-details" v-if="getSelectedFlight?.document_required">
-              <div style="margin-bottom: 1rem">
-                <span class="contact_details">Passport Information</span><br />
-                <span style="font-size: 1rem; font-weight: 700;">Please ensure your passport is valid for at least 6 months from the departure date</span>
-              </div>
-
-              <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => documents.number = value" label="Passport Number"></on-boarding-input>
-                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => documents.expiry_date = obj.formattedDate"/>
-              </div>
-
-              <div class="group-inputs">
-                <div class="choose_document_type" style="position: relative;">
-                  <label class="class_label">Passport Nationality</label>
-                  <p class="selected-item">{{ selectedNationalityCountry ? selectedNationalityCountry :  countries[0].name }}</p>
-                  <div  v-if="showCountries && label === 'pn'" class="dropDown">
-                    <div class="doc_type_options">
-                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
-                        <p class="passenger-type-text-1" @click="documents.nationality_country = i.code, selectedNationalityCountry=i.name, showCountries=!showCountries">{{ i.name }}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <img @click="showCountries = !showCountries, label = 'pn'" src="../../assets/Monotone.svg" style="cursor: pointer" />
-                </div>
-
-                <div class="choose_document_type" style="position: relative;">
-                  <label class="class_label">Passport Issuing Country</label>
-                  <p class="selected-item">{{selectedIssuingCountry ? selectedIssuingCountry : countries[0].name }}</p>
-                  <div  v-if="showCountries && label === 'pic'" class="dropDown">
-                    <div class="doc_type_options">
-                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
-                        <p class="passenger-type-text-1" @click="documents.issuing_country = i.code, selectedIssuingCountry=i.name,showCountries=!showCountries">{{ i.name }}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <img @click="showCountries = !showCountries, label = 'pic'" src="../../assets/Monotone.svg" style="cursor: pointer" />
-                </div>
-
-
-<!--                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>-->
-<!--                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>-->
-              </div>
-
-              <div class="group-inputs">
-                <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
-                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => documents.issuing_date = obj.formattedDate"/>
-              </div>
-            </div>
+           
 
 
 
@@ -389,35 +392,35 @@ export default {
       convertDurationToWords,
       getYYYYMMDDFormat,
       passengers:[],
+      index_:null,
       passengerIdCounter:1,
       showCountries:null,
       label:null,
       selectedIssuingCountry:null,
       selectedNationalityCountry:null,
       showingGenderIndex:null,
-      documents:{
-        number: null,
-        issuing_date: null,
-        expiry_date: null,
-        issuing_country: null,
-        nationality_country: null,
-        document_type: 'passport',
-        holder: false
-      },
       showGender:false,
       isTitle:false,
       dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
-      infantMax:new Date().setFullYear(new Date().getFullYear() - 2),
+      infantMax:new Date(new Date().setFullYear(new Date().getFullYear() - 2))
+      // new Date().setFullYear(new Date().getFullYear() - 2),
     }
   },
   methods:{
     
     addPassenger(value) {
+      let value_;
+      if(value.toLowerCase() === 'held_infant') {
+          value_ = value.split('_')[1]
+      }else{
+          value_ = value
+      }
 
+      console.log(value_)
 
 
       const newPassenger = {
-          passenger_type: value,
+          passenger_type: value_,
           first_name: null,
           last_name: null,
           dob: null,
@@ -425,7 +428,16 @@ export default {
           title: null,
           email: null,
           phone_number: null,
+        };
 
+      const documents = {
+            number: null,
+            issuing_date: null,
+            expiry_date: null,
+            issuing_country: null,
+            nationality_country: null,
+            document_type: 'passport',
+            holder: false
         };
 
         // Create a new passenger object with a unique ID
@@ -439,7 +451,7 @@ export default {
         }
 
         if(this.getSelectedFlight?.document_required){
-           newPassenger.documents = this.documents
+           newPassenger.documents = documents
         }
 
         newPassenger.email = this.getUser?.email

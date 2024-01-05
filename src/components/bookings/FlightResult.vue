@@ -777,7 +777,6 @@ line-height: 1.75rem; /* 175% */
 
 .breaker1{
   width: 100%;
-  height: 0.0625rem;
   background: #DFE6ED;
   margin-top: 0.56rem;
 }

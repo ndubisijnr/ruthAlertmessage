@@ -14,12 +14,12 @@
                 </div>
                 <div>
                     <div class="item_layout" style="margin-bottom: 1rem;">
-                        <input style="z-index: 1" type="range" @change="doFilter('price',min_input_value)" id="filter_by_amount"
+                        <input style="z-index: 1" type="range" @change="filterByAmount" id="filter_by_amount"
                             v-model="min_input_value" :min="getInputRange[getInputRange.length - 1]/2"
                             :max="getInputRange[getInputRange.length - 1]" />
 
-                            <input type="range" id="filter_by_amount" @change="doFilter('price',max_input_value)" v-model="max_input_value"
-                                :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]/2" />
+                            <!-- <input type="range" id="filter_by_amount" @change="doFilter('price',max_input_value)" v-model="max_input_value"
+                                :min="getInputRange[0]" :max="getInputRange[getInputRange.length - 1]/2" /> -->
                     </div>
                     <div class="range_value">
                       <div style="display: flex;gap: 0.5rem; ">
@@ -170,7 +170,15 @@ export default {
             return results
 
         },
+        filterByAmount() {
+            const input = document.getElementById('filter_by_amount').value
+            // const input2 = document.getElementById('filter_by_amount2').value
 
+            console.log(input)
+
+            document.getElementById('start_amount').textContent = input
+            document.getElementById('end_amount').textContent = input.max
+        },
     
 
     filterFlights(array, stopsFilter, airlineCodes, flexibility, prices) {
@@ -452,13 +460,11 @@ export default {
             return amount
         },
 
-        filterByAmount() {
-            const input = document.getElementById('filter_by_amount').value
-            const input2 = document.getElementById('filter_by_amount2').value
-
-            document.getElementById('start_amount').textContent = input.min
-            document.getElementById('end_amount').textContent = input.max
+        getFlightModel(){
+            return localStorage?.flightModel
         },
+
+        
 
         getFilteredFlight() {
             return storeUtils.fireAway().flight?.getFilteredFlight
