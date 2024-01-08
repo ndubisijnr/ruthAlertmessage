@@ -172,7 +172,7 @@
 
                           <div class="choose_document_type" style="position: relative;">
                             <label class="class_label">Class</label>
-                            <p class="selected-item">{{ flightModel.cabin }}</p>
+                            <p class="selected-item">{{ flightModel?.cabin.replace('_', ' ') }}</p>
                             <div  v-if="showClass" class="dropDown">
                               <div class="doc_type_options">
                                 <div class="passenger-type" style="width: 100%">
@@ -694,6 +694,7 @@ export default {
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
+  text-transform: capitalize;
 }
 
 .per_airport{
