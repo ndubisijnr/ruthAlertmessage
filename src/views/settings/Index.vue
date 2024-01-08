@@ -956,7 +956,7 @@ export default {
 
   beforeRouteLeave(to, from, next){
     if(this.isEditing){
-      if(!window.confirm("Are you sure? all unsaved changes won't reflect o.")){
+      if(!window.confirm("Are you sure? all unsaved changes won't reflect.")){
         return;
       }
     }

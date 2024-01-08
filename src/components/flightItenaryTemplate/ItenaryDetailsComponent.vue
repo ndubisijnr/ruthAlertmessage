@@ -40,6 +40,7 @@ export default{
     getCurrentRoute(){
       return router.currentRoute.value.fullPath
     },
+   
   },
 
   methods:{

@@ -21,12 +21,12 @@
               <input v-model="searchQuery" @input="doSearch" type="text" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
             </div>
             <div class="filter">
-              <div class="filter-div">
+              <!-- <div class="filter-div">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
                 </svg>
                 <span class="filter-span">Sort By</span>
-              </div>
+              </div> -->
               <div class="filter-by-modal">
                 <p class="filter-by-modal-p">Last Updated (newest first) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
@@ -122,13 +122,13 @@ export default {
       searchQuery:null,
       filterResult:null,
       activeService:'Flight',
-      searchModel:BookingsRequest.bookingSummary,
+      searchModel:{},
       bookingFields:[
         {key:"", label:"Customer’s Name"},
         // {key:"contact_email", label:"Email"},
         {key:"amount", label:"Ticket Amount"},
         // {key:"id", label:"Ticket ID"},
-        {key:"", label:"Airline/Logo"},
+        {key:"flight", label:"Airline"},
         {key:"created_at", label:"Booking Date"},
         {key:"status", label:"Status_"},
         // {key:"Action", label:"Action",id:"member"},
@@ -136,14 +136,24 @@ export default {
     }
   },
   methods:{
-    doSearch(){
+     doSearch(){
       this.searchModel.keyword = this.searchQuery
-      storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel,this.getBusinessProfile.id)
+      storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel).then(() => {
+        this.searchModel = {}
+
+      })
+      
+     
       // this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    },
+
+    doFilter(){
+ 
     },
     close(value){
       this.isFilterBooking = value
     },
+  
   },
 
 
@@ -152,6 +162,8 @@ export default {
     getCurrentRoute(){
       return router.currentRoute.value.name
     },
+
+   
 
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme

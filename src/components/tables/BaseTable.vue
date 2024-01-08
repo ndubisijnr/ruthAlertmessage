@@ -51,7 +51,8 @@
                     <circle cx="3" cy="3" r="3" fill="#F04444"/>
                   </svg>
 
-                   {{ j.status }}</span>
+                   {{ j.status }}
+                  </span>
 
 
           <!-- template {domain is_primary}  -->
@@ -64,8 +65,6 @@
                     <circle cx="3" cy="3" r="3" fill="#7B61FF"/>
                   </svg> <span class="primary">Primary</span>
               </span>
-
-
 
 
           <!-- template {actions}  -->
@@ -111,7 +110,6 @@
           </div>
 
 
-
           <!-- template {team member full name}  -->
 
           <span  v-else-if="h.label.toLowerCase() === 'name'">{{j.first_name}} {{j.last_name}}</span>
@@ -120,6 +118,9 @@
           <!-- template {bookings user fullname} -->
 
           <span  v-else-if="h.label === 'Customer’s Name'">{{j.contact_first_name}} {{j.contact_last_name}}</span>
+
+          <span  v-else-if="h.label === 'Airline'"><img width="20" :src="j.flight?.outbound[0]?.airline_details.logo" alt="flight_logo"> {{j.flight?.outbound[0]?.airline_details.name}}</span>
+
 
           <!-- template {bookings status} -->
 
@@ -223,6 +224,7 @@ export default {
       localStorage.userWallet = JSON.stringify(obj.wallet)
       storeUtils.fireAway().travelAgent?.handleGetUser(obj)
     },
+
     editRole(obj){
       this.model.id = obj.id
       this.model.name = obj?.name
@@ -249,7 +251,6 @@ export default {
         localStorage.managedBookings = JSON.stringify(obj)
         router.push({path:`/bookings/details/${this.getUser?.access_token?.slice(0,20)}`})
       }
-
     },
     
 

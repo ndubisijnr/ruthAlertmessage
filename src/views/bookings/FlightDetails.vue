@@ -5,6 +5,7 @@ import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
 import router from "@/router";
 import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
+import storeUtils from "../../utils/storeUtils";
 export default {
   name: "FlightDetails",
   components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
@@ -21,23 +22,35 @@ export default {
   methods:{
     goBack(){
       router.push({name:"Bookings_Details"})
+    },
+    printAction(){
+    console.log('printing')
+    window.print()
     }
+    
   },
+
+ 
 
   computed: {
     getFlights() {
       if (!this.data) return;
-      return JSON.parse(this.data?.flight)?.passengers
+      return this.data?.flight?.passengers
     },
     airlineDetails() {
       if (!this.data) return;
-      return JSON.parse(this.data?.flight)
+      return this.data?.flight
     },
     getUser() {
       if (localStorage.user) {
         return JSON.parse(localStorage.user)
       }
-    }
+    },
+    getTemplateId(){
+      if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
+      return storeUtils.fireAway().theme.custom_theme.template_id;
+
+    },
   },
 
   mounted() {
@@ -63,7 +76,7 @@ export default {
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
            <p class="flight_details">Flight Details</p>
-           <on-boarding-button btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
+           <on-boarding-button @click="printAction" btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
          </div>
 
           <div>

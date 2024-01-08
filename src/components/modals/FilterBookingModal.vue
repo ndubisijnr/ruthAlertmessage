@@ -3,14 +3,25 @@ import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import {lightenColor} from "@/mixins/themeUtils";
 import storeUtils from "@/utils/storeUtils";
+import BookingsRequest from "../../model/BookingsRequest";
+
 export default {
   name: "FilterBookingModal",
   data(){
     return{
-      lightenColor
+      lightenColor,
+      searchModal:{}
     }
   },
   methods: {
+    applyFilter(){
+      // this.searchModal.booking_status
+      // this.searchModal.payment_status
+      storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel).then(() => {
+        this.searchModel = {}
+
+      })
+    },
     close(){
       this.$emit('close', false)
     },
@@ -19,6 +30,9 @@ export default {
   computed:{
     getTheme(){
       return storeUtils.fireAway().theme.custom_theme ? storeUtils.fireAway().theme.custom_theme : storeUtils.fireAway().theme.default_theme
+    },
+    getLoading(){
+      return storeUtils.fireAway().booking?.getBookingLoading
     }
   }
 }
@@ -83,7 +97,7 @@ export default {
 
         <div class="modal-footer">
           <!-- <on-boarding-button btn-width="8.75rem" :color="getTheme.color" text-node="Reset Filter" :background="lightenColor(getTheme.color)" border="none"></on-boarding-button> -->
-          <on-boarding-button  border="none"  btn-width="8.75rem" text-node="Apply Filter"></on-boarding-button>
+          <on-boarding-button :loading="getLoading" :disabled="getLoading"  border="none"  @click="applyFilter" btn-width="8.75rem" text-node="Apply Filter"></on-boarding-button>
         </div>
       </div>
 

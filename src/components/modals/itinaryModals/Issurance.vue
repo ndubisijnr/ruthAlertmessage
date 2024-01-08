@@ -27,7 +27,6 @@ export default {
     },
     submitRequest(){
       this.model.type = "Issurance"
-      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
       this.model.booking_id = this.data?.id
 
       storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
@@ -81,30 +80,30 @@ export default {
                 </div>
                 <div class="form-input">
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
-                    <p class="label_text">PNR</p>
+                    <p class="label_text">Reference</p>
                   </div>
-                    <input class="form-input-input" :value="data?.pnr"/>
+                    <input class="form-input-input" :value="data?.reference"/>
                 </div>
 
               </div>
               <div>
                 <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label">Attach Payment Receipt </label>
+                  <label class="class_label">Requested by <span class="required">*</span></label>
                 </div>
                 <div>
-                    <div class="form-input">
+                    <!-- <div class="form-input">
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
                         <p class="label_text">Payment Receipt</p>
                       </div>
                         <input class="form-input-input" id="attachment" @change="handleFileChange" type="file" hidden/>
                         <p class="choose-attachment" @click="uploadAttachment">Choose Attachment</p>
-                    </div>
+                    </div> -->
 
 
                   <div>
                     <div class="form-input">
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
-                        <p class="label_text">Requested By <span class="required">*</span></p>
+                        <p class="label_text">Requested By </p>
                       </div>
                       <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name" readonly/>
                     </div>
@@ -117,7 +116,7 @@ export default {
 
           <div>
             <div style="margin-bottom: 0.75rem">
-              <label class="class_label">Additional Information or Comments <span class="required">*</span></label>
+              <label class="class_label">Additional Information or Comments </label>
 
             </div>
             <textarea class="comment_section" v-model="model.description" placeholder="Let us know other additional information you need before or upon ticket issuance"></textarea>

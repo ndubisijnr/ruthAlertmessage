@@ -6,8 +6,8 @@ export default {
         return apiService.Client.post(`/api/${tenant_id}/booking/all`, payload)
     },
 
-    getAgentsBookings(tenant_id,user_id, payload){
-        return apiService.Client.post(`/api/${tenant_id}/booking/all/${user_id}?`, payload)
+    getAgentsBookings(tenant_id,payload){
+        return apiService.Client.post(`/api/${tenant_id}/booking/all`, payload)
     },
 
     getBookingsSummary(tenant_id,user_id) {

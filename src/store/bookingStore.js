@@ -23,7 +23,7 @@ export const useBookingStore = defineStore('bookingStore', {
 
     getters:{
         getLoadingBooking:state => state.loadingBooking,
-        getBookingLoading:state => state.loadingBooking,
+        getBookingLoading:state => state.bookingLoading,
         getLoadingFlightSearch:state => state.loadingFlightSearch,
         getLoading:state => state.loading,
         getLoadingPayment:state => state.loadingPayment,
@@ -71,10 +71,10 @@ export const useBookingStore = defineStore('bookingStore', {
             }
         },
 
-        async getAllAgentBooking(payload, user_id){
+        async getAllAgentBooking(payload){
             this.bookingLoading = true
             try{
-                const response = await BookingService.getAgentsBookings(storeUtils.fireAway().global?.getTenant_id,user_id,payload)
+                const response = await BookingService.getAgentsBookings(storeUtils.fireAway().global?.getTenant_id,payload)
                 let responseData = response.data
                 if(responseData.success){
                     this.loadingBooking = false
