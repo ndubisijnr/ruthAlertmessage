@@ -3,7 +3,7 @@
     <div class="fliter_wrapper">
         <div>
             <div class="fliter_header">
-                <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.stops.length + getSearchParams.flexibility.length + getSearchParams.airlines.length}} )</span> <br />Fliter</p>
+                <p class="fliter">Fliter</p>
                 <OnBoardingButton class="clear_all" btn-width="5rem" height="2rem" text-node="Clear all" @click="clearAll" />
             </div>
             <div class="breaker"></div>
@@ -37,7 +37,7 @@
             <div>
                 <div>
                     <div class="fliter_header">
-                        <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.stops.length}} )</span> <br />Stops</p>
+                        <p class="fliter">Stops</p>
                     </div>
                     <div class="item_layout">
                         <input type="checkbox" @change="doFilter('stops', 0)" />
@@ -55,7 +55,7 @@
 
                 <div class="breaker"></div>
                 <div class="fliter_header">
-                    <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.airlines.length}} )</span> <br />Airlines</p>
+                    <p class="fliter">Airlines</p>
                     <!-- <p class="clear_all" @click="clear('airlines', [])">Clear</p> -->
                 </div>
 
@@ -72,7 +72,7 @@
             <div class="breaker"></div>
             <div>
                 <div class="fliter_header">
-                    <p class="fliter"><span style="border-radius:.5rem;font-size:.8rem;padding:.5rem;background:rgba(0,250,0,0.32)"> Active ( {{getSearchParams.flexibility.length}} )</span> <br />Flexibility</p>
+                    <p class="fliter">Flexibility</p>
                     <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
                 </div>
                 <div class="item_layout">

@@ -43,25 +43,26 @@ export default {
                 <p>Booking Status:</p>
                 <select style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
                   <option>Select booking status</option>
+                  <option value="issued">Issued</option>
+                  <option value="reserved">Reserved</option>
+
                 </select>
               </div>
-              <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
-                <p>Payment Method:</p>
-                <select style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
-                  <option>Select booking status</option>
-                </select>
-              </div>
+            
               <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
                 <p>Payment Status:</p>
                 <select style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
                   <option>Select booking status</option>
+                  <option value="paid">Paid</option>
+                  <option value="unpaid">unPaid</option>
+
                 </select>
               </div>
             </div>
 
           </div>
 
-          <div class="filter_card">
+          <!-- <div class="filter_card">
             <p class="text_1">By Customer</p>
 
             <div style="border-radius: 0.75rem;border: 1px solid #E5E9F2;padding: 1.5rem;">
@@ -77,11 +78,11 @@ export default {
               </div>
             </div>
 
-          </div>
+          </div> -->
         </div>
 
         <div class="modal-footer">
-          <on-boarding-button btn-width="8.75rem" :color="getTheme.color" text-node="Reset Filter" :background="lightenColor(getTheme.color)" border="none"></on-boarding-button>
+          <!-- <on-boarding-button btn-width="8.75rem" :color="getTheme.color" text-node="Reset Filter" :background="lightenColor(getTheme.color)" border="none"></on-boarding-button> -->
           <on-boarding-button  border="none"  btn-width="8.75rem" text-node="Apply Filter"></on-boarding-button>
         </div>
       </div>

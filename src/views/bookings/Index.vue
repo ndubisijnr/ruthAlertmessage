@@ -18,7 +18,7 @@
                 <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
                 <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
               </svg>
-              <input v-model="searchQuery" @input="doSearch" type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
+              <input v-model="searchQuery" @input="doSearch" type="text" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
             </div>
             <div class="filter">
               <div class="filter-div">
@@ -58,7 +58,6 @@
               </div></router-link>
             </div>
           </div>
-
           <div style="margin-top: 3.5rem">
             <div class="table-wrapper">
               <domain-table :fields="bookingFields" :data="filterResult ? filterResult : getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
@@ -106,11 +105,11 @@ import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import router from "../../router";
 import storeUtils from "../../utils/storeUtils";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
-import stores from "../../store";
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.vue";
 import filterBookingModal from "@/components/modals/FilterBookingModal.vue";
 import ComingSoon from "@/components/ComingSoon.vue";
+import BookingsRequest from "../../model/BookingsRequest";
 
 export default {
   name: "Bookings",
@@ -123,12 +122,13 @@ export default {
       searchQuery:null,
       filterResult:null,
       activeService:'Flight',
+      searchModel:BookingsRequest.bookingSummary,
       bookingFields:[
         {key:"", label:"Customer’s Name"},
         // {key:"contact_email", label:"Email"},
         {key:"amount", label:"Ticket Amount"},
         // {key:"id", label:"Ticket ID"},
-        {key:"", label:"Airline"},
+        {key:"", label:"Airline/Logo"},
         {key:"created_at", label:"Booking Date"},
         {key:"status", label:"Status_"},
         // {key:"Action", label:"Action",id:"member"},
@@ -137,8 +137,9 @@ export default {
   },
   methods:{
     doSearch(){
-      this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
-      console.log(this.filterResult)
+      this.searchModel.keyword = this.searchQuery
+      storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel,this.getBusinessProfile.id)
+      // this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
     },
     close(value){
       this.isFilterBooking = value
@@ -256,9 +257,10 @@ a{
 .filter-by-modal{
   flex-direction: column;
   position: absolute;
-  //z-index: 999999;
+  z-index: 999999;
   display: none;
   width: 19rem;
+  top:3.7rem;
   /* m6 */
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
 }
@@ -269,7 +271,7 @@ a{
 
 .filter-by-modal-p{
   display: flex;
-  //width: 12.4375rem;
+  /*width: 12.4375rem;*/
   padding: 0.625rem 1.25rem;
   align-items: center;
   gap: 0.875rem;

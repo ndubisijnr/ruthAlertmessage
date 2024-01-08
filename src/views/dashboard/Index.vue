@@ -8,7 +8,7 @@
           <div class="get-started" :style="{background:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}" v-show="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document && getUser.account_type !== 'super_admin'">
             <div class="with-tiqwa">
               <div>
-                <h3 class="with-tiqwa-h">Hello, {{getUser?.first_name}}, get started with Travel Yakata 🎉</h3>
+                <h3 class="with-tiqwa-h">Hello,{{getUser?.first_name}}, get started with Travel Yakata 🎉</h3>
                 <p class="with-tiqwa-p">Please complete your setup to access Travel Yakata services, </p>
               </div>
               <div style="display: flex;gap: 1rem;height: 2.5rem">

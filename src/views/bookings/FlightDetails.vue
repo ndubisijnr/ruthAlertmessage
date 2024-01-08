@@ -4,12 +4,17 @@ import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
 import router from "@/router";
+import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
 export default {
   name: "FlightDetails",
   components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
   data(){
     return{
-      data:null
+      data:null,
+      formatAmount,
+      convertTo12HourFormat,
+      convertToWord,
+      getYYYYMMDDFormat
     }
   },
 
@@ -66,7 +71,7 @@ export default {
             <div class="travel_section_info_box">
               <div v-for="(i, index) in getFlights" style="display: flex;gap: 5.81rem">
                 <section>
-                  <p class="key">Customer Name</p>
+                  <p class="key">Customer {{ index + 1 }} Name</p>
                   <p class="value">{{i.first_name}} {{i.last_name}}</p>
                 </section>
                 <section>
@@ -84,7 +89,7 @@ export default {
               <div style="display: flex;justify-content: space-between;width: 70%">
                 <div>
                   <p class="key">Payment Date</p>
-                  <p class="value">{{airlineDetails?.created_at}}</p>
+                  <p class="value">{{convertToWord(airlineDetails?.created_at)}} {{ convertTo12HourFormat(airlineDetails?.created_at) }}</p>
                 </div>
                 <div>
                   <p class="key">Pnr Number</p>
@@ -92,7 +97,7 @@ export default {
                 </div>
                 <div>
                   <p class="key">Amount</p>
-                  <p class="value">{{airlineDetails?.amount}}</p>
+                  <p class="value">₦{{formatAmount(airlineDetails?.amount)}}</p>
                 </div>
                 <div>
                   <p class="key">Anchor Ref</p>
@@ -113,10 +118,14 @@ export default {
 
             </div>
           </div>
+          <div style="width: 100%;">
+            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+          </div>
       </div>
+      
+
       </div>
 
-    <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
 
   </layout>
 </template>
@@ -157,10 +166,10 @@ export default {
 }
 
 .wrapper{
-  //width: 100%;
+  /*width: 100%;*/
   height: auto;
   position: relative;
-  //padding: 0 5.5rem;
+  /*padding: 0 5.5rem;*/
   width: 90rem;
   margin-bottom: 5.5rem;
 
@@ -179,7 +188,7 @@ export default {
 .travel_section_info_box{
   display: flex;
   width: 100%;
-  height: 7.5625rem;
+  /* height: 7.5625rem; */
   margin-top: 0.75rem;
   padding: 1.5rem;
   flex-direction: column;

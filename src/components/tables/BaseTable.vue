@@ -133,6 +133,11 @@
 
           <span  v-else-if="h.label.toLowerCase() === 'status'">{{j.type}}</span>
 
+          <!--  formating amount --> 
+
+
+          <span v-else-if="h.label.toLowerCase() === 'ticket amount'">₦ {{ formatAmount(j?.amount) }}</span>
+
 
           <!-- template {agent balance}  -->
 
@@ -185,6 +190,7 @@ import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";
+import { formatAmount } from "../../mixins/flightUtil";
 
 export default {
   name: "BaseTable",
@@ -197,6 +203,7 @@ export default {
       currentPage:1,
       itemsPerPage:20,
       paginate,
+      formatAmount,
       currentActionIndex:null,
       show:false,
       inModal:false,

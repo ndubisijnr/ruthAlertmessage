@@ -100,7 +100,7 @@ export default{
   <Void :data="getBookedFlight" @close="close" v-show="isVoiding"></Void>
   <Others :data="getBookedFlight" @close="close" v-show="isOthers"></Others>
 
-  <div :style="getCurrentRoute.includes('bookings')  ? {marginLeft: '10.5rem',marginTop:'-5rem'} : null">
+  <div :style="getCurrentRoute.includes('bookings')  ? {marginLeft: '0',marginTop:'0'} : null">
     <div class="payment-wrapper">
       <div class="payment-wrapper-header">
         <img src="../../assets/tiqwa_.gif"  style="width: 15.5rem;"/>
@@ -122,16 +122,13 @@ export default{
         </div>
         <div class="booking-summary-item">
           <p class="key">Booking Creation Date</p>
-          <p class="value">{{ getBookedFlight?.created_at }}</p>
+          <p class="value">{{ convertToWord(getBookedFlight?.created_at) }} at {{ convertTo12HourFormat(getBookedFlight?.created_at) }}</p>
         </div>
         <div class="booking-summary-item">
           <p class="key">Booking Expiry Date</p>
-          <p class="value">{{ getBookedFlight?.expires_at }}</p>
+          <p class="value">{{ convertToWord(getBookedFlight?.expires_at)}}  at  {{convertTo12HourFormat(getBookedFlight?.expires_at)}}</p>
         </div>
-        <div class="booking-summary-item">
-          <p class="key">Payment Date</p>
-          <p class="value">{{ getBookedFlight?.pricing.payable }}</p>
-        </div>
+      
         <div class="booking-summary-item">
           <p class="key">Booking Status</p>
           <p class="value">{{ getBookedFlight?.status }}</p>
