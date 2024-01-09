@@ -5,16 +5,40 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "CancelItinerary",
   components: {Layout, OnBoardingButton},
+  props:['data'],
   data(){
     return{
       activeSelectedIndex:null,
+      model:{}
     }
   },
 
   methods:{
+    cancel(){
+      this.model.booking_id= this.data
+      this.model.type = 'cancel'
+      this.model.description = ""
+
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+        if(this.getIsSuccess){
+          this.close()
+        }
+      })
+
+    },
     close(){
       this.$emit('close', false)
     },
+  },
+
+  computed:{
+    getLoading(){
+      return storeUtils.fireAway()?.flight?.getLoading
+    },
+
+    getIsSuccess(){
+      return storeUtils.fireAway().flight?.getIsSuccess
+    }
   }
 }
 </script>
@@ -40,7 +64,7 @@ export default {
 
       <div class="card-footer">
         <p @click="close" style="cursor: pointer">Abort</p>
-        <on-boarding-button  btn-width="11.0625rem" border="none" background="#F04444" text-node="Cancel Itinerary"></on-boarding-button>
+        <on-boarding-button @click="cancel" :loading="getLoading" :disabled="getLoading" btn-width="11.0625rem" border="none" background="#F04444" text-node="Cancel Itinerary"></on-boarding-button>
       </div>
 
     </div>

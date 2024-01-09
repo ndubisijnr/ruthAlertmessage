@@ -3,23 +3,34 @@ import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import {lightenColor} from "@/mixins/themeUtils";
 import storeUtils from "@/utils/storeUtils";
-import BookingsRequest from "../../model/BookingsRequest";
 
 export default {
   name: "FilterBookingModal",
   data(){
     return{
       lightenColor,
-      searchModal:{}
+      searchModel:{}
     }
   },
   methods: {
     applyFilter(){
       // this.searchModal.booking_status
       // this.searchModal.payment_status
+      const booking_status = document.getElementById("booking_status");
+      const payment_status =  document.getElementById("payment_status");
+
+      const text1 = booking_status.options[booking_status.selectedIndex].value
+      const text2 = payment_status.options[payment_status.selectedIndex].value
+
+
+      this.searchModel.booking_status = text1
+      this.searchModel.payment_status = text2
+
+      console.log(this.searchModel)
+
       storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel).then(() => {
         this.searchModel = {}
-
+        this.close()
       })
     },
     close(){
@@ -55,7 +66,7 @@ export default {
             <div style="border-radius: 0.75rem;border: 1px solid #E5E9F2;padding: 1.5rem;">
               <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
                 <p>Booking Status:</p>
-                <select style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
+                <select id="booking_status" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
                   <option>Select booking status</option>
                   <option value="issued">Issued</option>
                   <option value="reserved">Reserved</option>
@@ -65,7 +76,7 @@ export default {
             
               <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
                 <p>Payment Status:</p>
-                <select style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
+                <select id="payment_status" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
                   <option>Select booking status</option>
                   <option value="paid">Paid</option>
                   <option value="unpaid">unPaid</option>

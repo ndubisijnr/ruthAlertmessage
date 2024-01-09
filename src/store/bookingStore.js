@@ -78,12 +78,14 @@ export const useBookingStore = defineStore('bookingStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.loadingBooking = false
+                    this.bookingLoading = false
                     this.agentBookings = responseData.data
                     this.bookings = responseData.data
                 }
 
             }catch(err){
-                this.loadingBooking = false
+                this.bookingLoading = false
+                
             }
         },
 

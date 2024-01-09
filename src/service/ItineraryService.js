@@ -8,6 +8,8 @@ export default {
          return apiService.Client.post(`api/${tenant_id}/itinerary/request`, payload)
     },
 
+   
+
     getItineraryRequest(tenant_id){
         return apiService.Client.get(`api/${tenant_id}/itinerary/request`)
     }

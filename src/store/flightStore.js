@@ -36,6 +36,7 @@ export const useFlightStore = defineStore('flightStore', {
         wallet:null,
         filteredFlightResult:[],
         confirmingBookingLoading:false,
+        isSuccess:false,
         searchParams:{
             stops:[],
             airlines:[],
@@ -72,7 +73,8 @@ export const useFlightStore = defineStore('flightStore', {
         getProgressNav:() => {return localStorage.progressNav},
         getFilteredFlight:state  => state.filteredFlightResult,
         // .slice().sort((a, b) => a - b).reverse(),
-        getConfirmingBookingLoading:state => state.confirmingBookingLoading
+        getConfirmingBookingLoading:state => state.confirmingBookingLoading,
+        getIsSuccess:state => state.isSuccess
     },
 
     actions: {
@@ -314,7 +316,8 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 this.loading = false
                 if (responseData.success) {
-                    RuthdoAlert({title:'success', icon:'error'})
+                    RuthdoAlert({title:'success', icon:'success'})
+                    this.isSuccess = true
                 }
             } catch (err) {
                 this.loading = false

@@ -14,7 +14,7 @@ import router from "@/router";
 export default{
   name: "ItenaryDetailsComponent",
   components: {ChooseASeat, Others, Issurance, EmailItinerary, Refund, Void, Exchange, CancelItinerary},
-  props:['getUser','getBookedFlight','getSelectedFlight'],
+  props:['getUser','getBookedFlight','getSelectedFlight', "id"],
   data(){
     return{
       isPaying:false,
@@ -92,14 +92,14 @@ export default{
 </script>
 
 <template>
-  <EmailItinerary @close="close" v-show="isEmailTemplate"></EmailItinerary>
-  <ChooseASeat @close="close" v-show="isChooseSeat"></ChooseASeat>
-  <CancelItinerary @close="close" v-show="isCancel"></CancelItinerary>
-  <issurance :data="getBookedFlight" @close="close" v-show="isIssurance"></issurance>
-  <Refund :data="getBookedFlight" @close="close" v-show="isRefund"></Refund>
-  <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange"></Exchange>
-  <Void :data="getBookedFlight" @close="close" v-show="isVoiding"></Void>
-  <Others :data="getBookedFlight" @close="close" v-show="isOthers"></Others>
+  <EmailItinerary @close="close" v-show="isEmailTemplate" :data="id"></EmailItinerary>
+  <ChooseASeat @close="close" v-show="isChooseSeat" :data="id"></ChooseASeat>
+  <CancelItinerary @close="close" v-show="isCancel" :data="id"></CancelItinerary>
+  <issurance :data="getBookedFlight" @close="close" v-show="isIssurance" :id="id"></issurance>
+  <Refund :data="getBookedFlight" @close="close" v-show="isRefund" :id="id"></Refund>
+  <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
+  <Void :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
+  <Others :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
 
   <div :style="getCurrentRoute.includes('bookings')  ? {marginLeft: '0',marginTop:'0'} : null">
     <div class="payment-wrapper">

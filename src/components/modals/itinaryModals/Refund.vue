@@ -7,10 +7,10 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "Refund",
   components: {OnBoardingButton, Layout},
-  props:['data'],
+  props:['data', 'id'],
   data(){
     return{
-      model:ItineraryRequest.submitRequest,
+      model:{request:null,description:null},
       showClass:false,
       selectedValue:null
     }
@@ -21,6 +21,9 @@ export default {
     },
     getLoading (){
       return storeUtils.fireAway().flight.getLoading
+    },
+    getIsSuccess(){
+      return storeUtils.fireAway().flight?.getIsSuccess
     }
   },
   methods:{
@@ -28,11 +31,14 @@ export default {
       this.$emit('close', false)
     },
     submitRequest(){
-      this.model.type = "Refund"
-      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
-      this.model.booking_id = this.data?.id
+      this.model.type = "refund"
+      this.model.booking_id = this.id
 
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+        if(this.getIsSuccess){
+          this.close()
+        }
+      })
     }
   }
 }

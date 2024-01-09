@@ -7,10 +7,10 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "Exchange",
   components: {OnBoardingButton, Layout},
-  props:['data'],
+  props:['data', 'id'],
   data(){
     return{
-      model:ItineraryRequest.submitRequest,
+      model:{request:null,description:null},
       showClass:false,
       selectedValue:null
     }
@@ -21,6 +21,9 @@ export default {
     },
     getLoading (){
       return storeUtils.fireAway().flight.getLoading
+    },
+    getIsSuccess(){
+      return storeUtils.fireAway().flight?.getIsSuccess
     }
   },
   methods:{
@@ -28,11 +31,15 @@ export default {
       this.$emit('close', false)
     },
     submitRequest(){
-      this.model.type = "Exchange"
-      this.model.attachment = this.data?.tickets[0]?.ticket_number[0]
-      this.model.booking_id = this.data?.id
+      this.model.type = "exchange"
+      this.model.booking_id = this.id
 
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+        if(this.getIsSuccess){
+          this.close()
+        }
+      })
     }
   }
 }
@@ -68,10 +75,10 @@ export default {
                     <div class="dropDown" v-show="showClass">
                       <div class="doc_type_options">
                         <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'get-fund-quote', showClass = !showClass, selectedValue='Get Refund Quote'">Get Exchange (Re-issue) Quote</p>
+                          <p class="passenger-type-text-1" @click="model.request = 'get-exchange-qoute', showClass = !showClass, selectedValue='Get Refund Quote'">Get Exchange (Re-issue) Quote</p>
                         </div>
                         <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'request-for-refund', showClass = !showClass,selectedValue='Request for Refund'">Request for Exchange (Re-issues)</p>
+                          <p class="passenger-type-text-1" @click="model.request = 'request-for-exchange', showClass = !showClass,selectedValue='Request for Refund'">Request for Exchange (Re-issues)</p>
                         </div>
                       </div>
                     </div>

@@ -7,10 +7,11 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "Issurance",
   components: {OnBoardingButton, Layout},
-  props:['data'],
+  props:['data', "id"],
   data(){
     return{
-      model:ItineraryRequest.submitRequest
+      model:{},
+      description:null
     }
   },
   computed:{
@@ -19,6 +20,9 @@ export default {
     },
     getLoading (){
       return storeUtils.fireAway().flight.getLoading
+    },
+    getIsSuccess(){
+      return storeUtils.fireAway().flight?.getIsSuccess
     }
   },
   methods:{
@@ -26,10 +30,16 @@ export default {
       this.$emit('close', false)
     },
     submitRequest(){
-      this.model.type = "Issurance"
-      this.model.booking_id = this.data?.id
+      console.log(this.data)
+      this.model.type = "issuance"
+      this.model.description = this.description
+      this.model.booking_id = this.id
 
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model)
+      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+        if(this.getIsSuccess){
+          this.close()
+        }
+      })
     },
 
     uploadAttachment(){
@@ -119,7 +129,7 @@ export default {
               <label class="class_label">Additional Information or Comments </label>
 
             </div>
-            <textarea class="comment_section" v-model="model.description" placeholder="Let us know other additional information you need before or upon ticket issuance"></textarea>
+            <textarea class="comment_section" v-model="description" placeholder="Let us know other additional information you need before or upon ticket issuance"></textarea>
           </div>
 
         </div>

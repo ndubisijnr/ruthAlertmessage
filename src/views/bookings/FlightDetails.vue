@@ -132,7 +132,7 @@ export default {
             </div>
           </div>
           <div style="width: 100%;">
-            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
           </div>
       </div>
       
