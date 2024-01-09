@@ -81,8 +81,8 @@ export default {
     getTemplateId(){
       if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
       return storeUtils.fireAway().theme.custom_theme.template_id;
-
     },
+    
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme
     },

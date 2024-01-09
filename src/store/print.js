@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import {RuthdoAlert} from "ruthly";
 
 export const usePrintStore = defineStore('PrintStore', {
     state: () => ({
@@ -13,7 +12,8 @@ export const usePrintStore = defineStore('PrintStore', {
     },
 
     actions: {
-        commitPrintLoadind(loading, payload){
+        commitPrintLoading(loading, payload){
+            console.log(payload)
             this.loading = loading
             this.data = payload
         }

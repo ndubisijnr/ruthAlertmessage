@@ -23,14 +23,14 @@ export default {
     goBack(){
       router.push({name:"Bookings_Details"})
     },
-    printAction(){
-    console.log('printing')
-    window.print()
+     printAction(){
+       storeUtils.fireAway().print?.commitPrintLoading(true, this.data)
+       if(this.getTemplateId === 1) router.push({name:'Template1'})
+       if(this.getTemplateId === 2) router.push({name:'Template2'})
+       if(this.getTemplateId === 3) router.push({name:'Template3'})
     }
     
   },
-
- 
 
   computed: {
     getFlights() {
@@ -65,13 +65,11 @@ export default {
     <div class="overall">
         <div class="wrapper">
         <div class="breadcrumb">
-
           <p @click="goBack" class="breadcrumb_list">Manage Flight Bookings</p>
           <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
           </svg>
             <p class="breadcrumb_list">{{ data?.contact_first_name }} {{data?.contact_last_name}}</p>
-
         </div>
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
