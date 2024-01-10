@@ -1,6 +1,5 @@
 <script>
 import {convertDurationToWords, convertTo12HourFormat, convertToWord, formatAmount} from "@/mixins/flightUtil";
-import storeUtils from "@/utils/storeUtils";
 import CancelItinerary from "@/components/modals/itinaryModals/CancelItinerary.vue";
 import Exchange from "@/components/modals/itinaryModals/Exchange.vue";
 import Void from "@/components/modals/itinaryModals/Void.vue";

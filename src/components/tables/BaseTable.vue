@@ -116,8 +116,9 @@
 
 
           <!-- template {bookings user fullname} -->
+         
 
-          <span  v-else-if="h.label === 'Customer’s Name'">{{j.contact_first_name}} {{j.contact_last_name}}</span>
+          <span  v-else-if="h.label === 'Customer’s Name'" style="text-transform: capitalize;">  {{ j.flight.passengers[0].first_name }} {{ j.flight.passengers[0].last_name }}</span>
 
           <span  v-else-if="h.label === 'Airline'"><img width="20" :src="j.flight?.outbound[0]?.airline_details.logo" alt="flight_logo"> {{j.flight?.outbound[0]?.airline_details.name}}</span>
 

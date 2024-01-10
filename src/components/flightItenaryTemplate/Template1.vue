@@ -1,9 +1,8 @@
 <template>
   <div style="display: flex;justify-content: center;width: 100%" class="animate__animated animate__zoomIn">
+    {{ getData }}
 
     <div class="invoice-wrapper">
-      <!-- {{ getData }} -->
-
       <div class="invoice">
 
         <div class="first-invoice-row">
@@ -12,16 +11,11 @@
               <img src="../../assets/Cards/logo.svg" />
             </div>
           </div>
-          <!-- <div class="button-area" id="hiddenOnPrint1">
-            <button @click="saveAsPDF" id="ondownload" class="print-invoice" :style="{background:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
-                <path d="M15.7605 22.25H9.24047C4.33047 22.25 2.23047 20.15 2.23047 15.24V15.11C2.23047 10.67 3.98047 8.53003 7.90047 8.16003C8.30047 8.13003 8.68047 8.43003 8.72047 8.84003C8.76047 9.25003 8.46047 9.62003 8.04047 9.66003C4.90047 9.95003 3.73047 11.43 3.73047 15.12V15.25C3.73047 19.32 5.17047 20.76 9.24047 20.76H15.7605C19.8305 20.76 21.2705 19.32 21.2705 15.25V15.12C21.2705 11.41 20.0805 9.93003 16.8805 9.66003C16.4705 9.62003 16.1605 9.26003 16.2005 8.85003C16.2405 8.44003 16.5905 8.13003 17.0105 8.17003C20.9905 8.51003 22.7705 10.66 22.7705 15.13V15.26C22.7705 20.15 20.6705 22.25 15.7605 22.25Z" fill="#2C6CAC"/>
-                <path d="M12.5 15.63C12.09 15.63 11.75 15.29 11.75 14.88V2C11.75 1.59 12.09 1.25 12.5 1.25C12.91 1.25 13.25 1.59 13.25 2V14.88C13.25 15.3 12.91 15.63 12.5 15.63Z" fill="#2C6CAC"/>
-                <path d="M12.4998 16.7501C12.3098 16.7501 12.1198 16.6801 11.9698 16.5301L8.61984 13.1801C8.32984 12.8901 8.32984 12.4101 8.61984 12.1201C8.90984 11.8301 9.38984 11.8301 9.67984 12.1201L12.4998 14.9401L15.3198 12.1201C15.6098 11.8301 16.0898 11.8301 16.3798 12.1201C16.6698 12.4101 16.6698 12.8901 16.3798 13.1801L13.0298 16.5301C12.8798 16.6801 12.6898 16.7501 12.4998 16.7501Z" fill="#2C6CAC"/>
-              </svg>
+          <div class="button-area" id="hiddenOnPrint1">
+            <button @click="printPage" id="ondownload" class="print-invoice" :style="{background:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}">
 
-              Download</button>
-          </div> -->
+              Print</button>
+          </div>
         </div>
 
         <div id="pdf-to-download">
@@ -34,15 +28,15 @@
             <div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Full Name : </p>
-                <p class="value"> Mr Jane Doe</p>
+                <p class="value"> {{getData?.contact_first_name ? getData?.contact_first_name + " " + getData?.contact_last_name : 'Mr Jane Doe'}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Email:</p>
-                <p class="value">janedoe@gmail.com </p>
+                <p class="value">{{getData?.contact_email ? getData?.contact_email : 'janedoe@gmail.com '}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Class: </p>
-                <p class="value"> Economy</p>
+                <p class="value">{{getData?.flight.outbound[0].cabin_type ? getData?.flight.outbound[0].cabin_type : 'Economy'}} </p>
               </div>
             </div>
 
@@ -73,7 +67,7 @@
 
             <!--     outbound-->
 
-            <div class="flight_info_wrapper">
+            <div v-for="(i,index) in  getData?.flight.outbound" class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2645_19017)">
@@ -87,38 +81,38 @@
                 </svg>
                 <span class="departure_flight">Departure Flight</span>
               </div>
-              <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
+               <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
                 <div class="equal-height-table_item">
-                  <p class="flight_info_text">Lagos (LOS) </p>
+                  <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
                   <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
                     <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" fill="white"/>
                   </svg>
-                  <p class="flight_info_text">Abuja (ABV)</p>
+                  <p class="flight_info_text">{{getCityByCityCode(i.airport_to)}} ({{ i.airport_to }})</p>
                 </div>
                 <div>
-                  <p class="flight_info_text">Tues 15th Sept, 2023</p>
+                  <p class="flight_info_text">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
                 </div>
               </div>
 
               <div class="flight_info2">
                 <div>
-                  <p class="key">WWW001 </p>
-                  <p class="value">Flight</p>
+                  <p class="key">{{i.flight_number}} </p>
+                  <p class="value">Flight No.</p>
                 </div>
                 <div>
-                  <p class="key">01:00 PM </p>
+                  <p class="key">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
                   <p class="value"> Departure </p>
                 </div>
                 <div>
-                  <p class="key">1h 30m  </p>
+                  <p class="key">{{convertDurationToWords(i.duration)}} </p>
                   <p class="value">Duration</p>
                 </div>
                 <div>
-                  <p class="key">02 : 30 PM</p>
+                  <p class="key">{{i.arrival_time ? convertToWord(i.arrival_time) : '02 : 30 PM'}}</p>
                   <p class="value">Arrival</p>
                 </div>
                 <div>
-                  <p class="key">0</p>
+                  <p class="key">{{ getData?.flight.outbound_stops }}</p>
                   <p class="value">Stops </p>
                 </div>
 
@@ -126,23 +120,20 @@
 
               <div class="flight_info">
                 <div class="flight_info_item">
-                  <p class="airport">Muritala Mohammed International Airport Lagos (LOS) </p>
-                  <p class="time">01 : 00 PM </p>
-                  <p class="time">Thurs 20th Sept, 2023</p>
+                  <p class="airport">{{getAirportNamesByCityCode(i.airport_from)}} ({{i.airport_from}})</p>
+                  <p class="time">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
                   <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                 </svg>
                 <div class="flight_info_item">
-                  <p class="airport">Muritala Mohammed International Airport Lagos (LOS) </p>
-                  <p class="time">01 : 00 PM </p>
-                  <p class="time">Thurs 20th Sept, 2023</p>
+                  <p class="airport">{{getAirportNamesByCityCode(i.airport_to)}} ({{i.airport_to}})</p>
+                  <p class="time">{{ convertToWord(i.arrival_time) }} {{ convertTo12HourFormat(i.arrival_time) }}</p>
                 </div>
-              </div>
+              </div> 
             </div>
 
-
-            <div class="flight_info_wrapper">
+            <!-- <div class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -238,7 +229,7 @@
                 </div>
               </div>
 
-            </div>
+            </div> -->
           </div>
 
           <div class="flight_info_wrapper">
@@ -248,12 +239,10 @@
               <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
             </div>
 
-            <div class="flight_info2" style="justify-content: start;">
-              <p class="value" style="width: 11.25rem;">Passenger Name </p>
-              <p class="value" style="width: 11.25rem;">Email</p>
-              <p class="value" style="width: 11.25rem;">Ticket </p>
-
-
+            <div v-for="i in getData?.flight.passengers" class="flight_info2" style="justify-content: start;">
+              <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
+              <p class="value" style="width: 11.25rem;">{{i.email}}</p>
+              <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
             </div>
 
           </div>
@@ -265,8 +254,8 @@
               </div>
 
             </div>
-            <p><span class="sub-total">Sub-Total :</span> 10000</p>
-            <p><span class="sub-total">Total :</span> 15000 </p>
+     
+            <p><span class="sub-total">Total :</span> {{formatAmount(getData?.amount)}} </p>
             <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
             <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>
@@ -282,7 +271,7 @@
 <script>
 import router from "../../router";
 import { convertToWord } from "../../mixins/lettersExtractor";
-import { formatAmount } from "../../mixins/flightUtil";
+import { formatAmount, convertTo12HourFormat, convertDurationToWords } from "../../mixins/flightUtil";
 import storeUtils from "@/utils/storeUtils";
 import {lightenColor} from "@/mixins/themeUtils";
 export default {
@@ -290,7 +279,9 @@ export default {
   data(){
     return{
       formatAmount,
-      convertToWord
+      convertToWord,
+      convertTo12HourFormat,
+      convertDurationToWords
     }
   },
   methods:{
@@ -326,6 +317,19 @@ export default {
       },100)
 
     },
+    getAirportNamesByCityCode(city_code) {
+      const airports = JSON.parse(localStorage?.airports)
+      if (airports) {
+        return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.name
+      }
+    },
+
+    getCityByCityCode(city_code) {
+      const airports = JSON.parse(localStorage?.airports)
+      if (airports) {
+        return airports.filter(it => it.city_code === city_code || it.iata_code=== city_code)[0]?.city
+      }
+    },
   },
   computed:{
     getBookedFlight(){
@@ -352,8 +356,6 @@ export default {
   },
 
   mounted(){
-    if(!this.getData) router.push({path:`bookings/details/${this.getUser?.access_token?.slice(0,20)}`})
-    else
       if(this.$router.currentRoute.value.path === '/templates_1') this.printPage();
       if(this.$router.currentRoute.value.path === '/templates_3') this.printPage();
       if(this.$router.currentRoute.value.path === '/templates_2') this.printPage();
@@ -448,7 +450,7 @@ export default {
 .flight_info{
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 5.5rem;
   border-top: solid #E5E9F2;
   padding: 1.5rem;
