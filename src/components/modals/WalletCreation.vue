@@ -91,10 +91,11 @@ export default {
           <div>
             <p class="p1-2">Wallet Account Setup</p>
 
-            <div>
+            <div >
               <OnBoardingInput label="BVN" @inputValue="e => model.bvn = e.value"></OnBoardingInput>
-              <DatePicker label="Date Of Birth"></DatePicker>
             </div>
+            <DatePicker label="Date Of Birth"></DatePicker>
+
 
 
           </div>

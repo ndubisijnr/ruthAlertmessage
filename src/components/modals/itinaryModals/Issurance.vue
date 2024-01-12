@@ -39,6 +39,7 @@ export default {
         if(this.getIsSuccess){
           this.close()
         }
+        this.description = null
       })
     },
 

@@ -104,7 +104,7 @@
              
               <div class="group-inputs">
                 <on-boarding-input :default-value="getUser?.email" width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
-                <on-boarding-input  width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
+                <on-boarding-input :id="'contactPhone'"  :error="phoneValidation" width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
               </div>
             </div>
 
@@ -197,7 +197,7 @@
               </div>
 
               <div class="group-inputs">
-                <on-boarding-input  width="100%" @inputValue="value => w.documents.number = value" label="Passport Number"></on-boarding-input>
+                <on-boarding-input :id="'passportNumber'" :error="passportNumberValidation"  width="100%" @inputValue="value => w.documents.number = value" label="Passport Number"></on-boarding-input>
               </div>
 
               <div class="group-inputs">
@@ -233,10 +233,11 @@
               </div>
 
               <div class="group-inputs">
+                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => w.documents.issuing_date = obj.formattedDate"/>
+
                 <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => w.documents.expiry_date = obj.formattedDate"/>
 
                 <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
-                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => w.documents.issuing_date = obj.formattedDate"/>
               </div>
             </div>
               <!-- <div class="simple-info">
@@ -386,6 +387,8 @@ export default {
       showBookHold:false,
       countries,
       bookFlightModal:FlightRequest.bookFlight,
+      phoneValidation:null,
+      passportNumberValidation:null,
       formatAmount,
       convertToWord,
       convertTo12HourFormat,
@@ -434,8 +437,8 @@ export default {
             number: null,
             issuing_date: null,
             expiry_date: null,
-            issuing_country: null,
-            nationality_country: null,
+            issuing_country: this.countries[0].name,
+            nationality_country: this.countries[0].name,
             document_type: 'passport',
             holder: false
         };
@@ -469,7 +472,6 @@ export default {
         const key = Object.keys(this.getSelectedFlight?.travelers_price[i]).toLocaleString()
         this.addPassenger(key)
       }
-
     },
 
 
@@ -478,15 +480,29 @@ export default {
       this.passengers = this.passengers.filter(it => it.id !== value)
     },
 
+    bookingValidation(id){
+      const element = document.getElementById(id)
+      return !element.value
+    },
+
     proceedToPayment(){
-      const name = this.getBusinessProfile.name
-      let first_name = name.split(' ')[0]
-      let last_name = name.split(' ')[1]
-      this.bookFlightModal.passengers = this.passengers
-      this.bookFlightModal.contact_first_name = this.getUser?.first_name ? this.getUser?.first_name : first_name
-      this.bookFlightModal.contact_last_name = this.getUser?.last_name ? this.getUser?.last_name : last_name
-      this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
-      storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
+      const phone_validation = this.bookingValidation('contactPhone')
+      const passportNumberValidation = this.bookingValidation('passportNumber')
+      if(phone_validation || passportNumberValidation){
+         this.phoneValidation = 'Contact Phone is required';
+         this.passportNumberValidation = 'Password number is required'
+      }
+      else{
+        const name = this.getBusinessProfile.name
+        let first_name = name.split(' ')[0]
+        let last_name = name.split(' ')[1]
+        this.bookFlightModal.passengers = this.passengers
+        this.bookFlightModal.contact_first_name = this.getUser?.first_name ? this.getUser?.first_name : first_name
+        this.bookFlightModal.contact_last_name = this.getUser?.last_name ? this.getUser?.last_name : last_name
+        this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
+        storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
+      }
+     
     },
 
     getAirportNamesByCityCode(city_code){

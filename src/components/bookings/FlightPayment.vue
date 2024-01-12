@@ -3,7 +3,6 @@
 
   <booking-index v-slot:booking_children>
     <div class="flight_wrapper  animate__animated animate__fadeIn">
-        <!-- {{ getBookedFlight }} -->
 
     <div class="progress-or">
                 <div class="progress-or-item" v-for="(i, index) in bookingProgress">
@@ -17,7 +16,7 @@
                 </div>
         </div>
 
-      <itenary-details-component :get-user="getUser" :get-booked-flight="getBookedFlight"></itenary-details-component>
+      <itenary-details-component :id="getBookedFlight?.id" :get-user="getUser" :get-booked-flight="getBookedFlight"></itenary-details-component>
 
         <!-- <div style="margin: 2.5rem 0;">
             <p class="text">Flight Details</p>
@@ -206,7 +205,6 @@ export default{
 
     mounted(){
         storeUtils.fireAway().flight?.handleGetWallet()
-        storeUtils.fireAway().flight?.handleGetItineraryRequest()
         storeUtils.fireAway().flight?.handleGetFlightDetails(this.getBookedFlight?.reference)
     }
 }

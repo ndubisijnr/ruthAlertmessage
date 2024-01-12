@@ -9,9 +9,9 @@
             <div class="with-tiqwa">
               <div>
                 <h3 class="wallet_balance">Total Wallet Balance</h3>
-                <p class="balance" style="margin-top: 0.75rem;">N {{ getWallet?.balance }}</p>
+                <p class="balance" style="margin-top: 0.75rem;">₦ {{ getWallet?.balance ? getWallet?.balance : 0.00 }}</p>
               </div>
-              <div style="display: flex;gap: 1rem;height: 2.5rem">
+              <div style="display: flex;gap: 1rem;height: 2.5rem" v-if="getWallet?.wallet_number">
                  <on-boarding-button @click="addFunds=true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Add Funds"></on-boarding-button>
               </div>
             </div>
