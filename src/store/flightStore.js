@@ -3,10 +3,8 @@ import FlightService from "../service/FlightService";
 import {catchErrorHandler} from "../mixins/ErrorHandler";
 import storeUtils from "../utils/storeUtils";
 import FlightRequest from '../model/FlightRequest';
-import router from '../router';
 import { RuthdoAlert } from 'ruthly';
 import ItineraryService from "@/service/ItineraryService";
-import Whoosh from "@/assets/mixkit-air-woosh-1489.wav";
 
 export const useFlightStore = defineStore('flightStore', {
     state: () => ({
@@ -281,8 +279,8 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 if (responseData.success) {
                     this.loading = false
-                    RuthdoAlert({title: 'success', icon: 'success'})
-                    console.log(responseData)
+                    RuthdoAlert({title: responseData.data.message, icon: 'success'})
+                    storeUtils.fireAway().travelAgent?.handleGetTravelAgent()
                 }else{
                     this.loading = false
                     RuthdoAlert({title: responseData.data, icon: 'error'})
@@ -307,6 +305,41 @@ export const useFlightStore = defineStore('flightStore', {
             }
 
         },
+    
+
+        async handleCancelItinenery(booking_reference){
+            this.loading = true
+            try {
+                const response = await ItineraryService.cancelItenery(storeUtils.fireAway().global?.getTenant_id, booking_reference)
+                let responseData = response.data
+                this.loading = false
+                if (responseData.success) {
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }else{
+                    RuthdoAlert({title:responseData.data, icon:'error'})
+                }
+            } catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
+
+        async handleSendItineneryEmail(booking_reference){
+            this.loading = true
+            try {
+                const response = await ItineraryService.sendIteneryEmail(storeUtils.fireAway().global?.getTenant_id, booking_reference)
+                let responseData = response.data
+                this.loading = false
+                if (responseData.success) {
+                    RuthdoAlert({title:responseData.data, icon:'success'})
+                }else{
+                    RuthdoAlert({title:responseData.data, icon:'error'})
+                }
+            } catch (err) {
+                this.loading = false
+                catchErrorHandler(err)
+            }
+        },
 
 
         async handleSubmitItineraryRequest(payload) {
@@ -316,8 +349,10 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 this.loading = false
                 if (responseData.success) {
-                    RuthdoAlert({title:'success', icon:'success'})
+                    RuthdoAlert({title:responseData.data, icon:'success'})
                     this.isSuccess = true
+                }else{
+                    RuthdoAlert({title:responseData.data, icon:'error'})
                 }
             } catch (err) {
                 this.loading = false

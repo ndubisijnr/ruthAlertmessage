@@ -30,19 +30,19 @@
                         <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
 <!--                          {{getAgentsBooking}}-->
                             <p class="time_line">Today </p>
-                            <div v-for="i in getAgentsBooking">
+                            <div v-for="(i, index) in getAgentsBooking">
                               <div v-if="formattedDate(i.created_at) === today()">
 
                                 <div style="display: flex;justify-content: space-between;align-items: center;">
                                   <div class="unissued_item">
                                     <p class="time_booked">{{ convertToWord(i.created_at) }}</p>
 
-                                    <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
+                                    <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{i.flight.inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
                                   </div>
 
                                   <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
                                     <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                                    <OnBoardingButton @click="issueTicket(i.provider_reference)" btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+                                    <OnBoardingButton  :disabled="loading" :loading="loading && current_index === index" @click="current_index = index,issueTicket(i.provider_reference)" btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
 
                                   </div>
                                 </div>
@@ -52,20 +52,20 @@
 
                         </div>
                         <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
-                            <p class="time_line">Yesterday</p>
-                            <div v-for="i in getAgentsBooking">  
-                                <div v-if="formattedDate(i.created_at) !== today()">
+                            <p class="time_line">UnIssued</p>
+                            <div v-for="(i,index) in getAgentsBooking">  
+                                <div >
                                 
                                     <div style="display: flex;justify-content: space-between;align-items: center;">
                                         <div class="unissued_item">
                                             <p class="time_booked">{{ convertToWord(i.created_at) }}</p>
                                             
-                                            <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{JSON.parse(i.flight).inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
+                                            <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{i.flight.inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
                                         </div>
 
                                         <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
                                             <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+                                            <OnBoardingButton :disabled="loading" :loading="loading  && current_index === index" @click="current_index = index,issueTicket(i.provider_reference)" btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
 
                                         </div>
                                     </div>
@@ -154,7 +154,8 @@ export default{
                     {key:"status", label:"Status_"},
                 ],
             bookingModel:BookingsRequest.bookingSummary,
-            convertToWord
+            convertToWord,
+            current_index:null
         }
       
     },
@@ -187,6 +188,9 @@ export default{
             }
         },
         
+        loading(){
+            return storeUtils.fireAway()?.flight.getLoading
+        },        
         getAgentsBooking(){
             const bookings = storeUtils.fireAway().booking?.getAgentBookings?.data
             return bookings

@@ -22,7 +22,7 @@ export const convertToWord = (date) => {
     const arrivalDate = new Date(arrivalTime);
 
 // Converting to words
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const formattedDate = arrivalDate.toLocaleDateString('en-US', options);
 
     return formattedDate

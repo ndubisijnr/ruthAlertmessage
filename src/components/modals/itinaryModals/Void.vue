@@ -6,38 +6,73 @@ import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "Void",
-  components: {OnBoardingButton, Layout},
-  props:['data', 'id'],
-  data(){
-    return{
-      model:{description:null}
+  components: { OnBoardingButton, Layout },
+  props: ['data', 'id'],
+  data() {
+    return {
+      model: { description: null,passengers:null}
     }
   },
-  computed:{
-    getUser(){
+  computed: {
+    getUser() {
       return JSON.parse(localStorage?.user)
     },
-    getLoading (){
+    getLoading() {
       return storeUtils.fireAway().flight.getLoading
     },
-    getIsSuccess(){
+    getIsSuccess() {
       return storeUtils.fireAway().flight?.getIsSuccess
     }
   },
-  methods:{
-    close(){
+  methods: {
+    close() {
       this.$emit('close', false)
     },
-    submitRequest(){
+
+    toggleTravelersTicket(id, filterValue,obj){
+      const box = document.getElementById(id)
+      if(!this.model.passengers) this.model.passengers = this.data?.tickets;
+      if(box.checked){
+        this.model.passengers.push(obj)
+        console.log(this.model, 'checked')
+      }
+      else this.removeTravelerTicket(filterValue)
+      
+    },
+
+    removeTravelerTicket(filterValue){
+      if(!this.model.passengers) this.model.passengers = this.data?.tickets;
+
+      this.model.passengers = this.model.passengers.filter(it => it.traveler !== filterValue)
+      
+      console.log(this.model, 'unchecked')
+    },
+
+    submitRequest() {
       this.model.type = "void"
       this.model.booking_id = this.id
+      this.model.passengers = this.model?.passengers ? this.model.passengers : this.data?.tickets
+
+      console.log(this.model)
+     
 
       storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
-        if(this.getIsSuccess){
+        if (this.getIsSuccess) {
           this.close()
         }
       })
+      console.log(this.model)
     }
+  },
+
+  beforeMount(){
+   
+  },
+
+  mounted(){
+   
+    
+    
   }
 }
 </script>
@@ -47,7 +82,7 @@ export default {
     <div class="modal">
       <div class="modal-header">
         <p class="add-team-member">Void</p>
-        <img src="../../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
+        <img src="../../../assets/cancle.svg" @click="close" style="cursor: pointer" />
       </div>
 
       <div class="main">
@@ -56,14 +91,14 @@ export default {
           <div class="email-area">
             <div class="group-inputs">
               <div>
-                <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label" >Booking Reference <span class="required">*</span> </label>
+                <div style="margin-bottom: 0.75rem">
+                  <label class="class_label">Booking Reference <span class="required">*</span> </label>
                 </div>
                 <div class="form-input">
                   <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                     <p class="label_text">PNR</p>
                   </div>
-                    <input class="form-input-input" :value="data?.pnr"/>
+                  <input class="form-input-input" :value="data?.pnr" />
                 </div>
 
                 <!--                <div class="choose_document_type" style="position: relative;">-->
@@ -82,44 +117,46 @@ export default {
                 <!--                </div>-->
               </div>
               <div>
-                <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label">Ticket Number *</label>
+                <div style="margin-bottom: 2.1rem">
+                  <label class="class_label"></label>
                 </div>
                 <div>
-                  <div class="form-input">
-                    <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
-                      <p class="label_text">Ticket Number</p>
-                    </div>
-                      <input v-if="data?.tickets" class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
-                  </div>
-
 
                   <div>
                     <div class="form-input">
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
                         <p class="label_text">Requested By <span class="required">*</span></p>
                       </div>
-                        <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name" readonly/>
+                      <input class="form-input-input" :value="getUser.first_name + ' ' + getUser.last_name" readonly />
                     </div>
                   </div>
                 </div>
-
-                <!--                <div class="choose_document_type" style="position: relative;">-->
-                <!--                  <p class="selected-item">Select Options</p>-->
-                <!--                  &lt;!&ndash;              <div class="dropDown">&ndash;&gt;-->
-                <!--                  &lt;!&ndash;                <div class="doc_type_options">&ndash;&gt;-->
-                <!--                  &lt;!&ndash;                  <div class="passenger-type" style="width: 100%">&ndash;&gt;-->
-                <!--                  &lt;!&ndash;                    <p class="passenger-type-text-1" @click="flightModel.cabin = 'Economy', showClass = !showClass">Economy</p>&ndash;&gt;-->
-                <!--                  &lt;!&ndash;                  </div>&ndash;&gt;-->
-
-
-
-                <!--                  &lt;!&ndash;                </div>&ndash;&gt;-->
-                <!--                  &lt;!&ndash;              </div>&ndash;&gt;-->
-                <!--                  <img @click="showClass = !showClass, showPassengers = false" src="../../../assets/Monotone.svg" style="cursor: pointer" />-->
-                <!--                </div>-->
               </div>
+
+
             </div>
+
+          </div>
+
+          <div style="margin-bottom: 3rem;">
+            <p class="label_text_ticket">Ticket Number <span class="required">*</span></p>
+
+            <div style="border: solid #C0D3E6;padding: 1rem;border-radius: 0.375rem;border: 1px solid var(--primary-15, #C0D3E6);background: var(--Color, #FFF);">
+
+              <div v-for="(i, index) in data?.tickets" :key="index" style="display: flex;gap:1.5rem;align-items: center;justify-content: flex-start;margin-bottom: 0.5rem;">
+                <p class="ticket_name">{{ i.traveler }}</p>
+                <div style="padding: 0.25rem 0.75rem;border-radius: 1.25rem;background: #EAF0F7;">
+                  <div style="display: flex;gap: 0.5rem;">
+                    <input :id="`check_box${index}`" type="checkbox" checked="true" @change="toggleTravelersTicket(`check_box${index}`,i.traveler, {name:i.traveler, ticket_numbers:i.ticket_number})"/>
+                    <p class="ticket_number" v-for="(j, index2) in i.ticket_number" :key="index2">{{ j }}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div>
 
           </div>
 
@@ -128,15 +165,18 @@ export default {
               <label class="class_label">Reason for Requesting for Voiding <span class="required">*</span></label>
 
             </div>
-            <textarea class="comment_section" v-model="model.description" placeholder="Please provide reason why you are requesting for Voiding"></textarea>
+            <textarea class="comment_section" v-model="model.description"
+              placeholder="Please provide reason why you are requesting for Voiding"></textarea>
           </div>
 
         </div>
 
         <div class="modal-footer">
-          <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
+          <on-boarding-button border="1px solid #F04444" @click="close" background="#F04444" btn-width="7.4375rem"
+            text-node="Cancel"></on-boarding-button>
 
-          <on-boarding-button border="none" :loading="getLoading" @click="submitRequest" btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
+          <on-boarding-button border="none" :loading="getLoading" @click="submitRequest" btn-width="7.4375rem"
+            text-node="Submit"></on-boarding-button>
         </div>
 
       </div>
@@ -148,31 +188,67 @@ export default {
 
 
   </layout>
-
 </template>
 
 <style scoped>
-.label_text{
+.label_text {
   color: #444854;
   font-family: 'Product Sans';
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 1.75rem; /* 200% */
-  margin:0 1.25rem;
+  line-height: 1.75rem;
+  /* 200% */
+  margin: 0 1.25rem;
 }
 
-.class_label{
-  color:  #2D3139;
+.label_text_ticket {
+  color: #444854;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 200% */
+
+}
+
+
+.ticket_name {
+  color: var(--Black-text-02, #2D3139);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem;
+  text-wrap: wrap;
+  width: 8rem;
+  /* 142.857% */
+  text-transform: capitalize;
+}
+
+.ticket_number {
+  color: var(--Black-text-03, #444854);
+  font-family: 'Product Sans' Medium;
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 280% */
+}
+
+.class_label {
+  color: #2D3139;
   font-family: 'Product Sans';
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 300;
-  line-height: 1.25rem; /* 142.857% */
+  line-height: 1.25rem;
+  /* 142.857% */
   margin-bottom: 0.74rem;
 }
 
-.required{
+.required {
   color: #F04444;
   font-family: 'Product Sans';
   font-size: 0.875rem;
@@ -181,7 +257,7 @@ export default {
   line-height: 1.25rem;
 }
 
-.comment_section{
+.comment_section {
   display: flex;
   width: 35.8125rem;
   height: 13.375rem;
@@ -193,24 +269,25 @@ export default {
   border: 1px solid #C0D3E6;
 }
 
-.form-input-input{
+.form-input-input {
   outline: none;
   border: none;
   padding-left: 12px;
   width: 50%;
 }
 
-.form-input{
+.form-input {
   display: flex;
   width: 100%;
   height: 3.5rem;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  border: 1px solid  #C0D3E6;
+  border: 1px solid #C0D3E6;
   margin-bottom: 1rem;
   align-items: center;
 }
-.choose_document_type{
+
+.choose_document_type {
   display: flex;
   width: 100%;
   height: 4rem;
@@ -218,17 +295,19 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-radius: 0.375rem;
-  border: 1px solid  #EFF2F7;
+  border: 1px solid #EFF2F7;
   margin-bottom: 1rem;
 
 }
-.group-inputs{
+
+.group-inputs {
   display: flex;
   align-items: start;
   justify-content: center;
   gap: 1.5rem;
 }
-.doc_type_options{
+
+.doc_type_options {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -236,7 +315,8 @@ export default {
   padding: 0.5rem;
   width: 100%;
 }
-.dropDown{
+
+.dropDown {
   width: 17.625rem;
   display: flex;
   flex-direction: column;
@@ -250,7 +330,8 @@ export default {
   position: absolute;
   z-index: 999999999;
 }
-.selected-item{
+
+.selected-item {
   padding: 1rem 0 0.25rem 0;
   /* border: solid; */
   color: var(--black-text-01, #1D1E2C);
@@ -258,23 +339,25 @@ export default {
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 1.75rem; /* 175% */
+  line-height: 1.75rem;
+  /* 175% */
 }
 
-.passenger-type{
+.passenger-type {
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 0.37rem;
 }
 
-.role-options-wrapper{
+.role-options-wrapper {
   height: 40vh;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.invite-h{
-  color:  #1D1E2C;
+
+.invite-h {
+  color: #1D1E2C;
   text-align: center;
   font-family: 'Product Sans';
   font-size: 2.5rem;
@@ -284,22 +367,22 @@ export default {
   width: 15.625rem;
 }
 
-.invite-success-body{
+.invite-success-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.notice{
+.notice {
   display: inline-flex;
   padding: 1rem 1.1875rem 1rem 1rem;
   justify-content: center;
   align-items: center;
   border-radius: 0.25rem;
-  border: 1px solid  #FAF0AB;
+  border: 1px solid #FAF0AB;
   background: #FEFCF1;
-  color:  #575A65;
+  color: #575A65;
   margin-bottom: .5rem;
 
   /* caption/12px/regular */
@@ -307,10 +390,11 @@ export default {
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.25rem; /* 166.667% */
+  line-height: 1.25rem;
+  /* 166.667% */
 }
 
-.invite-p{
+.invite-p {
   color: #444854;
   text-align: center;
   font-family: 'Product Sans';
@@ -320,14 +404,15 @@ export default {
   line-height: normal;
 }
 
-.invite-gif{
+.invite-gif {
   display: flex;
   width: 11.25rem;
   height: 11.25rem;
   justify-content: center;
   align-items: center;
 }
-.invite-success{
+
+.invite-success {
   display: flex;
   width: 30rem;
   padding: 2.5rem;
@@ -339,18 +424,21 @@ export default {
   background: #FFF;
   margin: 100px auto;
 }
-.role-image{
+
+.role-image {
   width: 2.35294rem;
   height: 2.35294rem;
   flex-shrink: 0;
   border-radius: 360px;
 }
-.modal-footer{
+
+.modal-footer {
   padding-top: 3rem;
   display: flex;
   justify-content: space-between;
 }
-.p-1{
+
+.p-1 {
   color: #212B36;
 
   /* Body/16px/Regular */
@@ -358,10 +446,11 @@ export default {
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.75rem; /* 175% */
+  line-height: 1.75rem;
+  /* 175% */
 }
 
-.p-2{
+.p-2 {
   color: #637381;
 
   /* Subtext/14px/Regular */
@@ -369,10 +458,11 @@ export default {
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.5rem; /* 171.429% */
+  line-height: 1.5rem;
+  /* 171.429% */
 }
 
-.role-options{
+.role-options {
   display: flex;
   width: 35.8125rem;
   padding: 0.5rem 0.625rem 0.5rem 1.25rem;
@@ -386,23 +476,24 @@ export default {
 }
 
 @media (max-width: 1024px) {
-  .role-options{
+  .role-options {
     width: 100%;
   }
 }
 
-.choose-role-p{
-  color:  #1D1E2C;
+.choose-role-p {
+  color: #1D1E2C;
 
   /* Medium/16px */
   font-family: 'Product Sans';
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 1.75rem; /* 175% */
+  line-height: 1.75rem;
+  /* 175% */
 }
 
-.add-emails{
+.add-emails {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -410,11 +501,12 @@ export default {
   justify-content: start;
   margin-bottom: 1.25rem;
 }
-.main{
+
+.main {
   margin: 2rem;
 }
 
-.emails{
+.emails {
   display: flex;
   width: 13.25rem;
   padding: 0.625rem 0.625rem 0.625rem 1rem;
@@ -425,81 +517,83 @@ export default {
 }
 
 @media (max-width: 1024px) {
-  .emails{
+  .emails {
     width: 100%;
   }
 }
 
-.add-team-member{
-  color:  #1D1E2C;
+.add-team-member {
+  color: #1D1E2C;
 
   /* 18px/bold */
   font-family: 'Product Sans';
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 1.75rem; /* 155.556% */
+  line-height: 1.75rem;
+  /* 155.556% */
 }
-.modal{
+
+.modal {
   width: 39.8125rem;
   height: auto;
   margin: 20px auto;
   border-radius: 1rem;
-  background:  #FFF;
+  background: #FFF;
 
   /* m3 */
   box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
 }
 
 @media (max-width: 1024px) {
-  .modal{
+  .modal {
     height: auto;
   }
 }
 
-.modal-header{
+.modal-header {
   display: inline-flex;
   padding: 1rem 2rem;
   justify-content: space-between;
   align-items: center;
   /*gap: 22.5625rem;*/
-  background:  #F9FAFC;
+  background: #F9FAFC;
   width: 100%;
   border-radius: 1rem;
 
 }
 
-.on_boarding_input{
-  position:relative;
+.on_boarding_input {
+  position: relative;
   width: 100%;
 }
 
-.formInput{
+.formInput {
   height: 4rem;
   font-size: 1rem;
   border-radius: 0.375rem;
   border-radius: 0.375rem;
-  border: 1px solid  #E0E6ED;
+  border: 1px solid #E0E6ED;
   padding-top: 1.13rem;
-  padding-left:1.25rem;
+  padding-left: 1.25rem;
   margin-bottom: 1rem;
-  width:100%;
+  width: 100%;
 }
 
 
 
 /* .groupedformInput{} */
 
-.formInput.focused{
+.formInput.focused {
   padding-top: 1.13rem;
-  padding-left:1.25rem;
+  padding-left: 1.25rem;
   border: 1px solid var(--app-default-primary);
   border-radius: 0.375rem;
   outline: var(--app-default-primary);
 
 }
 
-.error{
+.error {
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
@@ -513,50 +607,51 @@ export default {
 
 
 
-.label.focused{
-  position:absolute;
-  top:-0.5rem;
-  left:1.25rem;
+.label.focused {
+  position: absolute;
+  top: -0.5rem;
+  left: 1.25rem;
   width: auto;
-  height:1.50rem;
-  font-size:0.88rem;
+  height: 1.50rem;
+  font-size: 0.88rem;
   padding-bottom: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   text-transform: capitalize;
-  line-height: 1.5rem; /* 171.429% */
+  line-height: 1.5rem;
+  /* 171.429% */
   font-style: normal;
   font-weight: 300;
-  color:  #575A65;
+  color: #575A65;
   transition: ease-in-out .2s;
   background-color: white;
 }
 
-.label{
-  position:absolute;
-  top:.5rem;
-  left:1.25rem;
+.label {
+  position: absolute;
+  top: .5rem;
+  left: 1.25rem;
   width: auto;
-  height:1.50rem;
-  font-size:1rem;
+  height: 1.50rem;
+  font-size: 1rem;
   text-transform: capitalize;
-  line-height: 1.7rem; /* 171.429% */
+  line-height: 1.7rem;
+  /* 171.429% */
   font-style: normal;
   font-weight: 300;
-  color:  #575A65;
+  color: #575A65;
   transition: ease-in .2s;
 }
 
 @media (max-width:1024px) {
-  .formInput{
-    width:100% !important;
+  .formInput {
+    width: 100% !important;
   }
 }
 
 @media (max-width: 1024px) {
-  .modal{
+  .modal {
     margin: 20px auto;
     width: 90%;
   }
-}
-</style>
+}</style>

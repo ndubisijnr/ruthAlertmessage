@@ -15,14 +15,9 @@ export default {
 
   methods:{
     cancel(){
-      this.model.booking_id= this.data
-      this.model.type = 'cancel'
-      this.model.description = ""
-
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
-        if(this.getIsSuccess){
-          this.close()
-        }
+      
+      storeUtils.fireAway().flight.handleCancelItinenery(this.data?.reference).then(() => {
+        this.close()
       })
 
     },
@@ -53,8 +48,8 @@ export default {
     <div class="delete-card-option">
       <div class="card-header">
         <p class="card-header-h">Confirm Action</p>
+      
       </div>
-
       <div style="margin: 2rem">
         <p class="are-you-sure">Are you sure you want to cancel Itinerary?</p>
 

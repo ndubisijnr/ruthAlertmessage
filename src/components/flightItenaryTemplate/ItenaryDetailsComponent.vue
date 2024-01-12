@@ -9,10 +9,12 @@ import Issurance from "@/components/modals/itinaryModals/Issurance.vue";
 import Others from "@/components/modals/itinaryModals/Others.vue";
 import ChooseASeat from "@/components/modals/itinaryModals/ChooseASeat.vue";
 import router from "@/router";
+import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
+import storeUtils from "../../utils/storeUtils";
 
 export default{
   name: "ItenaryDetailsComponent",
-  components: {ChooseASeat, Others, Issurance, EmailItinerary, Refund, Void, Exchange, CancelItinerary},
+  components: {ChooseASeat, OnBoardingButton,Others, Issurance, EmailItinerary, Refund, Void, Exchange, CancelItinerary},
   props:['getUser','getBookedFlight','getSelectedFlight', "id"],
   data(){
     return{
@@ -31,13 +33,19 @@ export default{
       isVoiding:false,
       isRefund:false,
       isExchange:false,
-      isOthers:false
+      isOthers:false,
+      no_ticket:false
     }
   },
 
   computed:{
     getCurrentRoute(){
       return router.currentRoute.value.fullPath
+    },
+    getTemplateId(){
+      if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
+      return storeUtils.fireAway().theme.custom_theme.template_id;
+
     },
    
   },
@@ -49,11 +57,18 @@ export default{
           this.actionClicked=!this.actionClicked
     },
 
+    printAction(){
+       storeUtils.fireAway().print?.commitPrintLoading(true, this.getBookedFlight)
+       if(this.getTemplateId === 1) router.push({name:'Template1'})
+       if(this.getTemplateId === 2) router.push({name:'Template2'})
+       if(this.getTemplateId === 3) router.push({name:'Template3'})
+    },
+
     openItineneryModal(type){
-      if(type === 'refund'  && this.getBookedFlight.status === 'issued') this.isRefund=true;
-      else if(type === 'exchange'  && this.getBookedFlight.status === 'issued') this.isExchange=true;
-      else if(type === 'void'  && this.getBookedFlight.status === 'issued') this.isVoiding=true;
-      else alert('This ticket has not been issued.')
+      if(type === 'refund'  && this.getBookedFlight.status === 'reserved') this.isRefund=true;
+      else if(type === 'exchange'  && this.getBookedFlight.status === 'reserved') this.isExchange=true;
+      else if(type === 'void'  && this.getBookedFlight.status === 'reserved') this.isVoiding=true;
+      else this.no_ticket = true
     },
 
     close(value){
@@ -98,14 +113,34 @@ export default{
 </script>
 
 <template>
-  <EmailItinerary @close="close" v-show="isEmailTemplate" :data="id"></EmailItinerary>
-  <ChooseASeat @close="close" v-show="isChooseSeat" :data="id"></ChooseASeat>
-  <CancelItinerary @close="close" v-show="isCancel" :data="id"></CancelItinerary>
-  <issurance :data="getBookedFlight" @close="close" v-show="isIssurance" :id="id"></issurance>
-  <Refund :data="getBookedFlight" @close="close" v-show="isRefund" :id="id"></Refund>
-  <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
-  <Void :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
-  <Others :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
+  <EmailItinerary :booking_reference="getBookedFlight?.reference" style="margin-left: -144px;" @close="close" v-show="isEmailTemplate" :data="id"></EmailItinerary>
+  <ChooseASeat style="margin-left: -144px;" @close="close" v-show="isChooseSeat" :data="id"></ChooseASeat>
+  <CancelItinerary style="margin-left: -144px;" @close="close" v-show="isCancel" :data="getBookedFlight"></CancelItinerary>
+  <issurance style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isIssurance" :id="id"></issurance>
+  <Refund  style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isRefund" :id="id"></Refund>
+  <Exchange style="margin-left: -144px;" :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
+  <Void style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
+  <Others style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
+
+  <div class="layout-modal" v-show="no_ticket">
+    <div class="delete-card-option">
+      <div class="card-header">
+      </div>
+
+      <div style="width:100%;text-align: center;display: flex;justify-content: center;flex-direction: column;align-items: center;">
+        <img src="../../assets/notice.gif"  class="invite-gif" />
+
+        <p style="font-size: 20px;">This ticket has not been issued.</p>
+
+      </div>
+
+      <div class="card-footer">
+        <on-boarding-button btn-width="11.0625rem" @click="no_ticket = false" border="none" background="#F04444" text-node="Okay"></on-boarding-button>
+      </div>
+
+    </div>
+
+  </div>
 
   <div :style="getCurrentRoute.includes('bookings')  ? {marginLeft: '0',marginTop:'0'} : null">
     <div class="payment-wrapper">
@@ -174,7 +209,7 @@ export default{
             <p class="itinerary-p" @click="e => showAction(e, 'view_itinerary')">View Itinerary</p>
             <div style="position: relative" v-show="activeAction === 'view_itinerary' && actionClicked">
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p">Print Itinerary</p>
+                <p class="filter-by-modal-p" @click="printAction">Print Itinerary</p>
                 <p class="filter-by-modal-p" @click="isEmailTemplate=true">Email Itinerary</p>
               </div>
             </div>
@@ -375,6 +410,63 @@ export default{
 .filter-items:hover ~ .filter-by-modal {
   display: flex;
 }
+.layout-modal{
+  background: #00000065;
+  width: 100%;
+  height: 100vh;
+  z-index: 999999;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  margin-left: -144px;
+  padding-top: 5rem;
+}
+
+.delete-card-option{
+  width: 34rem;
+  height: 23.25rem;
+  border-radius: 0.5rem;
+  background:  #FFF;
+  position: relative;
+  /* Shadows / Modals */
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+}
+
+.card-header{
+  display: flex;
+  width: 34rem;
+  height: 4.5rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  align-items: center;
+  flex-shrink: 0;
+  background:  #F9FAFC;
+  justify-content: space-between;
+}
+
+.card-header-h{
+  color:  #1D1E2C;
+  font-family: 'Product Sans';
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.card-footer{
+  display: flex;
+  align-items: center;
+  gap:2.9rem;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  width: 100%;
+}
+
+
 .filter-by-modal-p:hover{
   font-size: 1.2rem;
 }
@@ -388,7 +480,7 @@ export default{
   border-radius: 0rem 0rem 0.25rem 0.25rem;
   background: #FFF;
   color: #222;
-
+  cursor: pointer;
   /* medium/input/16px */
   font-family: 'Product Sans';
   font-size: 1rem;
@@ -541,6 +633,14 @@ export default{
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.invite-gif{
+  display: flex;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+
 }
 .text{
   color: #2D3139;

@@ -9,28 +9,38 @@ export default {
   data(){
     return{
       lightenColor,
-      searchModel:{}
+      searchModel:{},
+      reset:false,
     }
   },
   methods: {
+    resetModal(){
+       document.getElementById("booking_status").value = 'issued';
+       document.getElementById("payment_status").value = 'paid';
+
+       this.reset = true
+
+       this.searchModel = {}
+    },
+
     applyFilter(){
       // this.searchModal.booking_status
       // this.searchModal.payment_status
-      const booking_status = document.getElementById("booking_status");
-      const payment_status =  document.getElementById("payment_status");
+      if(!this.reset){
+        const booking_status = document.getElementById("booking_status");
+        const payment_status =  document.getElementById("payment_status");
 
-      const text1 = booking_status.options[booking_status.selectedIndex].value
-      const text2 = payment_status.options[payment_status.selectedIndex].value
+        const text1 = booking_status.options[booking_status.selectedIndex].value
+        const text2 = payment_status.options[payment_status.selectedIndex].value
 
-
-      this.searchModel.booking_status = text1
-      this.searchModel.payment_status = text2
-
-      console.log(this.searchModel)
+        this.searchModel.booking_status = text1
+        this.searchModel.payment_status = text2
+      }
 
       storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel).then(() => {
         this.searchModel = {}
         this.close()
+        this.reset = false
       })
     },
     close(){
@@ -67,7 +77,6 @@ export default {
               <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
                 <p>Booking Status:</p>
                 <select id="booking_status" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
-                  <option>Select booking status</option>
                   <option value="issued">Issued</option>
                   <option value="reserved">Reserved</option>
 
@@ -77,9 +86,8 @@ export default {
               <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
                 <p>Payment Status:</p>
                 <select id="payment_status" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
-                  <option>Select booking status</option>
                   <option value="paid">Paid</option>
-                  <option value="unpaid">unPaid</option>
+                  <option value="unpaid">UnPaid</option>
 
                 </select>
               </div>
@@ -107,7 +115,7 @@ export default {
         </div>
 
         <div class="modal-footer">
-          <!-- <on-boarding-button btn-width="8.75rem" :color="getTheme.color" text-node="Reset Filter" :background="lightenColor(getTheme.color)" border="none"></on-boarding-button> -->
+          <on-boarding-button btn-width="8.75rem" @click="resetModal" :color="getTheme.color" text-node="Reset Filter" :background="lightenColor(getTheme.color)" border="none"></on-boarding-button>
           <on-boarding-button :loading="getLoading" :disabled="getLoading"  border="none"  @click="applyFilter" btn-width="8.75rem" text-node="Apply Filter"></on-boarding-button>
         </div>
       </div>

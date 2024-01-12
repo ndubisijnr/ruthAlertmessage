@@ -38,7 +38,7 @@ export default {
       return this.data?.flight?.passengers
     },
     airlineDetails() {
-      if (!this.data) return;
+      if (!this.data) return; 
       return this.data?.flight
     },
     getUser() {
@@ -46,11 +46,11 @@ export default {
         return JSON.parse(localStorage.user)
       }
     },
-    getTemplateId(){
+    getTemplateId(){    
       if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
       return storeUtils.fireAway().theme.custom_theme.template_id;
 
-    },
+    },  
   },
 
   mounted() {
@@ -62,7 +62,9 @@ export default {
 
 <template>
   <layout v-slot:child-content>
+   
     <div class="overall">
+    
         <div class="wrapper">
         <div class="breadcrumb">
           <p @click="goBack" class="breadcrumb_list">Manage Flight Bookings</p>
@@ -136,8 +138,6 @@ export default {
       
 
       </div>
-
-
   </layout>
 </template>
 

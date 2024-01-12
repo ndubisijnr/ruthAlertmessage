@@ -4,11 +4,11 @@ import Layout from "@/components/modals/Layout.vue";
 import SettingsRequest from "@/model/SettingsRequest";
 import {ellipsis} from "@/mixins/lettersExtractor";
 import storeUtils from "@/utils/storeUtils";
-import {RuthdoAlert} from "ruthly";
 
 export default {
   name: "EmailItinerary",
   components: {Layout, OnBoardingButton},
+  props:['booking_reference'],
   data(){
     return{
       inputValue:null,
@@ -41,25 +41,10 @@ export default {
       this.$emit('close', false)
     },
 
-    inviteMember(){
-      if(this.emails.length < 1 && !this.inputValue) RuthdoAlert({title:"Please Add Emails", icon:"error"})
-      else if(!this.model.role_id) RuthdoAlert({title:"Please Select a role", icon:"error"})
-      else {
-        if (this.emails.length > 1) {
-          this.model.emails = this.emails
-
-        } else {
-          this.emails.push(this.inputValue)
-          this.model.emails =  this.emails
-
-        }
-        storeUtils.fireAway().settings?.addTeamMembers(this.model)
-      }
-      //     .then(() => {
-      //   if(this.getError === 'false'){
-      //     this.close(false)
-      //   }
-      // }))
+    sendEmail(){
+    
+        storeUtils.fireAway().flight?.handleSendItineneryEmail(this.booking_reference)
+      
     },
 
     select(value, i){
@@ -98,7 +83,7 @@ export default {
       return storeUtils.fireAway().settings?.getAllRoles
     },
     getLoading(){
-      return storeUtils.fireAway().settings?.teamLoading
+      return storeUtils.fireAway().flight?.getLoading
     },
 
     default_theme(){
@@ -128,23 +113,15 @@ export default {
         <img src="../../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
       </div>
 
+
       <div class="main">
         <div class="modal-body">
 
           <div class="email-area">
             <div class="on_boarding_input">
               <label class="label" :class="{'focused':isFocused}">Email Address</label>
-              <input id="invite-input" @keyup="checkComma" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
-              <div class="notice">To add multiple emails, include a comma at the end of each email.</div>
-              <div class="add-emails" >
-                <div class="emails" v-for="(i, index) in emails" :key="index">
-                  <span >{{ellipsis(i, 18)}}</span>
-                  <svg @click="removeEmail(index)" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.89617 2.6781C6.94224 2.44942 9.05741 2.44942 11.1035 2.6781C12.2453 2.80571 13.1665 3.70532 13.3005 4.85165C13.5452 6.9434 13.5452 9.05653 13.3005 11.1483C13.1665 12.2946 12.2453 13.1942 11.1035 13.3218C9.05741 13.5505 6.94224 13.5505 4.89617 13.3218C3.75436 13.1942 2.83318 12.2946 2.69911 11.1483C2.45446 9.05653 2.45446 6.9434 2.69911 4.85165C2.83318 3.70532 3.75436 2.80571 4.89617 2.6781ZM5.64628 5.64641C5.84155 5.45114 6.15813 5.45114 6.35339 5.64641L7.99984 7.29286L9.64629 5.64641C9.84155 5.45115 10.1581 5.45115 10.3534 5.64641C10.5487 5.84167 10.5487 6.15826 10.3534 6.35352L8.70695 7.99996L10.3534 9.64641C10.5487 9.84167 10.5487 10.1583 10.3534 10.3535C10.1581 10.5488 9.84155 10.5488 9.64628 10.3535L7.99984 8.70707L6.3534 10.3535C6.15813 10.5488 5.84155 10.5488 5.64629 10.3535C5.45103 10.1583 5.45103 9.84167 5.64629 9.64641L7.29274 7.99996L5.64628 6.35351C5.45102 6.15825 5.45102 5.84167 5.64628 5.64641Z" fill="#2D3139"/>
-                  </svg>
-                </div>
-
-              </div>
+              <input id="invite-input" :class="{'focused':isFocused}" v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Start by typing an email address" />
+          
             </div>
 
           </div>
@@ -152,7 +129,7 @@ export default {
         </div>
 
         <div class="modal-footer">
-          <on-boarding-button border="none" :loading="getLoading" @click="inviteMember" :disabled="getLoading" btn-width="100%" text-node="Send"></on-boarding-button>
+          <on-boarding-button border="none" :loading="getLoading" @click="sendEmail" :disabled="getLoading" btn-width="100%" text-node="Send"></on-boarding-button>
         </div>
 
       </div>

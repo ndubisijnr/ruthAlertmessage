@@ -1,7 +1,5 @@
 <template>
   <div style="display: flex;justify-content: center;width: 100%" class="animate__animated animate__zoomIn">
-    {{ getData }}
-
     <div class="invoice-wrapper">
       <div class="invoice">
 
@@ -36,30 +34,18 @@
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Class: </p>
-                <p class="value">{{getData?.flight.outbound[0].cabin_type ? getData?.flight.outbound[0].cabin_type : 'Economy'}} </p>
+                <p class="value">{{getData?.flight?.outbound[0].cabin_type ? getData?.flight?.outbound[0].cabin_type : 'Economy'}} </p>
               </div>
-            </div>
-
-            <div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Booking ID : </p>
-                <p class="value"> 1234567890 </p>
+                <p class="value"> {{getData?.reference}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">PNR: </p>
-                <p class="value">1234567</p>
-              </div>
-
-              <div style="display: flex;gap: 10px;">
-                <p class="key">Flight Number : </p>
-                <p class="value"> 1234567</p>
-              </div>
-              <div style="display: flex;gap: 10px;">
-                <p class="key">Trip Type: </p>
-                <p class="value"> Round Trip</p>
+                <p class="value">{{ getData?.pnr }}</p>
               </div>
             </div>
-
+            
           </div>
 
 
@@ -67,7 +53,7 @@
 
             <!--     outbound-->
 
-            <div v-for="(i,index) in  getData?.flight.outbound" class="flight_info_wrapper">
+            <div v-for="(i,index) in  getData?.flight?.outbound" class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2645_19017)">
@@ -133,7 +119,7 @@
               </div> 
             </div>
 
-            <!-- <div class="flight_info_wrapper">
+            <div class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -229,7 +215,7 @@
                 </div>
               </div>
 
-            </div> -->
+            </div>
           </div>
 
           <div class="flight_info_wrapper">
@@ -239,7 +225,7 @@
               <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
             </div>
 
-            <div v-for="i in getData?.flight.passengers" class="flight_info2" style="justify-content: start;">
+            <div v-for="i in getData?.flight?.passengers" class="flight_info2" style="justify-content: start;">
               <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
               <p class="value" style="width: 11.25rem;">{{i.email}}</p>
               <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->

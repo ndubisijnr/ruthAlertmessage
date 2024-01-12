@@ -10,7 +10,7 @@ export default {
   props:['data', 'id'],
   data(){
     return{
-      model:{request:null,description:null},
+      model:{request:null,description:null, passengers:null},
       showClass:false,
       selectedValue:null
     }
@@ -30,9 +30,27 @@ export default {
     close(){
       this.$emit('close', false)
     },
+
+    toggleTravelersTicket(id, filterValue,obj){
+      const box = document.getElementById(id)
+      if(!this.model.passengers) this.model.passengers = this.data?.tickets;
+      if(box.checked){
+        this.model.passengers.push(obj)
+      }
+      else this.removeTravelerTicket(filterValue)
+      
+    },
+
+    removeTravelerTicket(filterValue){
+      if(!this.model.passengers) this.model.passengers = this.data?.tickets;
+      this.model.passengers = this.model.passengers.filter(it => it.traveler !== filterValue)
+    },
+
+
     submitRequest(){
       this.model.type = "refund"
       this.model.booking_id = this.id
+      this.model.passengers = this.model?.passengers ? this.model.passengers : this.data?.tickets
 
       storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
         if(this.getIsSuccess){
@@ -67,37 +85,13 @@ export default {
                   </div>
                     <input class="form-input-input" :value="data?.pnr"/>
                 </div>
-                  <div>
-                    <p class="class_label">Request <span class="required">*</span></p>
-                  <div class="choose_document_type" style="position: relative;">
-                    <p class="selected-item">{{ selectedValue ? selectedValue : 'Select Options'}}</p>
-                    <div class="dropDown" v-show="showClass">
-                      <div class="doc_type_options">
-                        <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'get-fund-quote', showClass = !showClass, selectedValue='Get Refund Quote'">Get Refund Quote</p>
-                        </div>
-                        <div class="passenger-type" style="width: 100%">
-                          <p class="passenger-type-text-1" @click="model.request = 'request-for-refund', showClass = !showClass,selectedValue='Request for Refund'">Request for Refund</p>
-                        </div>
-                      </div>
-                    </div>
-                    <img @click="showClass = !showClass" src="../../../assets/Monotone.svg" style="cursor: pointer" />
-                  </div>
-                  </div>
+
               </div>
               <div>
-                <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label">Ticket Number <span class="required">*</span> </label>
+                <div  style="margin-bottom: 2rem">
+                  <label class="class_label"> </label>
                 </div>
                 <div>
-                  <div class="form-input">
-                    <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
-                      <p class="label_text">Ticket Number</p>
-                    </div>
-                      <input v-if="data?.tickets" class="form-input-input" :value="data?.tickets[0]?.ticket_number[0]"/>
-                  </div>
-
-
                   <div>
                     <div class="form-input">
                       <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
@@ -110,6 +104,43 @@ export default {
               </div>
             </div>
 
+          </div>
+          
+
+          <div style="margin-bottom: 1rem">
+            <p class="label_text_ticket">Ticket Number <span class="required">*</span></p>
+
+            <div style="border: solid #C0D3E6;padding: 1rem;border-radius: 0.375rem;border: 1px solid var(--primary-15, #C0D3E6);background: var(--Color, #FFF);">
+
+              <div v-for="(i, index) in data?.tickets" :key="index" style="display: flex;gap:1.5rem;align-items: center;justify-content: flex-start;margin-bottom: 0.5rem;">
+                <p class="ticket_name">{{ i.traveler }}</p>
+                <div style="padding: 0.25rem 0.75rem;border-radius: 1.25rem;background: #EAF0F7;">
+                  <div style="display: flex;gap: 0.5rem;">
+                    <input :id="`refund_check_box${index}`" type="checkbox" checked="true" @change="toggleTravelersTicket(`refund_check_box${index}`,i.traveler, {name:i.traveler, ticket_numbers:i.ticket_number})"/>
+                    <p class="ticket_number" v-for="(j, index2) in i.ticket_number" :key="index2">{{ j }}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div>
+              <p class="class_label">Request <span class="required">*</span></p>
+              <div class="choose_document_type" style="position: relative;">
+                <p class="selected-item">{{ selectedValue ? selectedValue : 'Select Options'}}</p>
+                <div class="dropDown" v-show="showClass">
+                  <div class="doc_type_options">
+                    <div class="passenger-type" style="width: 100%">
+                      <p class="passenger-type-text-1" @click="model.request = 'get-fund-quote', showClass = !showClass, selectedValue='Get Refund Quote'">Get Refund Quote</p>
+                    </div>
+                    <div class="passenger-type" style="width: 100%">
+                      <p class="passenger-type-text-1" @click="model.request = 'request-for-refund', showClass = !showClass,selectedValue='Request for Refund'">Request for Refund</p>
+                    </div>
+                  </div>
+                </div>
+                <img @click="showClass = !showClass" src="../../../assets/Monotone.svg" style="cursor: pointer" />
+              </div>
           </div>
 
           <div>
@@ -150,6 +181,42 @@ export default {
   line-height: 1.75rem; /* 200% */
   margin:0 1.25rem;
 }
+
+.label_text_ticket {
+  color: #444854;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 200% */
+
+}
+
+
+.ticket_name {
+  color: var(--Black-text-02, #2D3139);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem;
+  text-wrap: wrap;
+  width: 8rem;
+  /* 142.857% */
+  text-transform: capitalize;
+}
+
+.ticket_number {
+  color: var(--Black-text-03, #444854);
+  font-family: 'Product Sans' Medium;
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 280% */
+}
+
 
 .class_label{
   color:  #2D3139;
