@@ -65,9 +65,11 @@ export default{
     },
 
     openItineneryModal(type){
-      if(type === 'refund'  && this.getBookedFlight.status === 'reserved') this.isRefund=true;
-      else if(type === 'exchange'  && this.getBookedFlight.status === 'reserved') this.isExchange=true;
-      else if(type === 'void'  && this.getBookedFlight.status === 'reserved') this.isVoiding=true;
+      if(this.getBookedFlight.tickets){
+        if(type === 'refund'  && this.getBookedFlight?.tickets[0]?.status === 'issued') this.isRefund=true;
+        else if(type === 'exchange'  && this.getBookedFlight?.tickets[0]?.status  === 'issued') this.isExchange=true;
+        else if(type === 'void'  && this.getBookedFlight?.tickets[0]?.status  === 'issued') this.isVoiding=true;
+      }
       else this.no_ticket = true
     },
 
@@ -153,7 +155,6 @@ export default{
       </div>
 
       <div class="payment-wrapper-body">
-
         <div class="booking-summary-item">
           <p class="key">Booking Reference</p>
           <p class="value">{{getBookedFlight?.reference}}</p>
@@ -357,8 +358,7 @@ export default{
 
     <div style="width: 47.1875rem;display: flex;justify-content: center;align-items: center;">
       <div class="fare_rules">
-        <div
-            style="width: 100%;display:flex;align-items: center;gap: 0.5rem;margin-bottom: 0.5rem;justify-content: space-between;">
+        <div style="width: 100%;display:flex;align-items: center;gap: 0.5rem;margin-bottom: 0.5rem;justify-content: space-between;">
           <div style="display:flex;align-items: center;gap: 0.5rem;">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24"
                  fill="none">
@@ -640,6 +640,7 @@ export default{
   width: 100px;
   justify-content: center;
   align-items: center;
+  margin-top: 1rem;
 
 }
 .text{
