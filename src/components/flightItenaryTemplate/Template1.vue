@@ -241,7 +241,7 @@
 
             </div>
      
-            <p><span class="sub-total">Total :</span> {{formatAmount(getData?.amount)}} </p>
+            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
             <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
             <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>
@@ -351,6 +351,12 @@ export default {
 </script>
 
 <style scoped>
+@media print {
+    body {
+      -webkit-print-color-adjust: exact; /* For WebKit browsers like Chrome and Safari */
+      background-color: #fff; /* Specify a background color if needed */
+    }
+  }
 .layover{
   display: flex;
   width: 33.25rem;

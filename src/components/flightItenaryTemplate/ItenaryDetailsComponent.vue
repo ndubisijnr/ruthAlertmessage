@@ -115,14 +115,14 @@ export default{
 </script>
 
 <template>
-  <EmailItinerary :booking_reference="getBookedFlight?.reference" style="margin-left: -144px;" @close="close" v-show="isEmailTemplate" :data="id"></EmailItinerary>
-  <ChooseASeat style="margin-left: -144px;" @close="close" v-show="isChooseSeat" :data="id"></ChooseASeat>
-  <CancelItinerary style="margin-left: -144px;" @close="close" v-show="isCancel" :data="getBookedFlight"></CancelItinerary>
-  <issurance style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isIssurance" :id="id"></issurance>
-  <Refund  style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isRefund" :id="id"></Refund>
-  <Exchange style="margin-left: -144px;" :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
-  <Void style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
-  <Others style="margin-left: -144px;" :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
+  <EmailItinerary :booking_reference="getBookedFlight?.reference" @close="close" v-show="isEmailTemplate" :data="id"></EmailItinerary>
+  <ChooseASeat @close="close" v-show="isChooseSeat" :data="id"></ChooseASeat>
+  <CancelItinerary  @close="close" v-show="isCancel" :data="getBookedFlight"></CancelItinerary>
+  <issurance  :data="getBookedFlight" @close="close" v-show="isIssurance" :id="id"></issurance>
+  <Refund :data="getBookedFlight" @close="close" v-show="isRefund" :id="id"></Refund>
+  <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
+  <Void :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
+  <Others :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
 
   <div class="layout-modal" v-show="no_ticket">
     <div class="delete-card-option">
@@ -421,7 +421,6 @@ export default{
   display: flex;
   justify-content: center;
   align-items: start;
-  margin-left: -144px;
   padding-top: 5rem;
 }
 
