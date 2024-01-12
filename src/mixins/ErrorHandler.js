@@ -2,6 +2,7 @@ import {RuthdoAlert} from "ruthly";
 import storeUtils from "../utils/storeUtils";
 
 export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
+    console.log(exception)
     if(exception?.response?.data) {
         RuthdoAlert({title: exception?.response?.data.message ? exception?.response?.data.message : exception?.response?.data.data ? exception?.response?.data.data : exception?.response?.data, icon: 'error'})
         const error =  exception?.response?.data

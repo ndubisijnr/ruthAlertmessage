@@ -353,10 +353,11 @@ export const useFlightStore = defineStore('flightStore', {
                     this.isSuccess = true
                 }else{
                     RuthdoAlert({title:responseData.data, icon:'error'})
+                    this.isSuccess = true
                 }
             } catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+                this.isSuccess = true
             }
 
         }

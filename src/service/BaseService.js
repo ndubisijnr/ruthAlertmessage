@@ -1,5 +1,6 @@
 import axios from "axios";
 import storeUtils from "@/utils/storeUtils";
+import { RuthdoAlert } from "ruthly";
 
 const Client = axios.create({
     baseURL: "https://b2b-api-dev.tiqwa.com/",
@@ -33,6 +34,9 @@ Client.interceptors.response.use(async response => {
 }, error =>{
         if(error.response.status === 403) {
             storeUtils.fireAway().global.commitUnauthorised(true)
+        }
+        if(error.response.status === 500){
+            RuthdoAlert({title:error.response.data.data, icon:'error'})
         }
         return error
     }
