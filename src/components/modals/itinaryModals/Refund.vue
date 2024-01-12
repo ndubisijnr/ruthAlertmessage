@@ -52,11 +52,23 @@ export default {
       this.model.booking_id = this.id
       this.model.passengers = this.model?.passengers ? this.model.passengers : this.data?.tickets
 
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
-        if(this.getIsSuccess){
-          this.close()
-        }
-      })
+      if(!this.model.passengers.length){
+        let ticket_error = document.getElementById('refund_ticket_error')
+          ticket_error.style.display = 'block'
+          setTimeout(() => {
+            ticket_error.style.display = 'none'
+          },5000)
+      }else{
+        storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+          if(this.getIsSuccess){
+            this.close()
+          }
+
+          Object.keys(this.model).forEach(key => {
+            this.model[key] = null
+          })
+        })
+      }
     }
   }
 }
@@ -152,6 +164,8 @@ export default {
           </div>
 
         </div>
+        <p class="animate__animated animate__shakeX" id="refund_ticket_error" style="text-transform: capitalize;font-size:1rem;color: rgb(184, 7, 7);display: none;">please select at least one ticket to refund!</p>
+
 
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>

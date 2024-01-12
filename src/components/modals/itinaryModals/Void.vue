@@ -48,19 +48,40 @@ export default {
       console.log(this.model, 'unchecked')
     },
 
+    validateSelectedCheckboxes(){
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        // Check if all checkboxes are selected
+        const atLeastOneSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+        return atLeastOneSelected
+      },
+
     submitRequest() {
       this.model.type = "void"
       this.model.booking_id = this.id
       this.model.passengers = this.model?.passengers ? this.model.passengers : this.data?.tickets
 
-      console.log(this.model)
+      console.log(this.model)     
      
-
-      storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
-        if (this.getIsSuccess) {
-          this.close()
-        }
-      })
+      if(!this.model.passengers.length){
+        let ticket_error = document.getElementById('ticket_error')
+          ticket_error.style.display = 'block'
+          setTimeout(() => {
+            ticket_error.style.display = 'none'
+          },5000)
+      }else{
+        storeUtils.fireAway().flight.handleSubmitItineraryRequest(this.model).then(() => {
+          if (this.getIsSuccess) {
+            this.close()
+          }
+          Object.keys(this.model).forEach(key => {
+            this.model[key] = null
+          })
+        }) 
+          
+         
+      }
       console.log(this.model)
     }
   },
@@ -140,9 +161,8 @@ export default {
 
           <div style="margin-bottom: 3rem;">
             <p class="label_text_ticket">Ticket Number <span class="required">*</span></p>
-
             <div style="border: solid #C0D3E6;padding: 1rem;border-radius: 0.375rem;border: 1px solid var(--primary-15, #C0D3E6);background: var(--Color, #FFF);">
-
+            
               <div v-for="(i, index) in data?.tickets" :key="index" style="display: flex;gap:1.5rem;align-items: center;justify-content: flex-start;margin-bottom: 0.5rem;">
                 <p class="ticket_name">{{ i.traveler }}</p>
                 <div style="padding: 0.25rem 0.75rem;border-radius: 1.25rem;background: #EAF0F7;">
@@ -170,6 +190,8 @@ export default {
           </div>
 
         </div>
+        <p class="animate__animated animate__shakeX" id="ticket_error" style="text-transform: capitalize;font-size:1rem;color: rgb(184, 7, 7);display: none;">please select at least one ticket to void!</p>
+
 
         <div class="modal-footer">
           <on-boarding-button border="1px solid #F04444" @click="close" background="#F04444" btn-width="7.4375rem"

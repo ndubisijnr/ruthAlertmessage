@@ -194,7 +194,7 @@ export const useFlightStore = defineStore('flightStore', {
                     bookingprogressarray.push('Traveller’s Info')
                     localStorage.progressNav = JSON.stringify(bookingprogressarray)
                     localStorage.bookingStage = 'Payment Confirmation'
-                    window.location = `/dashboard/payment/${this.getUser?.access_token?.slice(0, 20)}`
+                    window.location = `/dashboard/payment`
                 }
             } catch (err) {
                 this.bookingLoading = false

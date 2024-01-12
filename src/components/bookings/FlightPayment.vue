@@ -17,12 +17,7 @@
                 </div>
         </div>
 
-
       <itenary-details-component :get-user="getUser" :get-booked-flight="getBookedFlight"></itenary-details-component>
-
-
-
-
 
         <!-- <div style="margin: 2.5rem 0;">
             <p class="text">Flight Details</p>

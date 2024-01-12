@@ -31,7 +31,7 @@ export default [
     },
 
     {
-        path: '/dashboard/payment/:token',
+        path: '/dashboard/payment',
         // redirect:'create-account',
         name: 'Flight Payment',
         meta: {layout: 'dashboard',authRequired:true},
