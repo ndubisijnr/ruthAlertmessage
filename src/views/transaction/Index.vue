@@ -1,6 +1,6 @@
 <template>
-  <WalletCreation v-if="isWallet && !getWallet?.wallet_number && !getLoading" @cancel="close"></WalletCreation>
-  <add-funds @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number"></add-funds>
+  <WalletCreation v-if="isWallet && !getWallet?.wallet_number || setup" @cancel="close"></WalletCreation>
+  <add-funds @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number" :wallet_name="getWallet?.wallet_name"></add-funds>
   <layout v-slot:child-content>
     <div class="overall">
       <div class="booking-wrapper">
@@ -16,14 +16,19 @@
               </div>
             </div>
             <div class="account_number_wrapper" v-if="getWallet?.wallet_number">
-              <svg style="position: absolute;top:10px;right: 10px;cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg @click="copyToClipboard" style="position: absolute;top:10px;right: 10px;cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M11.1 22.75H6.9C2.99 22.75 1.25 21.01 1.25 17.1V12.9C1.25 8.99 2.99 7.25 6.9 7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V17.1C16.75 21.01 15.01 22.75 11.1 22.75ZM6.9 8.75C3.8 8.75 2.75 9.8 2.75 12.9V17.1C2.75 20.2 3.8 21.25 6.9 21.25H11.1C14.2 21.25 15.25 20.2 15.25 17.1V12.9C15.25 9.8 14.2 8.75 11.1 8.75H6.9Z" fill="#6A8297"/>
                 <path d="M17.1 16.75H16C15.59 16.75 15.25 16.41 15.25 16V12.9C15.25 9.8 14.2 8.75 11.1 8.75H8C7.59 8.75 7.25 8.41 7.25 8V6.9C7.25 2.99 8.99 1.25 12.9 1.25H17.1C21.01 1.25 22.75 2.99 22.75 6.9V11.1C22.75 15.01 21.01 16.75 17.1 16.75ZM16.75 15.25H17.1C20.2 15.25 21.25 14.2 21.25 11.1V6.9C21.25 3.8 20.2 2.75 17.1 2.75H12.9C9.8 2.75 8.75 3.8 8.75 6.9V7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V15.25Z" fill="#6A8297"/>
               </svg>
-              <div>
+              <div style="position: relative;">
+                <p id="copy_message" class="copy_message_hide">Copied to clipboard</p>
                 <p class="account_number_label">Account Number</p>
-                <p class="number">{{ getWallet?.wallet_number }}</p>
+                <p class="number" id="wallet_number">{{ getWallet?.wallet_number }}</p>
               </div>
+            </div>
+
+            <div v-if="!getWallet?.wallet_number" style="position: absolute;right: 1rem;bottom: 1rem;">
+              <on-boarding-button @click="setup=true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Setup Wallet"></on-boarding-button>
             </div>
           </div>
 
@@ -118,6 +123,7 @@ export default {
     return{
       isWallet:true,
       addFunds:false,
+      setup:false,
       transactionFields:[
         {key:"", label:"Admin Name"},
         // {key:"contact_email", label:"Email"},
@@ -132,9 +138,35 @@ export default {
   },
 
   methods:{
+      copyToClipboard() {
+        // Get the text area element
+        const copyText = document.getElementById('wallet_number').textContent
+        const copyMessage = document.getElementById('copy_message')
+
+        navigator.clipboard.writeText(copyText).then(() => {
+          copyMessage.classList.remove('copy_message_hide')
+          copyMessage.classList.add('copy_message_show')
+          setTimeout(() => {
+            copyMessage.classList.add('copy_message_hide')
+            copyMessage.classList.remove('copy_message_show')
+          },2000)
+        })
+    },
+
     close(value){
       this.isWallet = value
       this.addFunds = value
+      this.setup = false
+    }
+  },
+
+  watch:{
+    getIsWalletSetupSuccess(newValue, oldValue){
+      console.log(newValue)
+      if(newValue){
+        if(this.getIsWalletSetupSuccess) this.close();
+      }
+
     }
   },
 
@@ -143,6 +175,10 @@ export default {
       if(localStorage.user){
         return JSON.parse(localStorage.user)
       }
+    },
+
+    getIsWalletSetupSuccess(){
+      return storeUtils.fireAway().transaction.getIsWalletSetupSuccess
     },
 
     getWallet(){
@@ -174,6 +210,27 @@ a{
   text-decoration: none;
 }
 
+.copy_message_hide{
+  position:absolute;
+  top: -3rem;
+  right: -13rem;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: none;
+  transition: .2s ease-in;
+}
+
+.copy_message_show{
+  position:absolute;
+  top: -3rem;
+  right: -13rem;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: block;
+  transition: .2s ease-in;
+}
 .account_number_wrapper{
   position: relative;
   margin: 1.5rem;
@@ -202,6 +259,7 @@ a{
   background-size: contain;
   background-position: right;
   background-color: var(--app-defautl-primary-light);
+  position: relative;
 }
 
 .account_number_label{
@@ -316,7 +374,7 @@ line-height: normal;
 }
 
 .booking-wrapper{
-  width: 68.625rem;
+  width: 70.625rem;
   height: auto;
   position: relative;
 }

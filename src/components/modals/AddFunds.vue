@@ -5,8 +5,22 @@ import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 export default {
   name: "AddFunds",
   components:{OnBoardingButton, OnBoardingInput, layout},
-  props:['account_number', 'bank_name'],
+  props:['account_number', 'bank_name', 'wallet_name'],
   methods: {
+    copyToClipboard(modal_id, text_id) {
+        // Get the text area element
+        const copyText = document.getElementById(text_id).textContent
+        const copyMessage = document.getElementById(modal_id)
+
+        navigator.clipboard.writeText(copyText).then(() => {
+          copyMessage.classList.remove('copy_message_hide')
+          copyMessage.classList.add('copy_message_show')
+          setTimeout(() => {
+            copyMessage.classList.add('copy_message_hide')
+            copyMessage.classList.remove('copy_message_show')
+          },2000)
+        })
+    },
     close() {
 
       this.$emit('close', false)
@@ -31,32 +45,46 @@ export default {
 
           <div class="wallet_info">
             <div class="account_number_wrapper">
-              <div>
+              <p id="copy_message_bank_name" class="copy_message_hide">Copied to clipboard</p>
+
+              <div style="position: relative;">
                 <p class="account_number_label">BANK NAME</p>
-                <p class="number">Providus Bank</p>
+                <p class="number" id="bank_name">Providus Bank</p>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg style="position: absolute;top:10px;right: 10px;cursor: pointer"  @click="copyToClipboard('copy_message_bank_name', 'bank_name')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M11.1 22.75H6.9C2.99 22.75 1.25 21.01 1.25 17.1V12.9C1.25 8.99 2.99 7.25 6.9 7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V17.1C16.75 21.01 15.01 22.75 11.1 22.75ZM6.9 8.75C3.8 8.75 2.75 9.8 2.75 12.9V17.1C2.75 20.2 3.8 21.25 6.9 21.25H11.1C14.2 21.25 15.25 20.2 15.25 17.1V12.9C15.25 9.8 14.2 8.75 11.1 8.75H6.9Z" fill="#6A8297"/>
                 <path d="M17.1 16.75H16C15.59 16.75 15.25 16.41 15.25 16V12.9C15.25 9.8 14.2 8.75 11.1 8.75H8C7.59 8.75 7.25 8.41 7.25 8V6.9C7.25 2.99 8.99 1.25 12.9 1.25H17.1C21.01 1.25 22.75 2.99 22.75 6.9V11.1C22.75 15.01 21.01 16.75 17.1 16.75ZM16.75 15.25H17.1C20.2 15.25 21.25 14.2 21.25 11.1V6.9C21.25 3.8 20.2 2.75 17.1 2.75H12.9C9.8 2.75 8.75 3.8 8.75 6.9V7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V15.25Z" fill="#6A8297"/>
               </svg>
             </div>
             <div class="account_number_wrapper">
-              <div>
+              <p id="copy_message_number" class="copy_message_hide">Copied to clipboard</p>
+
+              <div style="position: relative;">
                 <p class="account_number_label">ACCOUNT NUMBER</p>
-                <p class="number">{{account_number}}</p>
+                <p class="number" id="number">{{account_number}}</p>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg style="position: absolute;top:10px;right: 10px;cursor: pointer"  @click="copyToClipboard('copy_message_number', 'number')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M11.1 22.75H6.9C2.99 22.75 1.25 21.01 1.25 17.1V12.9C1.25 8.99 2.99 7.25 6.9 7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V17.1C16.75 21.01 15.01 22.75 11.1 22.75ZM6.9 8.75C3.8 8.75 2.75 9.8 2.75 12.9V17.1C2.75 20.2 3.8 21.25 6.9 21.25H11.1C14.2 21.25 15.25 20.2 15.25 17.1V12.9C15.25 9.8 14.2 8.75 11.1 8.75H6.9Z" fill="#6A8297"/>
                 <path d="M17.1 16.75H16C15.59 16.75 15.25 16.41 15.25 16V12.9C15.25 9.8 14.2 8.75 11.1 8.75H8C7.59 8.75 7.25 8.41 7.25 8V6.9C7.25 2.99 8.99 1.25 12.9 1.25H17.1C21.01 1.25 22.75 2.99 22.75 6.9V11.1C22.75 15.01 21.01 16.75 17.1 16.75ZM16.75 15.25H17.1C20.2 15.25 21.25 14.2 21.25 11.1V6.9C21.25 3.8 20.2 2.75 17.1 2.75H12.9C9.8 2.75 8.75 3.8 8.75 6.9V7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V15.25Z" fill="#6A8297"/>
               </svg>
             </div>
+
+            <div class="account_number_wrapper">
+              <p id="copy_message_name" class="copy_message_hide">Copied to clipboard</p>
+
+              <div style="position: relative;">
+                <p class="account_number_label">ACCOUNT NAME</p>
+                <p class="number" id="name">{{wallet_name}}</p>
+              </div>
+              <svg style="position: absolute;top:10px;right: 10px;cursor: pointer"  @click="copyToClipboard('copy_message_name', 'name')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M11.1 22.75H6.9C2.99 22.75 1.25 21.01 1.25 17.1V12.9C1.25 8.99 2.99 7.25 6.9 7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V17.1C16.75 21.01 15.01 22.75 11.1 22.75ZM6.9 8.75C3.8 8.75 2.75 9.8 2.75 12.9V17.1C2.75 20.2 3.8 21.25 6.9 21.25H11.1C14.2 21.25 15.25 20.2 15.25 17.1V12.9C15.25 9.8 14.2 8.75 11.1 8.75H6.9Z" fill="#6A8297"/>
+                <path d="M17.1 16.75H16C15.59 16.75 15.25 16.41 15.25 16V12.9C15.25 9.8 14.2 8.75 11.1 8.75H8C7.59 8.75 7.25 8.41 7.25 8V6.9C7.25 2.99 8.99 1.25 12.9 1.25H17.1C21.01 1.25 22.75 2.99 22.75 6.9V11.1C22.75 15.01 21.01 16.75 17.1 16.75ZM16.75 15.25H17.1C20.2 15.25 21.25 14.2 21.25 11.1V6.9C21.25 3.8 20.2 2.75 17.1 2.75H12.9C9.8 2.75 8.75 3.8 8.75 6.9V7.25H11.1C15.01 7.25 16.75 8.99 16.75 12.9V15.25Z" fill="#6A8297"/>
+              </svg>
+            </div>
+            
           </div>
 
         </div>
-      </div>
-
-      <div class="modal_child_wrapper_footer">
-        <OnBoardingButton border="#2C6CAC"  textNode="I have made payment" color="#2C6CAC" background="transparent"></OnBoardingButton>
       </div>
     </div>
 
@@ -73,6 +101,28 @@ export default {
   gap: 1rem;
   flex-shrink: 0;
   width: 100%;
+}
+
+.copy_message_hide{
+  position:absolute;
+  top: -3rem;
+  right: -13rem;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: none;
+  transition: .2s ease-in;
+}
+
+.copy_message_show{
+  position:absolute;
+  top: -3rem;
+  right: 0rem;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: block;
+  transition: .2s ease-in;
 }
 
 .wallet_info{

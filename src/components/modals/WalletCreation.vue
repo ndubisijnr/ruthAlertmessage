@@ -19,24 +19,39 @@ export default {
       model:TransactionRequest.walletSetup,
       dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
       getYYYYMMDDFormat,
+      isFocused:false,
 
     }
   },
   methods:{
+    handleFocus(){
+      this.isFocused = true
+    },
+    handleFocusOut(){
+      this.isFocused = false
+    },
     cancel(){
       this.$emit('cancel', false)
     },
 
+    validateBvn(){
+      const bvnINput = document.getElementById('bvn')
+      if(bvnINput.value.length > 11){
+        bvnINput.style.borderColor = 'red'
+        bvnINput.style.borderWidth = '1px'
+      }
+    },
+
     closeModal(){
      this.cancel()
-
     },
 
     doSetup(){
       storeUtils.fireAway().transaction.walletSetup(this.model).then(() => {
         setTimeout(() => {
-          this.closeModal()
-        }, 3000);
+          location.reload()
+        },1500)
+       
       })
     }
 
@@ -48,6 +63,7 @@ export default {
         return JSON.parse(localStorage.user)
       }
     },
+
     default_theme(){
       return storeUtils.fireAway().theme.getDefault_theme
     },
@@ -65,11 +81,11 @@ export default {
   <Layout>
 
     <template v-slot:children>
-      <div class="cancel_trigger" @click="closeModal"></div>
 
       <div class="modal_child" :style="{borderColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}">
-        <div class="cancel" @click="cancel">
+        <div class="cancel">
 
+          <img src="../../assets/cancle.svg"  @click="closeModal" style="cursor: pointer;position: absolute;right: 1rem;top: 1rem;"/>
 
           <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
             <path d="M0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75Z" fill="#F1F2F6"/>
@@ -99,7 +115,12 @@ export default {
             <p class="p1-2">Wallet Account Setup</p>
 
             <div>
-              <OnBoardingInput :type="'number'" label="BVN" @inputValue="e => model.bvn = e.value"></OnBoardingInput>
+              <div class="on_boarding_input">
+              <label class="label" :class="{'focused':isFocused}">BVN</label>
+              <input maxlength="11" autocomplete="off" :class="{'focused':isFocused}" v-model="model.bvn" @focus="handleFocus" @focusout="handleFocusOut"  class="formInput"/>
+
+            </div>
+              <!-- <OnBoardingInput id="bvn" :type="`text`" label="BVN" @inputValue="e => model.bvn = e.value" :max="'11'"></OnBoardingInput> -->
               <DatePicker :max_date="getYYYYMMDDFormat(dobMax)" label="Date Of Birth"></DatePicker>
 
             </div>
@@ -109,7 +130,7 @@ export default {
           </div>
 
         </div>
-        <upload-documents-component id="utilities_bills"></upload-documents-component>
+        <!-- <upload-documents-component id="utilities_bills"></upload-documents-component> -->
 
 
         <div class="child_footer">
@@ -124,6 +145,72 @@ export default {
 <style scoped>
 a{
   text-decoration: none;
+}
+
+.on_boarding_input{
+  position:relative;
+  width: 100%;
+}
+
+
+.label.focused{
+  position:absolute;
+  top:-0.5rem;
+  left:1.25rem;
+  width: auto;
+  height:1.50rem;
+  font-size:0.88rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-transform: capitalize;
+  line-height: 1.5rem; /* 171.429% */
+  font-style: normal;
+  font-weight: 300;
+  color:  #575A65;
+  transition: ease-in-out .2s;
+  background-color: white;
+}
+
+.label{
+  position:absolute;
+  top:.5rem;
+  left:1.25rem;
+  width: auto;
+  height:1.50rem;
+  font-size:1rem;
+  text-transform: capitalize;
+  line-height: 1.7rem; /* 171.429% */
+  font-style: normal;
+  font-weight: 300;
+  color:  #575A65;
+  transition: ease-in .2s;
+}
+
+
+.formInput{
+  height: 4rem;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border-radius: 0.375rem;
+  border: 1px solid  #E0E6ED;
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
+  margin-bottom: 1rem;
+  width:100%;
+}
+
+
+
+/* .groupedformInput{} */
+
+.formInput.focused{
+  padding-top: 1.13rem;
+  padding-left:1.25rem;
+  border: 1px solid var(--app-default-primary);
+  border-radius: 0.375rem;
+  outline: var(--app-default-primary);
+
 }
 
 .cancel_trigger{
@@ -155,10 +242,10 @@ a{
   display: flex;
   justify-content: center;
   cursor: pointer;
-  background: #2C6CAC;
+  /* background: #2C6CAC; */
   border-top-right-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
-  padding: 1rem 13rem;
+  padding: 1rem 1rem;
 }
 
 .child_body{

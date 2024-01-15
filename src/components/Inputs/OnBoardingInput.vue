@@ -18,7 +18,7 @@
             </svg>
           </div>
 
-          <input  :id="id" @keydown="validate" :name="name" :autocomplete="autocomplete" :max="max" required :style="[style, width ?  {width: width,paddingLeft:type === 'tel' ? '7rem' : null} : null, isFocused ? {border:custom_theme ? custom_theme.color : default_theme.color,outlineColor:custom_theme ? `${custom_theme.color} !important` : default_theme.color, caretColor:custom_theme ? custom_theme.color : default_theme.color} : null]"
+          <input  :id="id" @keydown="validate" :name="name" :autocomplete="autocomplete" maxlength="max" required :style="[style, width ?  {width: width,paddingLeft:type === 'tel' ? '7rem' : null} : null, isFocused ? {border:custom_theme ? custom_theme.color : default_theme.color,outlineColor:custom_theme ? `${custom_theme.color} !important` : default_theme.color, caretColor:custom_theme ? custom_theme.color : default_theme.color} : null]"
             :type="type" class="formInput" :placeholder="type === 'tel' ? null : placeholder" :class="{ 'focused': isFocused }" :readonly="readonly"
             v-model="inputValue" @focus="handleFocus" @focusout="handleFocusOut" @input="emitValue" />
           <div class="loader">

@@ -13,6 +13,7 @@ export const useTransactionStore = defineStore('transactionStore', {
         singleTransactions:null,
         userWallet:null,
         transactionSummary:null,
+        isWalletSetupSuccess:false
     }),
 
     getters: {
@@ -20,7 +21,8 @@ export const useTransactionStore = defineStore('transactionStore', {
         getLoading: state => state.loading,
         getSingleTransaction: state => state.singleTransaction,
         getTransactions: state => state.transactions,
-        getTransactionSummary:state => state.transactionSummary 
+        getTransactionSummary:state => state.transactionSummary,
+        getIsWalletSetupSuccess:state => state.isWalletSetupSuccess  
     },
 
     actions: {
@@ -86,6 +88,7 @@ export const useTransactionStore = defineStore('transactionStore', {
                 this.loading=false
                 if(response.data.success){
                     RuthdoAlert({title:'Success', icon:'success'})
+                    this.isWalletSetupSuccess = true
                 }
             }catch (err){
                 this.loading=false

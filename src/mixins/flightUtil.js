@@ -82,3 +82,4 @@ export const getYYYYMMDDFormat = (dateString) => {
 
     return formattedDate;
 }
+
