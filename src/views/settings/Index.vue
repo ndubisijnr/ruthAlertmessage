@@ -89,22 +89,22 @@
                       <div class="grouped_input">
                         <div class="on_boarding_input">
                           <label class="label" :class="{'focused':isFocused}">First Name</label>
-                          <input id="first_name"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"   type="email" class="formInput"  />
+                          <input id="first_name"  :class="{'focused':isFocused}" v-model="model1.first_name" @focus="handleFocus" @focusout="handleFocusOut"   type="email" class="formInput"  />
                         </div>
                         <div class="on_boarding_input">
                           <label class="label" :class="{'focused':isFocused}">Last Name</label>
-                          <input id="last_name"  :class="{'focused':isFocused}"  @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                          <input id="last_name" v-model="model1.last_name"  :class="{'focused':isFocused}"  @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
                         </div>
                       </div>
 
                       <div class="on_boarding_input">
                         <label class="label" :class="{'focused':isFocused}">Email</label>
-                        <input id="email"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" disabled />
+                        <input id="email"  :class="{'focused':isFocused}" v-model="model1.email" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" disabled />
                       </div>
 
                       <div class="on_boarding_input">
                         <label class="label" :class="{'focused':isFocused}">Phone</label>
-                        <input id="phone"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                        <input id="phone"  :class="{'focused':isFocused}" v-model="model1.phone" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
                       </div>
                     </form>
                     <div class="change_password">
@@ -893,10 +893,7 @@ export default {
         const last_name = document.getElementById('last_name')
         const email = document.getElementById('email')
         const phone = document.getElementById('phone')
-        this.model1.first_name = first_name.value
-        this.model1.last_name = last_name.value
-        this.model1.email = email.value
-        this.model1.phone = phone.value
+        
         storeUtils.fireAway().settings?.updateProfileAction()
     },
 
@@ -1063,6 +1060,10 @@ export default {
 
 
   mounted() {
+    this.model1.first_name = this.getUser?.first_name
+    this.model1.last_name = this.getUser?.last_name
+    this.model1.email = this.getUser?.email
+    this.model1.phone = this.getUser?.phone
     setTimeout(() => { this.currentTab = this.getCurrentRouteParams,  this.marry(this.getCurrentRouteParams) },500)
     storeUtils.fireAway().global?.commitError(null)
   }
