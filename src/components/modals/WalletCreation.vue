@@ -33,7 +33,11 @@ export default {
     },
 
     doSetup(){
-      storeUtils.fireAway().transaction.walletSetup(this.model)
+      storeUtils.fireAway().transaction.walletSetup(this.model).then(() => {
+        setTimeout(() => {
+          this.closeModal()
+        }, 3000);
+      })
     }
 
 
