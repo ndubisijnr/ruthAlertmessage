@@ -19,7 +19,7 @@ export default {
     background: #00000065;
     width: 100%;
     height: 100vh;
-    z-index: 9999999999;
+    z-index: 5;
     position: fixed;
     bottom: 0;
     top: 0;

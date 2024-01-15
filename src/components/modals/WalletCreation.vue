@@ -8,13 +8,18 @@ import UploadDocumentsComponent from "@/components/forms/UploadDocumentsComponen
 import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
 import DatePicker from "@/components/Inputs/custom-date-picker/DataPicker.vue";
 import TransactionRequest from "@/model/TransactionRequest";
+import { formatAmount, getYYYYMMDDFormat, convertDurationToWords, convertToWord, convertTo12HourFormat } from "../../mixins/flightUtil";
+
 export default {
   name: "WalletCreation",
   components:{OnBoardingButton, Layout,UploadDocumentsComponent,OnBoardingInput,DatePicker},
   data(){
     return{
       lightenColor,
-      model:TransactionRequest.walletSetup
+      model:TransactionRequest.walletSetup,
+      dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
+      getYYYYMMDDFormat,
+
     }
   },
   methods:{
@@ -28,9 +33,7 @@ export default {
     },
 
     doSetup(){
-      storeUtils.fireAway().transaction.walletSetup(this.model).then(()=>{
-        this.closeModal()
-      })
+      storeUtils.fireAway().transaction.walletSetup(this.model)
     }
 
 
@@ -91,10 +94,11 @@ export default {
           <div>
             <p class="p1-2">Wallet Account Setup</p>
 
-            <div >
-              <OnBoardingInput label="BVN" @inputValue="e => model.bvn = e.value"></OnBoardingInput>
+            <div>
+              <OnBoardingInput :type="'number'" label="BVN" @inputValue="e => model.bvn = e.value"></OnBoardingInput>
+              <DatePicker :max_date="getYYYYMMDDFormat(dobMax)" label="Date Of Birth"></DatePicker>
+
             </div>
-            <DatePicker label="Date Of Birth"></DatePicker>
 
 
 
@@ -103,8 +107,9 @@ export default {
         </div>
         <upload-documents-component id="utilities_bills"></upload-documents-component>
 
+
         <div class="child_footer">
-          <OnBoardingButton @click="doSetup" :disabled="loading" :loading="loading"  :height="'2.75rem'" btn-width="100%" :textNode="'Submit'"></OnBoardingButton>
+          <OnBoardingButton @click="doSetup" :disabled="loading" :loading="loading"  :height="'2.75rem'"  :textNode="'Submit'"></OnBoardingButton>
          </div>
         </div>
 
@@ -122,25 +127,25 @@ a{
   height: 100%;
   background: transparent;
   position: absolute;
+  z-index: 1;
 }
 
 .modal_child{
   display: block;
   width: 37.5rem;
   justify-content: center;
-  //align-items: center;
+  /*align-items: center; */
   gap: 1.5rem;
   border-radius: 0.5rem;
   border: 1px solid;
   background:  #FFF;
   transform: scale(.9);
+  z-index: 3;
 
   /* Shadow / Small */
   box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.08), 0px 0px 2px 0px rgba(0, 0, 0, 0.12);
   position: absolute;
 }
-
-
 
 .cancel{
   display: flex;
@@ -163,13 +168,11 @@ a{
 }
 
 .child_footer{
+  width: 100%;
+  margin-bottom: 2.5rem;
   display: flex;
   align-items: center;
-  width: 100%;
   justify-content: center;
-  margin-bottom: 2.5rem;
-  padding: 0 11.96744rem;
-
 }
 
 .p1{
