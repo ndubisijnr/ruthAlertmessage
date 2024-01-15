@@ -150,7 +150,7 @@ export const useFlightStore = defineStore('flightStore', {
                 }
             } catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+         
             }
         },
 

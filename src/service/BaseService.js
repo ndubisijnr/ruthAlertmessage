@@ -32,12 +32,11 @@ Client.interceptors.response.use(async response => {
 
     return response
 }, error =>{
-        if(error.response.status === 403) {
-            storeUtils.fireAway().global.commitUnauthorised(true)
-        }
-        if(error.response.status === 500){
-            RuthdoAlert({title:error.response.data.data, icon:'error'})
-        }
+        console.log(error)
+        if(error.response.status !== 200 || error.response.status !== 201)  RuthdoAlert({title:error.response.data.data, icon:'error'});
+
+        if(error.response.status === 403) storeUtils.fireAway().global.commitUnauthorised(true);
+        
         return error
     }
 );

@@ -89,22 +89,22 @@
                       <div class="grouped_input">
                         <div class="on_boarding_input">
                           <label class="label" :class="{'focused':isFocused}">First Name</label>
-                          <input id="first_name"  :class="{'focused':isFocused}" :value="getUser.first_name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                          <input id="first_name"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"   type="email" class="formInput"  />
                         </div>
                         <div class="on_boarding_input">
                           <label class="label" :class="{'focused':isFocused}">Last Name</label>
-                          <input id="last_name"  :class="{'focused':isFocused}"  :value="getUser.last_name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                          <input id="last_name"  :class="{'focused':isFocused}"  @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
                         </div>
                       </div>
 
                       <div class="on_boarding_input">
                         <label class="label" :class="{'focused':isFocused}">Email</label>
-                        <input id="email"  :class="{'focused':isFocused}" :value="getUser.email" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" disabled />
+                        <input id="email"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" disabled />
                       </div>
 
                       <div class="on_boarding_input">
                         <label class="label" :class="{'focused':isFocused}">Phone</label>
-                        <input id="phone"  :class="{'focused':isFocused}" :value="getUser.phone" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
+                        <input id="phone"  :class="{'focused':isFocused}" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput"  />
                       </div>
                     </form>
                     <div class="change_password">

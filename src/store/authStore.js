@@ -14,9 +14,6 @@ export const useAuthStore = defineStore('authStore', {
         businessProfile:null,
         stage: 'email',
         wasCustomization:false
-
-
-
     }),
 
     getters:{
@@ -95,7 +92,7 @@ export const useAuthStore = defineStore('authStore', {
                 }
             }catch (err){
                 this.loading = false
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
 
         },
@@ -113,7 +110,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err,  payload.email)
+                // catchErrorHandler(err,  payload.email)
             }
 
         },
@@ -151,7 +148,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
         },
 

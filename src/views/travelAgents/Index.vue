@@ -107,11 +107,11 @@ export default {
       ],
 
       membersFields:[
-        {key:"name", label:"Name"},
+        {key:"business_name", label:"Agent Name"},
         {key:"email", label:"Email Address"},
         {key:"created_at", label:"Date of Registration"},
         // {key:"phone", label:"Phone Number"},
-        {key:"is_corporate", label:"Office Type"},
+        {key:"type", label:"Office Type"},
         {key:"status", label:"Status"},
         {key:"wallet", label:"Wallet Balance"},
 
