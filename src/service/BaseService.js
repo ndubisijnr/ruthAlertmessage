@@ -1,6 +1,11 @@
 import axios from "axios";
 import storeUtils from "@/utils/storeUtils";
 import { RuthdoAlert } from "ruthly";
+import {catchErrorHandler} from "../mixins/ErrorHandler";
+
+
+
+
 
 const Client = axios.create({
     baseURL: "https://b2b-api-dev.tiqwa.com/",
@@ -33,7 +38,7 @@ Client.interceptors.response.use(async response => {
     return response
 }, error =>{
         console.log(error)
-        if(error.response.status !== 200 || error.response.status !== 201)  RuthdoAlert({title:error.response.data.data, icon:'error'});
+        if(error.response.status !== 200 || error.response.status !== 201) catchErrorHandler(error);
 
         if(error.response.status === 403) storeUtils.fireAway().global.commitUnauthorised(true);
         

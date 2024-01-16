@@ -42,7 +42,7 @@
                 </svg>
                 <span class="filter-span">Sort By</span>
               </div> -->
-              <on-boarding-button @click="isAddAgents=true" class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button>
+              <!-- <on-boarding-button @click="isAddAgents=true" class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button> -->
             </div>
         </div>
         <div style="margin-top: 3.5rem">
@@ -1149,7 +1149,7 @@ a{
 }
 
 .booking-wrapper{
-  width: 68.625rem;
+  width: 75.625rem;
   height: auto;
   position: relative;
 }

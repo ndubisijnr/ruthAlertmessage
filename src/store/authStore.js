@@ -53,7 +53,6 @@ export const useAuthStore = defineStore('authStore', {
             }catch (err){
                 this.loading = false
                 console.log(err)
-                catchErrorHandler(err, this.errors)
             }
 
         },
@@ -170,7 +169,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+            
             }
         },
 
@@ -185,7 +184,7 @@ export const useAuthStore = defineStore('authStore', {
                 }
             }
             catch (err) {
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
         },
 
@@ -203,7 +202,7 @@ export const useAuthStore = defineStore('authStore', {
         }
     catch (err) {
             this.loading = false
-            catchErrorHandler(err)
+            // catchErrorHandler(err)
         }
     },
 
@@ -221,7 +220,7 @@ export const useAuthStore = defineStore('authStore', {
         }
         catch (err) {
             this.loading = false
-            catchErrorHandler(err)
+            // catchErrorHandler(err)
         }
     },
 
@@ -238,7 +237,7 @@ export const useAuthStore = defineStore('authStore', {
         }
         catch (err) {
             this.loading = false
-            catchErrorHandler(err)
+            // catchErrorHandler(err)
         }
     },
 
@@ -255,7 +254,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
         },
 
@@ -272,7 +271,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
         },
 
@@ -290,7 +289,7 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
-                catchErrorHandler(err)
+                // catchErrorHandler(err)
             }
         },
 
