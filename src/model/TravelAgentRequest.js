@@ -2,7 +2,8 @@ class TravelAgentRequest{
 
      verifyBusiness =  {
         user_id: null,
-        verification_reason: null
+        cac_verification_reason: null,
+        id_verification_reason: null
 
     }
 
