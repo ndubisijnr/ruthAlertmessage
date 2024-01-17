@@ -74,7 +74,7 @@ export const useAuthStore = defineStore('authStore', {
                     localStorage.progressNav = JSON.stringify([])
                     localStorage.theme = JSON.stringify(responseData.data.customizations)
                     this.loading = false
-                    if(responseData.data.account_type === 'super_admin'){
+                    if(responseData.data.account_type === 'super_admin' || responseData.data.account_type === 'admin'){
                         await router.push({name: "Dashboard", params: {token:responseData.data.access_token.slice(0,20)}})
 
                     }else{

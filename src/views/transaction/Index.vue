@@ -27,7 +27,7 @@
               </div>
             </div>
 
-            <div v-if="!getWallet?.wallet_number" style="position: absolute;right: 1rem;bottom: 1rem;">
+            <div v-if="!getWallet?.wallet_number && pageMounted" style="position: absolute;right: 1rem;bottom: 1rem;">
               <on-boarding-button @click="setup=true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Setup Wallet"></on-boarding-button>
             </div>
           </div>
@@ -121,8 +121,9 @@ export default {
   components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation,AddFunds},
   data(){
     return{
-      isWallet:true,
+      isWallet:false,
       addFunds:false,
+      pageMounted:false,
       setup:false,
       transactionFields:[
         {key:"", label:"Admin Name"},
@@ -196,10 +197,20 @@ export default {
     }
   },
 
+
+  beforeMount(){
+    
+  },
+
   mounted(){
     storeUtils.fireAway().transaction.handleGetTransactionSummary()
     storeUtils.fireAway().transaction.handleGetUserTransaction()
-    storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id)
+    storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id).then(() => {
+      this.isWallet = true
+      this.pageMounted = true
+
+    })
+   
 
   }
 }

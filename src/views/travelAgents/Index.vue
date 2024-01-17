@@ -26,14 +26,14 @@
     </div>
     <div v-else class="overall" id="overall">
       <div class="booking-wrapper">
-        <p class="travel_agents_count">Travel Agents ( {{ getMembers?.length }} )</p>
+        <p class="travel_agents_count">You Have ( {{ getMembers?.length }} ) Travel Agents. </p>
         <div class="search_filter">
             <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
                 <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
               </svg>
-              <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search Agents"/>
+              <input type="search" @input="queryAgent" v-model="agent_query" style="outline: none;border: none;width: 19.4rem" placeholder="Search Agents"/>
             </div>
             <div class="filter">
               <!-- <div class="filter-div">
@@ -96,6 +96,7 @@ export default {
   data(){
     return{
       active:"Business Information",
+      agent_query:null,
       isAddAgents:false,
       navs:[
           {nav:'Business Information',route:'/agents/business-information'},
@@ -136,6 +137,10 @@ export default {
 
     getCurrentRouteName(){
       return router.currentRoute.value.name
+    },
+
+    queryAgent(){
+      storeUtils.fireAway().travelAgent.handleGetTravelAgent(this.agent_query)
     },
 
 

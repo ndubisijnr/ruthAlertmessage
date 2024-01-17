@@ -98,6 +98,8 @@
                 <p class="txt-2">Driver's License, International Passport, NIN (National Identification Number) Slip.</p>
               </div>
 
+              {{ getTravelAgent.cac_verification_reason }}
+
               <div v-if="!getTravelAgent.id_document" class="component_wrapper">
 
                 <p>Nothing to show</p>
@@ -116,7 +118,6 @@
               </div>
 
               <div class="reason_area">
-                {{ model }}
                 <p class="action">Actions</p>
                 <div style="display: flex;gap: 1rem;margin-bottom: 1rem;">
                   <div v-if="getTravelAgent?.is_id_verified === 'true' && !edit_iscac" style="display: flex;gap:0.5rem;align-items: center;cursor: pointer;">
@@ -237,15 +238,15 @@ export default {
 
     async handleApprove(document_to_verify){
       this.model.user_id = this.getTravelAgent.id
-      if(document_to_verify === 'id'){
-        this.id=true
-        this.model.is_id_verified = this.docModel.is_id_verified
-        this.model.verification_reason = this.docModel.verification_reason
-      }else{
-        this.id=false
-        this.model.is_cac_verified = this.cacModel.is_cac_verified
-        this.model.verification_reason = this.cacModel.verification_reason
-      }
+      // if(document_to_verify === 'id'){
+      //   this.id=true
+      //   this.model.is_id_verified = this.docModel.is_id_verified
+      //   this.model.verification_reason = this.docModel.verification_reason
+      // }else{
+      //   this.id=false
+      //   this.model.is_cac_verified = this.cacModel.is_cac_verified
+      //   this.model.verification_reason = this.cacModel.verification_reason
+      // }
       await storeUtils.fireAway().travelAgent?.handleVerifyBusiness(this.model)
 
       this.model = new TravelAgentRequest().verifyBusiness
@@ -277,7 +278,13 @@ export default {
       }
     }
 
-  }
+  },
+  mounted() {
+    this.model.id_verification_reason = this.getTravelAgent?.id_verification_reason
+    this.model.cac_verification_reason = this.getTravelAgent?.cac_verification_reason
+    this.model.is_id_verified = this.getTravelAgent?.is_id_verified
+    this.model.is_cac_verified = this.getTravelAgent?.is_cac_verified
+  },
 }
 </script>
 
