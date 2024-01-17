@@ -13,7 +13,7 @@
 
             <div class="booking-div-body">
               <div v-if="activeService === 'Flight'">
-                <div v-if="getUser.account_type === 'super_admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
+                <div v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
                   <div class="booking-nav">
                     <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
                     <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>

@@ -40,7 +40,7 @@
   </div>
   <change-password v-show="changePassword" @close="close"></change-password>
   <edit-role v-show="updateRole" @close="close"></edit-role>
-  <edit-team-member v-show="editTeamMember" @close="close"></edit-team-member>
+  <edit-team-member v-show="editTeamMember" @close="close" :permissionId="permissionModel"></edit-team-member>
   <deactivate-account-confirm v-show="isDeactivateAccount" :user_id="teamMemberId" @close="close"></deactivate-account-confirm>
 
   <!--  <account-deactivated></account-deactivated>-->
@@ -63,10 +63,10 @@
               <ul class="inner-tab-nav" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {}:{justifyContent:'start'}">
                 <a :class="{'active':currentTab === 'Account'}" @click="activateTab('Account')" href="#Account">Account</a>
                 <a v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Domain'}" href="#Domain" @click="activateTab('Domain')">Domain</a>
-                <a v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Teams'}" @click="activateTab('Teams')" href="#Teams">Teams</a>
-                <a :class="{'active':currentTab === 'Notifications'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Notifications" @click="activateTab('Notifications')">Notifications</a>
-                <a v-if="getUser.account_type === 'super_admin' ||  getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'"  :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="activateTab('Payment')">Payment </a>
-                <a :class="{'active':currentTab === 'Markup'}" v-if="getUser.account_type === 'super_admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Markup" @click="activateTab('Markup')">Markup</a>
+                <a v-if="getUser.account_type === 'super_admin'|| getUser.account_type === 'admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" :class="{'active':currentTab === 'Teams'}" @click="activateTab('Teams')" href="#Teams">Teams</a>
+                <a :class="{'active':currentTab === 'Notifications'}" v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Notifications" @click="activateTab('Notifications')">Notifications</a>
+                <a v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' ||  getUser.account_type !== 'booker' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'"  :class="{'active':currentTab === 'Payment'}" href="#Payment" @click="activateTab('Payment')">Payment </a>
+                <a :class="{'active':currentTab === 'Markup'}" v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' ||  getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" href="#Markup" @click="activateTab('Markup')">Markup</a>
                 <a :class="{'active':currentTab === 'Customization'}" href="#Customization" @click="activateTab('Customization'), isEditing=true">Customization</a>
               </ul>
             </div>
@@ -637,6 +637,8 @@ export default {
       notTyping:false,
       noUser:false,
       lightenColor,
+      // this.model.permission_ids
+      permissionModel:SettingsRequest.editMember.permission_ids,
       // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
       error:{
         name:null,
@@ -1137,7 +1139,7 @@ export default {
 }
 
 .settings-main{
-  width: 68.125rem;
+  width: 70.125rem;
   margin-top: 2rem;
 }
 
@@ -1891,11 +1893,12 @@ m-2{
 }
 
 .settings-wrapper-navs{
-  //width: 68.586rem;
+  /* width: 75.586rem; */
   width: 100%;
-  //margin: 4rem 0;
+  /* //margin: 4rem 0; */
   display: flex;
   justify-content: center;
+
 }
 
 .accounts-header{

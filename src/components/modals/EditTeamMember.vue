@@ -24,7 +24,6 @@
             </div>
 
           </div>
-          <h1 hidden="">{{xxx}}</h1>
           <div class="choose-role">
             <div class="choose-role">
               <p class="choose-role-p">Choose Permission</p>
@@ -54,7 +53,6 @@
                   <p>Custom Permission</p>
                 </div>
               </div>
-
 
               <div v-show="choosePermissions === 'full'">
                 <img src="../../assets/full_permission.svg" style="width: 100%;" />
@@ -145,6 +143,7 @@ export default {
     OnBoardingButton,
     InviteSuccessful
   },
+  props:['permissionId'],
   data(){
     return{
       inputValue:null,
@@ -186,10 +185,14 @@ export default {
     },
 
     removeRole(id){
-      this.selectedRole = this.selectedRole.filter(it =>{
-        return it !== id
-      })
-      console.log(this.selectedRole)
+      let removedRole
+      console.log(id)
+      console.log("before", this.selectedRole)
+      removedRole = this.selectedRole.filter(item => item !== id)
+      this.selectedRole = removedRole
+      console.log("after", removedRole)
+
+      
     },
 
 
@@ -199,7 +202,6 @@ export default {
       if(this.choosePermissions === 'full'){
         this.getAllPermissionsId()
         this.model.permission_ids = this.selectedRole
-        console.log(this.selectedRole)
       }
       storeUtils.fireAway().settings?.updateTeamMember(this.model).then(() => {
         if(this.getError === 'false'){
@@ -292,10 +294,7 @@ export default {
   },
 
   computed:{
-    xxx(){
-      this.selectedRole = this.model.permission_ids?.map(it => it.id);
-      return this.selectedRole
-    },
+  
     getRoles(){
       return storeUtils.fireAway().settings?.getAllRoles
     },
@@ -322,6 +321,7 @@ export default {
 
 
   mounted() {
+    console.log(this.permissionId)
     // storeUtils.fireAway().settings?.readAllRoles()
   }
 
