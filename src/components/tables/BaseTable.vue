@@ -234,8 +234,9 @@ export default {
     },
 
     editTeamMember(obj){
+      let id= obj.permissions.map(it => it.id)
       this.model2.email = obj.email
-      this.model2.permission_ids = obj.permissions
+      this.model2.permission_ids = id
       this.$emit('updatingTeamMember', true)
       console.log(obj)
     },

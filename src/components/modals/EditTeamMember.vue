@@ -143,7 +143,7 @@ export default {
     OnBoardingButton,
     InviteSuccessful
   },
-  props:['permissionId'],
+  props:['opened'],
   data(){
     return{
       inputValue:null,
@@ -156,6 +156,7 @@ export default {
       choosePermissions:"custom",
       currentPerm:[],
       ellipsis,
+      opened:false,
       options:[
         {
           type:"Owner",
@@ -177,6 +178,7 @@ export default {
       storeUtils.fireAway().global?.commitError(null)
       this.activeSelectedIndex = null
       this.$emit('close', false)
+      this.$emit('opened', false)
     },
 
     pushRole(id){
@@ -281,17 +283,21 @@ export default {
     }
 
   },
-
-  watch:{
-    'model.permission_ids'(old, newValue){
-      console.log('watching')
-      if(newValue){
-        console.log(old, newValue)
-      }else{
-        console.log(old)
-      }
-    }
+  beforeUnmount(){
+   
+    console.log(this.opened)
   },
+
+  // watch:{
+  //   'model.permission_ids'(old, newValue){
+  //     console.log('watching')
+  //     if(newValue){
+  //       console.log(old, newValue)
+  //     }else{
+  //       console.log(old)
+  //     }
+  //   }
+  // },
 
   computed:{
   
@@ -321,7 +327,9 @@ export default {
 
 
   mounted() {
-    console.log(this.permissionId)
+    console.log(this.opened)
+    if(this.opened) this.selectedRole = this.model.permission_ids
+    console.log(this.selectedRole)
     // storeUtils.fireAway().settings?.readAllRoles()
   }
 

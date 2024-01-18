@@ -40,7 +40,7 @@
   </div>
   <change-password v-show="changePassword" @close="close"></change-password>
   <edit-role v-show="updateRole" @close="close"></edit-role>
-  <edit-team-member v-show="editTeamMember" @close="close" :permissionId="permissionModel"></edit-team-member>
+  <edit-team-member v-show="editTeamMember" @close="close" @opened="closeOpened" :opened="opened"></edit-team-member>
   <deactivate-account-confirm v-show="isDeactivateAccount" :user_id="teamMemberId" @close="close"></deactivate-account-confirm>
 
   <!--  <account-deactivated></account-deactivated>-->
@@ -636,6 +636,7 @@ export default {
       teamMemberId:null,
       notTyping:false,
       noUser:false,
+      opened:false,
       lightenColor,
       // this.model.permission_ids
       permissionModel:SettingsRequest.editMember.permission_ids,
@@ -722,6 +723,7 @@ export default {
     updateTeam(value){
       console.log(value)
       this.editTeamMember = value
+      this.opened = value
 
     },
 
@@ -870,6 +872,11 @@ export default {
       this.updateRole = value
       this.editTeamMember = value
       this.isDeactivateAccount = value
+     
+    },
+
+    closeOpened(value){
+      this.opened = value
     },
 
     handleUpdateBizProfile(){

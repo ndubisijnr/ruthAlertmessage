@@ -3,6 +3,14 @@
     <div class="overall" id="overall">
       <div class="booking-wrapper">
         <p class="itinerary_support">Itinerary Support</p>
+        <div class="booking-div-head">
+        <div class="service_nav">
+          <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
+          <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
+          <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Visa</div>
+          <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Refund</div>
+        </div>
+      </div>
         <div>
           <div class="search_filter">
             <div class="search">
@@ -217,7 +225,7 @@ import BookingsRequest from "../../model/BookingsRequest";
   
   .booking-div-head{
     display: flex;
-    height: 7.25rem;
+    /* height: 7.25rem; */
     align-items: end;
     width: 68.625rem;
     margin-bottom: 2.5rem;
