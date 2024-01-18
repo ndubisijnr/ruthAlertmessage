@@ -1,32 +1,73 @@
 @import './base.css';
 @import url('https://fonts.googleapis.com/css?family=Product Sans');
 
-*{
-    font-family:'Product Sans';
-  }
-  html{
-    font-size: 0.8rem; 
-   
-  }
+* {
+  font-family: 'Product Sans';
+}
+
+html {
+  font-size: 0.8rem;
+
+}
 
 /* Hide scrollbar thumb on WebKit browsers */
 body::-webkit-scrollbar-thumb {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 /* For Firefox */
 body {
-    scrollbar-color: transparent transparent;
+  scrollbar-color: transparent transparent;
 }
 
 /* For Edge */
 body {
-    scrollbar-face-color: transparent;
+  scrollbar-face-color: transparent;
 }
 
-  
-  
+/* reusables  */
 
+.flex_center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.align_auto {
+  display: flex;
+  align-items: center;
+  grid-gap: 24px;
+  width: 100%;
 
+}
 
+.align_auto>* {
+  width: 100%;
+  flex: auto !important;
+}
+
+.flex_between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.relative {
+  position: relative !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.capital {
+  text-transform: capitalize;
+}
+
+.upperCase {
+  text-transform: uppercase;
+}
