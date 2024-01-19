@@ -5,10 +5,10 @@
         <p class="itinerary_support">Itinerary Support</p>
         <div class="booking-div-head">
         <div class="service_nav">
-          <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
-          <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
-          <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Visa</div>
-          <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Refund</div>
+          <div class="nav-a1" @click="activeService = 'Issuance',requestItinery()" :class="{'activeSection':activeService === 'Issuance'}" :style="activeService === 'Issuance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
+          <div class="nav-a1" @click="activeService = 'Void',requestItinery()" :class="{'activeSection':activeService === 'Void'}" :style="activeService === 'Void' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
+          <div class="nav-a1" @click="activeService = 'Exchange',requestItinery()" :class="{'activeSection':activeService === 'Exchange'}" :style="activeService === 'Exchange' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Exchange</div>
+          <div class="nav-a1" @click="activeService = 'Refund',requestItinery()" :class="{'activeSection':activeService === 'Refund'}" :style="activeService === 'Refund' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Refund</div>
         </div>
       </div>
         <div>
@@ -45,6 +45,7 @@
             </div>
           </div>
           <div style="width: 100%;overflow-x: scroll">
+
             <div class="card-area">
               <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
               <bookings-cards v-else title="Issuance" :number="getBookingSum?.total_bookings ? getBookingSum?.total_bookings : '0'"></bookings-cards>
@@ -60,7 +61,7 @@
           </div>
           <div style="margin-top: 3.5rem">
             <div class="table-wrapper">
-              <domain-table :fields="bookingFields" :data="filterResult ? filterResult : getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
+              <domain-table :fields="itineneryFields" :data="filterResult ? filterResult : itineraryRequest?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
                 <template v-slot:emptyIcon>
                   <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                     <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
@@ -85,6 +86,7 @@
                   </svg>
                 </template>
               </domain-table>
+             
             </div>
           </div>
         </div>
@@ -119,16 +121,13 @@ import BookingsRequest from "../../model/BookingsRequest";
       isFilterBooking:false,
       searchQuery:null,
       filterResult:null,
-      activeService:'Flight',
+      activeService:'Issuance',
       searchModel:{},
-      bookingFields:[
-        {key:"", label:"Customer’s Name"},
-        // {key:"contact_email", label:"Email"},
-        {key:"amount", label:"Ticket Amount"},
-        // {key:"id", label:"Ticket ID"},
-        {key:"flight", label:"Airline"},
+      itineneryFields:[
+        {key:"type", label:"Type"},
+        {key:"description", label:"Description"},
         {key:"created_at", label:"Booking Date"},
-        {key:"status", label:"Status_"},
+        {key:"status", label:"Status"},
         // {key:"Action", label:"Action",id:"member"},
       ],
     }
@@ -140,9 +139,14 @@ import BookingsRequest from "../../model/BookingsRequest";
         this.searchModel = {}
 
       })
+
       
      
       // this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    },
+
+    requestItinery(){
+      storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
     },
 
     doFilter(){
@@ -155,6 +159,11 @@ import BookingsRequest from "../../model/BookingsRequest";
   },
 
     computed: {
+
+      itineraryRequest(){
+        return storeUtils.fireAway()?.itineneryStore.getItineraryRequest
+      },
+
     getCurrentRoute(){
       return router.currentRoute.value.name
     },
@@ -203,6 +212,11 @@ import BookingsRequest from "../../model/BookingsRequest";
       return storeUtils.fireAway().booking?.getProgressNav
     }
 
+  },
+
+  mounted(){
+    if(this.getUser.account_type === 'manager') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.activeService)
+    else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
   }
   }
   </script>

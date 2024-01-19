@@ -233,6 +233,12 @@ export default {
       this.$emit('updatingRole', true)
     },
 
+    itineneryDetails(obj){
+      console.log(obj)
+      storeUtils.fireAway().itineneryStore?.getItineraryRequestDetailsAction(obj.id)
+    },
+    
+
     editTeamMember(obj){
       let id= obj.permissions.map(it => it.id)
       this.model2.email = obj.email
@@ -246,6 +252,7 @@ export default {
     },
 
     table_row_onclick_action(obj){
+      console.log(obj)
       if(this.getCurrentRoute.toLowerCase() === 'travel agents'){
         this.readAgent(obj)
       }
@@ -253,8 +260,13 @@ export default {
         localStorage.managedBookings = JSON.stringify(obj)
         router.push({path:`/bookings/details/${this.getUser?.access_token?.slice(0,20)}`})
       }
+
+      if(this.getCurrentRoute.toLowerCase() === 'support'){
+        console.log(this.getCurrentRoute.toLowerCase())
+        this.itineneryDetails(obj)
+      }
     },
-    
+
 
     confirmDeactiveAgent(){
       this.$emit('agentDeactive', true)

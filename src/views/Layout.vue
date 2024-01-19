@@ -23,7 +23,7 @@
                 <span class="links">Dashboard</span>
               </div>
             </router-link>
-            <router-link v-if="getUser?.account_type === 'super_admin'" :to="`/agents/${getUser?.access_token?.slice(0,20)}`">
+            <router-link v-if="getUser?.account_type === 'super_admin'|| getUser.account_type === 'admin'" :to="`/agents/${getUser?.access_token?.slice(0,20)}`">
               <div class="links-item" :style="getCurrentRoute.includes('agents') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('agents')}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                   <path d="M15.3549 6.59148C15.3299 6.59148 15.3132 6.59148 15.2882 6.59148H15.2466C13.6716 6.54148 12.4966 5.32481 12.4966 3.82481C12.4966 2.29147 13.7466 1.0498 15.2716 1.0498C16.7966 1.0498 18.0466 2.29981 18.0466 3.82481C18.0383 5.33314 16.8632 6.54981 15.3632 6.59981C15.3632 6.59147 15.3632 6.59148 15.3549 6.59148ZM15.2716 2.29148C14.4299 2.29148 13.7466 2.97481 13.7466 3.81648C13.7466 4.64148 14.3883 5.30815 15.2133 5.34148C15.2216 5.33315 15.2882 5.33315 15.3632 5.34148C16.1716 5.29981 16.7966 4.63314 16.8049 3.81648C16.8049 2.97481 16.1216 2.29148 15.2716 2.29148Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>

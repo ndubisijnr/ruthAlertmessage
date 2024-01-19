@@ -51,6 +51,11 @@ export default {
       return storeUtils.fireAway().theme.custom_theme.template_id;
 
     },  
+
+    getRequestDetails(){
+      return storeUtils.fireAway().itineneryStore?.getItineraryRequestDetails
+
+    }
   },
 
   mounted() {
@@ -71,7 +76,7 @@ export default {
           <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
           </svg>
-            <p class="breadcrumb_list">{{ data?.contact_first_name }} {{data?.contact_last_name}}</p>
+            <p class="breadcrumb_list">{{ getRequestDetails.booking?.contact_first_name }} {{getRequestDetails.booking?.contact_last_name}}</p>
         </div>
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
@@ -82,7 +87,7 @@ export default {
           <div>
             <p class="travel_section_info">Travellers Information</p>
             <div class="travel_section_info_box">
-              <div v-for="(i, index) in getFlights" style="display: flex;gap: 5.81rem">
+              <div v-for="(i, index) in getRequestDetails.booking.flight.passengers" style="display: flex;gap: 5.81rem">
                 <section>
                   <p class="key">Customer {{ index + 1 }} Name</p>
                   <p class="value">{{i.first_name}} {{i.last_name}}</p>
@@ -102,41 +107,70 @@ export default {
               <div style="display: flex;justify-content: space-between;width: 70%">
                 <div>
                   <p class="key">Payment Date</p>
-                  <p class="value">{{convertToWord(airlineDetails?.created_at)}} {{ convertTo12HourFormat(airlineDetails?.created_at) }}</p>
+                  <p class="value">{{convertToWord(getRequestDetails.booking.flight?.created_at)}} {{ convertTo12HourFormat(getRequestDetails.booking.flight?.created_at) }}</p>
                 </div>
                 <div>
                   <p class="key">Pnr Number</p>
-                  <p class="value">{{airlineDetails?.pnr}}</p>
+                  <p class="value">{{getRequestDetails.booking.flight?.pnr}}</p>
                 </div>
                 <div>
                   <p class="key">Amount</p>
-                  <p class="value">₦{{formatAmount(airlineDetails?.amount)}}</p>
+                  <p class="value">₦{{formatAmount(getRequestDetails.booking.flight?.amount)}}</p>
                 </div>
                 <div>
                   <p class="key">Anchor Ref</p>
-                  <p class="value">{{airlineDetails?.reference}}</p>
+                  <p class="value">{{getRequestDetails.booking.flight?.reference}}</p>
                 </div>
                 <div>
                   <p class="key">status</p>
-                  <p class="value">{{airlineDetails?.status}}</p>
+                  <p class="value">{{getRequestDetails.booking.flight?.status}}</p>
                 </div>
               </div>
 
             </div>
           </div>
-          <div>
-            <p class="travel_section_info">Itinerary Details</p>
+          
+          <div style="width: 100%;margin-top: 3rem;">
+
+          <!------  spinage -->
+
+          <!-- <div class="div-support">
+            <div>
+              <p>Request Date</p>
+              <p>28th December, 2023</p>
+            </div>
 
             <div>
+              <div>
+                <label>Booking Refrence</label>
+                <div></div>
+              </div>
 
+              <div>
+                <div></div>
+              </div>
+            </div>
+
+
+            <div>
+              <label>Additional Information or Comments *</label>
+              <textarea></textarea>
+            </div>
+
+
+
+            <div>
+              <div>
+                <label>Support Team Comments</label>
+                <textarea></textarea>
+            </div>
             </div>
           </div>
-         
-      </div>
+          </div>-->
+      </div> 
+    </div> 
       
-      <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 3rem;">
-            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
-          </div>
+    
       </div>
   </layout>
 </template>
@@ -148,6 +182,17 @@ export default {
   width: 100%;
   flex-direction: column;
   position: relative;
+}
+
+.div-support{
+  border-radius: 1.25rem;
+  background: var(--primary-05, #EAF0F7);
+  display: inline-flex;
+  padding: 1.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .breadcrumb{
