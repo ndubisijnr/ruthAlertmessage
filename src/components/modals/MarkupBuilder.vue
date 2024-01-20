@@ -639,7 +639,7 @@ export default {
                       fill-rule="evenodd"
                       clip-rule="evenodd"
                       d="M11.9999 16.0969L6.35151 10.4485L8.04831 8.75172L11.9999 12.7033L15.9515 8.75172L17.6483 10.4485L11.9999 16.0969ZM11.9999 2.40012C6.6983 2.40012 2.3999 6.69732 2.3999 12.0001C2.3999 17.3017 6.6983 21.6001 11.9999 21.6001C17.3015 21.6001 21.5999 17.3017 21.5999 12.0001C21.5999 6.69732 17.3015 2.40012 11.9999 2.40012Z"
-                      fill="#2C6CAC"
+                      fill="var(--primary_color)"
                     />
                   </svg>
                 </div>
@@ -767,6 +767,9 @@ export default {
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
+                    @click="tabIndicator++"
+                    class="nextBtn"
+                    background="var(--primary_color)"
                     btnWidth="84px"
                     :angleRight="true"
                     height="36px"
@@ -867,12 +870,18 @@ export default {
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
+                    class="backBtn"
+                    @click="tabIndicator--"
+                    color="var(--primary_color)"
                     btnWidth="84px"
                     :angleLeft="true"
                     height="36px"
                     textNode="Back"
                   ></OnBoardingButton>
                   <OnBoardingButton
+                    @click="tabIndicator++"
+                    class="nextBtn"
+                    background="var(--primary_color)"
                     btnWidth="84px"
                     :angleRight="true"
                     height="36px"
@@ -940,12 +949,17 @@ export default {
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
+                    class="backBtn"
+                    color="var(--primary_color)"
+                    @click="tabIndicator--"
                     btnWidth="84px"
                     :angleLeft="true"
                     height="36px"
                     textNode="Back"
                   ></OnBoardingButton>
                   <OnBoardingButton
+                    background="var(--primary_color)"
+                    @click="tabIndicator = 0"
                     btnWidth="100px"
                     height="36px"
                     textNode="New Markup"
@@ -975,6 +989,36 @@ export default {
       border: none;
       border-radius: 0;
       transform: scale(1);
+    }
+  }
+}
+
+.backBtn {
+  background: transparent !important;
+  border: 1px solid var(--primary_color) !important;
+  * {
+    transition: all 0.25s ease-in-out;
+  }
+  svg {
+    display: block;
+  }
+  &:hover {
+    svg {
+      transform: translateX(-5px);
+    }
+  }
+}
+
+.nextBtn {
+  * {
+    transition: all 0.25s ease-in-out;
+  }
+  svg {
+    display: block;
+  }
+  &:hover {
+    svg {
+      transform: translateX(5px);
     }
   }
 }
@@ -1022,7 +1066,7 @@ a {
           padding: 12px;
           cursor: pointer;
           border-radius: 10px;
-          border: 1px solid #2c6cac;
+          border: 1px solid var(--primary_color);
           .left_section {
             grid-gap: 33px;
             svg {
@@ -1095,7 +1139,7 @@ a {
         height: 103px;
         resize: none;
         border-radius: 10px;
-        border: 1px solid #2c6cac;
+        border: 1px solid var(--primary_color);
         background: #fafdff;
       }
 
