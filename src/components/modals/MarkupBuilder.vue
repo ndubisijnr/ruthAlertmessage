@@ -33,7 +33,7 @@ export default {
       getYYYYMMDDFormat,
       isFocused: false,
       showModal: false,
-      tabIndicator: 2,
+      tabIndicator: 0,
       formData: {
         air: {
           general: [
