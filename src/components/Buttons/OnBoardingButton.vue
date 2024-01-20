@@ -20,7 +20,20 @@
     :disabled="disabled"
   >
     <svg
-      v-if="filter_icon"
+      v-if="!loading && angleLeft"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <path
+        d="M4.80007 8.00001C4.80007 7.53335 4.98007 7.06668 5.3334 6.71335L9.68007 2.36668C9.87341 2.17335 10.1934 2.17335 10.3867 2.36668C10.5801 2.56001 10.5801 2.88001 10.3867 3.07335L6.04007 7.42001C5.72007 7.74001 5.72007 8.26001 6.04007 8.58001L10.3867 12.9267C10.5801 13.12 10.5801 13.44 10.3867 13.6333C10.1934 13.8267 9.87341 13.8267 9.68007 13.6333L5.3334 9.28668C4.98007 8.93335 4.80007 8.46668 4.80007 8.00001Z"
+        :fill="color ? color : '#FFF'"
+      />
+    </svg>
+    <svg
+      v-if="!loading && filter_icon"
       xmlns="http://www.w3.org/2000/svg"
       width="18"
       height="18"
@@ -56,6 +69,32 @@
       {{ loading ? null : textNode }}
       <spinner-loader v-show="loading"></spinner-loader>
     </p>
+    <svg
+      v-if="!loading && plus_icon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <path
+        d="M8.66667 2.66668C8.66667 2.29849 8.36819 2.00002 8 2.00002C7.63181 2.00002 7.33333 2.29849 7.33333 2.66668V7.33335H2.66667C2.29848 7.33335 2 7.63183 2 8.00002C2 8.36821 2.29848 8.66668 2.66667 8.66668H7.33333V13.3334C7.33333 13.7015 7.63181 14 8 14C8.36819 14 8.66667 13.7015 8.66667 13.3334V8.66668H13.3333C13.7015 8.66668 14 8.36821 14 8.00002C14 7.63183 13.7015 7.33335 13.3333 7.33335H8.66667V2.66668Z"
+        fill="white"
+      />
+    </svg>
+    <svg
+      v-if="!loading && angleRight"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <path
+        d="M11.1999 7.99999C11.1999 8.46665 11.0199 8.93332 10.6666 9.28665L6.31993 13.6333C6.12659 13.8267 5.8066 13.8267 5.61326 13.6333C5.41993 13.44 5.41993 13.12 5.61326 12.9267L9.95993 8.57999C10.2799 8.25999 10.2799 7.73999 9.95993 7.41999L5.61326 3.07332C5.41993 2.87999 5.41993 2.55999 5.61326 2.36665C5.8066 2.17332 6.12659 2.17332 6.31993 2.36665L10.6666 6.71332C11.0199 7.06665 11.1999 7.53332 11.1999 7.99999Z"
+        fill="white"
+      />
+    </svg>
   </button>
 </template>
 
@@ -70,6 +109,9 @@ export default {
   props: [
     "textNode",
     "filter_icon",
+    "plus_icon",
+    "angleLeft",
+    "angleRight",
     "disabled",
     "padding",
     "type",
@@ -102,6 +144,7 @@ export default {
   align-items: center;
   border-radius: 6px;
   cursor: pointer;
+  grid-gap: 10px;
   width: 26.25rem;
   transition-duration: 0.4s;
   -webkit-transition-duration: 0.4s; /* Safari */
@@ -120,7 +163,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  width: 100%;
+  /* width: 100%; */
   text-align: center;
 }
 

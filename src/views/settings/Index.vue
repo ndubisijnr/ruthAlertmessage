@@ -68,6 +68,7 @@
     :user_id="teamMemberId"
     @close="close"
   ></deactivate-account-confirm>
+  <MarkupBuilder ref="markupBuilder" />
 
   <!--  <account-deactivated></account-deactivated>-->
   <!--  <deactivate-account-confirm></deactivate-account-confirm>-->
@@ -1543,17 +1544,46 @@
               <header class="flex_between">
                 <h3>Manage Markup</h3>
                 <on-boarding-button
+                  @click="$refs.markupBuilder.openModal()"
                   border="none"
-                  :loading="loading"
-                  :disabled="loading"
+                  :plus_icon="true"
                   btn-width="11.0625rem"
                   text-node="Markup Builder"
                 ></on-boarding-button>
               </header>
+
+              <header class="mb-0 flex_between">
+                <div class="search-team">
+                  <label for="markup_input_filter">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                    >
+                      <path
+                        d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z"
+                        fill="#9DA8B6"
+                      />
+                      <path
+                        d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z"
+                        fill="#9DA8B6"
+                      />
+                    </svg>
+                  </label>
+                  <input
+                    id="markup_input_filter"
+                    type="search"
+                    style="outline: none; border: none; width: 19.4rem"
+                    placeholder="Search by ID, names, etc"
+                  />
+                </div>
+              </header>
               <div class="table-wrapper">
                 <domain-table
                   :data="markUpData"
-                  :is-paginate="false"
+                  :is-paginate="true"
                   :fields="markUpFields"
                 ></domain-table>
               </div>
@@ -1596,6 +1626,7 @@
 
 <script>
 import Layout from "../Layout.vue";
+import MarkupBuilder from "@/components/modals/MarkupBuilder.vue";
 import BusinessVerification from "../../views/verification/BusinessInfo.vue";
 import UploadDocs from "../verification/UploadDocs.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
@@ -1628,6 +1659,7 @@ export default {
   name: "Settings",
   components: {
     Layout,
+    MarkupBuilder,
     OnBoardingButton,
     Dashboard,
     BusinessVerification,
@@ -1716,8 +1748,8 @@ export default {
         { key: "end_date", label: "End Date" },
         { key: "m_value", label: "Markup Value" },
         { key: "m_type", label: "Markup Type" },
-        { key: "status", label: "Status" },
-        { key: "action", label: "" },
+        { key: "status_m", label: "Status" },
+        { key: "action_m", label: "" },
       ],
       rolesFields: [
         { key: "name", label: "Roles" },
@@ -2054,7 +2086,7 @@ export default {
           end_date: "Feb 22nd, 2022",
           m_value: "10%",
           m_type: "Percentage",
-          status: "Inactive",
+          status_m: 0,
         },
         {
           first_name: "ABC",
@@ -2064,11 +2096,11 @@ export default {
           end_date: "Feb 22nd, 2022",
           m_value: "10%",
           m_type: "Percentage",
-          status: "Active",
+          status_m: 1,
         },
       ];
       let arr2 = [];
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 17; i++) {
         arr2 = [...arr2, ...arr1];
       }
       return arr2;
@@ -2624,8 +2656,8 @@ export default {
 }
 
 .markups {
-  padding: 2.5rem;
-  padding-left: 0;
+  padding-block: 2.5rem;
+  // padding-left: 0;
   header.flex_between {
     margin-bottom: 12px;
     h3 {
@@ -2633,6 +2665,15 @@ export default {
       font-size: 20px;
       font-weight: 700;
     }
+  }
+
+  .search-team {
+    padding-right: 0;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    min-width: 68.625rem;
   }
 }
 
