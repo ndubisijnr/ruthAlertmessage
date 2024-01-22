@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import FlightService from "../service/FlightService";
-import {catchErrorHandler} from "../mixins/ErrorHandler";
+import { catchErrorHandler } from "../mixins/ErrorHandler";
 import storeUtils from "../utils/storeUtils";
 import FlightRequest from '../model/FlightRequest';
 import { RuthdoAlert } from 'ruthly';
@@ -10,37 +10,37 @@ export const useFlightStore = defineStore('flightStore', {
     state: () => ({
         airports: false,
         loading: false,
-        flightLoading:false,
-        bookingLoading:false,
-        bookFlightId:null,
-        errors:null,
-        successMsg:null,
-        airlines:null,
-        flightSearchPayload:[],
-        bookedFlightDetails:[],
-        inbound:null,
-        outbound:null,
-        selectedFlight:null,
-        bookingFlightErrors:null,
-        checkout:false,
-        traveller:[],
-        showFlightDetailsModal:false,
-        paymentLoading:false,
-        txf_ref:null,
-        query:null,
-        invoicePayload:null,
-        showingPaymentMethod:false,
-        flightResults:null,
-        wallet:null,
-        filteredFlightResult:[],
-        confirmingBookingLoading:false,
-        isSuccess:false,
-        searchParams:{
-            stops:[],
-            airlines:[],
-            flexibility:[],
-            prices:[]
-        }, 
+        flightLoading: false,
+        bookingLoading: false,
+        bookFlightId: null,
+        errors: null,
+        successMsg: null,
+        airlines: null,
+        flightSearchPayload: [],
+        bookedFlightDetails: [],
+        inbound: null,
+        outbound: null,
+        selectedFlight: null,
+        bookingFlightErrors: null,
+        checkout: false,
+        traveller: [],
+        showFlightDetailsModal: false,
+        paymentLoading: false,
+        txf_ref: null,
+        query: null,
+        invoicePayload: null,
+        showingPaymentMethod: false,
+        flightResults: null,
+        wallet: null,
+        filteredFlightResult: [],
+        confirmingBookingLoading: false,
+        isSuccess: false,
+        searchParams: {
+            stops: [],
+            airlines: [],
+            flexibility: [],
+            prices: []
+        },
     }),
 
     getters: {
@@ -48,49 +48,51 @@ export const useFlightStore = defineStore('flightStore', {
         getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length || state.searchParams.prices.length,
         getTravellers: state => state.traveller,
         getQuery: state => state.query,
-        getCheckout:state => state.checkout,
+        getCheckout: state => state.checkout,
         getLoading: state => state.loading,
         getInBound: state => state.inbound,
         getOutBound: state => state.outbound,
         getFlightLoading: state => state.flightLoading,
         getBookingLoading: state => state.bookingLoading,
-        getErrors:state => state.errors,
-        getBookingFlightErrors:state => state.bookingFlightErrors,
+        getErrors: state => state.errors,
+        getBookingFlightErrors: state => state.bookingFlightErrors,
         getAirport: state => state.airports,
         getAirlines: state => state.airlines,
         getFlights: state => state.flightSearchPayload,
-        getSelectedFlight: () => {return localStorage?.selectedFlight ? JSON.parse(localStorage?.selectedFlight):[]},
-        getSuccess:state => state.successMsg,
-        getBookFlightDetails:state => state.bookedFlightDetails,
-        getPaymentLoading:state => state.paymentLoading,
-        getInvoicePayload:state => state.invoicePayload,
-        getShowingPaymentMethod:state => state.showingPaymentMethod,
-        getFlightResults: () => {return localStorage.flightResults ?  JSON.parse(localStorage?.flightResults) : []},
+        getSelectedFlight: () => { return localStorage?.selectedFlight ? JSON.parse(localStorage?.selectedFlight) : [] },
+        getSuccess: state => state.successMsg,
+        getBookFlightDetails: state => state.bookedFlightDetails,
+        getPaymentLoading: state => state.paymentLoading,
+        getInvoicePayload: state => state.invoicePayload,
+        getShowingPaymentMethod: state => state.showingPaymentMethod,
+        getFlightResults: () => { return localStorage.flightResults ? JSON.parse(localStorage?.flightResults) : [] },
         getWallet: state => state.wallet,
-        getBookingStage: () => {return localStorage.bookingStage},
-        getProgressNav:() => {return localStorage.progressNav},
-        getFilteredFlight:state  => state.filteredFlightResult,
+        getBookingStage: () => { return localStorage.bookingStage },
+        getProgressNav: () => { return localStorage.progressNav },
+        getFilteredFlight: state => state.filteredFlightResult,
         // .slice().sort((a, b) => a - b).reverse(),
-        getConfirmingBookingLoading:state => state.confirmingBookingLoading,
-        getIsSuccess:state => state.isSuccess
+        getConfirmingBookingLoading: state => state.confirmingBookingLoading,
+        getIsSuccess: state => state.isSuccess
     },
 
     actions: {
-
-        appendFilterType(type, value){
-            switch(type){
+        setStoreData({ name, data }) {
+            this[name] = data
+        },
+        appendFilterType(type, value) {
+            switch (type) {
                 case 'stops':
-                    !this.searchParams.stops.includes(value) ? this.searchParams.stops.push(value) : this.searchParams.stops = this.searchParams.stops.filter((a) => {return a !== value});
+                    !this.searchParams.stops.includes(value) ? this.searchParams.stops.push(value) : this.searchParams.stops = this.searchParams.stops.filter((a) => { return a !== value });
                     break;
                 case 'airlines':
-                    !this.searchParams.airlines.includes(value) ? this.searchParams.airlines.push(value) : this.searchParams.airlines = this.searchParams.airlines.filter((a) => {return a !== value});
+                    !this.searchParams.airlines.includes(value) ? this.searchParams.airlines.push(value) : this.searchParams.airlines = this.searchParams.airlines.filter((a) => { return a !== value });
                     break;
                 case 'flexibility':
-                    !this.searchParams.flexibility.includes(value) ? this.searchParams.flexibility.push(value) : this.searchParams.flexibility = this.searchParams.flexibility.filter((a) => {return a !== value});
+                    !this.searchParams.flexibility.includes(value) ? this.searchParams.flexibility.push(value) : this.searchParams.flexibility = this.searchParams.flexibility.filter((a) => { return a !== value });
                     break;
                 default:
                     break;
-                    
+
             }
         },
 
@@ -145,12 +147,12 @@ export const useFlightStore = defineStore('flightStore', {
                         localStorage.bookingStage = 'Flight Result'
                         window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0, 20)}`
                     } else {
-                        RuthdoAlert({title: "Couldn't find any flights at the moment", icon: "error"})
+                        RuthdoAlert({ title: "Couldn't find any flights at the moment", icon: "error" })
                     }
                 }
             } catch (err) {
                 this.loading = false
-         
+
             }
         },
 
@@ -171,7 +173,7 @@ export const useFlightStore = defineStore('flightStore', {
                         console.log(responseData.data)
                         window.location = `/dashboard/select_available_flights/${user?.access_token?.slice(0, 20)}`
                     } else {
-                        RuthdoAlert({title: "Couldn't find any flights at the moment", icon: "error"})
+                        RuthdoAlert({ title: "Couldn't find any flights at the moment", icon: "error" })
                     }
                 }
             } catch (err) {
@@ -279,11 +281,11 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 if (responseData.success) {
                     this.loading = false
-                    RuthdoAlert({title: responseData.data.message, icon: 'success'})
+                    RuthdoAlert({ title: responseData.data.message, icon: 'success' })
                     storeUtils.fireAway().travelAgent?.handleGetTravelAgent()
-                }else{
+                } else {
                     this.loading = false
-                    RuthdoAlert({title: responseData.data, icon: 'error'})
+                    RuthdoAlert({ title: responseData.data, icon: 'error' })
                 }
             } catch (err) {
                 this.loading = false
@@ -305,18 +307,18 @@ export const useFlightStore = defineStore('flightStore', {
             }
 
         },
-    
 
-        async handleCancelItinenery(booking_reference){
+
+        async handleCancelItinenery(booking_reference) {
             this.loading = true
             try {
                 const response = await ItineraryService.cancelItenery(storeUtils.fireAway().global?.getTenant_id, booking_reference)
                 let responseData = response.data
                 this.loading = false
                 if (responseData.success) {
-                    RuthdoAlert({title:responseData.data, icon:'success'})
-                }else{
-                    RuthdoAlert({title:responseData.data, icon:'error'})
+                    RuthdoAlert({ title: responseData.data, icon: 'success' })
+                } else {
+                    RuthdoAlert({ title: responseData.data, icon: 'error' })
                 }
             } catch (err) {
                 this.loading = false
@@ -324,16 +326,16 @@ export const useFlightStore = defineStore('flightStore', {
             }
         },
 
-        async handleSendItineneryEmail(booking_reference){
+        async handleSendItineneryEmail(booking_reference) {
             this.loading = true
             try {
                 const response = await ItineraryService.sendIteneryEmail(storeUtils.fireAway().global?.getTenant_id, booking_reference)
                 let responseData = response.data
                 this.loading = false
                 if (responseData.success) {
-                    RuthdoAlert({title:responseData.data, icon:'success'})
-                }else{
-                    RuthdoAlert({title:responseData.data, icon:'error'})
+                    RuthdoAlert({ title: responseData.data, icon: 'success' })
+                } else {
+                    RuthdoAlert({ title: responseData.data, icon: 'error' })
                 }
             } catch (err) {
                 this.loading = false
@@ -349,10 +351,10 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 this.loading = false
                 if (responseData.success) {
-                    RuthdoAlert({title:responseData.data, icon:'success'})
+                    RuthdoAlert({ title: responseData.data, icon: 'success' })
                     this.isSuccess = true
-                }else{
-                    RuthdoAlert({title:responseData.data, icon:'error'})
+                } else {
+                    RuthdoAlert({ title: responseData.data, icon: 'error' })
                     this.isSuccess = true
                 }
             } catch (err) {
@@ -361,5 +363,11 @@ export const useFlightStore = defineStore('flightStore', {
             }
 
         }
-    }
+    },
+
+    mutations: {
+        SET_MY_DATA(state, newValue) {
+            state.airlines = newValue;
+        },
+    },
 })

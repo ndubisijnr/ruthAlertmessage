@@ -15,6 +15,7 @@ import {
   convertToWord,
   convertTo12HourFormat,
 } from "../../mixins/flightUtil";
+import countries from "../../mixins/countries";
 
 export default {
   name: "MarkupBuilder",
@@ -31,13 +32,18 @@ export default {
       model: TransactionRequest.walletSetup,
       dobMax: new Date().setFullYear(new Date().getFullYear() - 12),
       getYYYYMMDDFormat,
+      airlines: [],
       isFocused: false,
       showModal: false,
       tabIndicator: 0,
+      currentMenu: null,
+      product: "Air",
       formData: {
-        air: {
+        Air: {
           general: [
+            // name
             {
+              postVal: "name",
               label: "Name",
               id: "general_name",
               required: true,
@@ -47,17 +53,28 @@ export default {
                 type: "text",
               },
             },
+            // markup_type
             {
+              postVal: "markup_type",
               label: "Markup Type",
               id: "general_markup_type",
               required: false,
-              val: "fixed",
+              val: "",
               inputType: {
                 structure: "select",
-                options: ["fixed", "fixed", "fixed"],
+                type: "single",
+                openVal: false,
+                options: [
+                  "discount",
+                  "markup",
+                  "service_fee",
+                  "promotional_discount",
+                ],
               },
             },
+            // account
             {
+              postVal: "account",
               label: "Markup Account",
               id: "general_markup_account",
               required: false,
@@ -67,45 +84,61 @@ export default {
                 type: "number",
               },
             },
+            // amount_type
             {
+              postVal: "amount_type",
               label: "Amount Type",
               id: "general_amount_type",
               required: false,
-              val: "Percentage",
+              val: "",
               break: true,
               inputType: {
                 structure: "select",
-                options: ["Percentage", "Percentage", "Percentage"],
+                type: "single",
+                openVal: false,
+                options: ["fixed", "percentage"],
               },
             },
+            // apply_markup_at
             {
+              postVal: "apply_markup_at",
               label: "Apply markup at:",
               id: "general_apply_markup_at",
               required: false,
-              val: "All",
+              val: "",
               inputType: {
                 structure: "select",
-                options: ["All", "All", "All"],
+                type: "single",
+                openVal: false,
+                options: ["all", "booking", "exchange", "refund"],
               },
             },
+            // fare_type
             {
+              postVal: "fare_type",
               label: "Fare Type:",
               id: "general_fare_type",
               required: false,
-              val: "All",
+              val: "",
               inputType: {
                 structure: "select",
-                options: ["All", "All", "All"],
+                type: "single",
+                openVal: false,
+                options: ["all", "corporate", "published", "private"],
               },
             },
+            // passenger_type
             {
+              postVal: "passenger_type",
               label: "Passenger Type:",
               id: "general_passenger_type",
               required: false,
-              val: "All",
+              val: "",
               inputType: {
                 structure: "select",
-                options: ["All", "All", "All"],
+                type: "single",
+                openVal: false,
+                options: ["all", "adult", "child", "infant"],
               },
             },
           ],
@@ -115,19 +148,24 @@ export default {
                 label: "Marketing Carriers",
                 id: "rule_mark_c",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "airline",
+                  openVal: false,
                 },
               },
               {
                 label: "Affiliate Carriers",
                 id: "rule_aff_c",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
+                  type: "airline",
+                  openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
@@ -135,9 +173,12 @@ export default {
                 label: "Operating Carriers",
                 id: "rule_ope_c",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
+                  type: "airline",
+                  openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
@@ -145,21 +186,30 @@ export default {
                 label: "Air Providers",
                 id: "rule_air_p",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "select",
+                  openVal: false,
+                  options: ["amadeus", "tiqwa"],
                 },
               },
               {
                 label: "Code share flights type:",
                 id: "rule_code_share",
                 required: false,
-                val: "All",
+                val: "",
                 break: true,
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: [
+                    "all",
+                    "equal_marketing_&_operation_carries",
+                    "different_marketing_&_operation_carries",
+                  ],
                 },
               },
               {
@@ -198,30 +248,45 @@ export default {
                 label: "Journey Type",
                 id: "rule_jour_t",
                 required: false,
-                val: "All",
+                val: "",
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: [
+                    "all",
+                    "one_way",
+                    "round_trip",
+                    "multi_destination",
+                  ],
                 },
               },
               {
                 label: "Booking Classes",
                 id: "rule_book_c",
                 required: false,
-                val: "All",
+                val: "",
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: ["all", "economy", "business", "premium", "first"],
                 },
               },
               {
                 label: "Choose Arrival Destination for Multidest",
                 id: "rule_arriv_t",
                 required: false,
-                val: "None",
+                val: "",
                 inputType: {
                   structure: "select",
-                  options: ["None", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: [
+                    "non",
+                    "use_first_destination_as_arrival_destination",
+                    "use_last_destination_as_arrival_destination",
+                  ],
                 },
               },
               {
@@ -238,10 +303,12 @@ export default {
                 label: "Number of stops",
                 id: "rule_num_stop",
                 required: false,
-                val: "Any",
+                val: "",
                 inputType: {
                   structure: "select",
-                  options: ["Any", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: ["0", "1", "2", "2+"],
                 },
               },
               {
@@ -287,20 +354,22 @@ export default {
                 label: "From Country",
                 id: "rule_from_c",
                 required: false,
-                val: "All",
+                val: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "country",
+                  openVal: false,
                 },
               },
               {
                 label: "To Country",
                 id: "rule_to_c",
                 required: false,
-                val: "All",
+                val: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "country",
+                  openVal: false,
                 },
               },
               {
@@ -310,6 +379,8 @@ export default {
                 val: null,
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["Select City(s)", "All", "All"],
                 },
               },
@@ -320,6 +391,8 @@ export default {
                 val: null,
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["Select City(s)", "All", "All"],
                 },
               },
@@ -350,6 +423,8 @@ export default {
                 val: "All",
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
@@ -360,42 +435,47 @@ export default {
               {
                 label: "Exclude Marketing Carriers",
                 id: "exclude_mark_c",
-                required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "airline",
+                  openVal: false,
                 },
               },
               {
                 label: "Exclude Operation Carriers",
                 id: "exclude_aff_c",
-                required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "airline",
+                  openVal: false,
                 },
               },
               {
                 label: "Exclude Affiliate Carriers",
                 id: "exclude_ope_c",
                 required: false,
-                val: "All",
-                break: true,
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "airline",
+                  openVal: false,
                 },
               },
               {
                 label: "Exclude Booking Class",
                 id: "exclude_air_p",
                 required: false,
-                val: "All",
+                val: "",
                 inputType: {
                   structure: "select",
-                  options: ["All", "All", "All"],
+                  type: "single",
+                  openVal: false,
+                  options: ["all", "economy", "business", "premium", "first"],
                 },
               },
               {
@@ -426,6 +506,8 @@ export default {
                 val: "All",
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
@@ -436,6 +518,8 @@ export default {
                 val: "All",
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
@@ -446,6 +530,8 @@ export default {
                 val: null,
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["Select City(s)", "All", "All"],
                 },
               },
@@ -456,6 +542,8 @@ export default {
                 val: null,
                 inputType: {
                   structure: "select",
+                  type: "single",
+                  openVal: false,
                   options: ["Select City(s)", "All", "All"],
                 },
               },
@@ -493,9 +581,171 @@ export default {
           },
         },
       },
+      remark: "",
+      searchValue: "",
     };
   },
   methods: {
+    filterAirlines() {
+      this.airlines = this.getAirlines;
+      if (this.searchValue) {
+        this.airlines = this.airlines.filter((el) => {
+          return el.name.toLowerCase().includes(this.searchValue.toLowerCase());
+        });
+      }
+    },
+    filterCountries() {
+      let arr = countries;
+      if (this.searchValue) {
+        arr = arr.filter((el) => {
+          return el.name.toLowerCase().includes(this.searchValue.toLowerCase());
+        });
+      }
+      return arr;
+    },
+    lowerCheck(type, arr, index, item) {
+      let val = false;
+      switch (type) {
+        case "airline":
+          if (
+            this.formData[this.product].rule[arr][index].val.includes(item.code)
+          ) {
+            val = true;
+          }
+          break;
+        case "country":
+          if (
+            this.formData[this.product].rule[arr][index].val.includes(item.name)
+          ) {
+            val = true;
+          }
+          break;
+
+        default:
+          break;
+      }
+      return { val };
+    },
+    higherCheck(type, arr, index) {
+      let val = false;
+      if (
+        this.formData[this.product].rule[arr][index].val.length &&
+        this.indeterminateCheck(type, arr, index).val == "checked"
+      ) {
+        val = true;
+      }
+
+      return { val };
+    },
+    setLowerCheck(type, arr, index, item) {
+      const arrw = this.formData[this.product].rule[arr][index];
+      switch (type) {
+        case "airline":
+          if (this.lowerCheck(type, arr, index, item).val) {
+            this.formData[this.product].rule[arr][index].val = arrw.val.filter(
+              (el) => {
+                return el !== item.code;
+              }
+            );
+            this.formData[this.product].rule[arr][index].userVal =
+              arrw.userVal.filter((el) => {
+                return el !== item.name;
+              });
+          } else {
+            this.formData[this.product].rule[arr][index].val.push(item.code);
+            this.formData[this.product].rule[arr][index].userVal.push(
+              item.name
+            );
+          }
+
+          break;
+        case "country":
+          if (this.lowerCheck(type, arr, index, item).val) {
+            this.formData[this.product].rule[arr][index].val = arrw.val.filter(
+              (el) => {
+                return el !== item.name;
+              }
+            );
+          } else {
+            this.formData[this.product].rule[arr][index].val.push(item.name);
+          }
+
+          break;
+
+        default:
+          break;
+      }
+      this.searchValue = "";
+    },
+    indeterminateCheck(type, arr, index) {
+      var val = null;
+      const arrw = this.formData[this.product].rule[arr][index].val;
+      switch (type) {
+        case "airline":
+          if (arrw.length && arrw.length < this.airlines.length) {
+            val = "indeterminate";
+          } else if (arrw.length && arrw.length === this.airlines.length) {
+            val = "checked";
+          } else {
+            val = null;
+          }
+          break;
+        case "country":
+          if (arrw.length && arrw.length < countries.length) {
+            val = "indeterminate";
+          } else if (arrw.length && arrw.length === countries.length) {
+            val = "checked";
+          } else {
+            val = null;
+          }
+          break;
+
+        default:
+          break;
+      }
+
+      return { val };
+    },
+    setHigherCheck(type, arr, index) {
+      switch (type) {
+        case "airline":
+          if (
+            !this.formData[this.product].rule[arr][index].val.length ||
+            this.indeterminateCheck(type, arr, index).val === "indeterminate"
+          ) {
+            this.formData[this.product].rule[arr][index].val =
+              this.airlines.map((el) => {
+                return el.code;
+              });
+            this.formData[this.product].rule[arr][index].userVal =
+              this.airlines.map((el) => {
+                return el.name;
+              });
+          } else {
+            this.formData[this.product].rule[arr][index].val = [];
+            this.formData[this.product].rule[arr][index].userVal = [];
+          }
+          break;
+        case "country":
+          if (
+            !this.formData[this.product].rule[arr][index].val.length ||
+            this.indeterminateCheck(type, arr, index).val === "indeterminate"
+          ) {
+            this.formData[this.product].rule[arr][index].val = countries.map(
+              (el) => {
+                return el.name;
+              }
+            );
+          } else {
+            this.formData[this.product].rule[arr][index].val = [];
+          }
+          break;
+
+        default:
+          break;
+      }
+      this.searchValue = "";
+    },
     handleFocus() {
       this.isFocused = true;
     },
@@ -514,16 +764,27 @@ export default {
       }
     },
 
+    closeMenu(event) {
+      const clickedInsideList = event.target.closest(".list_wrapper");
+      this.currentMenu = clickedInsideList ? true : null;
+      this.searchValue = "";
+      this.filterAirlines();
+    },
+
     closeModal() {
       this.showModal = false;
       let body = document.querySelector("body");
       body.style.overflow = null;
+      document.removeEventListener("click", this.closeMenu);
     },
 
     openModal() {
       this.showModal = true;
       let body = document.querySelector("body");
       body.style.overflow = "hidden";
+      document.addEventListener("click", this.closeMenu);
+      this.airlines = this.getAirlines;
+      console.log(countries);
     },
 
     doSetup() {
@@ -542,6 +803,10 @@ export default {
       if (localStorage.user) {
         return JSON.parse(localStorage.user);
       }
+    },
+
+    getAirlines() {
+      return storeUtils.fireAway().flight.airlines;
     },
 
     default_theme() {
@@ -689,7 +954,7 @@ export default {
                 <div class="top_section align_auto align-start">
                   <div class="left_section d-flex flex-column">
                     <div
-                      v-for="(items, id) in formData.air.general"
+                      v-for="(items, id) in formData.Air.general"
                       :key="id + 43434"
                       :class="{ break: items.break }"
                       class="flex_between"
@@ -704,18 +969,56 @@ export default {
                         :type="items.inputType.type"
                         v-model="items.val"
                       />
-                      <select
+                      <div
+                        @click.stop="
+                          if (currentMenu === null) {
+                            items.inputType.openVal = id;
+                            currentMenu = id;
+                          } else {
+                            items.inputType.openVal = false;
+                            currentMenu = null;
+                          }
+                        "
                         v-if="items.inputType.structure === 'select'"
-                        :id="items.id"
+                        class="d-flex align-center menuDropDown relative"
                       >
-                        <option
-                          v-for="(options, index) in items.inputType.options"
-                          :key="index + 9383"
-                          :value="options"
+                        <span>{{
+                          items.val
+                            ? items.val.split("_").join(" ")
+                            : `Select ${items.label}`
+                        }}</span>
+                        <div
+                          @click.stop="
+                            (currentMenu = id), (items.inputType.openVal = id)
+                          "
+                          :class="{
+                            active: items.inputType.openVal === currentMenu,
+                          }"
+                          class="absolute list_wrapper d-flex flex-column"
                         >
-                          {{ options }}
-                        </option>
-                      </select>
+                          <div
+                            v-for="(options, index) in items.inputType.options"
+                            :key="index + 9383"
+                            class="list_item d-flex align-center"
+                          >
+                            <template v-if="items.inputType.type == 'single'">
+                              <label class="d-flex align-center">
+                                <input
+                                  type="radio"
+                                  :name="items.id"
+                                  :value="options"
+                                  v-model="items.val"
+                                />
+                                {{ options.split("_").join(" ") }}
+                              </label>
+                            </template>
+                            <template v-else>
+                              <input :value="options" type="checkbox" />
+                              <span>{{ options }}</span>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="right_section d-flex flex-column">
@@ -763,7 +1066,7 @@ export default {
                 <div class="mid_section">
                   <label for="remark"> Remark Info Message </label>
 
-                  <textarea rows="" cols=""></textarea>
+                  <textarea v-model="remark" rows="" cols=""></textarea>
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
@@ -783,7 +1086,7 @@ export default {
               <!-- main wrapper -->
               <div class="child_body_wrapper second_slide">
                 <div
-                  v-for="(value, key, index) in formData.air.rule"
+                  v-for="(value, key, index) in formData.Air.rule"
                   :key="index + 1234"
                   class="looper_row"
                   :class="{ longer_row: key == 1 }"
@@ -810,18 +1113,246 @@ export default {
                           :type="items.inputType.type"
                           v-model="items.val"
                         />
-                        <select
+                        <div
+                          @click.stop="
+                            if (currentMenu === null) {
+                              items.inputType.openVal = id + key + '00';
+                              currentMenu = id + key + '00';
+                            } else {
+                              items.inputType.openVal = false;
+                              currentMenu = null;
+                            }
+                          "
                           v-if="items.inputType.structure === 'select'"
-                          :id="items.id"
+                          class="d-flex align-center menuDropDown relative"
                         >
-                          <option
-                            v-for="(options, index) in items.inputType.options"
-                            :key="index + 9383"
-                            :value="options"
+                          <span>{{
+                            items.val && items.val.length
+                              ? items.inputType.type === "single"
+                                ? items.val.split("_").join(" ")
+                                : items[
+                                    items.inputType.type === "airline"
+                                      ? "userVal"
+                                      : "val"
+                                  ].join(", ")
+                              : `Select ${items.label}`
+                          }}</span>
+                          <div
+                            @click.stop="
+                              (currentMenu = id + key + '00'),
+                                (items.inputType.openVal = id + key + '00')
+                            "
+                            :class="{
+                              active: items.inputType.openVal === currentMenu,
+                            }"
+                            class="absolute list_wrapper d-flex flex-column"
                           >
-                            {{ options }}
-                          </option>
-                        </select>
+                            <!-- airline -->
+                            <template v-if="items.inputType.type === 'airline'">
+                              <div
+                                class="airlines_wrapper d-flex flex-column h-100"
+                              >
+                                <div class="input_field">
+                                  <input
+                                    @input="filterAirlines"
+                                    type="text"
+                                    v-model="searchValue"
+                                    placeholder="Enter Keywords"
+                                  />
+                                </div>
+                                <div
+                                  v-if="items.inputType.openVal === currentMenu"
+                                  class="checkWapper d-flex flex-column h-100"
+                                >
+                                  <div
+                                    v-if="!searchValue"
+                                    class="top_field d-flex align-center"
+                                  >
+                                    <label class="transIn">
+                                      <input
+                                        color="var(--primary_color)"
+                                        style="color: var(--primary_color)"
+                                        @change="
+                                          setHigherCheck(
+                                            items.inputType.type,
+                                            0,
+                                            id
+                                          )
+                                        "
+                                        :checked="
+                                          indeterminateCheck(
+                                            items.inputType.type,
+                                            key,
+                                            id
+                                          ).val
+                                        "
+                                        type="checkbox"
+                                        :value="
+                                          higherCheck(
+                                            items.inputType.type,
+                                            key,
+                                            id
+                                          ).val
+                                        "
+                                      />
+                                      Check All
+                                    </label>
+                                  </div>
+                                  <div class="check_field d-flex flex-column">
+                                    <template v-if="airlines.length">
+                                      <label
+                                        v-for="(airL, index) in airlines"
+                                        class="d-flex align-center"
+                                        :key="id + index + 333"
+                                      >
+                                        <input
+                                          @change="
+                                            setLowerCheck(
+                                              items.inputType.type,
+                                              key,
+                                              id,
+                                              airL
+                                            )
+                                          "
+                                          v-model="
+                                            lowerCheck(
+                                              items.inputType.type,
+                                              key,
+                                              id,
+                                              airL
+                                            ).val
+                                          "
+                                          type="checkbox"
+                                        />
+                                        {{ airL.name }}
+                                      </label>
+                                    </template>
+                                    <template v-else>
+                                      <div>No keyword matches</div>
+                                    </template>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                            <!-- country -->
+                            <template
+                              v-else-if="items.inputType.type === 'country'"
+                            >
+                              <div
+                                class="airlines_wrapper d-flex flex-column h-100"
+                              >
+                                <div class="input_field">
+                                  <input
+                                    type="text"
+                                    v-model="searchValue"
+                                    placeholder="Enter Keywords"
+                                  />
+                                </div>
+                                <div
+                                  v-if="items.inputType.openVal === currentMenu"
+                                  class="checkWapper d-flex flex-column h-100"
+                                >
+                                  <div
+                                    v-if="!searchValue"
+                                    class="top_field d-flex align-center"
+                                  >
+                                    <label class="transIn">
+                                      <input
+                                        color="var(--primary_color)"
+                                        style="color: var(--primary_color)"
+                                        @change="
+                                          setHigherCheck(
+                                            items.inputType.type,
+                                            key,
+                                            id
+                                          )
+                                        "
+                                        :checked="
+                                          indeterminateCheck(
+                                            items.inputType.type,
+                                            1,
+                                            id
+                                          ).val
+                                        "
+                                        type="checkbox"
+                                        :value="
+                                          higherCheck(
+                                            items.inputType.type,
+                                            key,
+                                            id
+                                          ).val
+                                        "
+                                      />
+                                      Check All
+                                    </label>
+                                  </div>
+                                  <div class="check_field d-flex flex-column">
+                                    <template v-if="filterCountries().length">
+                                      <label
+                                        v-for="(
+                                          airL, index
+                                        ) in filterCountries()"
+                                        class="d-flex align-center"
+                                        :key="id + index + 333"
+                                      >
+                                        <input
+                                          @change="
+                                            setLowerCheck(
+                                              items.inputType.type,
+                                              key,
+                                              id,
+                                              airL
+                                            )
+                                          "
+                                          v-model="
+                                            lowerCheck(
+                                              items.inputType.type,
+                                              key,
+                                              id,
+                                              airL
+                                            ).val
+                                          "
+                                          type="checkbox"
+                                        />
+                                        {{ airL.name }}
+                                      </label>
+                                    </template>
+                                    <template v-else>
+                                      <div>No keyword matches</div>
+                                    </template>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                            <template v-else>
+                              <div
+                                v-for="(options, index) in items.inputType
+                                  .options"
+                                :key="index + 9383"
+                                class="list_item d-flex align-center"
+                              >
+                                <template
+                                  v-if="items.inputType.type == 'single'"
+                                >
+                                  <label class="d-flex align-center">
+                                    <input
+                                      type="radio"
+                                      :name="items.id"
+                                      :value="options"
+                                      v-model="items.val"
+                                    />
+                                    {{ options.split("_").join(" ") }}
+                                  </label>
+                                </template>
+                                <template v-else>
+                                  <input :value="options" type="checkbox" />
+                                  <span>{{ options }}</span>
+                                </template>
+                              </div>
+                            </template>
+                          </div>
+                        </div>
+
                         <img
                           class="absolute"
                           v-if="items.tooltip"
@@ -839,7 +1370,7 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_dda"> Departure Date After </label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_dda" type="text" />
+                        <input id="rate_dda" type="date" />
                       </div>
                     </div>
                   </div>
@@ -847,11 +1378,11 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_ddb">Departure Date Between</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_ddb" type="text" />
+                        <input id="rate_ddb" type="date" />
                       </div>
                       <label for="rate_ddb_and">And</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_ddb_and" type="text" />
+                        <input id="rate_ddb_and" type="date" />
                       </div>
                     </div>
                   </div>
@@ -859,11 +1390,11 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_bdb">Booking Date Between</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_bdb" type="text" />
+                        <input id="rate_bdb" type="date" />
                       </div>
                       <label for="rate_bdb_and">And</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_bdb_and" type="text" />
+                        <input id="rate_bdb_and" type="date" />
                       </div>
                     </div>
                   </div>
@@ -895,7 +1426,7 @@ export default {
               <!-- main wrapper -->
               <div class="child_body_wrapper second_slide">
                 <div
-                  v-for="(value, key, index) in formData.air.exclude"
+                  v-for="(value, key, index) in formData.Air.exclude"
                   :key="index + 1234"
                   class="looper_row"
                   :class="{ 'longer_row no-border': key == 1 }"
@@ -993,6 +1524,26 @@ export default {
   }
 }
 
+// input[type="checkbox"] {
+//   appearance: none;
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   width: 16px;
+//   height: 16px;
+//   border: 1px solid var(--primary_color);
+//   border-radius: 3px;
+//   outline: none;
+//   cursor: pointer;
+//   background-color: transparent;
+
+//   &:checked {
+//     background-color: var(--primary_color);
+//   }
+//   &:is(:indeterminate) {
+//     background-color: #f39c12 !important;
+//   }
+// }
+
 .backBtn {
   background: transparent !important;
   border: 1px solid var(--primary_color) !important;
@@ -1022,6 +1573,131 @@ export default {
     }
   }
 }
+
+.menuDropDown {
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid #c2c2c2;
+  padding: 6px 12px;
+  padding-right: 30px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 400;
+  outline: none;
+  text-transform: capitalize;
+  cursor: pointer;
+  width: 100%;
+
+  * {
+    position: relative;
+    z-index: 3;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background: #fff;
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  &::after {
+    background: url("../../assets/arrow_down.svg") calc(100% - 15px) center
+      no-repeat;
+  }
+
+  span {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .list_wrapper {
+    position: absolute;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgba(194, 194, 194, 0.5);
+    background: #fff;
+    left: 0;
+    padding: 16px;
+    grid-gap: 12px;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    top: 0;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+    .list_item,
+    label {
+      grid-gap: 8px;
+      color: #000;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+    }
+
+    &:has(.airlines_wrapper) {
+      max-width: 586px;
+      min-width: 286px;
+      border-radius: 4px;
+      border-color: #d5e2ee;
+      background: #f2f6fa;
+      overflow: hidden;
+      height: 300px;
+
+      .airlines_wrapper {
+        & > * {
+          height: 100%;
+          flex: auto;
+        }
+        .input_field {
+          height: max-content;
+          input {
+            background: transparent;
+          }
+        }
+
+        .checkWapper {
+          padding-top: 17px;
+          overflow: hidden;
+          & > * {
+            height: 100%;
+            flex: auto;
+          }
+
+          .top_field {
+            height: max-content;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d5e2ee;
+          }
+        }
+        .check_field {
+          padding-top: 8px;
+          grid-gap: 9px;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+      }
+    }
+
+    &.active {
+      user-select: auto;
+      pointer-events: all;
+      opacity: 1;
+      top: calc(100% + 10px);
+      z-index: 10;
+    }
+  }
+}
 </style>
 <style scoped lang="scss">
 a {
@@ -1031,6 +1707,9 @@ a {
 .modal_child {
   .child__wrapper {
     flex-direction: column;
+    width: 100%;
+    // max-width: 758px;
+    // margin-inline: auto;
     height: 100%;
     grid-gap: 0;
     & > * {
@@ -1110,7 +1789,7 @@ a {
       &::-webkit-scrollbar {
         width: 0 !important;
       }
-      input:not([type="checkbox"]),
+      input:not([type="checkbox"], [type="radio"]),
       select,
       textarea {
         height: 36px;
@@ -1153,7 +1832,8 @@ a {
               grid-gap: 12px;
               max-width: 315px;
               input,
-              select {
+              select,
+              .menuDropDown {
                 max-width: 161px;
               }
               .break {
@@ -1218,7 +1898,7 @@ a {
                     top: 50%;
                     transform: translateY(-50%);
                   }
-                  &:not(:has(input[type="checkBox"])) {
+                  &:not(:has(> input[type="checkBox"])) {
                     width: 100%;
                   }
                 }
@@ -1231,14 +1911,14 @@ a {
               .flex_between {
                 width: 100%;
                 max-width: 315px;
-                & > .d-flex:not(:has(input[type="checkBox"])) {
+                & > .d-flex:not(:has(> input[type="checkBox"])) {
                   max-width: 161px;
                 }
 
                 label {
                   max-width: 169px;
                 }
-                &:has(input[type="checkbox"]) {
+                &:has(> .d-flex > input[type="checkbox"]) {
                   justify-content: flex-start;
                 }
               }
@@ -1255,8 +1935,12 @@ a {
                 min-width: max-content;
               }
               .flex_between {
-                & > .d-flex:not(:has(input[type="checkBox"])) {
+                & > .d-flex:not(:has(> input[type="checkBox"])),
+                & > .d-flex:has(.menuDropDown) {
                   max-width: 85%;
+                }
+                & > .d-flex:has(.menuDropDown) {
+                  width: 100%;
                 }
               }
             }
@@ -1264,14 +1948,15 @@ a {
               .col-6 {
                 .flex_between {
                   max-width: 341px;
-                  & > .d-flex:not(:has(input[type="checkBox"])) {
+                  & > .d-flex:not(:has(> input[type="checkBox"])) {
                     max-width: 247px;
+                    width: 100%;
                   }
 
                   label {
                     max-width: 169px;
                   }
-                  &:has(input[type="checkbox"]) {
+                  &:has(> input[type="checkbox"]) {
                   }
                 }
               }
@@ -1288,7 +1973,7 @@ a {
                     width: 100%;
                     max-width: 141px;
                   }
-                  & > .d-flex:not(:has(input[type="checkBox"])) {
+                  & > .d-flex:not(:has(> input[type="checkBox"])) {
                     max-width: 161px;
                     & + label {
                       width: max-content;

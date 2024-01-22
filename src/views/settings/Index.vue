@@ -1573,6 +1573,7 @@
                     </svg>
                   </label>
                   <input
+                    :disabled="!markup?.length"
                     id="markup_input_filter"
                     type="search"
                     style="outline: none; border: none; width: 19.4rem"
@@ -1582,7 +1583,7 @@
               </header>
               <div class="table-wrapper">
                 <domain-table
-                  :data="markUpData"
+                  :data="markup"
                   :is-paginate="true"
                   :fields="markUpFields"
                 ></domain-table>
@@ -1746,9 +1747,9 @@ export default {
         { key: "product", label: "Product" },
         { key: "start_date", label: "Start Date" },
         { key: "end_date", label: "End Date" },
-        { key: "m_value", label: "Markup Value" },
-        { key: "m_type", label: "Markup Type" },
-        { key: "status_m", label: "Status" },
+        { key: "markup_value", label: "Markup Value" },
+        { key: "markup_type", label: "Markup Type" },
+        { key: "status", label: "Status" },
         { key: "action_m", label: "" },
       ],
       rolesFields: [
@@ -1796,6 +1797,7 @@ export default {
           break;
         case "Markup":
           storeUtils.fireAway().settings?.readMarkupSettings();
+          storeUtils.fireAway().settings?.getAirlines();
           break;
         case "Customization":
           this.currentTab = "Customization";
