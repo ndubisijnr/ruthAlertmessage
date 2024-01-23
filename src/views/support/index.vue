@@ -61,7 +61,7 @@
           </div>
           <div style="margin-top: 3.5rem">
             <div class="table-wrapper">
-              <domain-table :fields="itineneryFields" :data="filterResult ? filterResult : itineraryRequest?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
+              <domain-table :fields="itineneryFields" :data="filterResult ? filterResult : itineraryRequest" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
                 <template v-slot:emptyIcon>
                   <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                     <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
@@ -124,8 +124,9 @@ import BookingsRequest from "../../model/BookingsRequest";
       activeService:'Issuance',
       searchModel:{},
       itineneryFields:[
-        {key:"type", label:"Type"},
-        {key:"description", label:"Description"},
+        {key:"customer_name", label:"Agent Name"},
+        {key:"ticket_amount", label:"Ticket Amount_"},
+        {key:"airline", label:"Airline_"},
         {key:"created_at", label:"Booking Date"},
         {key:"status", label:"Status"},
         // {key:"Action", label:"Action",id:"member"},
@@ -146,7 +147,8 @@ import BookingsRequest from "../../model/BookingsRequest";
     },
 
     requestItinery(){
-      storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
+      if(this.getUser.account_type === 'manager')storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService);
+      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
     },
 
     doFilter(){
@@ -215,7 +217,7 @@ import BookingsRequest from "../../model/BookingsRequest";
   },
 
   mounted(){
-    if(this.getUser.account_type === 'manager') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.activeService)
+    if(this.getUser.account_type === 'manager') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService)
     else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
   }
   }

@@ -496,7 +496,7 @@ export default{
   left: 0;
   /* m6 */
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
-//bottom: 0;
+  /*bottom: 0;*/
   background: #fff;
 }
 

@@ -136,9 +136,11 @@
           <span  v-else-if="h.label.toLowerCase() === 'status'">{{j.type}}</span>
 
           <!--  formating amount --> 
+          
 
+          <span v-else-if="h.label.toLowerCase() === 'ticket amount'">₦ {{ formatAmount(j?.amount)}}</span>
 
-          <span v-else-if="h.label.toLowerCase() === 'ticket amount'">₦ {{ formatAmount(j?.amount) }}</span>
+          <span v-else-if="h.label.toLowerCase() === 'ticket amount_'">₦ {{ formatAmount(j?.ticket_amount)}}</span>
 
 
           <!-- template {agent balance}  -->

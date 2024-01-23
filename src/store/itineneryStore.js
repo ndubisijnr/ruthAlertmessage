@@ -32,10 +32,10 @@ export const useItineneryStore = defineStore('itineneryStore', {
      
        },
 
-       async getItineraryRequestManagerAction(payload){
+       async getItineraryRequestManagerAction(user_id, payload){
         this.loading = true
         try{
-            const response = await ItineraryService.getItineraryRequestManager(storeUtils.fireAway().global?.getTenant_id, '', payload)
+            const response = await ItineraryService.getItineraryRequestManager(storeUtils.fireAway().global?.getTenant_id, user_id, payload)
             let responseData = response.data
             if(responseData.success){
                 this.itineraryRequest = responseData.data
