@@ -1,8 +1,9 @@
 <script>
+import { apiService } from "../../service/BaseService";
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
+import MultiSelect from "@/components/MultiSelect.vue";
 import storeUtils from "@/utils/storeUtils";
-import router from "@/router";
 import { lightenColor } from "@/mixins/themeUtils";
 import UploadDocumentsComponent from "@/components/forms/UploadDocumentsComponent.vue";
 import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
@@ -15,13 +16,13 @@ import {
   convertToWord,
   convertTo12HourFormat,
 } from "../../mixins/flightUtil";
-import countries from "../../mixins/countries";
 
 export default {
   name: "MarkupBuilder",
   components: {
     OnBoardingButton,
     Layout,
+    MultiSelect,
     UploadDocumentsComponent,
     OnBoardingInput,
     DatePicker,
@@ -37,6 +38,7 @@ export default {
       showModal: false,
       tabIndicator: 0,
       currentMenu: null,
+      loader: { cities: false },
       product: "Air",
       formData: {
         Air: {
@@ -105,10 +107,10 @@ export default {
               label: "Apply markup at:",
               id: "general_apply_markup_at",
               required: false,
-              val: "",
+              val: [],
               inputType: {
                 structure: "select",
-                type: "single",
+                type: "multiple",
                 openVal: false,
                 options: ["all", "booking", "exchange", "refund"],
               },
@@ -119,10 +121,10 @@ export default {
               label: "Fare Type:",
               id: "general_fare_type",
               required: false,
-              val: "",
+              val: [],
               inputType: {
                 structure: "select",
-                type: "single",
+                type: "multiple",
                 openVal: false,
                 options: ["all", "corporate", "published", "private"],
               },
@@ -133,10 +135,10 @@ export default {
               label: "Passenger Type:",
               id: "general_passenger_type",
               required: false,
-              val: "",
+              val: [],
               inputType: {
                 structure: "select",
-                type: "single",
+                type: "multiple",
                 openVal: false,
                 options: ["all", "adult", "child", "infant"],
               },
@@ -144,7 +146,9 @@ export default {
           ],
           rule: {
             0: [
+              // marketing_carriers
               {
+                postVal: "marketing_carriers",
                 label: "Marketing Carriers",
                 id: "rule_mark_c",
                 required: false,
@@ -152,11 +156,13 @@ export default {
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                 },
               },
+              // affiliate_carriers
               {
+                postVal: "affiliate_carriers",
                 label: "Affiliate Carriers",
                 id: "rule_aff_c",
                 required: false,
@@ -164,12 +170,14 @@ export default {
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
+              // operating_carriers
               {
+                postVal: "operating_carriers",
                 label: "Operating Carriers",
                 id: "rule_ope_c",
                 required: false,
@@ -177,12 +185,14 @@ export default {
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                   options: ["All", "All", "All"],
                 },
               },
+              // providers
               {
+                postVal: "providers",
                 label: "Air Providers",
                 id: "rule_air_p",
                 required: false,
@@ -195,15 +205,17 @@ export default {
                   options: ["amadeus", "tiqwa"],
                 },
               },
+              // code_share_flights_type
               {
+                postVal: "code_share_flights_type",
                 label: "Code share flights type:",
                 id: "rule_code_share",
                 required: false,
-                val: "",
+                val: [],
                 break: true,
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "multiple",
                   openVal: false,
                   options: [
                     "all",
@@ -212,7 +224,9 @@ export default {
                   ],
                 },
               },
+              // fare_basic_code
               {
+                postVal: "fare_basic_code",
                 label: "Fare Basic Code",
                 id: "rule_basic_code",
                 required: false,
@@ -223,7 +237,9 @@ export default {
                   type: "number",
                 },
               },
+              // office_id
               {
+                postVal: "office_id",
                 label: "Office ID",
                 id: "rule_office_id",
                 val: null,
@@ -232,7 +248,9 @@ export default {
                   type: "number",
                 },
               },
+              // same_flight_whole
               {
+                postVal: "same_flight_whole",
                 label: "Same flight whole itinerary:",
                 id: "rule_sfwi",
                 required: false,
@@ -244,14 +262,16 @@ export default {
                   type: "checkbox",
                 },
               },
+              // journey_type
               {
+                postVal: "journey_type",
                 label: "Journey Type",
                 id: "rule_jour_t",
                 required: false,
-                val: "",
+                val: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "multiple",
                   openVal: false,
                   options: [
                     "all",
@@ -261,19 +281,23 @@ export default {
                   ],
                 },
               },
+              // booking_classes
               {
+                postVal: "booking_classes",
                 label: "Booking Classes",
                 id: "rule_book_c",
                 required: false,
-                val: "",
+                val: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "multiple",
                   openVal: false,
                   options: ["all", "economy", "business", "premium", "first"],
                 },
               },
+              // arrival_destination_multi
               {
+                postVal: "arrival_destination_multi",
                 label: "Choose Arrival Destination for Multidest",
                 id: "rule_arriv_t",
                 required: false,
@@ -288,8 +312,9 @@ export default {
                     "use_last_destination_as_arrival_destination",
                   ],
                 },
-              },
+              }, // apply_to_each_leg
               {
+                postVal: "apply_to_each_leg",
                 label: "Apply markup to each leg:",
                 id: "rule_amtel",
                 required: false,
@@ -298,8 +323,9 @@ export default {
                   structure: "input",
                   type: "checkbox",
                 },
-              },
+              }, // no_of_stops
               {
+                postVal: "no_of_stops",
                 label: "Number of stops",
                 id: "rule_num_stop",
                 required: false,
@@ -310,8 +336,9 @@ export default {
                   openVal: false,
                   options: ["0", "1", "2", "2+"],
                 },
-              },
+              }, // minimum_ticket_cost
               {
+                postVal: "minimum_ticket_cost",
                 label: "Minimum Ticket Cost",
                 id: "rule_ntc",
                 val: null,
@@ -319,8 +346,9 @@ export default {
                   structure: "input",
                   type: "text",
                 },
-              },
+              }, // booking_class_of_service
               {
+                postVal: "booking_class_of_service",
                 label: "Booking Class of Service",
                 id: "rule_bcos",
                 val: null,
@@ -329,7 +357,9 @@ export default {
                   type: "text",
                 },
               },
+              // any_combination_of_itinerary_classes
               {
+                postVal: "any_combination_of_itinerary_classes",
                 label: "Any combination of specified classes for Itinerary:",
                 id: "rule_acsci",
                 required: false,
@@ -339,7 +369,9 @@ export default {
                   type: "checkbox",
                 },
               },
+              // negotiated_rates
               {
+                postVal: "negotiated_rates",
                 label: "Negotiated Rates",
                 id: "rule_nego_r",
                 val: null,
@@ -350,53 +382,65 @@ export default {
               },
             ],
             1: [
+              // from_country
               {
+                postVal: "from_country",
                 label: "From Country",
                 id: "rule_from_c",
                 required: false,
                 val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "country",
+                  type: "countries",
                   openVal: false,
                 },
               },
+              // to_country
               {
+                postVal: "to_country",
                 label: "To Country",
                 id: "rule_to_c",
                 required: false,
                 val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "country",
+                  type: "countries",
                   openVal: false,
                 },
               },
+              // from_city
               {
+                postVal: "from_city",
                 label: "From City",
                 id: "rule_from_city",
-                required: false,
-                val: null,
+                val: [],
+                userVal: [],
+                mapVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "cities",
                   openVal: false,
-                  options: ["Select City(s)", "All", "All"],
                 },
               },
+              // to_city
               {
+                postVal: "to_city",
                 label: "To City",
                 id: "rule_to_city",
-                required: false,
-                val: null,
+                val: [],
+                userVal: [],
+                mapVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "cities",
                   openVal: false,
-                  options: ["Select City(s)", "All", "All"],
                 },
               },
+              // from_iata
               {
+                postVal: "from_iata",
                 label: "From IATA",
                 id: "rule_from_iata",
                 tooltip: true,
@@ -406,7 +450,9 @@ export default {
                   text: "text",
                 },
               },
+              // to_iata
               {
+                postVal: "to_iata",
                 label: "To IATA",
                 id: "rule_to_iata",
                 tooltip: true,
@@ -416,14 +462,16 @@ export default {
                   text: "text",
                 },
               },
+              // meta_search_engine
               {
+                postVal: "meta_search_engine",
                 label: "Meta-Search Engine",
                 id: "rule_mse",
                 required: false,
-                val: "All",
+                val: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "multiple",
                   openVal: false,
                   options: ["All", "All", "All"],
                 },
@@ -432,29 +480,35 @@ export default {
           },
           exclude: {
             0: [
+              // exclude_marketing_carriers
               {
+                postVal: "exclude_marketing_carriers",
                 label: "Exclude Marketing Carriers",
                 id: "exclude_mark_c",
                 val: [],
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                 },
               },
+              // exclude_operating_carriers
               {
+                postVal: "exclude_operating_carriers",
                 label: "Exclude Operation Carriers",
                 id: "exclude_aff_c",
                 val: [],
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                 },
               },
+              // exclude_affiliate_carriers
               {
+                postVal: "exclude_affiliate_carriers",
                 label: "Exclude Affiliate Carriers",
                 id: "exclude_ope_c",
                 required: false,
@@ -462,23 +516,27 @@ export default {
                 userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "airline",
+                  type: "airlines",
                   openVal: false,
                 },
               },
+              // exclude_booking_classes
               {
+                postVal: "exclude_booking_classes",
                 label: "Exclude Booking Class",
                 id: "exclude_air_p",
                 required: false,
-                val: "",
+                val: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "multiple",
                   openVal: false,
                   options: ["all", "economy", "business", "premium", "first"],
                 },
               },
+              // exclude_booking_class_of_service
               {
+                postVal: "exclude_booking_class_of_service",
                 label: "Exclude Booking Class of Service",
                 id: "exclude_basic_code",
                 required: false,
@@ -488,7 +546,9 @@ export default {
                   type: "text",
                 },
               },
+              // exclude_fare_basic_code
               {
+                postVal: "exclude_fare_basic_code",
                 label: "Exclude Fare Basis Code",
                 id: "exclude_office_id",
                 val: null,
@@ -499,55 +559,65 @@ export default {
               },
             ],
             1: [
+              // exclude_from_country
               {
+                postVal: "exclude_from_country",
                 label: "Exclude From Country",
                 id: "exclude_from_c",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "countries",
                   openVal: false,
-                  options: ["All", "All", "All"],
                 },
               },
+              // exclude_to_country
               {
+                postVal: "exclude_to_country",
                 label: "Exclude To Country",
                 id: "exclude_to_c",
                 required: false,
-                val: "All",
+                val: [],
+                userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "countries",
                   openVal: false,
-                  options: ["All", "All", "All"],
                 },
               },
+              // exclude_from_city
               {
-                label: "Exclude From City",
+                postVal: "exclude_from_city",
                 id: "exclude_from_city",
                 required: false,
-                val: null,
+                val: [],
+                userVal: [],
+                mapVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "cities",
                   openVal: false,
-                  options: ["Select City(s)", "All", "All"],
                 },
               },
+              // exclude_to_city
               {
-                label: "Exclude To City",
+                postVal: "exclude_to_city",
                 id: "exclude_to_city",
                 required: false,
-                val: null,
+                val: [],
+                userVal: [],
+                mapVal: [],
                 inputType: {
                   structure: "select",
-                  type: "single",
+                  type: "cities",
                   openVal: false,
-                  options: ["Select City(s)", "All", "All"],
                 },
               },
+              // exclude_from_iata
               {
+                postVal: "exclude_from_iata",
                 label: "Exclude From IATA",
                 id: "exclude_from_iata",
                 tooltip: true,
@@ -557,7 +627,9 @@ export default {
                   text: "text",
                 },
               },
+              // exclude_to_iata
               {
+                postVal: "exclude_to_iata",
                 label: "Exclude To IATA",
                 id: "exclude_to_iata",
                 tooltip: true,
@@ -567,9 +639,11 @@ export default {
                   text: "text",
                 },
               },
+              // region
               {
+                postVal: "region",
                 label: "Region",
-                id: "exclude_mse",
+                id: "region",
                 tooltip: true,
                 val: "All",
                 inputType: {
@@ -582,170 +656,17 @@ export default {
         },
       },
       remark: "",
-      searchValue: "",
+      departure_date_after: "",
+      departure_date_from: "",
+      departure_date_to: "",
+      booking_date_from: "",
+      booking_date_to: "",
+      searchValues: {
+        val: "",
+      },
     };
   },
   methods: {
-    filterAirlines() {
-      this.airlines = this.getAirlines;
-      if (this.searchValue) {
-        this.airlines = this.airlines.filter((el) => {
-          return el.name.toLowerCase().includes(this.searchValue.toLowerCase());
-        });
-      }
-    },
-    filterCountries() {
-      let arr = countries;
-      if (this.searchValue) {
-        arr = arr.filter((el) => {
-          return el.name.toLowerCase().includes(this.searchValue.toLowerCase());
-        });
-      }
-      return arr;
-    },
-    lowerCheck(type, arr, index, item) {
-      let val = false;
-      switch (type) {
-        case "airline":
-          if (
-            this.formData[this.product].rule[arr][index].val.includes(item.code)
-          ) {
-            val = true;
-          }
-          break;
-        case "country":
-          if (
-            this.formData[this.product].rule[arr][index].val.includes(item.name)
-          ) {
-            val = true;
-          }
-          break;
-
-        default:
-          break;
-      }
-      return { val };
-    },
-    higherCheck(type, arr, index) {
-      let val = false;
-      if (
-        this.formData[this.product].rule[arr][index].val.length &&
-        this.indeterminateCheck(type, arr, index).val == "checked"
-      ) {
-        val = true;
-      }
-
-      return { val };
-    },
-    setLowerCheck(type, arr, index, item) {
-      const arrw = this.formData[this.product].rule[arr][index];
-      switch (type) {
-        case "airline":
-          if (this.lowerCheck(type, arr, index, item).val) {
-            this.formData[this.product].rule[arr][index].val = arrw.val.filter(
-              (el) => {
-                return el !== item.code;
-              }
-            );
-            this.formData[this.product].rule[arr][index].userVal =
-              arrw.userVal.filter((el) => {
-                return el !== item.name;
-              });
-          } else {
-            this.formData[this.product].rule[arr][index].val.push(item.code);
-            this.formData[this.product].rule[arr][index].userVal.push(
-              item.name
-            );
-          }
-
-          break;
-        case "country":
-          if (this.lowerCheck(type, arr, index, item).val) {
-            this.formData[this.product].rule[arr][index].val = arrw.val.filter(
-              (el) => {
-                return el !== item.name;
-              }
-            );
-          } else {
-            this.formData[this.product].rule[arr][index].val.push(item.name);
-          }
-
-          break;
-
-        default:
-          break;
-      }
-      this.searchValue = "";
-    },
-    indeterminateCheck(type, arr, index) {
-      var val = null;
-      const arrw = this.formData[this.product].rule[arr][index].val;
-      switch (type) {
-        case "airline":
-          if (arrw.length && arrw.length < this.airlines.length) {
-            val = "indeterminate";
-          } else if (arrw.length && arrw.length === this.airlines.length) {
-            val = "checked";
-          } else {
-            val = null;
-          }
-          break;
-        case "country":
-          if (arrw.length && arrw.length < countries.length) {
-            val = "indeterminate";
-          } else if (arrw.length && arrw.length === countries.length) {
-            val = "checked";
-          } else {
-            val = null;
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      return { val };
-    },
-    setHigherCheck(type, arr, index) {
-      switch (type) {
-        case "airline":
-          if (
-            !this.formData[this.product].rule[arr][index].val.length ||
-            this.indeterminateCheck(type, arr, index).val === "indeterminate"
-          ) {
-            this.formData[this.product].rule[arr][index].val =
-              this.airlines.map((el) => {
-                return el.code;
-              });
-            this.formData[this.product].rule[arr][index].userVal =
-              this.airlines.map((el) => {
-                return el.name;
-              });
-          } else {
-            this.formData[this.product].rule[arr][index].val = [];
-            this.formData[this.product].rule[arr][index].userVal = [];
-          }
-          break;
-        case "country":
-          if (
-            !this.formData[this.product].rule[arr][index].val.length ||
-            this.indeterminateCheck(type, arr, index).val === "indeterminate"
-          ) {
-            this.formData[this.product].rule[arr][index].val = countries.map(
-              (el) => {
-                return el.name;
-              }
-            );
-          } else {
-            this.formData[this.product].rule[arr][index].val = [];
-          }
-          break;
-
-        default:
-          break;
-      }
-      this.searchValue = "";
-    },
     handleFocus() {
       this.isFocused = true;
     },
@@ -755,7 +676,6 @@ export default {
     cancel() {
       this.$emit("cancel", false);
     },
-
     validateBvn() {
       const bvnINput = document.getElementById("bvn");
       if (bvnINput.value.length > 11) {
@@ -763,30 +683,24 @@ export default {
         bvnINput.style.borderWidth = "1px";
       }
     },
-
     closeMenu(event) {
       const clickedInsideList = event.target.closest(".list_wrapper");
       this.currentMenu = clickedInsideList ? true : null;
-      this.searchValue = "";
-      this.filterAirlines();
+      this.searchValues.val = "";
+      this.airlines = this.getAirlines;
     },
-
     closeModal() {
       this.showModal = false;
       let body = document.querySelector("body");
       body.style.overflow = null;
       document.removeEventListener("click", this.closeMenu);
     },
-
     openModal() {
       this.showModal = true;
       let body = document.querySelector("body");
       body.style.overflow = "hidden";
       document.addEventListener("click", this.closeMenu);
-      this.airlines = this.getAirlines;
-      console.log(countries);
     },
-
     doSetup() {
       storeUtils
         .fireAway()
@@ -796,6 +710,30 @@ export default {
             location.reload();
           }, 1500);
         });
+    },
+    async modalMainAction() {
+      const mainContent = this.formData[this.product];
+      if (!mainContent.general[0].val) return;
+      try {
+        let objToSend = {};
+        Object.entries(mainContent).forEach(([key, value]) => {
+          if (key === "general") {
+            value.forEach((el) => {
+              objToSend[el.postVal] = el.val;
+            });
+          } else {
+            Object.entries(value).forEach(([key2, value2]) => {
+              value2.forEach((el) => {
+                objToSend[el.postVal] = el.val;
+              });
+            });
+          }
+        });
+
+        console.log(objToSend);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   computed: {
@@ -949,76 +887,26 @@ export default {
             <!-- first section -->
             <template v-if="!tabIndicator">
               <!-- main wrapper -->
-              <div class="child_body_wrapper first_slide">
+              <div class="transIn child_body_wrapper first_slide">
                 <!-- top section -->
                 <div class="top_section align_auto align-start">
                   <div class="left_section d-flex flex-column">
                     <div
                       v-for="(items, id) in formData.Air.general"
                       :key="id + 43434"
-                      :class="{ break: items.break }"
-                      class="flex_between"
+                      class="w-100"
                     >
-                      <label :for="items.id">
-                        {{ items.label }}
-                        <span v-if="items.required" class="text-danger">*</span>
-                      </label>
-                      <input
-                        v-if="items.inputType.structure === 'input'"
-                        :id="items.id"
-                        :type="items.inputType.type"
-                        v-model="items.val"
+                      <MultiSelect
+                        :loopedId="id"
+                        @changeMenu="currentMenu = $event"
+                        :getAirlines="getAirlines"
+                        :searchValues="searchValues"
+                        :currentMenu="currentMenu"
+                        :product="product"
+                        :formData="formData"
+                        :items="items"
+                        mainObj="general"
                       />
-                      <div
-                        @click.stop="
-                          if (currentMenu === null) {
-                            items.inputType.openVal = id;
-                            currentMenu = id;
-                          } else {
-                            items.inputType.openVal = false;
-                            currentMenu = null;
-                          }
-                        "
-                        v-if="items.inputType.structure === 'select'"
-                        class="d-flex align-center menuDropDown relative"
-                      >
-                        <span>{{
-                          items.val
-                            ? items.val.split("_").join(" ")
-                            : `Select ${items.label}`
-                        }}</span>
-                        <div
-                          @click.stop="
-                            (currentMenu = id), (items.inputType.openVal = id)
-                          "
-                          :class="{
-                            active: items.inputType.openVal === currentMenu,
-                          }"
-                          class="absolute list_wrapper d-flex flex-column"
-                        >
-                          <div
-                            v-for="(options, index) in items.inputType.options"
-                            :key="index + 9383"
-                            class="list_item d-flex align-center"
-                          >
-                            <template v-if="items.inputType.type == 'single'">
-                              <label class="d-flex align-center">
-                                <input
-                                  type="radio"
-                                  :name="items.id"
-                                  :value="options"
-                                  v-model="items.val"
-                                />
-                                {{ options.split("_").join(" ") }}
-                              </label>
-                            </template>
-                            <template v-else>
-                              <input :value="options" type="checkbox" />
-                              <span>{{ options }}</span>
-                            </template>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div class="right_section d-flex flex-column">
@@ -1070,6 +958,7 @@ export default {
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
+                    :disabled="!formData[product].general[0].val"
                     @click="tabIndicator++"
                     class="nextBtn"
                     background="var(--primary_color)"
@@ -1084,7 +973,7 @@ export default {
             <!-- second section -->
             <template v-else-if="tabIndicator === 1">
               <!-- main wrapper -->
-              <div class="child_body_wrapper second_slide">
+              <div class="transIn child_body_wrapper second_slide">
                 <div
                   v-for="(value, key, index) in formData.Air.rule"
                   :key="index + 1234"
@@ -1101,268 +990,18 @@ export default {
                         (id > 3 && id % 2 !== 0) || (key == 1 && id % 2 !== 0),
                     }"
                   >
-                    <div :class="{ break: items.break }" class="flex_between">
-                      <label :for="items.id">
-                        {{ items.label }}
-                        <span v-if="items.required" class="text-danger">*</span>
-                      </label>
-                      <div class="d-flex align-center relative">
-                        <input
-                          v-if="items.inputType.structure === 'input'"
-                          :id="items.id"
-                          :type="items.inputType.type"
-                          v-model="items.val"
-                        />
-                        <div
-                          @click.stop="
-                            if (currentMenu === null) {
-                              items.inputType.openVal = id + key + '00';
-                              currentMenu = id + key + '00';
-                            } else {
-                              items.inputType.openVal = false;
-                              currentMenu = null;
-                            }
-                          "
-                          v-if="items.inputType.structure === 'select'"
-                          class="d-flex align-center menuDropDown relative"
-                        >
-                          <span>{{
-                            items.val && items.val.length
-                              ? items.inputType.type === "single"
-                                ? items.val.split("_").join(" ")
-                                : items[
-                                    items.inputType.type === "airline"
-                                      ? "userVal"
-                                      : "val"
-                                  ].join(", ")
-                              : `Select ${items.label}`
-                          }}</span>
-                          <div
-                            @click.stop="
-                              (currentMenu = id + key + '00'),
-                                (items.inputType.openVal = id + key + '00')
-                            "
-                            :class="{
-                              active: items.inputType.openVal === currentMenu,
-                            }"
-                            class="absolute list_wrapper d-flex flex-column"
-                          >
-                            <!-- airline -->
-                            <template v-if="items.inputType.type === 'airline'">
-                              <div
-                                class="airlines_wrapper d-flex flex-column h-100"
-                              >
-                                <div class="input_field">
-                                  <input
-                                    @input="filterAirlines"
-                                    type="text"
-                                    v-model="searchValue"
-                                    placeholder="Enter Keywords"
-                                  />
-                                </div>
-                                <div
-                                  v-if="items.inputType.openVal === currentMenu"
-                                  class="checkWapper d-flex flex-column h-100"
-                                >
-                                  <div
-                                    v-if="!searchValue"
-                                    class="top_field d-flex align-center"
-                                  >
-                                    <label class="transIn">
-                                      <input
-                                        color="var(--primary_color)"
-                                        style="color: var(--primary_color)"
-                                        @change="
-                                          setHigherCheck(
-                                            items.inputType.type,
-                                            0,
-                                            id
-                                          )
-                                        "
-                                        :checked="
-                                          indeterminateCheck(
-                                            items.inputType.type,
-                                            key,
-                                            id
-                                          ).val
-                                        "
-                                        type="checkbox"
-                                        :value="
-                                          higherCheck(
-                                            items.inputType.type,
-                                            key,
-                                            id
-                                          ).val
-                                        "
-                                      />
-                                      Check All
-                                    </label>
-                                  </div>
-                                  <div class="check_field d-flex flex-column">
-                                    <template v-if="airlines.length">
-                                      <label
-                                        v-for="(airL, index) in airlines"
-                                        class="d-flex align-center"
-                                        :key="id + index + 333"
-                                      >
-                                        <input
-                                          @change="
-                                            setLowerCheck(
-                                              items.inputType.type,
-                                              key,
-                                              id,
-                                              airL
-                                            )
-                                          "
-                                          v-model="
-                                            lowerCheck(
-                                              items.inputType.type,
-                                              key,
-                                              id,
-                                              airL
-                                            ).val
-                                          "
-                                          type="checkbox"
-                                        />
-                                        {{ airL.name }}
-                                      </label>
-                                    </template>
-                                    <template v-else>
-                                      <div>No keyword matches</div>
-                                    </template>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>
-                            <!-- country -->
-                            <template
-                              v-else-if="items.inputType.type === 'country'"
-                            >
-                              <div
-                                class="airlines_wrapper d-flex flex-column h-100"
-                              >
-                                <div class="input_field">
-                                  <input
-                                    type="text"
-                                    v-model="searchValue"
-                                    placeholder="Enter Keywords"
-                                  />
-                                </div>
-                                <div
-                                  v-if="items.inputType.openVal === currentMenu"
-                                  class="checkWapper d-flex flex-column h-100"
-                                >
-                                  <div
-                                    v-if="!searchValue"
-                                    class="top_field d-flex align-center"
-                                  >
-                                    <label class="transIn">
-                                      <input
-                                        color="var(--primary_color)"
-                                        style="color: var(--primary_color)"
-                                        @change="
-                                          setHigherCheck(
-                                            items.inputType.type,
-                                            key,
-                                            id
-                                          )
-                                        "
-                                        :checked="
-                                          indeterminateCheck(
-                                            items.inputType.type,
-                                            1,
-                                            id
-                                          ).val
-                                        "
-                                        type="checkbox"
-                                        :value="
-                                          higherCheck(
-                                            items.inputType.type,
-                                            key,
-                                            id
-                                          ).val
-                                        "
-                                      />
-                                      Check All
-                                    </label>
-                                  </div>
-                                  <div class="check_field d-flex flex-column">
-                                    <template v-if="filterCountries().length">
-                                      <label
-                                        v-for="(
-                                          airL, index
-                                        ) in filterCountries()"
-                                        class="d-flex align-center"
-                                        :key="id + index + 333"
-                                      >
-                                        <input
-                                          @change="
-                                            setLowerCheck(
-                                              items.inputType.type,
-                                              key,
-                                              id,
-                                              airL
-                                            )
-                                          "
-                                          v-model="
-                                            lowerCheck(
-                                              items.inputType.type,
-                                              key,
-                                              id,
-                                              airL
-                                            ).val
-                                          "
-                                          type="checkbox"
-                                        />
-                                        {{ airL.name }}
-                                      </label>
-                                    </template>
-                                    <template v-else>
-                                      <div>No keyword matches</div>
-                                    </template>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>
-                            <template v-else>
-                              <div
-                                v-for="(options, index) in items.inputType
-                                  .options"
-                                :key="index + 9383"
-                                class="list_item d-flex align-center"
-                              >
-                                <template
-                                  v-if="items.inputType.type == 'single'"
-                                >
-                                  <label class="d-flex align-center">
-                                    <input
-                                      type="radio"
-                                      :name="items.id"
-                                      :value="options"
-                                      v-model="items.val"
-                                    />
-                                    {{ options.split("_").join(" ") }}
-                                  </label>
-                                </template>
-                                <template v-else>
-                                  <input :value="options" type="checkbox" />
-                                  <span>{{ options }}</span>
-                                </template>
-                              </div>
-                            </template>
-                          </div>
-                        </div>
-
-                        <img
-                          class="absolute"
-                          v-if="items.tooltip"
-                          width="16"
-                          height="16"
-                          src="../../assets/info.svg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
+                    <MultiSelect
+                      :objectKey="key"
+                      :loopedId="id"
+                      @changeMenu="currentMenu = $event"
+                      :getAirlines="getAirlines"
+                      :searchValues="searchValues"
+                      :currentMenu="currentMenu"
+                      :product="product"
+                      :formData="formData"
+                      :items="items"
+                      mainObj="rule"
+                    />
                   </div>
                 </div>
                 <div class="looper_row last_row no-border">
@@ -1370,7 +1009,11 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_dda"> Departure Date After </label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_dda" type="date" />
+                        <input
+                          v-model="departure_date_after"
+                          id="rate_dda"
+                          type="date"
+                        />
                       </div>
                     </div>
                   </div>
@@ -1378,11 +1021,19 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_ddb">Departure Date Between</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_ddb" type="date" />
+                        <input
+                          v-model="departure_date_from"
+                          id="rate_ddb"
+                          type="date"
+                        />
                       </div>
                       <label for="rate_ddb_and">And</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_ddb_and" type="date" />
+                        <input
+                          v-model="departure_date_to"
+                          id="rate_ddb_and"
+                          type="date"
+                        />
                       </div>
                     </div>
                   </div>
@@ -1390,11 +1041,19 @@ export default {
                     <div class="flex_between justify-start">
                       <label for="rate_bdb">Booking Date Between</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_bdb" type="date" />
+                        <input
+                          v-model="booking_date_from"
+                          id="rate_bdb"
+                          type="date"
+                        />
                       </div>
                       <label for="rate_bdb_and">And</label>
                       <div class="d-flex align-center relative">
-                        <input id="rate_bdb_and" type="date" />
+                        <input
+                          v-model="booking_date_to"
+                          id="rate_bdb_and"
+                          type="date"
+                        />
                       </div>
                     </div>
                   </div>
@@ -1424,7 +1083,7 @@ export default {
             <!-- third section -->
             <template v-else>
               <!-- main wrapper -->
-              <div class="child_body_wrapper second_slide">
+              <div class="transIn child_body_wrapper second_slide">
                 <div
                   v-for="(value, key, index) in formData.Air.exclude"
                   :key="index + 1234"
@@ -1442,44 +1101,23 @@ export default {
                         (key == 1 && id % 2 !== 0),
                     }"
                   >
-                    <div :class="{ break: items.break }" class="flex_between">
-                      <label :for="items.id">
-                        {{ items.label }}
-                        <span v-if="items.required" class="text-danger">*</span>
-                      </label>
-                      <div class="d-flex align-center relative">
-                        <input
-                          v-if="items.inputType.structure === 'input'"
-                          :id="items.id"
-                          :type="items.inputType.type"
-                          v-model="items.val"
-                        />
-                        <select
-                          v-if="items.inputType.structure === 'select'"
-                          :id="items.id"
-                        >
-                          <option
-                            v-for="(options, index) in items.inputType.options"
-                            :key="index + 9383"
-                            :value="options"
-                          >
-                            {{ options }}
-                          </option>
-                        </select>
-                        <img
-                          class="absolute"
-                          v-if="items.tooltip"
-                          width="16"
-                          height="16"
-                          src="../../assets/info.svg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
+                    <MultiSelect
+                      :objectKey="key"
+                      :loopedId="id"
+                      @changeMenu="currentMenu = $event"
+                      :getAirlines="getAirlines"
+                      :searchValues="searchValues"
+                      :currentMenu="currentMenu"
+                      :product="product"
+                      :formData="formData"
+                      :items="items"
+                      mainObj="exclude"
+                    />
                   </div>
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
+                    :disabled="loading"
                     class="backBtn"
                     color="var(--primary_color)"
                     @click="tabIndicator--"
@@ -1489,8 +1127,10 @@ export default {
                     textNode="Back"
                   ></OnBoardingButton>
                   <OnBoardingButton
+                    :loading="loading"
+                    :disabled="loading"
+                    @click="modalMainAction"
                     background="var(--primary_color)"
-                    @click="tabIndicator = 0"
                     btnWidth="100px"
                     height="36px"
                     textNode="New Markup"
@@ -1520,6 +1160,377 @@ export default {
       border: none;
       border-radius: 0;
       transform: scale(1);
+      .child__wrapper {
+        flex-direction: column;
+        width: 100%;
+        // max-width: 758px;
+        // margin-inline: auto;
+        height: 100%;
+        grid-gap: 0;
+        & > * {
+          height: 100%;
+          padding-inline: 64px;
+        }
+
+        .child_header {
+          height: max-content;
+          padding-block: 48px 0;
+          padding-inline: 0;
+          & > * {
+            padding-inline: 64px;
+          }
+          h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 0;
+            & + p {
+              margin-block: 16px;
+            }
+          }
+          p {
+            font-size: 12px;
+            font-weight: 400;
+          }
+
+          .mark_up_wrapper {
+            border-bottom: 1px solid #33333333;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+            .mark_up_select {
+              padding: 12px;
+              cursor: pointer;
+              border-radius: 10px;
+              border: 1px solid var(--primary_color);
+              .left_section {
+                grid-gap: 33px;
+                svg {
+                  min-width: 48px;
+                  width: 48px;
+                  height: 48px;
+                }
+                p {
+                  margin-bottom: 8px;
+                }
+
+                span {
+                  font-size: 14px;
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+
+          .progression_wrapper {
+            margin-inline: 64px;
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(51, 51, 51, 0.2);
+            p {
+              color: rgba(51, 51, 51, 0.5);
+              font-size: 12px;
+              font-weight: 400;
+              &.active {
+                color: #333;
+                font-weight: 600;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+        .child_body {
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: 24px 71px 0;
+          &::-webkit-scrollbar {
+            width: 0 !important;
+          }
+          input:not([type="checkbox"], [type="radio"]),
+          select,
+          textarea {
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid #c2c2c2;
+            padding: 6px 12px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 400;
+            outline: none;
+            width: 100%;
+          }
+
+          select {
+            text-transform: capitalize;
+            cursor: pointer;
+            padding-right: 30px;
+            background: url("../../assets/arrow_down.svg") calc(100% - 15px)
+              center no-repeat;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+          }
+
+          textarea {
+            height: 103px;
+            resize: none;
+            border-radius: 10px;
+            border: 1px solid var(--primary_color);
+            background: #fafdff;
+          }
+
+          .child_body_wrapper {
+            // overflow: hidden;
+            &.first_slide {
+              .top_section {
+                grid-gap: 101px;
+                margin-bottom: 36px;
+                .left_section {
+                  grid-gap: 12px;
+                  max-width: 315px;
+                  .flex_between > .d-flex {
+                    max-width: 161px;
+                    width: 100%;
+                  }
+                  .break {
+                    margin-bottom: 28px;
+                  }
+                }
+                .right_section {
+                  grid-gap: 26px;
+                  max-width: 272px;
+                  p {
+                    font-size: 12px;
+                    font-weight: 400;
+                  }
+                  .check_options {
+                    .d-flex {
+                      grid-gap: 8px;
+                    }
+                    .box_container {
+                      border-radius: 4px;
+                      border: 1px solid rgba(51, 51, 51, 0.2);
+                      margin-top: 9px;
+                      padding: 8px 14px 8px 8px;
+                      p {
+                        color: #667085;
+                        font-size: 10px;
+                        font-weight: 500;
+                      }
+                    }
+                  }
+                }
+              }
+              .mid_section {
+                margin-bottom: 48px;
+                label {
+                  display: block;
+                  width: max-content;
+                  margin-bottom: 16px;
+                }
+              }
+            }
+            &.second_slide {
+              .looper_row {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -16px;
+                padding-block: 24px;
+                border-bottom: 1px solid rgba(51, 51, 51, 0.2);
+                .break {
+                  margin-bottom: 32px;
+                }
+                & > * {
+                  padding: 16px;
+                  width: 100%;
+                  padding-bottom: 0;
+
+                  .flex_between {
+                    grid-gap: 16px;
+                    & > .d-flex {
+                      grid-gap: 8px;
+                      img {
+                        right: -24px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                      }
+                      &:not(:has(> input[type="checkBox"])) {
+                        width: 100%;
+                      }
+                    }
+                  }
+                }
+
+                .col-6 {
+                  flex: 0 0 50%;
+                  max-width: 50%;
+                  .flex_between {
+                    width: 100%;
+                    max-width: 315px;
+                    & > .d-flex:not(:has(> input[type="checkBox"])) {
+                      max-width: 161px;
+                    }
+
+                    label {
+                      max-width: 169px;
+                    }
+                    &:has(> .d-flex > input[type="checkbox"]) {
+                      justify-content: flex-start;
+                    }
+                  }
+                  &.mudulo {
+                    .flex_between {
+                      margin-left: auto;
+                    }
+                  }
+                }
+                .col-12 {
+                  flex: 0 0 100%;
+                  max-width: 100%;
+                  label {
+                    min-width: max-content;
+                  }
+                  .flex_between {
+                    & > .d-flex:not(:has(> input[type="checkBox"])),
+                    & > .d-flex:has(.menuDropDown) {
+                      max-width: 85%;
+                    }
+                    & > .d-flex:has(.menuDropDown) {
+                      width: 100%;
+                    }
+                  }
+                }
+                &.longer_row {
+                  .col-6 {
+                    .flex_between {
+                      max-width: 341px;
+                      & > .d-flex:not(:has(> input[type="checkBox"])) {
+                        max-width: 247px;
+                        width: 100%;
+                      }
+
+                      label {
+                        max-width: 169px;
+                      }
+                      &:has(> input[type="checkbox"]) {
+                      }
+                    }
+                  }
+                }
+
+                &.no-border {
+                  border: 0;
+                }
+                &.last_row {
+                  .col-12 {
+                    .flex_between {
+                      grid-gap: 34px;
+                      label {
+                        width: 100%;
+                        max-width: 141px;
+                      }
+                      & > .d-flex:not(:has(> input[type="checkBox"])) {
+                        max-width: 161px;
+                        & + label {
+                          width: max-content;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              .child_footer {
+                margin-top: 74px;
+              }
+            }
+          }
+        }
+      }
+
+      .cancel {
+        cursor: pointer;
+        /* background: #2C6CAC; */
+        border-radius: 6px;
+        padding: 1rem 1rem;
+        top: 48px;
+        right: 64px;
+        width: 56px;
+        height: 40px;
+        border: 0.6px solid #e5e9f2;
+        background: #eaf0f7;
+        z-index: 2;
+      }
+    }
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .inner_child_footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .child_footer {
+    width: 100%;
+    grid-gap: 24px;
+    margin-bottom: 2.5rem;
+  }
+
+  .p1 {
+    color: #272833;
+
+    /* Headings/20px/bold */
+    font-family: "Product Sans";
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 140% */
+  }
+
+  .p1-2 {
+    color: #2d3139;
+    font-family: "Product Sans";
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 140% */
+    margin: 1.5rem 0;
+  }
+
+  .p2 {
+    /* 16px/bold */
+    font-family: "Product Sans";
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 175% */
+  }
+
+  .p3 {
+    color: rgba(84, 89, 94, 0.6);
+
+    /* Subtext/14px/Regular */
+    font-family: "Product Sans";
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem; /* 171.429% */
+  }
+
+  @media (max-width: 1024px) {
+    .modal_child {
+      width: 90%;
+    }
+
+    .child_footer {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .inner_child_footer {
+      flex-direction: column;
     }
   }
 }
@@ -1571,507 +1582,6 @@ export default {
     svg {
       transform: translateX(5px);
     }
-  }
-}
-
-.menuDropDown {
-  height: 36px;
-  border-radius: 4px;
-  border: 1px solid #c2c2c2;
-  padding: 6px 12px;
-  padding-right: 30px;
-  color: #000;
-  font-size: 12px;
-  font-weight: 400;
-  outline: none;
-  text-transform: capitalize;
-  cursor: pointer;
-  width: 100%;
-
-  * {
-    position: relative;
-    z-index: 3;
-  }
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    background: #fff;
-    border-radius: inherit;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2;
-  }
-  &::after {
-    background: url("../../assets/arrow_down.svg") calc(100% - 15px) center
-      no-repeat;
-  }
-
-  span {
-    display: -webkit-box !important;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .list_wrapper {
-    position: absolute;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid rgba(194, 194, 194, 0.5);
-    background: #fff;
-    left: 0;
-    padding: 16px;
-    grid-gap: 12px;
-    user-select: none;
-    pointer-events: none;
-    opacity: 0;
-    top: 0;
-    z-index: 1;
-    transition: all 0.3s ease-in-out;
-    .list_item,
-    label {
-      grid-gap: 8px;
-      color: #000;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      display: flex;
-      align-items: center;
-    }
-
-    &:has(.airlines_wrapper) {
-      max-width: 586px;
-      min-width: 286px;
-      border-radius: 4px;
-      border-color: #d5e2ee;
-      background: #f2f6fa;
-      overflow: hidden;
-      height: 300px;
-
-      .airlines_wrapper {
-        & > * {
-          height: 100%;
-          flex: auto;
-        }
-        .input_field {
-          height: max-content;
-          input {
-            background: transparent;
-          }
-        }
-
-        .checkWapper {
-          padding-top: 17px;
-          overflow: hidden;
-          & > * {
-            height: 100%;
-            flex: auto;
-          }
-
-          .top_field {
-            height: max-content;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #d5e2ee;
-          }
-        }
-        .check_field {
-          padding-top: 8px;
-          grid-gap: 9px;
-          overflow-y: auto;
-          overflow-x: hidden;
-        }
-      }
-    }
-
-    &.active {
-      user-select: auto;
-      pointer-events: all;
-      opacity: 1;
-      top: calc(100% + 10px);
-      z-index: 10;
-    }
-  }
-}
-</style>
-<style scoped lang="scss">
-a {
-  text-decoration: none;
-}
-
-.modal_child {
-  .child__wrapper {
-    flex-direction: column;
-    width: 100%;
-    // max-width: 758px;
-    // margin-inline: auto;
-    height: 100%;
-    grid-gap: 0;
-    & > * {
-      height: 100%;
-      padding-inline: 64px;
-    }
-
-    .child_header {
-      height: max-content;
-      padding-block: 48px 0;
-      padding-inline: 0;
-      & > * {
-        padding-inline: 64px;
-      }
-      h3 {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 0;
-        & + p {
-          margin-block: 16px;
-        }
-      }
-      p {
-        font-size: 12px;
-        font-weight: 400;
-      }
-
-      .mark_up_wrapper {
-        border-bottom: 1px solid #33333333;
-        padding-bottom: 24px;
-        margin-bottom: 24px;
-        .mark_up_select {
-          padding: 12px;
-          cursor: pointer;
-          border-radius: 10px;
-          border: 1px solid var(--primary_color);
-          .left_section {
-            grid-gap: 33px;
-            svg {
-              min-width: 48px;
-              width: 48px;
-              height: 48px;
-            }
-            p {
-              margin-bottom: 8px;
-            }
-
-            span {
-              font-size: 14px;
-              font-weight: 600;
-            }
-          }
-        }
-      }
-
-      .progression_wrapper {
-        margin-inline: 64px;
-        padding: 24px;
-        border-radius: 10px;
-        border: 1px solid rgba(51, 51, 51, 0.2);
-        p {
-          color: rgba(51, 51, 51, 0.5);
-          font-size: 12px;
-          font-weight: 400;
-          &.active {
-            color: #333;
-            font-weight: 600;
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-    .child_body {
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 24px 71px 0;
-      &::-webkit-scrollbar {
-        width: 0 !important;
-      }
-      input:not([type="checkbox"], [type="radio"]),
-      select,
-      textarea {
-        height: 36px;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        padding: 6px 12px;
-        color: #000;
-        font-size: 12px;
-        font-weight: 400;
-        outline: none;
-        width: 100%;
-      }
-
-      select {
-        text-transform: capitalize;
-        cursor: pointer;
-        padding-right: 30px;
-        background: url("../../assets/arrow_down.svg") calc(100% - 15px) center
-          no-repeat;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-      }
-
-      textarea {
-        height: 103px;
-        resize: none;
-        border-radius: 10px;
-        border: 1px solid var(--primary_color);
-        background: #fafdff;
-      }
-
-      .child_body_wrapper {
-        // overflow: hidden;
-        &.first_slide {
-          .top_section {
-            grid-gap: 101px;
-            margin-bottom: 36px;
-            .left_section {
-              grid-gap: 12px;
-              max-width: 315px;
-              input,
-              select,
-              .menuDropDown {
-                max-width: 161px;
-              }
-              .break {
-                margin-bottom: 28px;
-              }
-            }
-            .right_section {
-              grid-gap: 26px;
-              max-width: 272px;
-              p {
-                font-size: 12px;
-                font-weight: 400;
-              }
-              .check_options {
-                .d-flex {
-                  grid-gap: 8px;
-                }
-                .box_container {
-                  border-radius: 4px;
-                  border: 1px solid rgba(51, 51, 51, 0.2);
-                  margin-top: 9px;
-                  padding: 8px 14px 8px 8px;
-                  p {
-                    color: #667085;
-                    font-size: 10px;
-                    font-weight: 500;
-                  }
-                }
-              }
-            }
-          }
-          .mid_section {
-            margin-bottom: 48px;
-            label {
-              display: block;
-              width: max-content;
-              margin-bottom: 16px;
-            }
-          }
-        }
-        &.second_slide {
-          .looper_row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: -16px;
-            padding-block: 24px;
-            border-bottom: 1px solid rgba(51, 51, 51, 0.2);
-            .break {
-              margin-bottom: 32px;
-            }
-            & > * {
-              padding: 16px;
-              width: 100%;
-              padding-bottom: 0;
-
-              .flex_between {
-                grid-gap: 16px;
-                & > .d-flex {
-                  grid-gap: 8px;
-                  img {
-                    right: -24px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                  }
-                  &:not(:has(> input[type="checkBox"])) {
-                    width: 100%;
-                  }
-                }
-              }
-            }
-
-            .col-6 {
-              flex: 0 0 50%;
-              max-width: 50%;
-              .flex_between {
-                width: 100%;
-                max-width: 315px;
-                & > .d-flex:not(:has(> input[type="checkBox"])) {
-                  max-width: 161px;
-                }
-
-                label {
-                  max-width: 169px;
-                }
-                &:has(> .d-flex > input[type="checkbox"]) {
-                  justify-content: flex-start;
-                }
-              }
-              &.mudulo {
-                .flex_between {
-                  margin-left: auto;
-                }
-              }
-            }
-            .col-12 {
-              flex: 0 0 100%;
-              max-width: 100%;
-              label {
-                min-width: max-content;
-              }
-              .flex_between {
-                & > .d-flex:not(:has(> input[type="checkBox"])),
-                & > .d-flex:has(.menuDropDown) {
-                  max-width: 85%;
-                }
-                & > .d-flex:has(.menuDropDown) {
-                  width: 100%;
-                }
-              }
-            }
-            &.longer_row {
-              .col-6 {
-                .flex_between {
-                  max-width: 341px;
-                  & > .d-flex:not(:has(> input[type="checkBox"])) {
-                    max-width: 247px;
-                    width: 100%;
-                  }
-
-                  label {
-                    max-width: 169px;
-                  }
-                  &:has(> input[type="checkbox"]) {
-                  }
-                }
-              }
-            }
-
-            &.no-border {
-              border: 0;
-            }
-            &.last_row {
-              .col-12 {
-                .flex_between {
-                  grid-gap: 34px;
-                  label {
-                    width: 100%;
-                    max-width: 141px;
-                  }
-                  & > .d-flex:not(:has(> input[type="checkBox"])) {
-                    max-width: 161px;
-                    & + label {
-                      width: max-content;
-                    }
-                  }
-                }
-              }
-            }
-          }
-          .child_footer {
-            margin-top: 74px;
-          }
-        }
-      }
-    }
-  }
-
-  .cancel {
-    cursor: pointer;
-    /* background: #2C6CAC; */
-    border-radius: 6px;
-    padding: 1rem 1rem;
-    top: 48px;
-    right: 64px;
-    width: 56px;
-    height: 40px;
-    border: 0.6px solid #e5e9f2;
-    background: #eaf0f7;
-    z-index: 2;
-  }
-}
-
-.inner_child_footer {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.child_footer {
-  width: 100%;
-  grid-gap: 24px;
-  margin-bottom: 2.5rem;
-}
-
-.p1 {
-  color: #272833;
-
-  /* Headings/20px/bold */
-  font-family: "Product Sans";
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.75rem; /* 140% */
-}
-
-.p1-2 {
-  color: #2d3139;
-  font-family: "Product Sans";
-  font-size: 1.25rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.75rem; /* 140% */
-  margin: 1.5rem 0;
-}
-
-.p2 {
-  /* 16px/bold */
-  font-family: "Product Sans";
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.75rem; /* 175% */
-}
-
-.p3 {
-  color: rgba(84, 89, 94, 0.6);
-
-  /* Subtext/14px/Regular */
-  font-family: "Product Sans";
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.5rem; /* 171.429% */
-}
-
-@media (max-width: 1024px) {
-  .modal_child {
-    width: 90%;
-  }
-
-  .child_footer {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 500px) {
-  .inner_child_footer {
-    flex-direction: column;
   }
 }
 </style>
