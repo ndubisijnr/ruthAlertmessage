@@ -1,21 +1,11 @@
 <script>
-import { apiService } from "../../service/BaseService";
+import requestService from "../../service/RequestService";
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import MultiSelect from "@/components/MultiSelect.vue";
 import storeUtils from "@/utils/storeUtils";
 import { lightenColor } from "@/mixins/themeUtils";
-import UploadDocumentsComponent from "@/components/forms/UploadDocumentsComponent.vue";
 import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
-import DatePicker from "@/components/Inputs/custom-date-picker/DataPicker.vue";
-import TransactionRequest from "@/model/TransactionRequest";
-import {
-  formatAmount,
-  getYYYYMMDDFormat,
-  convertDurationToWords,
-  convertToWord,
-  convertTo12HourFormat,
-} from "../../mixins/flightUtil";
 
 export default {
   name: "MarkupBuilder",
@@ -23,23 +13,17 @@ export default {
     OnBoardingButton,
     Layout,
     MultiSelect,
-    UploadDocumentsComponent,
     OnBoardingInput,
-    DatePicker,
   },
   data() {
     return {
       lightenColor,
-      model: TransactionRequest.walletSetup,
-      dobMax: new Date().setFullYear(new Date().getFullYear() - 12),
-      getYYYYMMDDFormat,
       airlines: [],
       isFocused: false,
       showModal: false,
       tabIndicator: 0,
       currentMenu: null,
       loader: { cities: false },
-      product: "Air",
       formData: {
         Air: {
           general: [
@@ -49,7 +33,7 @@ export default {
               label: "Name",
               id: "general_name",
               required: true,
-              val: null,
+              val: "",
               inputType: {
                 structure: "input",
                 type: "text",
@@ -80,7 +64,7 @@ export default {
               label: "Markup Account",
               id: "general_markup_account",
               required: false,
-              val: null,
+              val: "",
               inputType: {
                 structure: "input",
                 type: "number",
@@ -197,10 +181,9 @@ export default {
                 id: "rule_air_p",
                 required: false,
                 val: [],
-                userVal: [],
                 inputType: {
                   structure: "select",
-                  type: "select",
+                  type: "multiple",
                   openVal: false,
                   options: ["amadeus", "tiqwa"],
                 },
@@ -230,7 +213,7 @@ export default {
                 label: "Fare Basic Code",
                 id: "rule_basic_code",
                 required: false,
-                val: null,
+                val: "",
                 break: true,
                 inputType: {
                   structure: "input",
@@ -242,7 +225,7 @@ export default {
                 postVal: "office_id",
                 label: "Office ID",
                 id: "rule_office_id",
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "number",
@@ -341,7 +324,7 @@ export default {
                 postVal: "minimum_ticket_cost",
                 label: "Minimum Ticket Cost",
                 id: "rule_ntc",
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "text",
@@ -351,7 +334,7 @@ export default {
                 postVal: "booking_class_of_service",
                 label: "Booking Class of Service",
                 id: "rule_bcos",
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "text",
@@ -374,7 +357,7 @@ export default {
                 postVal: "negotiated_rates",
                 label: "Negotiated Rates",
                 id: "rule_nego_r",
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "text",
@@ -444,7 +427,7 @@ export default {
                 label: "From IATA",
                 id: "rule_from_iata",
                 tooltip: true,
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   text: "text",
@@ -456,7 +439,7 @@ export default {
                 label: "To IATA",
                 id: "rule_to_iata",
                 tooltip: true,
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   text: "text",
@@ -540,7 +523,7 @@ export default {
                 label: "Exclude Booking Class of Service",
                 id: "exclude_basic_code",
                 required: false,
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "text",
@@ -551,7 +534,7 @@ export default {
                 postVal: "exclude_fare_basic_code",
                 label: "Exclude Fare Basis Code",
                 id: "exclude_office_id",
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   type: "text",
@@ -621,7 +604,7 @@ export default {
                 label: "Exclude From IATA",
                 id: "exclude_from_iata",
                 tooltip: true,
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   text: "text",
@@ -633,7 +616,7 @@ export default {
                 label: "Exclude To IATA",
                 id: "exclude_to_iata",
                 tooltip: true,
-                val: null,
+                val: "",
                 inputType: {
                   structure: "input",
                   text: "text",
@@ -655,12 +638,17 @@ export default {
           },
         },
       },
-      remark: "",
-      departure_date_after: "",
-      departure_date_from: "",
-      departure_date_to: "",
-      booking_date_from: "",
-      booking_date_to: "",
+      otherData: {
+        product: "Air",
+        remark: "",
+        departure_date_after: "",
+        departure_date_from: "",
+        departure_date_to: "",
+        booking_date_from: "",
+        booking_date_to: "",
+        display_options: "",
+        active_indicator: "",
+      },
       searchValues: {
         val: "",
       },
@@ -690,6 +678,7 @@ export default {
       this.airlines = this.getAirlines;
     },
     closeModal() {
+      if (this.loading) return;
       this.showModal = false;
       let body = document.querySelector("body");
       body.style.overflow = null;
@@ -712,27 +701,38 @@ export default {
         });
     },
     async modalMainAction() {
-      const mainContent = this.formData[this.product];
+      const mainContent = this.formData[this.otherData.product];
       if (!mainContent.general[0].val) return;
       try {
-        let objToSend = {};
+        this.loading = true;
+        let payload = {};
         Object.entries(mainContent).forEach(([key, value]) => {
           if (key === "general") {
             value.forEach((el) => {
-              objToSend[el.postVal] = el.val;
+              payload[el.postVal] = el.val;
             });
           } else {
             Object.entries(value).forEach(([key2, value2]) => {
               value2.forEach((el) => {
-                objToSend[el.postVal] = el.val;
+                payload[el.postVal] = el.val;
               });
             });
           }
         });
-
-        console.log(objToSend);
+        payload = { ...payload, ...this.otherData };
+        console.log(payload);
+        const { data: res } = await requestService.postRequest(
+          {
+            path: "markups",
+            payload,
+          },
+          true
+        );
+        console.log(res);
       } catch (err) {
         console.log(err);
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -902,7 +902,7 @@ export default {
                         :getAirlines="getAirlines"
                         :searchValues="searchValues"
                         :currentMenu="currentMenu"
-                        :product="product"
+                        :product="otherData.product"
                         :formData="formData"
                         :items="items"
                         mainObj="general"
@@ -913,7 +913,10 @@ export default {
                     <div class="check_options">
                       <div class="d-flex align-center">
                         <p>Display Options</p>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          v-model="otherData.display_options"
+                        />
                       </div>
                       <div class="d-flex flex-column box_container">
                         <img
@@ -932,7 +935,10 @@ export default {
                     <div class="check_options">
                       <div class="d-flex align-center">
                         <p>Active Indicator</p>
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          v-model="otherData.active_indicator"
+                        />
                       </div>
                       <div class="d-flex flex-column box_container">
                         <img
@@ -954,11 +960,15 @@ export default {
                 <div class="mid_section">
                   <label for="remark"> Remark Info Message </label>
 
-                  <textarea v-model="remark" rows="" cols=""></textarea>
+                  <textarea
+                    v-model="otherData.remark"
+                    rows=""
+                    cols=""
+                  ></textarea>
                 </div>
                 <div class="d-flex align-center justify-end child_footer">
                   <OnBoardingButton
-                    :disabled="!formData[product].general[0].val"
+                    :disabled="!formData[otherData.product].general[0].val"
                     @click="tabIndicator++"
                     class="nextBtn"
                     background="var(--primary_color)"
@@ -997,7 +1007,7 @@ export default {
                       :getAirlines="getAirlines"
                       :searchValues="searchValues"
                       :currentMenu="currentMenu"
-                      :product="product"
+                      :product="otherData.product"
                       :formData="formData"
                       :items="items"
                       mainObj="rule"
@@ -1010,7 +1020,7 @@ export default {
                       <label for="rate_dda"> Departure Date After </label>
                       <div class="d-flex align-center relative">
                         <input
-                          v-model="departure_date_after"
+                          v-model="otherData.departure_date_after"
                           id="rate_dda"
                           type="date"
                         />
@@ -1022,7 +1032,7 @@ export default {
                       <label for="rate_ddb">Departure Date Between</label>
                       <div class="d-flex align-center relative">
                         <input
-                          v-model="departure_date_from"
+                          v-model="otherData.departure_date_from"
                           id="rate_ddb"
                           type="date"
                         />
@@ -1030,7 +1040,7 @@ export default {
                       <label for="rate_ddb_and">And</label>
                       <div class="d-flex align-center relative">
                         <input
-                          v-model="departure_date_to"
+                          v-model="otherData.departure_date_to"
                           id="rate_ddb_and"
                           type="date"
                         />
@@ -1042,7 +1052,7 @@ export default {
                       <label for="rate_bdb">Booking Date Between</label>
                       <div class="d-flex align-center relative">
                         <input
-                          v-model="booking_date_from"
+                          v-model="otherData.booking_date_from"
                           id="rate_bdb"
                           type="date"
                         />
@@ -1050,7 +1060,7 @@ export default {
                       <label for="rate_bdb_and">And</label>
                       <div class="d-flex align-center relative">
                         <input
-                          v-model="booking_date_to"
+                          v-model="otherData.booking_date_to"
                           id="rate_bdb_and"
                           type="date"
                         />
@@ -1108,7 +1118,7 @@ export default {
                       :getAirlines="getAirlines"
                       :searchValues="searchValues"
                       :currentMenu="currentMenu"
-                      :product="product"
+                      :product="otherData.product"
                       :formData="formData"
                       :items="items"
                       mainObj="exclude"
@@ -1535,25 +1545,29 @@ export default {
   }
 }
 
-// input[type="checkbox"] {
-//   appearance: none;
-//   -webkit-appearance: none;
-//   -moz-appearance: none;
-//   width: 16px;
-//   height: 16px;
-//   border: 1px solid var(--primary_color);
-//   border-radius: 3px;
-//   outline: none;
-//   cursor: pointer;
-//   background-color: transparent;
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--primary_color);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  background-color: #eaf0f7;
+  background-color: transparent;
 
-//   &:checked {
-//     background-color: var(--primary_color);
-//   }
-//   &:is(:indeterminate) {
-//     background-color: #f39c12 !important;
-//   }
-// }
+  &:checked {
+    background-image: url("../../assets/check.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &:is(:indeterminate) {
+    background-color: #f39c12 !important;
+  }
+}
 
 .backBtn {
   background: transparent !important;

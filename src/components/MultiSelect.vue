@@ -83,7 +83,7 @@
                     <label
                       v-for="(airL, index) in airlines"
                       class="d-flex align-center"
-                      :key="loopedId + index + 333"
+                      :key="loopedId * (index + 3) * 333"
                     >
                       <input
                         @change="setLowerCheck(items.inputType.type, airL)"
@@ -138,7 +138,7 @@
                     <label
                       v-for="(airL, index) in filterCountries()"
                       class="d-flex align-center"
-                      :key="loopedId + index + 333"
+                      :key="loopedId * (index + 3) * 833"
                     >
                       <input
                         @change="setLowerCheck(items.inputType.type, airL)"
@@ -196,7 +196,7 @@
                       <label
                         v-for="(airL, index) in filterCitites(items.mapVal)"
                         class="d-flex align-center"
-                        :key="loopedId + index + 333"
+                        :key="loopedId * (index + 7) * 383"
                       >
                         <input
                           @change="setLowerCheck(items.inputType.type, airL)"
@@ -261,7 +261,7 @@
 </template>
 
 <script>
-import { apiService } from "../service/BaseService";
+import requestService from "../service/RequestService";
 import countries from "../mixins/countries";
 export default {
   props: {
@@ -606,9 +606,9 @@ export default {
     async getCities(val) {
       this.loader.cities = true;
       try {
-        const { data: res } = await apiService.Client.get(
-          `api/airports/${val.join(",")}`
-        );
+        const { data: res } = await requestService.getRequest({
+          path: `airports/${val.join(",")}`,
+        });
         this.formData[this.product][this.mainObj][this.objectKey][
           this.loopedId + 2
         ].mapVal = this.replaceKeys(this.removeDuplicates(res, "city_code"), [
