@@ -20,9 +20,7 @@
 
   </div>
 
-
   <table class="table" >
-
     <thead class="th">
     <tr v-for="h in fields" :key="h.key" class="table-cell table-header">
       <th class="table-label">{{ h.label }}</th>
@@ -33,7 +31,7 @@
       <p>No User Found</p>
     </div>
     <tr v-for="h in fields" :key="h.key" class="table-cell">
-      <div v-for="(j, index) in isPaginate ? paginate(data, currentPage, itemsPerPage) : data">
+      <div v-for="(j, index) in data">
         <td  @click="table_row_onclick_action(j)" class="table-row px-6 py-3 " >
           <!-- template {domain status}  -->
           <span class="connected" :class="{'pending':j.active !== 1}" v-if="h.label.toLowerCase() === 'status'">{{ j.active === 1 ? 'Connected ': 'Pending' }}</span>
@@ -175,14 +173,14 @@
 
   </table>
 
-  <div v-show="isPaginate" class="paginate" v-if="getTotalPage > 1">
+  <div v-show="isPaginate" class="paginate" v-if="getTotalPage >= 1">
     <div style="width: 100%">Total Pages: {{getTotalPage}}</div>
     <div class="paginate_num">
-      <img src="../../assets/Icons/Settings/leftArrows.svg" @click="currentPage=currentPage - 1" />
-      <div @click="currentPage=i" :class="{'activePage':i===currentPage}" class="pag_item" v-for="i in getTotalPage">
+      <button @click="next(this.currentPage - 1)" style="border: none;background-color: transparent;cursor: pointer;"><img src="../../assets/Icons/Settings/leftArrows.svg"/></button>
+      <div @click="next(i)" :class="{'activePage':i===currentPage}" class="pag_item" v-for="i in getTotalPage">
         <span >{{i}}</span>
       </div>
-      <img src="../../assets/Icons/Settings/rightArrow.svg" @click="currentPage=currentPage + 1"/>
+      <button @click="next(this.currentPage + 1)" :disabled="getTotalPage < lastPage" style="border: none;background-color: transparent;cursor: pointer;"><img  src="../../assets/Icons/Settings/rightArrow.svg"/></button>
     </div>
   </div>
 </template>
@@ -198,14 +196,12 @@ import { formatAmount } from "../../mixins/flightUtil";
 
 export default {
   name: "BaseTable",
-  props:['data', 'fields','isPaginate','emptyMessage','filterQuery'],
+  props:['data', 'fields','isPaginate','emptyMessage','other', 'filterQuery',  'currentPage', 'itemsPerPage', 'lastPage', 'total'],
   components:{OnBoardingButton},
 
   data(){
     return{
       convertToWord,
-      currentPage:1,
-      itemsPerPage:20,
       paginate,
       formatAmount,
       currentActionIndex:null,
@@ -221,6 +217,14 @@ export default {
   methods:{
     closePop(){
       console.log('click')
+    },
+
+    next(value){
+      console.log(value)
+      if(this.getCurrentRoute === 'Support') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.other.activeService, this.other.filterValue, value)
+      
+      if(this.getCurrentRoute === 'Bookings') storeUtils.fireAway().booking?.getAllBooking(value)
+      
     },
 
     readAgent(obj){
@@ -282,7 +286,7 @@ export default {
 
   computed:{
     getTotalPage(){
-        return Math.ceil(Number(this.data?.length) / Number(this.itemsPerPage))
+        return Math.ceil(Number(this.total) / Number(this.itemsPerPage))
     },
     getUser(){
       if(localStorage.user){
@@ -558,7 +562,7 @@ export default {
   align-items: center;
   justify-content: start;
   gap: 0.5rem;
-  //text-transform: ;
+  /*text-transform: ;*/
   padding-left: 1rem;
 
 }

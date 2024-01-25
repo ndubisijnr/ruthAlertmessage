@@ -673,7 +673,7 @@ export default {
 
 
 .airportsDropDown{
-  //width: 100%;
+  /*width: 100%;*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -694,7 +694,7 @@ export default {
   padding: 0;
   margin: 0;
   height: 0;
-  //opacity: 0;
+  /*opacity: 0;*/
 }
 
 .search_flight_model_wrapper_animated_out{
@@ -742,7 +742,7 @@ export default {
   background: #FFF;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   position: absolute;
-  //z-index: 999999999999999999999;
+  /*z-index: 999999999999999999999;*/
 }
 
 .class_label{

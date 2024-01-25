@@ -5,7 +5,7 @@ export const catchErrorHandler = (exception, errorObj, AdditionalErrorName) => {
     console.log(exception)
     if(exception) {
         // RuthdoAlert({title: exception?.response?.data.message ? exception?.response?.data.message : exception?.response?.data.data ? exception?.response?.data.data : exception?.response?.data, icon: 'error'})
-        RuthdoAlert({title: exception.response.data.message, icon: 'error'})
+        RuthdoAlert({title: exception.response.data.message || exception.response.data.data, icon: 'error'})
 
     }
 }

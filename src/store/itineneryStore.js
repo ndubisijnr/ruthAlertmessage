@@ -55,14 +55,14 @@ export const useItineneryStore = defineStore('itineneryStore', {
        },
 
 
-       async getItineraryRequestAction(payload, value){
+       async getItineraryRequestAction(payload, value, page){
         this.requestingDetailsLoading = true
         try{
-            const response = await ItineraryService.getItineraryRequest(storeUtils.fireAway().global?.getTenant_id, payload, value)
+            const response = await ItineraryService.getItineraryRequest(storeUtils.fireAway().global?.getTenant_id, payload, value,page)
             let responseData = response.data
             if(responseData.success){
                 this.requestingDetailsLoading = false
-                this.itineraryRequest = responseData.data
+                this.itineraryRequest = responseData
             }
         }catch(errr){
             this.requestingDetailsLoading = false
