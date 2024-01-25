@@ -27,19 +27,24 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
                 </svg>
-                <span class="filter-span">Sort By</span>
+                <span class="filter-span">Filter</span>
               </div>
 
               
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p">Pending Support (Default) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <p class="filter-by-modal-p" @click="filterValue='pending', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'pending'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>
-                <p class="filter-by-modal-p">Resolved Support</p>
-                <p class="filter-by-modal-p">Everything</p>
-                <p class="filter-by-modal-p">Nothing</p>
-               
+                <p class="filter-by-modal-p" @click="filterValue='resolved', doFilter()">Resolved Support <svg v-if="filterValue === 'resolved'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                  <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg></p>
+                <p class="filter-by-modal-p" @click="doFilter('resolved')">Everything</p>
+
+                <p class="filter-by-modal-p" @click="doFilter('resolved')">Nothing</p>
+
+
               </div>
 
             </div>
@@ -124,6 +129,7 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
       filterResult:null,
       activeService:'Issuance',
       searchModel:{},
+      filterValue:'pending',
       itineneryFields:[
         {key:"customer_name", label:"Agent Name"},
         {key:"ticket_amount", label:"Ticket Amount_"},
@@ -142,19 +148,18 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
         this.searchModel = {}
 
       })
-
-      
+    
      
       // this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
     },
 
     requestItinery(){
       if(this.getUser.account_type === 'manager')storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService);
-      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
+      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
     },
 
     doFilter(){
- 
+      storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
     },
     close(value){
       this.isFilterBooking = value
@@ -233,7 +238,7 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
   mounted(){
     storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
     if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService)
-    else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
+    else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
 
   }
   }
@@ -355,9 +360,9 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
   .filter-span{
     color:  #1D1E2C;
     font-family: 'Product Sans';
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.5rem; /* 171.429% */
     padding: 0.5rem;
   }
