@@ -60,7 +60,6 @@ export const useAuthStore = defineStore('authStore', {
        async login(payload=AuthRequest.login){
             this.loading = true
             try {
-
                 const response = await AuthService.initiateLogin(storeUtils.fireAway().global.getTenant_id, payload)
                 let responseData = response.data
                 if (responseData.success) {

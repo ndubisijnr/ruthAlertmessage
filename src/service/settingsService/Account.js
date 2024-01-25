@@ -2,7 +2,7 @@ import {apiService} from "../BaseService";
 
 export default {
     getPersonalProfile(tenant_id, id){
-        return apiService.Client.get(`/api/${tenant_id}/user/profile/${id}`)
+        return apiService.Client.get(`/api/${tenant_id}/user/profile`)
     },
 
     getBusinessProfile(tenant_id, id){

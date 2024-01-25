@@ -7,6 +7,7 @@ import {useTravelAgentStore} from "./travelAgentStore";
 import {useTransactionStore} from "./transactionStore";
 import {useCustomizationStore} from "@/store/customizationStore";
 import { usePrintStore } from "./print";
+import {useItineneryStore} from "@/store/itineneryStore";
 
 const stores = {
     global:useGlobalStore(),
@@ -17,7 +18,8 @@ const stores = {
     travelAgent:useTravelAgentStore(),
     transaction:useTransactionStore(),
     theme:useCustomizationStore(),
-    print:usePrintStore()
+    print:usePrintStore(),
+    itineneryStore:useItineneryStore(),
 }
 
 export default stores
