@@ -54,7 +54,7 @@
                         <div style="margin-bottom:1.5rem;min-height:12rem;border-bottom: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);">
                             <p class="time_line">UnIssued</p>
                             <div v-for="(i,index) in getAgentsBooking">  
-                                <div >
+                                <div>
                                 
                                     <div style="display: flex;justify-content: space-between;align-items: center;">
                                         <div class="unissued_item">

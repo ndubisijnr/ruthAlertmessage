@@ -107,6 +107,7 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if(responseData.success){
                     this.businessProfile = responseData.data
+                    localStorage.user = responseData.data
                 }
 
             }catch{
@@ -137,6 +138,7 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async updateProfileAction(payload=SettingsRequest.updateProfileInfo){
+            localStorage.removeItem('user')
 
             this.loading = true
 
@@ -146,6 +148,11 @@ export const useSettingsStore = defineStore('settingsStore', {
                 if(responseData.success){
                     this.loading = false
                     RuthdoAlert({title:"Success", icon:"success"})
+                    this.getPersonalProfileAction()
+                    // setTimeout(() => {
+                    //     location.reload()
+                    // },500)
+                    
                     // standby
                 }
 

@@ -22,7 +22,6 @@
 
               </div>
             </div>
-
           </div>
           <div class="choose-role">
             <div class="choose-role">
@@ -61,7 +60,7 @@
               <div v-show="choosePermissions === 'custom'" v-for="(i, index) in getPermissions" :key="index">
                 <div class="permission-children">
                   <div class="role-options" v-for="j in i" :key="j.id">
-                    <svg v-if="selectedRole?.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg v-if="model.permission_ids?.includes(j.id)" @click="removeRole(j.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="24" height="24" rx="4" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                       <g clip-path="url(#clip0_1281_18363)">
                         <path d="M10.2864 14.7196L18.1653 6.83984L19.3781 8.05184L10.2864 17.1436L4.83154 11.6887L6.04354 10.4767L10.2864 14.7196Z" fill="white"/>
@@ -182,32 +181,28 @@ export default {
     },
 
     pushRole(id){
-      this.selectedRole.push(id)
-      console.log(this.selectedRole)
+      this.model.permission_ids.push(id)
     },
 
     removeRole(id){
       let removedRole
-      console.log(id)
-      console.log("before", this.selectedRole)
-      removedRole = this.selectedRole.filter(item => item !== id)
-      this.selectedRole = removedRole
-      console.log("after", removedRole)
-
-      
+      removedRole = this.model.permission_ids.filter(item => item !== id)
+      this.model.permission_ids = removedRole
     },
 
 
     inviteMember(){
-      this.model.permission_ids = this.selectedRole
       console.log(this.model)
       if(this.choosePermissions === 'full'){
         this.getAllPermissionsId()
         this.model.permission_ids = this.selectedRole
       }
+      console.log(this.model)
       storeUtils.fireAway().settings?.updateTeamMember(this.model).then(() => {
         if(this.getError === 'false'){
           this.close(false)
+        }else{
+          this.close(true)
         }
       })
       // createRole(){

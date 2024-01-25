@@ -21,12 +21,12 @@
               <input v-model="searchQuery" @input="doSearch" type="text" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
             </div>
             <div class="filter">
-              <!-- <div class="filter-div">
+              <div class="filter-div">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
                 </svg>
                 <span class="filter-span">Sort By</span>
-              </div> -->
+              </div>
               <div class="filter-by-modal">
                 <p class="filter-by-modal-p">Last Updated (newest first) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
