@@ -208,7 +208,26 @@ export default {
                 this.loading = false;
             }
         },
-        async deleteMarkup() {},
+        async deleteMarkup(val) {
+            this.loading = true;
+            try {
+                const { data: res } = await requestService.deleteRequest(
+                    {
+                        path: "markups",
+                        id: val.id,
+                    },
+                    true
+                );
+                await storeUtils.fireAway().settings.readMarkupSettings();
+                RuthdoAlert({
+                    title: res.data,
+                    icon: "success",
+                });
+            } catch (err) {
+            } finally {
+                this.loading = false;
+            }
+        },
     },
     computed: {
         getUser() {
