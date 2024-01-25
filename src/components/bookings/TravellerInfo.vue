@@ -467,6 +467,7 @@ export default {
 
     },
 
+
     passengerList() {
       for(let i = 0; i < this.getSelectedFlight?.travelers_price.length;i++){
         const key = Object.keys(this.getSelectedFlight?.travelers_price[i]).toLocaleString()
@@ -486,13 +487,15 @@ export default {
     },
 
     proceedToPayment(){
+      this.phoneValidation=null
+      this.passportNumberValidation=null
       const phone_validation = this.bookingValidation('contactPhone')
       const passportNumberValidation = this.bookingValidation('passportNumber')
-      if(phone_validation || passportNumberValidation){
-         this.phoneValidation = 'Contact Phone is required';
-         this.passportNumberValidation = 'Password number is required'
-      }
+      if(phone_validation)this.phoneValidation = 'Contact Phone is required';  
+      else if(passportNumberValidation)  this.passportNumberValidation = 'Password number is required'
       else{
+        this.phoneValidation=null
+        this.passportNumberValidation=null
         const name = this.getBusinessProfile.name
         let first_name = name.split(' ')[0]
         let last_name = name.split(' ')[1]
@@ -1105,12 +1108,12 @@ a{
   align-items: flex-start;
   overflow-y: scroll;
 
-  /*gap: 1.25rem;*/
-  //border-radius: 0.5rem;
-  //border: 1px solid  #F9FAFC;
-  //background: #FFF;
-  //left: 0;
-  /*bottom: -60px;*/
+  /*gap: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid  #F9FAFC;
+  background: #FFF;
+  left: 0;
+  bottom: -60px;*/
   /* m4 */
 }
 

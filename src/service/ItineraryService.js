@@ -8,8 +8,8 @@ export default {
          return apiService.Client.post(`api/${tenant_id}/itinerary/request`, payload)
     },
 
-    getItineraryRequest(tenant_id, itineraryType, status){
-        return apiService.Client.get(`api/${tenant_id}/itinerary/requests?type=${itineraryType}&status=${status}`)
+    getItineraryRequest(tenant_id, itineraryType, status,page){
+        return apiService.Client.get(`api/${tenant_id}/itinerary/requests?type=${itineraryType}&status=${status}&page=${page}`)
     },
 
     getItineraryRequestManager(tenant_id, user_id, itineraryType){

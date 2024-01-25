@@ -45,7 +45,7 @@
               <!-- <on-boarding-button @click="isAddAgents=true" class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button> -->
             </div>
         </div>
-        <div style="margin-top: 3.5rem">
+        <div >
           <div class="table-wrapper">
             <domain-table :empty-message="`Hi, No agents at the moments`" :is-paginate="true" :data="getMembers" :fields="membersFields">
               <template v-slot:emptyIcon>
@@ -227,7 +227,6 @@ export default {
 
 .table-wrapper{
   overflow-x: scroll;
-  width: 68.625rem;
 }
 
 @media (max-width: 1024px) {
@@ -378,7 +377,7 @@ a{
   text-decoration: none !important;
 }
 .wrapper{
-  //min-width: 100%;
+  /*min-width: 100%;*/
   background-color: #F9FAFC;
   min-height: 100vh;
   overflow: scroll;
@@ -1150,7 +1149,7 @@ a{
 
 .table-wrapper{
   overflow-x: scroll;
-  width: 100%;
+
 }
 
 .booking-wrapper{

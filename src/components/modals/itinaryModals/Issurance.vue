@@ -216,7 +216,7 @@ export default {
             </div>
 
             <div class="modal_child_wrapper_footer">
-                <OnBoardingButton :loading="getLoading" border="none"  :disabled="!isWallet" textNode="Purchase"></OnBoardingButton>
+                <OnBoardingButton :loading="getLoading" border="none" @click="submitRequest"  :disabled="!isWallet" textNode="Purchase"></OnBoardingButton>
                 <OnBoardingButton  @click="prevProgress('Pay Now')" background="transparent" color="black" border="none" textNode="Cancel"></OnBoardingButton>
 
             </div>

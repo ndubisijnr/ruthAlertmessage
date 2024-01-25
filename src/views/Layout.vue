@@ -103,7 +103,7 @@
                 <path d="M6.7998 14.1895C6.2398 14.1895 5.7998 13.7395 5.7998 13.1895C5.7998 12.6395 6.2498 12.1895 6.7998 12.1895C7.3498 12.1895 7.7998 12.6395 7.7998 13.1895C7.7998 13.7395 7.3498 14.1895 6.7998 14.1895Z" fill="#1D1E2C"/>
                 <path d="M17.9396 16.29C17.7396 16.29 17.5396 16.21 17.3996 16.06C17.2396 15.9 17.1697 15.67 17.1997 15.45C17.2297 15.24 17.2396 15.02 17.2396 14.79V10.79C17.2396 8.00001 15.9897 6.75 13.1997 6.75H6.79963C6.56963 6.75 6.34966 6.76 6.13966 6.78C5.91966 6.81 5.68964 6.72999 5.52964 6.57999C5.36964 6.41999 5.27963 6.20001 5.29963 5.98001C5.47963 3.82001 6.58963 1.25 10.7996 1.25H17.1997C20.8197 1.25 22.7396 3.17001 22.7396 6.79001V10.79C22.7396 15 20.1697 16.1 18.0097 16.29C17.9797 16.29 17.9596 16.29 17.9396 16.29ZM6.91966 5.25H13.1896C16.8096 5.25 18.7297 7.17001 18.7297 10.79V14.66C20.4297 14.24 21.2297 12.99 21.2297 10.79V6.79001C21.2297 4.00001 19.9796 2.75 17.1896 2.75H10.7897C8.58965 2.75 7.34966 3.55 6.91966 5.25Z" fill="#1D1E2C"/>
               </svg>
-                <span>Support</span>
+                <span>Itinerary Support</span>
                 <img v-if="getCurrentRoute.includes('support')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
               </div>
               </router-link>
@@ -228,14 +228,14 @@ export default {
 #nav a.router-link-exact-active {
   border-radius: 1.25rem;
   /* background: var(--app-nav-active); */
-  //background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  /*background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));*/
   text-decoration: none;
   transition: ease 2s;
 }
 
 .active{
   border-radius: 1.25rem;
-  //background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  /*background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));*/
   text-decoration: none;
   transition: ease 2s;
 }
