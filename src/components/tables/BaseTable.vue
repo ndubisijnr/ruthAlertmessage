@@ -484,7 +484,8 @@ export default {
 .table {
   /* border-collapse: collapse; */
   width: 100%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
+  margin-bottom: 3rem;
 
 }
 

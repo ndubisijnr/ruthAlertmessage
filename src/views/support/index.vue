@@ -1,6 +1,7 @@
 <template>
      <layout v-slot:child-content>
     <div class="overall" id="overall">
+      <modal-loader v-if="getRequestingDetailsLoading"></modal-loader>
       <div class="booking-wrapper">
         <p class="itinerary_support">Itinerary Support</p>
         <div class="booking-div-head">
@@ -13,50 +14,48 @@
       </div>
         <div>
           <div class="search_filter">
-            <div class="search">
+            <!-- <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
                 <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
               </svg>
               <input v-model="searchQuery" @input="doSearch" type="text" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
-            </div>
+            </div> -->
             <div class="filter">
-              <!-- <div class="filter-div">
+             
+              <div class="filter-div">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
                 </svg>
                 <span class="filter-span">Sort By</span>
-              </div> -->
+              </div>
+
+              
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p">Last Updated (newest first) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <p class="filter-by-modal-p">Pending Support (Default) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>
-                <p class="filter-by-modal-p">Total Booking (highest first)</p>
-                <p class="filter-by-modal-p">Total Booking (lowest first)</p>
-                <p class="filter-by-modal-p">Alphabetically (A-Z)</p>
-                <p class="filter-by-modal-p">Alphabetically (Z-A)</p>
-                <p class="filter-by-modal-p">Date Created (newest first)</p>
-                <p class="filter-by-modal-p">Date Created (oldest first)</p>
+                <p class="filter-by-modal-p">Resolved Support</p>
+                <p class="filter-by-modal-p">Everything</p>
+                <p class="filter-by-modal-p">Nothing</p>
+               
               </div>
-<!--              <json-excel class="btn btn-default" :data="getBookings?.data" />-->
 
-              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking" @click="isFilterBooking=true"></on-boarding-button>
             </div>
           </div>
           <div style="width: 100%;overflow-x: scroll">
-
             <div class="card-area">
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Issuance" :number="getBookingSum?.total_bookings ? getBookingSum?.total_bookings : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Voidance" :number="getBookingSum?.total_reserved ? getBookingSum?.total_reserved: '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Refund" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Exchange" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Others" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Issuance" :number="getSummary?.issuance_count "></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Voidance" :number="getSummary?.voided_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Refund" :number="getSummary?.refunded_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Exchange" :number="getSummary?.exchanged_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>
             </div>
           </div>
           <div style="margin-top: 3.5rem">
@@ -98,7 +97,7 @@
   </template>
   
   <script>
-  import RouteNav from "../../components/RouteNav.vue";
+import RouteNav from "../../components/RouteNav.vue";
 import Layout from "../Layout.vue";
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import DomainTable from "../../components/tables/BaseTable.vue";
@@ -111,9 +110,11 @@ import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.v
 import filterBookingModal from "@/components/modals/FilterBookingModal.vue";
 import ComingSoon from "@/components/ComingSoon.vue";
 import BookingsRequest from "../../model/BookingsRequest";
+import ModalLoader from "../../components/loaders/ModalLoader.vue";
   export default {
     name: "Index",
     components:{
+    ModalLoader,
     ComingSoon,
     RouteNav,OnBoardingInput, filterBookingModal, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
     data(){
@@ -128,6 +129,7 @@ import BookingsRequest from "../../model/BookingsRequest";
         {key:"ticket_amount", label:"Ticket Amount_"},
         {key:"airline", label:"Airline_"},
         {key:"created_at", label:"Booking Date"},
+        {key:"type", label:"Type"},
         {key:"status", label:"Status"},
         // {key:"Action", label:"Action",id:"member"},
       ],
@@ -180,6 +182,10 @@ import BookingsRequest from "../../model/BookingsRequest";
       return storeUtils.fireAway().theme.custom_theme
     },
 
+    getSummary(){
+      return storeUtils.fireAway().itineneryStore.getItinerarySummaryState
+    },
+
     getBusinessProfile(){
       if(localStorage.businessProfile){
         const business = JSON.parse(localStorage?.businessProfile)
@@ -200,8 +206,16 @@ import BookingsRequest from "../../model/BookingsRequest";
       return storeUtils.fireAway().booking?.getLoadingBooking
     },
 
+    getLoadingSummary(){
+      return storeUtils.fireAway().itineneryStore?.getLoadingSummary
+    },
+
     getBookings(){
       return storeUtils.fireAway().booking?.getBookings
+    },
+
+    getRequestingDetailsLoading(){
+      return storeUtils.fireAway().itineneryStore?.getRequestingDetailsLoading
     },
 
     getUser(){
@@ -217,8 +231,10 @@ import BookingsRequest from "../../model/BookingsRequest";
   },
 
   mounted(){
-    if(this.getUser.account_type === 'manager') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService)
+    storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+    if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService)
     else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService)
+
   }
   }
   </script>
@@ -343,6 +359,7 @@ import BookingsRequest from "../../model/BookingsRequest";
     font-style: normal;
     font-weight: 500;
     line-height: 1.5rem; /* 171.429% */
+    padding: 0.5rem;
   }
   
   .overall{
@@ -361,8 +378,8 @@ import BookingsRequest from "../../model/BookingsRequest";
     margin-top: 1rem;
     margin-bottom: 3rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
   
   .table-wrapper{

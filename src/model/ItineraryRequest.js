@@ -6,6 +6,10 @@ class ItineraryRequest {
         description:null ,
     }
 
+    static support = {
+        support_comment: null
+    }
+
 }
 
 export default ItineraryRequest

@@ -6,12 +6,14 @@ import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryD
 import router from "@/router";
 import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
 import storeUtils from "../../utils/storeUtils";
+import ItineraryRequest from "../../model/ItineraryRequest"
 export default {
   name: "SupportDetails",
   components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
   data(){
     return{
       data:null,
+      itCommentModel:ItineraryRequest.support,
       formatAmount,
       convertTo12HourFormat,
       convertToWord,
@@ -23,6 +25,21 @@ export default {
     goBack(){
       router.push({name:"Bookings_Details"})
     },
+
+
+    submitSupportAction(){
+      storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getUser.id, this.itCommentModel)
+    },
+
+    issueTicket(){
+      let value;
+      if(this.getRequestDetails.type === 'issuance') value = 'issued';
+      if(this.getRequestDetails.type === 'refund') value = 'refunded';
+
+      const request = {"status":value}
+      storeUtils.fireAway().itineneryStore.approveItineraryRequestAction(this.getRequestDetails.id, request)
+    },
+
      printAction(){
        storeUtils.fireAway().print?.commitPrintLoading(true, this.data)
        if(this.getTemplateId === 1) router.push({name:'Template1'})
@@ -33,6 +50,7 @@ export default {
   },
 
   computed: {
+    
     getFlights() {
       if (!this.data) return;
       return this.data?.flight?.passengers
@@ -52,10 +70,18 @@ export default {
 
     },  
 
+    getLoading(){
+      return storeUtils.fireAway().itineneryStore?.getLoading
+    },
+
     getRequestDetails(){
       return storeUtils.fireAway().itineneryStore?.getItineraryRequestDetails
 
     }
+  },
+
+  beforeUnmount(){
+    console.log('unmounting')
   },
 
   mounted() {
@@ -69,10 +95,11 @@ export default {
   <layout v-slot:child-content>
    
     <div class="overall">
+
     
         <div class="wrapper">
         <div class="breadcrumb">
-          <p @click="goBack" class="breadcrumb_list">Manage Flight Bookings</p>
+          <RouterLink to="/support"><p @click="goBack" class="breadcrumb_list">Itinerary Support</p></RouterLink>
           <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
           </svg>
@@ -81,7 +108,7 @@ export default {
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
            <p class="flight_details">Itinerary Support details</p>
-           <on-boarding-button @click="printAction" btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
+           <!-- <on-boarding-button @click="printAction" btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button> -->
          </div>
 
           <div>
@@ -127,9 +154,7 @@ export default {
               </div>
 
             </div>
-          </div>
-          {{ getRequestDetails }}
-          
+          </div>          
           <div style="width: 100%;margin-top: 3rem;">
           <p class="travel_section_info">Itinerary Request</p>
 
@@ -143,13 +168,8 @@ export default {
               </svg>
             </div>
 
-            <p class="itinerary-p">          {{ getRequestDetails?.type }}</p>
-            <!--              <div style="position: relative">-->
-            <!--                <div class="filter-by-modal">-->
-            <!--                  <p class="filter-by-modal-p">Print Itinerary</p>-->
-            <!--                  <p class="filter-by-modal-p">Email Itinerary</p>-->
-            <!--                </div>-->
-            <!--              </div>-->
+            <p class="itinerary-p"> {{ getRequestDetails?.type }}</p>
+         
           </div>
 
           <div v-if="getRequestDetails?.type === 'void'" class="action_wrapper">
@@ -162,6 +182,7 @@ export default {
             </div>
             <p class="itinerary-p">  {{ getRequestDetails?.type }}</p>
           </div>
+
           <div v-if="getRequestDetails?.type === 'exchange'" class="action_wrapper">
             <div class="action_items" @click="openItineneryModal('exchange')">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -170,6 +191,7 @@ export default {
             </div>
             <p class="itinerary-p">          {{ getRequestDetails?.type }}</p>
           </div>
+
           <div v-if="getRequestDetails?.type === 'refund'" class="action_wrapper">
             <button class="action_items" @click="openItineneryModal('refund')">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -189,67 +211,105 @@ export default {
           <!------  spinage -->
 
           <div class="div-support">
-            {{ getRequestDetails?.flight?.pnr }}
-            <!-- <div>         
-                <div style="display: flex;justify-content: space-between;align-items: center;">
-                    <div class="unissued_item">
-                        <p class="time_booked">{{ convertToWord(i.created_at) }}</p>
-                        <span class="time_booked"><span class="details">{{ i.contact_first_name }} {{ i.contact_last_name }}</span> made a new flight booking for a {{i.flight.inbound.length  > 0 ? 'round' : 'one way'}} trip.</span>
-                    </div>
-
-                    <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
-                        <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                        <OnBoardingButton :disabled="loading" :loading="loading  && current_index === index" @click="current_index = index,issueTicket(i.provider_reference)" btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
-                    </div>
-                </div>
-            </div> -->
-
             <div style="display: flex;gap: 1.5rem;align-items: center;">
               <p class="request_date">Request Date</p>
-              <p class="request_date_value">{{getRequestDetails.created_at}}</p>
+              <p class="request_date_value">{{ convertToWord(getRequestDetails?.created_at) }} {{convertTo12HourFormat(getRequestDetails?.created_at)}}</p>
             </div>
 
-            <div style="width: 100%;">
+            <div class="email-area">
+            <div class="group-inputs">
               <div>
-                <label class="booking_reference">Booking Refrence</label>
-                <div></div>
+                <div style="margin-bottom: 0.75rem">
+                  <label class="class_label">Booking Reference <span class="required">*</span> </label>
+                </div>
+                <div class="form-input">
+                  <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
+                    <p class="label_text">PNR</p>
+                  </div>
+                  <input class="form-input-input" :value="getRequestDetails?.booking?.pnr" />
+                </div>
+              </div>
+              <div>
+                <div style="margin-bottom: 2.1rem">
+                  <label class="class_label"></label>
+                </div>
+                <div>
+
+                  <div class="form-input">
+                      <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
+                        <p class="label_text">Requested By <span class="required">*</span></p>
+                      </div>
+                      <input class="form-input-input" :value="getRequestDetails?.booking?.contact_first_name + ' ' + getRequestDetails?.booking?.contact_last_name" readonly />
+                    </div>
+                </div>
               </div>
 
-              <div style="width: 100%;">
+
+            </div>
+
+          </div>
+
+            <div style="width: 100%;">
+            
+              <div v-if="getRequestDetails?.type !== 'issuance'" style="margin-bottom: 1.5rem;">
+                <p class="label_text_ticket">Ticket Number <span class="required">*</span></p>
+                <div style="border: solid #C0D3E6;padding: 1rem;border-radius: 0.375rem;border: 1px solid var(--primary-15, #C0D3E6);background: var(--Color, #FFF);">
+                
+                  <div v-for="(i, index) in getRequestDetails?.passengers" :key="index" style="display: flex;gap:1.5rem;align-items: center;justify-content: flex-start;margin-bottom: 0.5rem;">
+                    <p class="ticket_name">{{ i.traveler }}</p>
+                    <div style="padding: 0.25rem 0.75rem;border-radius: 1.25rem;background: #EAF0F7;">
+                      <div style="display: flex;gap: 0.5rem;">
+                        <input :id="`check_box${index}`" type="checkbox" disabled checked="true" @change="toggleTravelersTicket(`check_box${index}`,i.traveler, {name:i.traveler, ticket_numbers:i.ticket_number})"/>
+                        <p class="ticket_number" v-for="(j, index2) in i.ticket_number" :key="index2">{{ j }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              
+              <div style="width: 100%;margin-bottom: 1.5rem;">
                 <div>
                   <div class="issuance_wrapper">     
                         <div class="unissued_item">
-                            <p class="time_booked">{{getRequestDetails.created_at}}</p>
+                            <p class="time_booked">{{convertToWord(getRequestDetails?.created_at)}} . {{convertTo12HourFormat(getRequestDetails?.created_at)}}</p>
                             
-                            <span class="time_booked"><span class="details">{{ getRequestDetails.booking.contact_first_name }}  {{getRequestDetails.booking.contact_last_name}} </span> made a new flight booking for a trip to {{ getRequestDetails.booking.flight.outbound[0].airport_to }}.</span>
                         </div>
 
-                        <div v-if="getRequestDetails.booking.status === 'issued'">
+                        <div v-if="getRequestDetails?.booking.status === 'issued'">
                           <p class="issued">Issued</p>
                         </div>
 
                         <div v-else style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
                             <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Issue Ticket"></OnBoardingButton>
+                            <OnBoardingButton :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
 
                         </div>
                     </div>
                 </div>
               </div>
+
+            
             </div>
 
-
             <div style="width: 100%;">
-              <label class="additional_comment_p">Additional Information or Comments *</label>
+              <p class="additional_comment_p">Additional Information or Comments  <span class="required">*</span></p>
               <textarea class="additional_comment"></textarea>
             </div>
           </div>
 
           <div>
               <div>
-                <label class="">Support Team Comments</label>
-                <textarea class="comment_area"></textarea>
+                <p class="support_comment_p">Support Team Comments</p>
+                <p class="additional_comment_p">Additional Information or Comments <span class="required">*</span></p>
             </div>
+            <textarea class="comment_area" placeholder="Kindly send any information regarding this issue if neccessary" v-model="itCommentModel.support_comment"></textarea>
+          </div>
+
+
+          <div v-if="getRequestDetails?.booking.status !== 'issued' && getUser?.account_type !== 'manager'" style="display: flex;justify-content: end;margin-top: 40px;">
+            <OnBoardingButton btn-width="8rem" height="3rem" text-node="Submit" @click="submitSupportAction"></OnBoardingButton>
           </div>
           </div>
       </div> 
@@ -259,6 +319,16 @@ export default {
 </template>
 
 <style scoped>
+.support_comment_p{
+  color: var(--Black-text-01, #1D1E2C);
+  /* 18px/bold */
+  font-family: "Product Sans";
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 155.556% */
+  margin-bottom: 0.75rem;
+}
 .issuance_wrapper{
   border-radius: 6px;
   background: var(--Color, #FFF);
@@ -268,6 +338,111 @@ export default {
   align-items: center;
   /* gap: 347px; */
   justify-content: space-between;
+}
+
+.label_text {
+  color: #444854;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 200% */
+  margin: 0 1.25rem;
+}
+
+.label_text_ticket {
+  color: #444854;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 200% */
+
+}
+
+
+.ticket_name {
+  color: var(--Black-text-02, #2D3139);
+  font-family: 'Product Sans';
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem;
+  text-wrap: wrap;
+  width: 8rem;
+  /* 142.857% */
+  text-transform: capitalize;
+}
+
+.ticket_number {
+  color: var(--Black-text-03, #444854);
+  font-family: 'Product Sans' Medium;
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+  /* 280% */
+}
+
+.class_label {
+  color: #2D3139;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem;
+  /* 142.857% */
+  margin-bottom: 0.74rem;
+}
+
+.required {
+  color: #F04444;
+  font-family: 'Product Sans';
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.25rem;
+}
+
+.comment_section {
+  display: flex;
+  width: 35.8125rem;
+  height: 13.375rem;
+  padding: 0.875rem 1rem 9rem 1.25rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  border: 1px solid #C0D3E6;
+}
+
+
+.form-input {
+  display: flex;
+  width: 100%;
+  height: 3.5rem;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  border: 1px solid #C0D3E6;
+  margin-bottom: 1rem;
+  align-items: center;
+  background-color: #FFF;
+}
+
+.form-input-input {
+  outline: none;
+  border: none;
+  padding-left: 12px;
+  width: 100%;
+}
+
+.group-inputs {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 .issued{
@@ -309,7 +484,7 @@ export default {
 }
 .additional_comment_p{
   color: var(--Black-text-02, #2D3139);
-  font-family: "Product Sans Light";
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 300;
@@ -324,11 +499,12 @@ export default {
   border-radius: 0.375rem;
   border: 1px solid var(--primary-15, #C0D3E6);
   background: var(--Color, #FFF);
+  margin-top: 0.75rem;
 }
 
 .request_date_value{
   color: var(--Black-text-04, #575A65);
-font-family: "Product Sans Medium";
+font-family: "Product Sans";
 font-size: 0.875rem;
 font-style: normal;
 font-weight: 500;
@@ -337,7 +513,7 @@ line-height: normal;
 
 .request_date{
   color: var(--Primary-Main, #2C6CAC);
-  font-family: "Product Sans Medium";
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
@@ -353,6 +529,7 @@ flex-shrink: 0;
 border-radius: 0.375rem;
 border: 1px solid var(--primary-15, #C0D3E6);
 background: var(--Color, #FFF);
+margin-top:0.75rem;
 }
 .overall{
   display: flex;
