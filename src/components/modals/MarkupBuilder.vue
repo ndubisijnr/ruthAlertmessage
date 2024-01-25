@@ -6,6 +6,8 @@ import MultiSelect from "@/components/MultiSelect.vue";
 import storeUtils from "@/utils/storeUtils";
 import { lightenColor } from "@/mixins/themeUtils";
 import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
+import defaultMarkupSettings from "../../mixins/defaultMarkupSettings";
+import { RuthdoAlert } from "ruthly";
 
 export default {
     name: "MarkupBuilder",
@@ -24,658 +26,10 @@ export default {
             tabIndicator: 0,
             currentMenu: null,
             loader: { cities: false },
-            formData: {
-                Air: {
-                    general: [
-                        // name
-                        {
-                            postVal: "name",
-                            label: "Name",
-                            id: "general_name",
-                            required: true,
-                            val: "",
-                            inputType: {
-                                structure: "input",
-                                type: "text",
-                            },
-                        },
-                        // markup_type
-                        {
-                            postVal: "markup_type",
-                            label: "Markup Type",
-                            id: "general_markup_type",
-                            required: false,
-                            val: "",
-                            inputType: {
-                                structure: "select",
-                                type: "single",
-                                openVal: false,
-                                options: [
-                                    "discount",
-                                    "markup",
-                                    "service_fee",
-                                    "promotional_discount",
-                                ],
-                            },
-                        },
-                        // markup_value
-                        {
-                            postVal: "markup_value",
-                            label: "Markup Account",
-                            id: "general_markup_account",
-                            required: false,
-                            val: "",
-                            inputType: {
-                                structure: "input",
-                                type: "number",
-                            },
-                        },
-                        // amount_type
-                        {
-                            postVal: "amount_type",
-                            label: "Amount Type",
-                            id: "general_amount_type",
-                            required: false,
-                            val: "",
-                            break: true,
-                            inputType: {
-                                structure: "select",
-                                type: "single",
-                                openVal: false,
-                                options: ["fixed", "percentage"],
-                            },
-                        },
-                        // apply_markup_at
-                        {
-                            postVal: "apply_markup_at",
-                            label: "Apply markup at:",
-                            id: "general_apply_markup_at",
-                            required: false,
-                            val: [],
-                            inputType: {
-                                structure: "select",
-                                type: "multiple",
-                                openVal: false,
-                                options: [
-                                    "all",
-                                    "booking",
-                                    "exchange",
-                                    "refund",
-                                ],
-                            },
-                        },
-                        // fare_type
-                        {
-                            postVal: "fare_type",
-                            label: "Fare Type:",
-                            id: "general_fare_type",
-                            required: false,
-                            val: [],
-                            inputType: {
-                                structure: "select",
-                                type: "multiple",
-                                openVal: false,
-                                options: [
-                                    "all",
-                                    "corporate",
-                                    "published",
-                                    "private",
-                                ],
-                            },
-                        },
-                        // passenger_type
-                        {
-                            postVal: "passenger_type",
-                            label: "Passenger Type:",
-                            id: "general_passenger_type",
-                            required: false,
-                            val: [],
-                            inputType: {
-                                structure: "select",
-                                type: "multiple",
-                                openVal: false,
-                                options: ["all", "adult", "child", "infant"],
-                            },
-                        },
-                    ],
-                    rule: {
-                        0: [
-                            // marketing_carriers
-                            {
-                                postVal: "marketing_carriers",
-                                label: "Marketing Carriers",
-                                id: "rule_mark_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                },
-                            },
-                            // affiliate_carriers
-                            {
-                                postVal: "affiliate_carriers",
-                                label: "Affiliate Carriers",
-                                id: "rule_aff_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                    options: ["All", "All", "All"],
-                                },
-                            },
-                            // operating_carriers
-                            {
-                                postVal: "operating_carriers",
-                                label: "Operating Carriers",
-                                id: "rule_ope_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                    options: ["All", "All", "All"],
-                                },
-                            },
-                            // providers
-                            {
-                                postVal: "providers",
-                                label: "Air Providers",
-                                id: "rule_air_p",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: ["amadeus", "tiqwa"],
-                                },
-                            },
-                            // code_share_flights_type
-                            {
-                                postVal: "code_share_flights_type",
-                                label: "Code share flights type:",
-                                id: "rule_code_share",
-                                required: false,
-                                val: [],
-                                break: true,
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "all",
-                                        "equal_marketing_&_operation_carries",
-                                        "different_marketing_&_operation_carries",
-                                    ],
-                                },
-                            },
-                            // fare_basic_code
-                            {
-                                postVal: "fare_basic_code",
-                                label: "Fare Basic Code",
-                                id: "rule_basic_code",
-                                required: false,
-                                val: "",
-                                break: true,
-                                inputType: {
-                                    structure: "input",
-                                    type: "number",
-                                },
-                            },
-                            // office_id
-                            {
-                                postVal: "office_id",
-                                label: "Office ID",
-                                id: "rule_office_id",
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "number",
-                                },
-                            },
-                            // same_flight_whole
-                            {
-                                postVal: "same_flight_whole",
-                                label: "Same flight whole itinerary:",
-                                id: "rule_sfwi",
-                                required: false,
-                                val: false,
-                                tooltip: true,
-                                break: true,
-                                inputType: {
-                                    structure: "input",
-                                    type: "checkbox",
-                                },
-                            },
-                            // journey_type
-                            {
-                                postVal: "journey_type",
-                                label: "Journey Type",
-                                id: "rule_jour_t",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "all",
-                                        "one_way",
-                                        "round_trip",
-                                        "multi_destination",
-                                    ],
-                                },
-                            },
-                            // booking_classes
-                            {
-                                postVal: "booking_classes",
-                                label: "Booking Classes",
-                                id: "rule_book_c",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "all",
-                                        "economy",
-                                        "business",
-                                        "premium",
-                                        "first",
-                                    ],
-                                },
-                            },
-                            // arrival_destination_multi
-                            {
-                                postVal: "arrival_destination_multi",
-                                label: "Choose Arrival Destination for Multidest",
-                                id: "rule_arriv_t",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "non",
-                                        "use_first_destination_as_arrival_destination",
-                                        "use_last_destination_as_arrival_destination",
-                                    ],
-                                },
-                            }, // apply_to_each_leg
-                            {
-                                postVal: "apply_to_each_leg",
-                                label: "Apply markup to each leg:",
-                                id: "rule_amtel",
-                                required: false,
-                                val: false,
-                                inputType: {
-                                    structure: "input",
-                                    type: "checkbox",
-                                },
-                            }, // no_of_stops
-                            {
-                                postVal: "no_of_stops",
-                                label: "Number of stops",
-                                id: "rule_num_stop",
-                                required: false,
-                                val: "",
-                                inputType: {
-                                    structure: "select",
-                                    type: "single",
-                                    openVal: false,
-                                    options: ["0", "1", "2", "2+"],
-                                },
-                            }, // minimum_ticket_cost
-                            {
-                                postVal: "minimum_ticket_cost",
-                                label: "Minimum Ticket Cost",
-                                id: "rule_ntc",
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "text",
-                                },
-                            }, // booking_class_of_service
-                            {
-                                postVal: "booking_class_of_service",
-                                label: "Booking Class of Service",
-                                id: "rule_bcos",
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "text",
-                                },
-                            },
-                            // any_combination_of_itinerary_classes
-                            {
-                                postVal: "any_combination_of_itinerary_classes",
-                                label: "Any combination of specified classes for Itinerary:",
-                                id: "rule_acsci",
-                                required: false,
-                                val: false,
-                                inputType: {
-                                    structure: "input",
-                                    type: "checkbox",
-                                },
-                            },
-                            // negotiated_rates
-                            {
-                                postVal: "negotiated_rates",
-                                label: "Negotiated Rates",
-                                id: "rule_nego_r",
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "text",
-                                },
-                            },
-                        ],
-                        1: [
-                            // from_country
-                            {
-                                postVal: "from_country",
-                                label: "From Country",
-                                id: "rule_from_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "countries",
-                                    openVal: false,
-                                },
-                            },
-                            // to_country
-                            {
-                                postVal: "to_country",
-                                label: "To Country",
-                                id: "rule_to_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "countries",
-                                    openVal: false,
-                                },
-                            },
-                            // from_city
-                            {
-                                postVal: "from_city",
-                                label: "From City",
-                                id: "rule_from_city",
-                                val: [],
-                                userVal: [],
-                                mapVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "cities",
-                                    openVal: false,
-                                },
-                            },
-                            // to_city
-                            {
-                                postVal: "to_city",
-                                label: "To City",
-                                id: "rule_to_city",
-                                val: [],
-                                userVal: [],
-                                mapVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "cities",
-                                    openVal: false,
-                                },
-                            },
-                            // from_iata
-                            {
-                                postVal: "from_iata",
-                                label: "From IATA",
-                                id: "rule_from_iata",
-                                tooltip: true,
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    text: "text",
-                                },
-                            },
-                            // to_iata
-                            {
-                                postVal: "to_iata",
-                                label: "To IATA",
-                                id: "rule_to_iata",
-                                tooltip: true,
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    text: "text",
-                                },
-                            },
-                            // meta_search_engine
-                            {
-                                postVal: "meta_search_engine",
-                                label: "Meta-Search Engine",
-                                id: "rule_mse",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "kayak",
-                                        "trivago",
-                                        "wego",
-                                        "tripadvisor",
-                                    ],
-                                },
-                            },
-                        ],
-                    },
-                    exclude: {
-                        0: [
-                            // exclude_marketing_carriers
-                            {
-                                postVal: "exclude_marketing_carriers",
-                                label: "Exclude Marketing Carriers",
-                                id: "exclude_mark_c",
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_operating_carriers
-                            {
-                                postVal: "exclude_operating_carriers",
-                                label: "Exclude Operation Carriers",
-                                id: "exclude_aff_c",
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_affiliate_carriers
-                            {
-                                postVal: "exclude_affiliate_carriers",
-                                label: "Exclude Affiliate Carriers",
-                                id: "exclude_ope_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "airlines",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_booking_classes
-                            {
-                                postVal: "exclude_booking_classes",
-                                label: "Exclude Booking Class",
-                                id: "exclude_air_p",
-                                required: false,
-                                val: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "multiple",
-                                    openVal: false,
-                                    options: [
-                                        "all",
-                                        "economy",
-                                        "business",
-                                        "premium",
-                                        "first",
-                                    ],
-                                },
-                            },
-                            // exclude_booking_class_of_service
-                            {
-                                postVal: "exclude_booking_class_of_service",
-                                label: "Exclude Booking Class of Service",
-                                id: "exclude_basic_code",
-                                required: false,
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "text",
-                                },
-                            },
-                            // exclude_fare_basic_code
-                            {
-                                postVal: "exclude_fare_basic_code",
-                                label: "Exclude Fare Basis Code",
-                                id: "exclude_office_id",
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    type: "text",
-                                },
-                            },
-                        ],
-                        1: [
-                            // exclude_from_country
-                            {
-                                postVal: "exclude_from_country",
-                                label: "Exclude From Country",
-                                id: "exclude_from_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "countries",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_to_country
-                            {
-                                postVal: "exclude_to_country",
-                                label: "Exclude To Country",
-                                id: "exclude_to_c",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "countries",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_from_city
-                            {
-                                postVal: "exclude_from_city",
-                                id: "exclude_from_city",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                mapVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "cities",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_to_city
-                            {
-                                postVal: "exclude_to_city",
-                                id: "exclude_to_city",
-                                required: false,
-                                val: [],
-                                userVal: [],
-                                mapVal: [],
-                                inputType: {
-                                    structure: "select",
-                                    type: "cities",
-                                    openVal: false,
-                                },
-                            },
-                            // exclude_from_iata
-                            {
-                                postVal: "exclude_from_iata",
-                                label: "Exclude From IATA",
-                                id: "exclude_from_iata",
-                                tooltip: true,
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    text: "text",
-                                },
-                            },
-                            // exclude_to_iata
-                            {
-                                postVal: "exclude_to_iata",
-                                label: "Exclude To IATA",
-                                id: "exclude_to_iata",
-                                tooltip: true,
-                                val: "",
-                                inputType: {
-                                    structure: "input",
-                                    text: "text",
-                                },
-                            },
-                            // region
-                            {
-                                postVal: "region",
-                                label: "Region",
-                                id: "region",
-                                tooltip: true,
-                                val: "All",
-                                inputType: {
-                                    structure: "input",
-                                    type: "checkbox",
-                                },
-                            },
-                        ],
-                    },
-                },
-            },
-            otherData: {
-                product: "Air",
-                remark_message: "",
-                departure_date_after: "",
-                departure_date_from: "",
-                departure_date_to: "",
-                booking_date_from: "",
-                booking_date_to: "",
-                display_options: "",
-                active_indicator: "",
-            },
+            formData: {},
+            otherData: {},
+            loading: false,
+            isEdit: false,
             searchValues: {
                 val: "",
             },
@@ -706,12 +60,48 @@ export default {
         },
         closeModal() {
             if (this.loading) return;
+            this.formData = {};
+            this.otherData = {};
             this.showModal = false;
+            this.isEdit = false;
+            this.tabIndicator = 0;
             let body = document.querySelector("body");
             body.style.overflow = null;
             document.removeEventListener("click", this.closeMenu);
         },
-        openModal() {
+        openModal(objData = null) {
+            if (this.loading) return;
+            this.formData = structuredClone(defaultMarkupSettings.formData);
+            this.otherData = structuredClone(defaultMarkupSettings.otherData);
+            if (objData) {
+                const val = objData;
+                Object.entries(this.otherData).forEach(([key, value]) => {
+                    if (val[key]) {
+                        this.otherData[key] = val[key];
+                    }
+                });
+                this.otherData.id = val.id;
+                this.isEdit = true;
+                Object.entries(this.formData[this.otherData.product]).forEach(
+                    ([key, value]) => {
+                        if (key === "general") {
+                            value.forEach((el, id) => {
+                                this.formData[this.otherData.product][key][
+                                    id
+                                ].val = val[el.postVal];
+                            });
+                        } else {
+                            Object.entries(value).forEach(([key2, value2]) => {
+                                value2.forEach((el, id) => {
+                                    this.formData[this.otherData.product][key][
+                                        key2
+                                    ][id].val = val[el.postVal];
+                                });
+                            });
+                        }
+                    }
+                );
+            }
             this.showModal = true;
             let body = document.querySelector("body");
             body.style.overflow = "hidden";
@@ -727,98 +117,98 @@ export default {
                     }, 1500);
                 });
         },
-        async modalMainAction() {
-            const mainContent = this.formData[this.otherData.product];
-            if (!mainContent.general[0].val) return;
+        disableBtn() {
+            var disable = false;
+            Object.entries(
+                this.formData[this.otherData.product].general
+            ).forEach(([key, value]) => {
+                if (value.required) {
+                    if (!value.val) disable = true;
+                }
+            });
+            return { disable };
+        },
+        async modalMainAction(objData = null) {
+            if (!objData) {
+                var mainContent = this.formData[this.otherData.product];
+                if (!mainContent.general[0].val) return;
+            }
             try {
                 this.loading = true;
                 let payload = {};
-                Object.entries(mainContent).forEach(([key, value]) => {
-                    if (key === "general") {
-                        value.forEach((el) => {
-                            payload[el.postVal] = el.val;
-                        });
-                    } else {
-                        Object.entries(value).forEach(([key2, value2]) => {
-                            value2.forEach((el) => {
+                if (!objData) {
+                    Object.entries(mainContent).forEach(([key, value]) => {
+                        if (key === "general") {
+                            value.forEach((el) => {
                                 payload[el.postVal] = el.val;
                             });
-                        });
-                    }
-                });
-                payload = { ...payload, ...this.otherData };
-                console.log(payload);
-                const { data: res } = await requestService.postRequest(
-                    {
-                        path: "markups",
-                        payload: {
-                            name: "",
-                            product: "",
-                            markup_type: "percentage",
-                            amount_type: "",
-                            fare_type: ["corporate", "published"],
-                            markup_value: "0.00",
-                            apply_markup_at: ["booking", "exchange"],
-                            passenger_type: ["adult", "child", "infant"],
-                            remark_message: "",
-                            status: "",
-                            marketing_carriers: ["ABV", "LOS"],
-                            affiliate_carriers: ["ABV", "LOS"],
-                            operating_carriers: ["ABV", "LOS"],
-                            providers: ["amadeus", "tiqwa"],
-                            code_share_flights_type: [
-                                "equal_marketing_and_operation_carries",
-                            ],
-                            office_id: "",
-                            fare_basic_code: "",
-                            journey_type: ["one_way", "round_trip"],
-                            arrival_destination_multi: [],
-                            no_of_stops: "",
-                            booking_class_of_service: "",
-                            negotiated_rates: "",
-                            from_country: ["ghana", "nigeria"],
-                            from_city: ["ABV", "LOS"],
-                            from_iata: "",
-                            to_country: ["ghana", "nigeria"],
-                            to_city: ["ABV", "LOS"],
-                            to_iata: "",
-                            meta_search_engine: [""],
-                            same_flight_whole: "",
-                            booking_classes: ["economy", "business"],
-                            apply_to_each_leg: "",
-                            minimum_ticket_cost: "",
-                            any_combination_of_itinerary_classes: "",
-                            departure_date_after: "",
-                            departure_date_from: "",
-                            departure_date_to: "",
-                            booking_date_from: "",
-                            booking_date_to: "",
-                            exclude_marketing_carriers: ["P4", "VM"],
-                            exclude_affiliate_carriers: ["P4", "VM"],
-                            exclude_operating_carriers: ["P4", "VM"],
-                            exclude_booking_classes: ["economy", "business"],
-                            exclude_booking_class_of_service: "",
-                            exclude_fare_basic_code: "",
-                            exclude_from_country: ["ghana", "nigeria"],
-                            exclude_from_city: ["ABV", "LOS"],
-                            exclude_from_iata: "",
-                            exclude_to_country: ["ghana", "nigeria"],
-                            exclude_to_city: ["ABV", "LOS"],
-                            exclude_to_iata: "",
-                            region: "",
-                            display_options: 1,
-                            active_indicator: 1,
+                        } else {
+                            Object.entries(value).forEach(([key2, value2]) => {
+                                value2.forEach((el) => {
+                                    payload[el.postVal] = el.val;
+                                });
+                            });
+                        }
+                    });
+                    payload = { ...payload, ...this.otherData };
+                } else {
+                    payload = objData;
+                    delete payload.id;
+                    delete payload.manager_id;
+                    delete payload.user_id;
+                }
+                if (!this.isEdit) {
+                    let { data: res } = await requestService.postRequest(
+                        {
+                            path: "markups",
+                            payload,
                         },
-                    },
-                    true
-                );
-                console.log(res);
+                        true
+                    );
+
+                    storeUtils.fireAway().settings.setStoreData({
+                        name: "markup",
+                        data: [
+                            ...[res.data],
+                            ...storeUtils.fireAway().settings.markup,
+                        ],
+                    });
+                    RuthdoAlert({
+                        title: "Markup created successfully",
+                        icon: "success",
+                    });
+                } else {
+                    let { data: res } = await requestService.patchRequest(
+                        {
+                            path: "markups",
+                            payload,
+                        },
+                        true
+                    );
+                    let mt = storeUtils.fireAway().settings.markup;
+                    const id = storeUtils
+                        .fireAway()
+                        .settings.markup.findIndex(
+                            (el) => el.id === payload.id
+                        );
+                    mt[id] = payload;
+                    storeUtils.fireAway().settings.setStoreData({
+                        name: "markup",
+                        data: mt,
+                    });
+                    RuthdoAlert({
+                        title: "Settings saved succesfully",
+                        icon: "success",
+                    });
+                }
+                this.loading = false;
+                this.closeModal();
             } catch (err) {
-                console.log(err);
             } finally {
                 this.loading = false;
             }
         },
+        async deleteMarkup() {},
     },
     computed: {
         getUser() {
@@ -833,9 +223,6 @@ export default {
 
         default_theme() {
             return storeUtils.fireAway().theme.getDefault_theme;
-        },
-        loading() {
-            return storeUtils.fireAway().transaction.getLoading;
         },
         custom_theme() {
             return storeUtils.fireAway().theme.custom_theme;
@@ -875,7 +262,7 @@ export default {
                 <div class="child__wrapper align_auto flex-column">
                     <!-- header -->
                     <div class="child_header">
-                        <h3>New Markup</h3>
+                        <h3>{{ isEdit ? "Edit" : "New" }} Markup</h3>
                         <p>
                             Your mark up details will be applied to the prices
                             of all flights results returned
@@ -916,7 +303,7 @@ export default {
                                     </svg>
                                     <div class="d-flex flex-column">
                                         <p>Markup Plan</p>
-                                        <span>Air</span>
+                                        <span>{{ otherData.product }}</span>
                                     </div>
                                 </div>
                                 <div class="right_side">
@@ -1088,10 +475,7 @@ export default {
                                     class="d-flex align-center justify-end child_footer"
                                 >
                                     <OnBoardingButton
-                                        :disabled="
-                                            !formData[otherData.product]
-                                                .general[0].val
-                                        "
+                                        :disabled="disableBtn().disable"
                                         @click="tabIndicator++"
                                         class="nextBtn"
                                         background="var(--primary_color)"
@@ -1311,11 +695,13 @@ export default {
                                     <OnBoardingButton
                                         :loading="loading"
                                         :disabled="loading"
-                                        @click="modalMainAction"
+                                        @click="modalMainAction(false)"
                                         background="var(--primary_color)"
                                         btnWidth="100px"
                                         height="36px"
-                                        textNode="New Markup"
+                                        :textNode="
+                                            isEdit ? 'Save' : 'New Markup'
+                                        "
                                     ></OnBoardingButton>
                                 </div>
                             </div>

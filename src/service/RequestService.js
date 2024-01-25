@@ -16,4 +16,9 @@ export default {
         const res = await apiService.Client.put(`api${tenant ? `/${storeUtils.fireAway().global?.getTenant_id}` : ''}/${val.path}`, val?.payload)
         return res
     },
+    // put requests
+    async patchRequest(val, tenant = null) {
+        const res = await apiService.Client.patch(`api${tenant ? `/${storeUtils.fireAway().global?.getTenant_id}` : ''}/${val.path}`, val?.payload)
+        return res
+    },
 }

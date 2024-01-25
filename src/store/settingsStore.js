@@ -30,7 +30,7 @@ export const useSettingsStore = defineStore('settingsStore', {
         allRoles: null,
         permissions: null,
         notifications: null,
-        markup: null,
+        markup: [],
         airlines: [],
         members: null,
         domainAvaliability: null,
@@ -63,6 +63,9 @@ export const useSettingsStore = defineStore('settingsStore', {
     },
 
     actions: {
+        setStoreData({ name, data }) {
+            this[name] = data
+        },
 
         async getDomainsAction() {
             const user = JSON.parse(localStorage?.user)
