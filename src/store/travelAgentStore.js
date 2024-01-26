@@ -9,6 +9,7 @@ import {RuthdoAlert} from "ruthly";
 export const useTravelAgentStore = defineStore('travelAgentStore', {
     state: () => ({
         loading: false,
+        loadingAgents:false,
         users:null,
         travelAgents:null,
         userWallet:null,
@@ -22,6 +23,7 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         getUser:state => state.users,
         getTravelAgents:state => state.travelAgents,
         getLoading: state => state.loading,
+        getLoadingAgents: state => state.loadingAgents,
         getUserWallet: state => state.userWallet,
         getSingleTransaction: state => state.singleTransaction,
         getTransactions: state => state.transactions,
@@ -32,17 +34,17 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
     actions: {
 
         async readAgentMembers(user_id){
-            this.loading = true
+            this.loadingAgents = true
             try{
                 const response = await TravelAgentsService.getAgentsTeamMembers(storeUtils.fireAway().global?.getTenant_id, user_id)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.loadingAgents = false
                     this.agentTeams = responseData.data
                 }
 
             }catch{
-                this.loading = false
+                this.loadingAgents = false
                 // do nothing
             }
 
@@ -105,15 +107,15 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         },
 
         handleGetTravelAgent(searchQuery){
-            this.loading = true
+            this.loadingAgents = true
             return TravelAgentsService.getTravelAgent(storeUtils.fireAway().global?.getTenant_id, searchQuery).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    this.loadingAgents = false
                     this.users = responseData
                 }
             }).catch(e => {
-                this.loading = false
+                this.loadingAgents = false
                 catchErrorHandler(e)
             })
         },

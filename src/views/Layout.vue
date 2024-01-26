@@ -12,7 +12,7 @@
             <img src="../../src/assets/Cards/logo.svg" />
           </router-link>
 
-          <div v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin'|| getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" class="navigation-links" id="nav">
+          <div v-if="getUser?.account_type === 'super_admin' || getUser?.account_type === 'admin'|| getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" class="navigation-links" id="nav">
             <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`">
               <div class="links-item" :style="getCurrentRoute.includes('dashboard') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('dashboard')}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -63,7 +63,7 @@
 
 
           <div class="m7-0">
-            <div class="account_indicator"> {{getUser?.account_type.toUpperCase()}}</div>
+            <div class="account_indicator"> {{getUser?.account_type.replace('_', ' ')}}</div>
 
             <img src="../assets/notification.svg" class="notification_icon">
 
@@ -241,6 +241,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  text-transform: capitalize;
 }
 
 #nav a.router-link-exact-active {

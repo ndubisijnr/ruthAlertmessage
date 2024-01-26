@@ -1,5 +1,4 @@
 import stores from "../store/";
-import {RuthdoAlert} from "ruthly";
 
 class storeUtils {
     //automatic dispatcher

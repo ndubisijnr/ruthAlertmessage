@@ -1,6 +1,6 @@
 <template>
   <add-team-member v-if="isAddAgents" @close="close"></add-team-member>
-  <ModalLoader v-if="getLoading" :message="'Loading Agents'"></ModalLoader>
+  <ModalLoader v-if="getLoadingAgents" :message="'Loading Agents'"></ModalLoader>
   <layout v-slot:child-content>
     
     <div class="overall" style="margin: 0" v-if="getCurrentRouteName !== 'Travel Agents'">
@@ -140,6 +140,11 @@ export default {
 
     getLoading(){
       return storeUtils.fireAway().travelAgent.getLoading
+    },
+
+
+    getLoadingAgents(){
+      return storeUtils.fireAway().travelAgent.getLoadingAgents
     },
 
     getCurrentRouteName(){

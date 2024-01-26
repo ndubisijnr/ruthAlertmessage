@@ -1,5 +1,5 @@
 <template>
-  <WalletCreation v-if="isWallet && !getWallet?.wallet_number || setup" @cancel="close"></WalletCreation>
+  <WalletCreation v-if="isWallet && getUser.account_type === 'manger' && !getWallet?.wallet_number || setup" @cancel="close"></WalletCreation>
   <add-funds @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number" :wallet_name="getWallet?.wallet_name"></add-funds>
   <layout v-slot:child-content>
     <div class="overall">
@@ -27,7 +27,7 @@
               </div>
             </div>
 
-            <div v-if="!getWallet?.wallet_number && pageMounted" style="position: absolute;right: 1rem;bottom: 1rem;">
+            <div v-if="!getWallet?.wallet_number && pageMounted && getUser.account_type === 'manger'" style="position: absolute;right: 1rem;bottom: 1rem;">
               <on-boarding-button @click="setup=true" btn-width="10rem" color="#FFF" height="2.5rem" text-node="Setup Wallet"></on-boarding-button>
             </div>
           </div>

@@ -2,8 +2,7 @@
 import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import {lightenColor} from "@/mixins/themeUtils";
-import storeUtils from "@/utils/storeUtils";
-
+import storeUtils from "../../utils/storeUtils";
 export default {
   name: "FilterBookingModal",
   data(){
@@ -37,11 +36,14 @@ export default {
         this.searchModel.payment_status = text2
       }
 
-      storeUtils.fireAway()?.booking?.getAllAgentBooking(this.searchModel).then(() => {
+
+      storeUtils.fireAway().booking?.getAllAgentBooking(1,this.searchModel).then(() => {
         this.searchModel = {}
         this.close()
         this.reset = false
+        console.log('clicked after')
       })
+      
     },
     close(){
       this.$emit('close', false)
