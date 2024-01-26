@@ -25,6 +25,7 @@ export const useSettingsStore = defineStore('settingsStore', {
         markupLoading: false,
         notificationLoading: false,
         domains: null,
+        markupKeyword: null,
         personalProfile: null,
         businessProfile: null,
         allRoles: null,
@@ -346,14 +347,15 @@ export const useSettingsStore = defineStore('settingsStore', {
 
         },
 
-        async readMarkupSettings() {
+        async readMarkupSettings(num = 1) {
             try {
-                const response = await Markup.getMarkupSettings(storeUtils.fireAway().global?.getTenant_id)
+                const response = await Markup.getMarkupSettings(storeUtils.fireAway().global?.getTenant_id, num, this.markupKeyword)
                 let responseData = response.data
                 // console.log('markUp-settings:', responseData)
                 if (responseData.success) {
                     this.loading = false
                     this.markup = responseData.data
+                    console.log(this.markup)
                 }
 
             }

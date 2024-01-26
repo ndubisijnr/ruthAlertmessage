@@ -165,14 +165,8 @@ export default {
                         },
                         true
                     );
+                    await storeUtils.fireAway().settings.readMarkupSettings();
 
-                    storeUtils.fireAway().settings.setStoreData({
-                        name: "markup",
-                        data: [
-                            ...[res.data],
-                            ...storeUtils.fireAway().settings.markup,
-                        ],
-                    });
                     RuthdoAlert({
                         title: "Markup created successfully",
                         icon: "success",
@@ -188,16 +182,16 @@ export default {
                     let mt = storeUtils.fireAway().settings.markup;
                     const id = storeUtils
                         .fireAway()
-                        .settings.markup.findIndex(
+                        .settings.markup.data.findIndex(
                             (el) => el.id === payload.id
                         );
-                    mt[id] = payload;
+                    mt.data[id] = payload;
                     storeUtils.fireAway().settings.setStoreData({
                         name: "markup",
                         data: mt,
                     });
                     RuthdoAlert({
-                        title: "Settings saved succesfully",
+                        title: res.data,
                         icon: "success",
                     });
                 }

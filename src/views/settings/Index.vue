@@ -1780,8 +1780,13 @@
                                         </svg>
                                     </label>
                                     <input
-                                        :disabled="!markup?.length"
+                                        :disabled="
+                                            !markupSearch &&
+                                            !markup.data?.length
+                                        "
+                                        @input="searchMarkup"
                                         id="markup_input_filter"
+                                        v-model="markupSearch"
                                         type="search"
                                         style="
                                             outline: none;
@@ -1805,8 +1810,13 @@
                                     @deleteMarkup="
                                         $refs.markupBuilder.deleteMarkup($event)
                                     "
-                                    :data="markup"
+                                    :data="markup.data"
+                                    :currentPage="markup.current_page"
+                                    :itemsPerPage="markup.per_page"
+                                    :lastPage="markup.last_page"
+                                    :total="markup.total"
                                     :is-paginate="true"
+                                    tableName="markup"
                                     :fields="markUpFields"
                                 ></domain-table>
                             </div>
@@ -1903,6 +1913,7 @@ export default {
 
     data() {
         return {
+            markupSearch: "",
             pureColor: "red",
             isFocused: false,
             gradientColor:
@@ -1996,6 +2007,24 @@ export default {
         editRole(value) {
             console.log(value);
             this.updateRole = value;
+        },
+
+        searchMarkup() {
+            if (this.markupSearch) {
+                storeUtils.fireAway().settings.setStoreData({
+                    name: "markupKeyword",
+                    data: this.markupSearch,
+                });
+                setTimeout(() => {
+                    storeUtils.fireAway().settings.readMarkupSettings(1);
+                }, 200);
+            } else {
+                storeUtils.fireAway().settings.setStoreData({
+                    name: "markupKeyword",
+                    data: this.markupSearch,
+                });
+                storeUtils.fireAway().settings.readMarkupSettings(1);
+            }
         },
 
         marry(value) {

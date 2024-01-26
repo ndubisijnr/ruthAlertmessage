@@ -42,22 +42,16 @@
             </tr>
         </thead>
         <tbody class="tr" v-if="data?.length">
-            <!-- this if statement below will never occur -->
             <div v-if="data.length === 0">
                 <p>No User Found</p>
             </div>
             <tr v-for="h in fields" :key="h.key" class="table-cell">
-                <div
-                    v-for="(j, index) in isPaginate
-                        ? paginate(data, currentPage, itemsPerPage)
-                        : data"
-                    :key="index + 4932"
-                >
+                <div v-for="(j, index) in data" :key="index + 1 * 232">
                     <td
                         @click="table_row_onclick_action(j)"
                         class="table-row px-6 py-3"
                     >
-                        <!-- template {domain status}  -->
+                        <!-- markup status  -->
                         <span
                             class="capital connected"
                             :class="{
@@ -163,7 +157,12 @@
                         </span>
 
                         <!-- template {actions}  -->
-                        <div v-else-if="h.label.toLowerCase() === 'action'">
+                        <div
+                            v-else-if="
+                                h.label.toLowerCase() === 'action' ||
+                                h.key.toLowerCase() === 'action_m'
+                            "
+                        >
                             <span
                                 @click="
                                     (currentActionIndex = index), (show = !show)
@@ -245,47 +244,6 @@
                                         Deactivate Agent
                                     </p>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- template {actions}  -->
-                        <div v-else-if="h.key.toLowerCase() === 'action_m'">
-                            <span
-                                @click="
-                                    (currentActionIndex = index), (show = !show)
-                                "
-                                :style="
-                                    j.type === 'manager'
-                                        ? { cursor: 'not-allowed' }
-                                        : { cursor: 'pointer' }
-                                "
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="4"
-                                    height="18"
-                                    viewBox="0 0 4 18"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M3.86744 2.58888C3.86751 2.83416 3.81928 3.07706 3.72549 3.3037C3.63169 3.53034 3.49418 3.73629 3.32079 3.90979C3.14741 4.08329 2.94155 4.22093 2.71497 4.31487C2.48838 4.40881 2.24552 4.4572 2.00024 4.45728C1.75495 4.45736 1.51206 4.40913 1.28541 4.31533C1.05877 4.22154 0.852823 4.08402 0.679326 3.91064C0.505829 3.73725 0.368183 3.53139 0.274244 3.30481C0.180305 3.07823 0.131915 2.83536 0.131836 2.59008C0.131677 2.09471 0.32831 1.61956 0.678478 1.26917C1.02865 0.918777 1.50366 0.721839 1.99904 0.72168C2.49441 0.721521 2.96955 0.918154 3.31995 1.26832C3.67034 1.61849 3.86728 2.09351 3.86744 2.58888Z"
-                                        fill="black"
-                                    />
-                                    <path
-                                        d="M2.00001 10.8665C3.03124 10.8665 3.86721 10.0305 3.86721 8.99928C3.86721 7.96805 3.03124 7.13208 2.00001 7.13208C0.968786 7.13208 0.132812 7.96805 0.132812 8.99928C0.132812 10.0305 0.968786 10.8665 2.00001 10.8665Z"
-                                        fill="black"
-                                    />
-                                    <path
-                                        d="M2.00001 17.2781C3.03124 17.2781 3.86721 16.4421 3.86721 15.4109C3.86721 14.3797 3.03124 13.5437 2.00001 13.5437C0.968786 13.5437 0.132812 14.3797 0.132812 15.4109C0.132812 16.4421 0.968786 17.2781 2.00001 17.2781Z"
-                                        fill="black"
-                                    />
-                                </svg>
-                            </span>
-
-                            <div
-                                class="menu"
-                                v-show="currentActionIndex === index && show"
-                            >
                                 <!-- markup -->
                                 <div v-if="j.hasOwnProperty('markup_value')">
                                     <p
@@ -305,51 +263,6 @@
                                         class="menu-item deactivate"
                                     >
                                         Delete
-                                    </p>
-                                </div>
-                                <!-- template {team} -->
-                                <div
-                                    v-if="h.id === 'member'"
-                                    v-show="j.type !== 'manager'"
-                                >
-                                    <p
-                                        class="menu-item"
-                                        @click="editTeamMember(j)"
-                                    >
-                                        Edit Member
-                                    </p>
-                                    <p
-                                        class="menu-item deactivate"
-                                        @click="deactivateTeamMember(j)"
-                                    >
-                                        Deactivate Member
-                                    </p>
-                                </div>
-
-                                <!-- template {agent_team} -->
-                                <div v-if="h.id === 'team'">
-                                    <p class="menu-item" @click="viewAgent(j)">
-                                        View Agent
-                                    </p>
-                                    <p
-                                        class="menu-item deactivate"
-                                        @click="confirmDeactiveAgent"
-                                    >
-                                        Deactivate Agent
-                                    </p>
-                                </div>
-
-                                <!-- template {roles} -->
-                                <div v-if="h.id === 'role'">
-                                    <p class="menu-item" @click="editRole(j)">
-                                        Edit Role
-                                    </p>
-                                    <!--                  <p class="menu-item deactivate" >Delete Role</p>-->
-                                </div>
-
-                                <div v-if="h.id === 'travel_agent_action'">
-                                    <p class="menu-item deactivate">
-                                        Deactivate Agent
                                     </p>
                                 </div>
                             </div>
@@ -431,6 +344,12 @@
                             {{ j.status }}
                         </span>
 
+                        <!-- template {team member agent type}  -->
+
+                        <span v-else-if="h.label.toLowerCase() === 'status'">{{
+                            j.type
+                        }}</span>
+
                         <!--  formating amount -->
 
                         <span
@@ -438,6 +357,13 @@
                                 h.label.toLowerCase() === 'ticket amount'
                             "
                             >₦ {{ formatAmount(j?.amount) }}</span
+                        >
+
+                        <span
+                            v-else-if="
+                                h.label.toLowerCase() === 'ticket amount_'
+                            "
+                            >₦ {{ formatAmount(j?.ticket_amount) }}</span
                         >
 
                         <!-- template {agent balance}  -->
@@ -492,25 +418,40 @@
         </div>
     </table>
 
-    <div v-show="isPaginate" class="paginate" v-if="getTotalPage > 1">
+    <div v-show="isPaginate" class="paginate" v-if="getTotalPage >= 1">
         <div style="width: 100%">Total Pages: {{ getTotalPage }}</div>
         <div class="paginate_num">
-            <img
-                src="../../assets/Icons/Settings/leftArrows.svg"
-                @click="currentPage = currentPage - 1"
-            />
+            <button
+                @click="next(currentPage - 1)"
+                :disabled="currentPage == 1"
+                style="
+                    border: none;
+                    background-color: transparent;
+                    cursor: pointer;
+                "
+            >
+                <img src="../../assets/Icons/Settings/leftArrows.svg" />
+            </button>
             <div
-                @click="currentPage = i"
+                @click="next(i)"
                 :class="{ activePage: i === currentPage }"
                 class="pag_item"
                 v-for="i in getTotalPage"
+                :key="i + 9018"
             >
                 <span>{{ i }}</span>
             </div>
-            <img
-                src="../../assets/Icons/Settings/rightArrow.svg"
-                @click="currentPage = currentPage + 1"
-            />
+            <button
+                @click="next(currentPage + 1)"
+                :disabled="currentPage == lastPage"
+                style="
+                    border: none;
+                    background-color: transparent;
+                    cursor: pointer;
+                "
+            >
+                <img src="../../assets/Icons/Settings/rightArrow.svg" />
+            </button>
         </div>
     </div>
 </template>
@@ -526,14 +467,24 @@ import { formatAmount } from "../../mixins/flightUtil";
 
 export default {
     name: "BaseTable",
-    props: ["data", "fields", "isPaginate", "emptyMessage", "filterQuery"],
+    props: [
+        "data",
+        "fields",
+        "isPaginate",
+        "emptyMessage",
+        "other",
+        "filterQuery",
+        "currentPage",
+        "itemsPerPage",
+        "lastPage",
+        "total",
+        "tableName",
+    ],
     components: { OnBoardingButton },
 
     data() {
         return {
             convertToWord,
-            currentPage: 1,
-            itemsPerPage: 20,
             paginate,
             formatAmount,
             currentActionIndex: null,
@@ -549,6 +500,31 @@ export default {
             console.log("click");
         },
 
+        next(value) {
+            if (this.currentPage == value) return;
+            if (this.getCurrentRoute === "Support") {
+                storeUtils
+                    .fireAway()
+                    ?.itineneryStore?.getItineraryRequestAction(
+                        this.other.activeService,
+                        this.other.filterValue,
+                        value
+                    );
+            }
+
+            if (this.getCurrentRoute === "Bookings") {
+                storeUtils.fireAway().booking?.getAllBooking(value);
+            }
+
+            if (this.getCurrentRoute === "Travel Agents") {
+                storeUtils.fireAway().travelAgent?.handleGetTravelAgent(value);
+            }
+
+            if (this.tableName === "markup") {
+                storeUtils.fireAway().settings?.readMarkupSettings(value);
+            }
+        },
+
         readAgent(obj) {
             localStorage.userWallet = JSON.stringify(obj.wallet);
             storeUtils.fireAway().travelAgent?.handleGetUser(obj);
@@ -559,6 +535,13 @@ export default {
             this.model.name = obj?.name;
             this.model.permission_ids = obj?.permissions.map((item) => item.id);
             this.$emit("updatingRole", true);
+        },
+
+        itineneryDetails(obj) {
+            console.log(obj);
+            storeUtils
+                .fireAway()
+                .itineneryStore?.getItineraryRequestDetailsAction(obj.id);
         },
 
         editTeamMember(obj) {
@@ -577,6 +560,7 @@ export default {
         },
 
         table_row_onclick_action(obj) {
+            console.log(obj);
             if (this.getCurrentRoute.toLowerCase() === "travel agents") {
                 this.readAgent(obj);
             }
@@ -588,6 +572,11 @@ export default {
                         20
                     )}`,
                 });
+            }
+
+            if (this.getCurrentRoute.toLowerCase() === "support") {
+                console.log(this.getCurrentRoute.toLowerCase());
+                this.itineneryDetails(obj);
             }
         },
 
@@ -602,9 +591,7 @@ export default {
 
     computed: {
         getTotalPage() {
-            return Math.ceil(
-                Number(this.data?.length) / Number(this.itemsPerPage)
-            );
+            return Math.ceil(Number(this.total) / Number(this.itemsPerPage));
         },
         getUser() {
             if (localStorage.user) {
@@ -803,7 +790,8 @@ export default {
 .table {
     /* border-collapse: collapse; */
     width: 100%;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    margin-bottom: 3rem;
 }
 
 .table-label {
@@ -870,7 +858,7 @@ export default {
     align-items: center;
     justify-content: start;
     gap: 0.5rem;
-    //text-transform: ;
+    /*text-transform: ;*/
     padding-left: 1rem;
 }
 
