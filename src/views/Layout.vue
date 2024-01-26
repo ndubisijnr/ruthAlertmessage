@@ -63,6 +63,7 @@
 
 
           <div class="m7-0">
+            <div class="account_indicator"> {{getUser?.account_type.toUpperCase()}}</div>
 
             <img src="../assets/notification.svg" class="notification_icon">
 
@@ -223,6 +224,23 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.account_indicator{
+  display: flex;
+  padding: 0.25rem 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 5rem;
+  width: 7rem;
+  background: var(--primary-05, #EAF0F7);
+  color: #000;
+  font-family: "Product Sans";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 #nav a.router-link-exact-active {
