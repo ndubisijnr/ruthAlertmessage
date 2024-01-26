@@ -93,7 +93,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
             let responseData = response.data
             if(responseData.success){
                 this.requestingDetailsLoading = false
-                this.itineraryRequest = responseData.data
+                this.itineraryRequest = responseData
             }
         }catch(errr){
             this.requestingDetailsLoading = false

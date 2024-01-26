@@ -173,6 +173,7 @@
 
   </table>
 
+
   <div v-show="isPaginate" class="paginate" v-if="getTotalPage >= 1">
     <div style="width: 100%">Total Pages: {{getTotalPage}}</div>
     <div class="paginate_num">
@@ -224,6 +225,9 @@ export default {
       if(this.getCurrentRoute === 'Support') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.other.activeService, this.other.filterValue, value)
       
       if(this.getCurrentRoute === 'Bookings') storeUtils.fireAway().booking?.getAllBooking(value)
+
+      if(this.getCurrentRoute === 'Travel Agents') storeUtils.fireAway().travelAgent?.handleGetTravelAgent(value)
+
       
     },
 

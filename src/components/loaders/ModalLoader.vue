@@ -5,7 +5,7 @@
             <SpinnerLoader></SpinnerLoader>
         </div>
 
-        <p class="loading_info">Loading Itenerary</p>
+        <p class="loading_info">{{message}}</p>
        
       </div>
     </div>
@@ -15,7 +15,8 @@
   <script>
   import SpinnerLoader from './SpinnerLoader.vue';
   export default {
-    name: "Modal Loader",
+    name: "ModalLoader",
+    props:['message'],
     components:{SpinnerLoader}
   }
   </script>

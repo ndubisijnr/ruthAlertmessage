@@ -12,8 +12,8 @@ export default {
         return apiService.Client.get(`api/${tenant_id}/itinerary/requests?type=${itineraryType}&status=${status}&page=${page}`)
     },
 
-    getItineraryRequestManager(tenant_id, user_id, itineraryType){
-        return apiService.Client.get(`api/${tenant_id}/itinerary/requests/manager/${user_id}?type=${itineraryType}`)
+    getItineraryRequestManager(tenant_id, user_id, itineraryType,status, page){
+        return apiService.Client.get(`api/${tenant_id}/itinerary/requests/manager/${user_id}?type=${itineraryType}&status=${status}&page=${page}`)
     },
 
     replyItineraryRequestService(tenant_id, id, payload){
