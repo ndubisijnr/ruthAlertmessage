@@ -60,6 +60,7 @@ export const useBookingStore = defineStore('bookingStore', {
             this.loadingBooking = true
             try{
                 const response = await BookingService.getBookings(storeUtils.fireAway().global?.getTenant_id,page)
+               
                 let responseData = response.data
                 if(responseData.success){
                     this.loadingBooking = false
@@ -71,10 +72,10 @@ export const useBookingStore = defineStore('bookingStore', {
             }
         },
 
-        async getAllAgentBooking(payload,page){
+        async getAllAgentBooking(page, payload){
             this.bookingLoading = true
             try{
-                const response = await BookingService.getAgentsBookings(storeUtils.fireAway().global?.getTenant_id,payload)
+                const response = await BookingService.getBookings(storeUtils.fireAway().global?.getTenant_id,page,payload)
                 let responseData = response.data
                 if(responseData.success){
                     this.loadingBooking = false
