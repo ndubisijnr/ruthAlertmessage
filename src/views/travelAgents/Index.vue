@@ -1,6 +1,8 @@
 <template>
   <add-team-member v-if="isAddAgents" @close="close"></add-team-member>
+  <ModalLoader v-if="getLoading" :message="'Loading Agents'"></ModalLoader>
   <layout v-slot:child-content>
+    
     <div class="overall" style="margin: 0" v-if="getCurrentRouteName !== 'Travel Agents'">
       <div class="main-wrapper">
         <div  class="side-area-wrapper">
@@ -26,7 +28,7 @@
     </div>
     <div v-else class="overall" id="overall">
       <div class="booking-wrapper">
-        <p class="travel_agents_count">You Have ( {{ getMembers?.length }} ) Travel Agents. </p>
+        <p class="travel_agents_count">You Have ( {{ getMembers?.total }} ) Travel Agents. </p>
         <div class="search_filter">
             <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -45,9 +47,9 @@
               <!-- <on-boarding-button @click="isAddAgents=true" class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Add Agents"></on-boarding-button> -->
             </div>
         </div>
-        <div style="margin-top: 3.5rem">
+        <div>
           <div class="table-wrapper">
-            <domain-table :empty-message="`Hi, No agents at the moments`" :is-paginate="true" :data="getMembers" :fields="membersFields">
+            <domain-table :items-per-page="getMembers?.per_page" :total="getMembers?.total" :current-page="getMembers?.current_page" :last-page="getMembers?.last_page" :empty-message="`Hi, No agents at the moments`" :is-paginate="true" :data="getMembers?.data" :fields="membersFields">
               <template v-slot:emptyIcon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                   <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
@@ -73,8 +75,6 @@
               </template>
             </domain-table>
           </div>
-
-
         </div>
       </div>
     </div>
@@ -90,9 +90,11 @@ import storeUtils from "../../utils/storeUtils";
 import DomainTable from "../../components/tables/BaseTable.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import AddTeamMember from "@/components/modals/AddTeamMember.vue";
+import ModalLoader from "../../components/loaders/ModalLoader.vue";
+
 export default {
   name: "Index",
-  component:{DomainTable,OnBoardingButton,AddTeamMember},
+
   data(){
     return{
       active:"Business Information",
@@ -122,7 +124,8 @@ export default {
 
     }
   },
-  components:{AddTeamMember, OnBoardingButton, DomainTable, Layout},
+
+  components:{AddTeamMember, OnBoardingButton, DomainTable, Layout,ModalLoader},
 
   methods:{
     close(value){
@@ -133,6 +136,10 @@ export default {
   computed: {
     getCurrentRoute(){
       return router.currentRoute.value.path
+    },
+
+    getLoading(){
+      return storeUtils.fireAway().travelAgent.getLoading
     },
 
     getCurrentRouteName(){
@@ -157,6 +164,7 @@ export default {
 
 
   },
+
   mounted() {
     storeUtils.fireAway().travelAgent?.handleGetTravelAgent()
   }
@@ -227,7 +235,6 @@ export default {
 
 .table-wrapper{
   overflow-x: scroll;
-  width: 68.625rem;
 }
 
 @media (max-width: 1024px) {
@@ -378,7 +385,7 @@ a{
   text-decoration: none !important;
 }
 .wrapper{
-  //min-width: 100%;
+  /*min-width: 100%;*/
   background-color: #F9FAFC;
   min-height: 100vh;
   overflow: scroll;
@@ -1150,7 +1157,7 @@ a{
 
 .table-wrapper{
   overflow-x: scroll;
-  width: 100%;
+
 }
 
 .booking-wrapper{

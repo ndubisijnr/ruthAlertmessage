@@ -3,18 +3,44 @@ import Layout from "@/components/modals/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import ItineraryRequest from "@/model/ItineraryRequest";
 import storeUtils from "@/utils/storeUtils";
+import WalletTopUp from "../WalletTopUp.vue";
+import TravelAgentRequest from "../../../model/TravelAgentRequest";
+import { formatAmount, convertDurationToWords, convertToWord, convertTo12HourFormat } from "../../../mixins/flightUtil";
+import { toHandlers } from "vue";
 
 export default {
   name: "Issurance",
-  components: {OnBoardingButton, Layout},
+  components: {OnBoardingButton, Layout,WalletTopUp},
   props:['data', "id"],
   data(){
     return{
       model:{},
-      description:null
+      description:null,
+      Progress:['Issuance Details', 'Pay Now'],
+      progressNav:['Issuance Details'],
+      progressStage:"Issuance Details",
+      formatAmount,
+      isWallet:false,
+      convertDurationToWords,
+      convertToWord,
+      convertTo12HourFormat,
+      fundRequest:TravelAgentRequest.makePayment
     }
   },
   computed:{
+    getSelectedFlight(){
+      return storeUtils.fireAway()?.flight?.getSelectedFlight
+    },
+
+    
+
+    getPaymentLoading(){
+        return storeUtils.fireAway()?.travelAgent?.getLoading
+    },
+
+    getError(){
+      return storeUtils.fireAway()?.flight?.getErrors
+    },
     getUser(){
       return JSON.parse(localStorage?.user)
     },
@@ -26,6 +52,14 @@ export default {
     }
   },
   methods:{
+    prevProgress(value){
+      console.log(value)
+      this.progressNav = this.progressNav.filter(item => {
+        return item !== value
+      })
+      this.progressStage = 'Issuance Details'
+    },
+
     close(){
       this.$emit('close', false)
     },
@@ -74,6 +108,7 @@ export default {
 
 <template>
   <layout v-slot:children>
+   
     <div class="modal">
       <div class="modal-header">
         <p class="add-team-member">Issuance</p>
@@ -81,65 +116,112 @@ export default {
       </div>
 
       <div class="main">
-        <div class="modal-body">
-
-          <div class="email-area">
-            <div class="group-inputs">
-              <div>
-                <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label" >Booking Reference <span class="required">*</span> </label>
-                </div>
-                <div class="form-input">
-                  <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
-                    <p class="label_text">Reference</p>
+        <div class="progress-or">
+                <div class="progress-or-item" v-for="(i, index) in Progress">
+                  <p class="stage" :class="{'activeStage':progressStage === i || progressNav.includes(i)}">{{ i }}</p>
+                  <div style="display: flex;align-items: center;justify-content: start">
+                    <div class="circle" :class="{'activeProgress': progressStage === i || progressNav.includes(i)}">{{index + 1}}</div>
+                    <div class="line" v-if="index !== Progress.length - 1">
+                      <div :class="{'progress':progressNav.includes(i)}"></div>
+                    </div>
                   </div>
-                    <input class="form-input-input" :value="data?.reference"/>
                 </div>
+        </div>
+        <div v-if="progressStage === 'Issuance Details'">
+        
+          <div class="modal-body">
 
-              </div>
-              <div>
-                <div  style="margin-bottom: 0.75rem">
-                  <label class="class_label">Requested by <span class="required">*</span></label>
+            <div class="email-area">
+              <div class="group-inputs">
+                <div>
+                  <div  style="margin-bottom: 0.75rem">
+                    <label class="class_label" >Booking Reference <span class="required">*</span> </label>
+                  </div>
+                  <div class="form-input">
+                    <div style="width:50%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
+                      <p class="label_text">Reference</p>
+                    </div>
+                      <input class="form-input-input" :value="data?.reference"/>
+                  </div>
+
                 </div>
                 <div>
-                    <!-- <div class="form-input">
-                      <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
-                        <p class="label_text">Payment Receipt</p>
-                      </div>
-                        <input class="form-input-input" id="attachment" @change="handleFileChange" type="file" hidden/>
-                        <p class="choose-attachment" @click="uploadAttachment">Choose Attachment</p>
-                    </div> -->
-
-
+                  <div  style="margin-bottom: 0.75rem">
+                    <label class="class_label">Requested by <span class="required">*</span></label>
+                  </div>
                   <div>
-                    <div class="form-input">
-                      <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
-                        <p class="label_text">Requested By </p>
+                      <!-- <div class="form-input">
+                        <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center;">
+                          <p class="label_text">Payment Receipt</p>
+                        </div>
+                          <input class="form-input-input" id="attachment" @change="handleFileChange" type="file" hidden/>
+                          <p class="choose-attachment" @click="uploadAttachment">Choose Attachment</p>
+                      </div> -->
+
+
+                    <div>
+                      <div class="form-input">
+                        <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
+                          <p class="label_text">Requested By </p>
+                        </div>
+                        <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name" readonly/>
                       </div>
-                      <input class="form-input-input" :value="getUser.first_name+' '+getUser.last_name" readonly/>
                     </div>
                   </div>
                 </div>
               </div>
+
+            </div>
+
+            <div>
+              <div style="margin-bottom: 0.75rem">
+                <label class="class_label">Additional Information or Comments </label>
+
+              </div>
+              <textarea class="comment_section" v-model="description" placeholder="Let us know other additional information you need before or upon ticket issuance"></textarea>
             </div>
 
           </div>
 
-          <div>
-            <div style="margin-bottom: 0.75rem">
-              <label class="class_label">Additional Information or Comments </label>
+          <div class="modal-footer">
+            <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
+
+            <on-boarding-button border="none"  @click="progressNav.push('Pay Now'), progressStage='Pay Now'"  btn-width="13.4375rem" text-node="Make Payment"></on-boarding-button>
+          </div>
+        </div>
+
+
+        <div v-else class="modal_child_wrapper_body">
+         
+        <div class="domain-registration">
+            <p class="payment_option">Payment Options</p>
+            <div class="role-options" :class="{'role-options-active':isWallet}"  @click="isWallet=!isWallet">
+                <svg  v-if="isWallet" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
+                    <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
+                    <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
+                </svg>
+                <div style="width: 100%;" >
+                    <p class="p-2" >Wallet</p>
+                </div>
+            </div>
+
+            <div :class="{'error':getError}">
+                <p class="wallet_name">{{user}}</p>
+                <p class="wallet_balance">Total Wallet Balance: <span :class="{'error':getError}">₦ {{formatAmount(balance)}}</span></p>
+                <p v-if="getError" class="insufficient_funds">{{getError}}</p>
+            </div>
+
+            <div class="modal_child_wrapper_footer">
+                <OnBoardingButton :loading="getLoading" border="none" @click="submitRequest"  :disabled="!isWallet" textNode="Purchase"></OnBoardingButton>
+                <OnBoardingButton  @click="prevProgress('Pay Now')" background="transparent" color="black" border="none" textNode="Cancel"></OnBoardingButton>
 
             </div>
-            <textarea class="comment_section" v-model="description" placeholder="Let us know other additional information you need before or upon ticket issuance"></textarea>
-          </div>
-
         </div>
-
-        <div class="modal-footer">
-          <on-boarding-button border="1px solid #F04444"  @click="close"  background="#F04444" btn-width="7.4375rem" text-node="Cancel"></on-boarding-button>
-
-          <on-boarding-button border="none" :loading="getLoading" @click="submitRequest"  btn-width="7.4375rem" text-node="Submit"></on-boarding-button>
-        </div>
+    </div>
 
       </div>
 
@@ -154,6 +236,125 @@ export default {
 </template>
 
 <style scoped>
+
+.progress-or{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.stage{
+    color:  #9DA8B6;
+    text-align: left;
+    /* Body/16px/Regular */
+    font-family: 'Product Sans';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem; /* 175% */
+    margin-left: -2rem;
+}
+
+.modal_child_wrapper_footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:3rem 1.5rem;
+}
+
+.payment_option{
+  color: #1D1E2C;
+  /* 16px/bold */
+  font-family: "Product Sans";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+}
+
+.activeProgress{
+    background: var(--app-default-primary) !important;
+}
+
+.activeStage{
+    color: var(--app-default-primary) !important;
+}
+
+.circle{
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    background: #E5E9F2;
+    border-radius: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:  #FFF;
+
+    /* Headings/20px/bold */
+    font-family: 'Product Sans';
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem; /* 140% */
+}
+
+.line{
+    width: 9.8125rem;
+    height: 0.25rem;
+    flex-shrink: 0;
+    border-radius: 0.3125rem;
+    background: #E5E9F2;
+}
+
+.spiralLines{
+    width: inherit;
+    height: inherit;
+}
+
+
+
+.insufficient_funds{
+    color: var(--error-red, #F04444);
+    font-family: 'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 180%;
+}
+
+.error{
+    border-radius: 0.25rem;
+    border: 0.5px solid var(--error-red, #F04444);
+}
+
+.wallet_name{
+    color: var(--3, #6A8297);
+    font-family: 'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 1.575rem */
+}
+
+.wallet_balance{
+    color: var(--3, #6A8297);
+    font-family: 'Product Sans';
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 1.575rem */
+}
+.wallet_details{
+    margin-top: 1rem;
+    display: flex;
+    width: 100%;
+    padding: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+}
 .choose-attachment{
   color: #9DA8B6;
   font-family:'Product Sans';

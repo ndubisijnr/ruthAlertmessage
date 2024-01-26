@@ -2,12 +2,8 @@ import {apiService} from "./BaseService";
 
 export default {
 
-    getBookings(tenant_id,user_id, payload) {
-        return apiService.Client.post(`/api/${tenant_id}/booking/all`, payload)
-    },
-
-    getAgentsBookings(tenant_id,payload){
-        return apiService.Client.post(`/api/${tenant_id}/booking/all`, payload)
+    getBookings(tenant_id, page, payload) {
+        return apiService.Client.post(`/api/${tenant_id}/booking/all?page=${page}`, payload)
     },
 
     getBookingsSummary(tenant_id,user_id) {

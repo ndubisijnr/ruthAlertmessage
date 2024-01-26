@@ -1,66 +1,69 @@
 <template>
      <layout v-slot:child-content>
     <div class="overall" id="overall">
+      <modal-loader :message="'Loading Itinerary'" v-if="getRequestingDetailsLoading"></modal-loader>
       <div class="booking-wrapper">
         <p class="itinerary_support">Itinerary Support</p>
         <div class="booking-div-head">
         <div class="service_nav">
-          <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
-          <div class="nav-a1" @click="activeService = 'Hotels'" :class="{'activeSection':activeService === 'Hotels'}" :style="activeService === 'Hotels' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
-          <div class="nav-a1" @click="activeService = 'Visa'" :class="{'activeSection':activeService === 'Visa'}" :style="activeService === 'Visa' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Visa</div>
-          <div class="nav-a1" @click="activeService = 'Insurance'" :class="{'activeSection':activeService === 'Insurance'}" :style="activeService === 'Insurance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Refund</div>
+          <div class="nav-a1" @click="activeService = 'Issuance',requestItinery()" :class="{'activeSection':activeService === 'Issuance'}" :style="activeService === 'Issuance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
+          <div class="nav-a1" @click="activeService = 'Void',requestItinery()" :class="{'activeSection':activeService === 'Void'}" :style="activeService === 'Void' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
+          <div class="nav-a1" @click="activeService = 'Exchange',requestItinery()" :class="{'activeSection':activeService === 'Exchange'}" :style="activeService === 'Exchange' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Exchange</div>
+          <div class="nav-a1" @click="activeService = 'Refund',requestItinery()" :class="{'activeSection':activeService === 'Refund'}" :style="activeService === 'Refund' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Refund</div>
         </div>
       </div>
         <div>
           <div class="search_filter">
-            <div class="search">
+            <!-- <div class="search">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M8.625 16.3125C4.3875 16.3125 0.9375 12.8625 0.9375 8.625C0.9375 4.3875 4.3875 0.9375 8.625 0.9375C12.8625 0.9375 16.3125 4.3875 16.3125 8.625C16.3125 12.8625 12.8625 16.3125 8.625 16.3125ZM8.625 2.0625C5.0025 2.0625 2.0625 5.01 2.0625 8.625C2.0625 12.24 5.0025 15.1875 8.625 15.1875C12.2475 15.1875 15.1875 12.24 15.1875 8.625C15.1875 5.01 12.2475 2.0625 8.625 2.0625Z" fill="#9DA8B6"/>
                 <path d="M16.5001 17.0626C16.3576 17.0626 16.2151 17.0101 16.1026 16.8976L14.6026 15.3976C14.3851 15.1801 14.3851 14.8201 14.6026 14.6026C14.8201 14.3851 15.1801 14.3851 15.3976 14.6026L16.8976 16.1026C17.1151 16.3201 17.1151 16.6801 16.8976 16.8976C16.7851 17.0101 16.6426 17.0626 16.5001 17.0626Z" fill="#9DA8B6"/>
               </svg>
               <input v-model="searchQuery" @input="doSearch" type="text" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
-            </div>
+            </div> -->
             <div class="filter">
-              <!-- <div class="filter-div">
+             
+              <div class="filter-div">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>
                 </svg>
-                <span class="filter-span">Sort By</span>
-              </div> -->
+                <span class="filter-span">Filter</span>
+              </div>
+
+              
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p">Last Updated (newest first) <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <p class="filter-by-modal-p" @click="filterValue='pending', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'pending'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>
-                <p class="filter-by-modal-p">Total Booking (highest first)</p>
-                <p class="filter-by-modal-p">Total Booking (lowest first)</p>
-                <p class="filter-by-modal-p">Alphabetically (A-Z)</p>
-                <p class="filter-by-modal-p">Alphabetically (Z-A)</p>
-                <p class="filter-by-modal-p">Date Created (newest first)</p>
-                <p class="filter-by-modal-p">Date Created (oldest first)</p>
-              </div>
-<!--              <json-excel class="btn btn-default" :data="getBookings?.data" />-->
+                <p class="filter-by-modal-p" @click="filterValue='resolved', doFilter()">Resolved Support <svg v-if="filterValue === 'resolved'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                  <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg></p>
+                <p class="filter-by-modal-p" @click="filterValue=null, doFilter()">Everything</p>
 
-              <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking" @click="isFilterBooking=true"></on-boarding-button>
+
+              </div>
+
             </div>
           </div>
           <div style="width: 100%;overflow-x: scroll">
             <div class="card-area">
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Issuance" :number="getBookingSum?.total_bookings ? getBookingSum?.total_bookings : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Voidance" :number="getBookingSum?.total_reserved ? getBookingSum?.total_reserved: '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Refund" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Exchange" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
-              <bookings-cards v-else title="Others" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Issuance" :number="getSummary?.issuance_count "></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Voidance" :number="getSummary?.voided_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Refund" :number="getSummary?.refunded_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Exchange" :number="getSummary?.exchanged_count"></bookings-cards>
+              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
+              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>
             </div>
           </div>
-          <div style="margin-top: 3.5rem">
+          <div style="margin: 3.5rem 0">
             <div class="table-wrapper">
-              <domain-table :fields="bookingFields" :data="filterResult ? filterResult : getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
+              <domain-table :is-paginate="true" :other="{activeService:activeService, filterValue:filterValue}" :total="itineraryRequest?.meta?.total" :items-per-page="itineraryRequest?.meta?.per_page" :current-page="itineraryRequest?.meta?.current_page" :last-page="itineraryRequest?.meta?.last_page" :fields="itineneryFields" :data="itineraryRequest?.data" :empty-message="`Hi ${getBusinessProfile?.name}, There are no Itinerary!`">
                 <template v-slot:emptyIcon>
                   <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                     <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>
@@ -85,6 +88,7 @@
                   </svg>
                 </template>
               </domain-table>
+             
             </div>
           </div>
         </div>
@@ -96,7 +100,7 @@
   </template>
   
   <script>
-  import RouteNav from "../../components/RouteNav.vue";
+import RouteNav from "../../components/RouteNav.vue";
 import Layout from "../Layout.vue";
 import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import DomainTable from "../../components/tables/BaseTable.vue";
@@ -109,9 +113,11 @@ import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.v
 import filterBookingModal from "@/components/modals/FilterBookingModal.vue";
 import ComingSoon from "@/components/ComingSoon.vue";
 import BookingsRequest from "../../model/BookingsRequest";
+import ModalLoader from "../../components/loaders/ModalLoader.vue";
   export default {
     name: "Index",
     components:{
+    ModalLoader,
     ComingSoon,
     RouteNav,OnBoardingInput, filterBookingModal, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
     data(){
@@ -119,16 +125,16 @@ import BookingsRequest from "../../model/BookingsRequest";
       isFilterBooking:false,
       searchQuery:null,
       filterResult:null,
-      activeService:'Flight',
+      activeService:'Issuance',
       searchModel:{},
-      bookingFields:[
-        {key:"", label:"Customer’s Name"},
-        // {key:"contact_email", label:"Email"},
-        {key:"amount", label:"Ticket Amount"},
-        // {key:"id", label:"Ticket ID"},
-        {key:"flight", label:"Airline"},
+      filterValue:'pending',
+      itineneryFields:[
+        {key:"customer_name", label:"Agent Name"},
+        {key:"ticket_amount", label:"Ticket Amount_"},
+        {key:"airline", label:"Airline_"},
         {key:"created_at", label:"Booking Date"},
-        {key:"status", label:"Status_"},
+        {key:"type", label:"Type"},
+        {key:"status", label:"Status"},
         // {key:"Action", label:"Action",id:"member"},
       ],
     }
@@ -140,13 +146,19 @@ import BookingsRequest from "../../model/BookingsRequest";
         this.searchModel = {}
 
       })
-      
+    
      
       // this.filterResult = this.getBookings.data.filter(it => it.contact_first_name.toLowerCase().includes(this.searchQuery.toLowerCase()) || it.contact_last_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
     },
 
+    requestItinery(){
+      if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker')storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService,this.filterValue);
+      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+    },
+
     doFilter(){
- 
+      if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker')storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService,this.filterValue);
+      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
     },
     close(value){
       this.isFilterBooking = value
@@ -155,6 +167,11 @@ import BookingsRequest from "../../model/BookingsRequest";
   },
 
     computed: {
+
+      itineraryRequest(){
+        return storeUtils.fireAway()?.itineneryStore.getItineraryRequest
+      },
+
     getCurrentRoute(){
       return router.currentRoute.value.name
     },
@@ -167,6 +184,10 @@ import BookingsRequest from "../../model/BookingsRequest";
 
     custom_theme(){
       return storeUtils.fireAway().theme.custom_theme
+    },
+
+    getSummary(){
+      return storeUtils.fireAway().itineneryStore.getItinerarySummaryState
     },
 
     getBusinessProfile(){
@@ -189,8 +210,16 @@ import BookingsRequest from "../../model/BookingsRequest";
       return storeUtils.fireAway().booking?.getLoadingBooking
     },
 
+    getLoadingSummary(){
+      return storeUtils.fireAway().itineneryStore?.getLoadingSummary
+    },
+
     getBookings(){
       return storeUtils.fireAway().booking?.getBookings
+    },
+
+    getRequestingDetailsLoading(){
+      return storeUtils.fireAway().itineneryStore?.getRequestingDetailsLoading
     },
 
     getUser(){
@@ -202,6 +231,13 @@ import BookingsRequest from "../../model/BookingsRequest";
     progressNav(){
       return storeUtils.fireAway().booking?.getProgressNav
     }
+
+  },
+
+  mounted(){
+    storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+    if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
+    else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
 
   }
   }
@@ -233,7 +269,7 @@ import BookingsRequest from "../../model/BookingsRequest";
   
   .service_nav{
     display: flex;
-    //margin-left:5.31rem;
+    /*margin-left:5.31rem;*/
   }
   
   
@@ -323,10 +359,11 @@ import BookingsRequest from "../../model/BookingsRequest";
   .filter-span{
     color:  #1D1E2C;
     font-family: 'Product Sans';
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.5rem; /* 171.429% */
+    padding: 0.5rem;
   }
   
   .overall{
@@ -345,8 +382,8 @@ import BookingsRequest from "../../model/BookingsRequest";
     margin-top: 1rem;
     margin-bottom: 3rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
   
   .table-wrapper{
@@ -355,7 +392,7 @@ import BookingsRequest from "../../model/BookingsRequest";
   }
   
   .booking-wrapper{
-    width: 80.625rem;
+    width: 75.625rem;
     height: auto;
     position: relative;
   }

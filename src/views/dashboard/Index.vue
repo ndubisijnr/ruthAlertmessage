@@ -3,6 +3,8 @@
     <div class="dashboard_wrapper">
      <div class="mb" v-if="getCurrentRoute === 'Dashboard'">
         <div>
+        <!-- <p>good morning ☀️.</p>  
+        <p>its 10:15am</p> -->
         <div v-if="getCurrentRoute === 'Dashboard'">
           <h3 class="user-name" style="margin-top: 3.5rem" v-show="getBusinessProfile?.id_document && getBusinessProfile?.cac_document || getUser.account_type === 'super_admin' || getUser.account_type === 'admin'"> Hello, {{getUser?.first_name}} {{getUser?.last_name}}</h3>
           <div class="get-started" :style="{background:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)}" v-if="!getBusinessProfile?.id_document && !getBusinessProfile?.cac_document && getUser.account_type !== 'super_admin' &&  getUser.account_type !== 'admin'">
@@ -671,7 +673,7 @@ export default {
 
 
 .airportsDropDown{
-  //width: 100%;
+  /*width: 100%;*/
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -692,7 +694,7 @@ export default {
   padding: 0;
   margin: 0;
   height: 0;
-  //opacity: 0;
+  /*opacity: 0;*/
 }
 
 .search_flight_model_wrapper_animated_out{
@@ -740,7 +742,7 @@ export default {
   background: #FFF;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   position: absolute;
-  //z-index: 999999999999999999999;
+  /*z-index: 999999999999999999999;*/
 }
 
 .class_label{

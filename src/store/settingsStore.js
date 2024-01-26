@@ -113,6 +113,7 @@ export const useSettingsStore = defineStore('settingsStore', {
                 let responseData = response.data
                 if (responseData.success) {
                     this.businessProfile = responseData.data
+                    localStorage.user = responseData.data
                 }
 
             } catch {
@@ -143,9 +144,7 @@ export const useSettingsStore = defineStore('settingsStore', {
         },
 
         async updateProfileAction(payload = SettingsRequest.updateProfileInfo) {
-
             this.loading = true
-
             try {
                 const response = await Account.updateProfileInfo(storeUtils.fireAway().global?.getTenant_id, payload)
                 let responseData = response.data
@@ -160,7 +159,6 @@ export const useSettingsStore = defineStore('settingsStore', {
                 catchErrorHandler(err)
                 // do nothing
             }
-
         },
 
         async addTeamMembers(payload = SettingsRequest.inviteNewMember) {

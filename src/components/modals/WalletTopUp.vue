@@ -12,7 +12,7 @@
         
                 <div class="domain-registration">
                     <p>Wallet Details</p>
-                    <!-- <div class="role-options" :class="{'role-options-active':isWallet}"  @click="isWallet=!isWallet">
+                    <div class="role-options" :class="{'role-options-active':isWallet}"  @click="isWallet=!isWallet">
                         <svg  v-if="isWallet" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
                             <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
@@ -24,7 +24,7 @@
                         <div style="width: 100%;" >
                             <p class="p-2" >Wallet</p>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div :class="{'error':getError}">
                         <p class="wallet_name">{{user}}</p>
@@ -85,17 +85,7 @@ export default{
     },
 
     computed:{
-        getSelectedFlight(){
-      return storeUtils.fireAway()?.flight?.getSelectedFlight
-    },
-
-    getLoading(){
-        return storeUtils.fireAway()?.travelAgent?.getLoading
-    },
-
-    getError(){
-      return storeUtils.fireAway()?.flight?.getErrors
-    },
+   
    
 }
 }

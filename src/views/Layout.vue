@@ -23,7 +23,7 @@
                 <span class="links">Dashboard</span>
               </div>
             </router-link>
-            <router-link v-if="getUser?.account_type === 'super_admin'" :to="`/agents/${getUser?.access_token?.slice(0,20)}`">
+            <router-link v-if="getUser?.account_type === 'super_admin'|| getUser.account_type === 'admin'" :to="`/agents/${getUser?.access_token?.slice(0,20)}`">
               <div class="links-item" :style="getCurrentRoute.includes('agents') ? {backgroundColor:custom_theme ? lightenColor(custom_theme.color) : lightenColor(default_theme.color)} : {}" :class="{'active':getCurrentRoute.includes('agents')}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                   <path d="M15.3549 6.59148C15.3299 6.59148 15.3132 6.59148 15.2882 6.59148H15.2466C13.6716 6.54148 12.4966 5.32481 12.4966 3.82481C12.4966 2.29147 13.7466 1.0498 15.2716 1.0498C16.7966 1.0498 18.0466 2.29981 18.0466 3.82481C18.0383 5.33314 16.8632 6.54981 15.3632 6.59981C15.3632 6.59147 15.3632 6.59148 15.3549 6.59148ZM15.2716 2.29148C14.4299 2.29148 13.7466 2.97481 13.7466 3.81648C13.7466 4.64148 14.3883 5.30815 15.2133 5.34148C15.2216 5.33315 15.2882 5.33315 15.3632 5.34148C16.1716 5.29981 16.7966 4.63314 16.8049 3.81648C16.8049 2.97481 16.1216 2.29148 15.2716 2.29148Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
@@ -63,6 +63,7 @@
 
 
           <div class="m7-0">
+            <div class="account_indicator"> {{getUser?.account_type.toUpperCase()}}</div>
 
             <img src="../assets/notification.svg" class="notification_icon">
 
@@ -103,7 +104,7 @@
                 <path d="M6.7998 14.1895C6.2398 14.1895 5.7998 13.7395 5.7998 13.1895C5.7998 12.6395 6.2498 12.1895 6.7998 12.1895C7.3498 12.1895 7.7998 12.6395 7.7998 13.1895C7.7998 13.7395 7.3498 14.1895 6.7998 14.1895Z" fill="#1D1E2C"/>
                 <path d="M17.9396 16.29C17.7396 16.29 17.5396 16.21 17.3996 16.06C17.2396 15.9 17.1697 15.67 17.1997 15.45C17.2297 15.24 17.2396 15.02 17.2396 14.79V10.79C17.2396 8.00001 15.9897 6.75 13.1997 6.75H6.79963C6.56963 6.75 6.34966 6.76 6.13966 6.78C5.91966 6.81 5.68964 6.72999 5.52964 6.57999C5.36964 6.41999 5.27963 6.20001 5.29963 5.98001C5.47963 3.82001 6.58963 1.25 10.7996 1.25H17.1997C20.8197 1.25 22.7396 3.17001 22.7396 6.79001V10.79C22.7396 15 20.1697 16.1 18.0097 16.29C17.9797 16.29 17.9596 16.29 17.9396 16.29ZM6.91966 5.25H13.1896C16.8096 5.25 18.7297 7.17001 18.7297 10.79V14.66C20.4297 14.24 21.2297 12.99 21.2297 10.79V6.79001C21.2297 4.00001 19.9796 2.75 17.1896 2.75H10.7897C8.58965 2.75 7.34966 3.55 6.91966 5.25Z" fill="#1D1E2C"/>
               </svg>
-                <span>Support</span>
+                <span>Itinerary Support</span>
                 <img v-if="getCurrentRoute.includes('support')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
               </div>
               </router-link>
@@ -225,17 +226,34 @@ export default {
   justify-content: center;
 }
 
+.account_indicator{
+  display: flex;
+  padding: 0.25rem 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 5rem;
+  width: 7rem;
+  background: var(--primary-05, #EAF0F7);
+  color: #000;
+  font-family: "Product Sans";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 #nav a.router-link-exact-active {
   border-radius: 1.25rem;
   /* background: var(--app-nav-active); */
-  //background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  /*background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));*/
   text-decoration: none;
   transition: ease 2s;
 }
 
 .active{
   border-radius: 1.25rem;
-  //background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));
+  /*background: var(--Gradient, linear-gradient(277deg, #D5E2EE 26.44%, rgba(213, 226, 238, 0.58) 56.97%, rgba(213, 226, 238, 0.36) 73.28%, rgba(213, 226, 238, 0.67) 99.44%));*/
   text-decoration: none;
   transition: ease 2s;
 }
