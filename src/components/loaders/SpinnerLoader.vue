@@ -1,11 +1,11 @@
 <template>
-    <span class="spinner-border" :style="{color:color}"></span>
+    <span class="spinner-border" :style="{color:color, width:width,height:width}"></span>
 </template>
 
 <script>
 export default {
   name: "SpinnerLoader",
-  props:['color']
+  props:['color', 'width']
 }
 </script>
 

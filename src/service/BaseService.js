@@ -1,14 +1,10 @@
 import axios from "axios";
 import storeUtils from "@/utils/storeUtils";
-import { RuthdoAlert } from "ruthly";
-import { catchErrorHandler } from "../mixins/ErrorHandler";
-
-
-
+import {catchErrorHandler} from "../mixins/ErrorHandler";
 
 
 const Client = axios.create({
-    baseURL: "https://b2b-api-dev.tiqwa.com/",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: false,
     headers: {
         Accept: "application/json",
@@ -19,7 +15,7 @@ const Client = axios.create({
 
 
 export const appClientImgUpload = axios.create({
-    baseURL: "https://b2b-api-dev.tiqwa.com/",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: false,
     headers: {
         Accept: "application/json",

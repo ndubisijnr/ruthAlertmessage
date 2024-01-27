@@ -1911,96 +1911,38 @@ export default {
         EditTeamMember,
     },
 
-    data() {
-        return {
-            markupSearch: "",
-            pureColor: "red",
-            isFocused: false,
-            gradientColor:
-                "linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
-            currentTab: this.getCurrentRouteParams,
-            verificationType: "business",
-            model: SettingsRequest.updateBusinessProfile,
-            model1: SettingsRequest.updateProfileInfo,
-            model3: SettingsRequest.updateNotificationSettings,
-            markupModel: SettingsRequest.updateMarkup,
-            updateBank: SettingsRequest.updateBank,
-            LocalMarkUpPlaceHolder: this.getMarkup?.domestic_markup_type
-                ? this.getMarkup?.domestic_markup_type
-                : "Markup Type",
-            IntMarkUpPlaceHolder: this.getMarkup?.international_markup_type
-                ? this.getMarkup?.international_markup_type
-                : "Markup Type",
-            addMember: false,
-            addRole: false,
-            changePassword: false,
-            updateRole: false,
-            searchQuery: null,
-            editBankAccount: false,
-            isEditing: false,
-            show: true,
-            isDeactivateAccount: false,
-            intDropdown: false,
-            addDomain: false,
-            addAccount: false,
-            localDropdown: false,
-            activeManageRole: "team",
-            bankIndex: null,
-            bankName: null,
-            paymentType: "bank",
-            inModal: false,
-            editTeamMember: false,
-            teamMemberId: null,
-            notTyping: false,
-            noUser: false,
-            opened: false,
-            lightenColor,
-            // this.model.permission_ids
-            permissionModel: SettingsRequest.editMember.permission_ids,
-            // notificationModal: JSON.parse(JSON.stringify(this.getNotifications ? this.getNotifications : null)),
-            error: {
-                name: null,
-                email: null,
-                address: null,
-                website: null,
-                cac_number: null,
-            },
-            getFirstLettersOfFirstAndLastName,
-            uploadModel: AuthRequest.upload,
-            domainFields: [
-                { key: "domain", label: "Domain Name" },
-                { key: "active", label: "Status" },
-                { key: "created_at", label: "Date Added" },
-                // {key:"Action", label:"Action"},
-            ],
-            markUpFields: [
-                { key: "name", label: "Name" },
-                { key: "product", label: "Product" },
-                { key: "start_date", label: "Start Date" },
-                { key: "end_date", label: "End Date" },
-                { key: "markup_value", label: "Markup Value" },
-                { key: "markup_type", label: "Markup Type" },
-                { key: "status", label: "Status" },
-                { key: "action_m", label: "" },
-            ],
-            rolesFields: [
-                { key: "name", label: "Roles" },
-                { key: "users", label: "No.of member" },
-                { key: "permissions", label: "No.of permission" },
-                { key: "Action", label: "Action", id: "role" },
-            ],
-            membersFields: [
-                { key: "name", label: "Name" },
-                { key: "email", label: "Email Address" },
-                { key: "type", label: "Role" },
-                { key: "created_at", label: "Date Added" },
-                { key: "status", label: "Member Status" },
-                { key: "Action", label: "Action", id: "member" },
-            ],
-            showDeleteBankModal: false,
-            showCannotDeleteModal: false,
-            membersFilteredResult: [],
-        };
+    switchTab(value){
+      switch (value) {
+        case 'Account':
+          storeUtils.fireAway().settings?.getPersonalProfileAction()
+          break;
+        case 'Domain':
+          storeUtils.fireAway().settings?.getDomainsAction()
+          break;
+        case 'Teams':
+          storeUtils.fireAway().settings?.readAllMembers()
+          break;
+        case 'Notifications':
+          storeUtils.fireAway().settings?.readAllNotification()
+          break;
+        case 'Payment':
+          storeUtils.fireAway().settings?.readBanksAccount()
+          break;
+        case 'Markup':
+          storeUtils.fireAway().settings?.readMarkupSettings()
+          break;
+        case 'Customization':
+          this.currentTab = 'Customization';
+          break;
+        default:
+          this.currentTab = 'Account';
+      }
+    },
+    handleFocus(){
+      this.isFocused = true
+    },
+    handleFocusOut(){
+      this.isFocused = false
     },
 
     methods: {
@@ -2441,7 +2383,251 @@ export default {
         }, 500);
         storeUtils.fireAway().global?.commitError(null);
     },
-};
+
+    updateNotification(){
+      this.model3.message_in_app_notification = this.getNotifications.message_in_app_notification
+      this.model3.message_email_notification = this.getNotifications.message_email_notification
+      this.model3.message_sms_notification = this.getNotifications.message_sms_notification
+      this.model3.reminder_email_notification = this.getNotifications.reminder_email_notification
+      this.model3.reminder_in_app_notification = this.getNotifications.reminder_in_app_notification
+      this.model3.reminder_sms_notification = this.getNotifications.reminder_sms_notification
+      this.model3.ads_newsletter_email_notification = this.getNotifications.ads_newsletter_email_notification
+      this.model3.ads_newsletter_in_app_notification = this.getNotifications.ads_newsletter_in_app_notification
+      this.model3.ads_newsletter_sms_notification = this.getNotifications.ads_newsletter_sms_notification
+      storeUtils.fireAway()?.settings.updateNotification(this.model3).then(() => {
+        storeUtils.fireAway().settings?.readAllNotification()
+      })
+    },
+
+    toggleIntDropdown(){
+      this.intDropdown = !this.intDropdown
+    },
+
+    toggleLocalDropdown(){
+      this.localDropdown = !this.localDropdown
+    },
+
+    makeSwitch(value){
+      this.verificationType = value
+    },
+
+    close(value) {
+      this.addMember = value
+      this.addRole = value
+      this.addDomain = value
+      this.addAccount = value
+      this.editBankAccount = value
+      this.bankIndex = null
+      this.changePassword = value
+      this.updateRole = value
+      this.editTeamMember = value
+      this.isDeactivateAccount = value
+     
+    },
+
+    closeOpened(value){
+      this.opened = value
+    },
+
+    handleUpdateBizProfile(){
+      if(!this.getBusinessProfile.name){
+        this.error.name = "business name is required"
+        storeUtils.fireAway().auth?.commitErrors(this.error)
+        RuthdoAlert({title:"business name is required", icon:'error'})
+      }else {
+        this.model.name = this.model.business_name ? this.model.business_address : this.getBusinessProfile.name
+        this.model.email = this.model.business_email ? this.model.business_email : this.getBusinessProfile.email
+        this.model.address = this.model.business_address ? this.model.business_address : this.getBusinessProfile.address
+        this.model.website = this.model.business_website ? this.model.business_website : this.getBusinessProfile.website
+        this.model.cac_number = this.model.cac_number ? this.model.cac_number : this.getBusinessProfile.cac_number
+        storeUtils.fireAway().auth?.commitErrors(this.error)
+        storeUtils.fireAway().settings?.updateBusinessProfileAction()
+      }
+
+
+    },
+
+    handleUpdateProfile(){
+        const first_name = document.getElementById('first_name')
+        const last_name = document.getElementById('last_name')
+        const email = document.getElementById('email')
+        const phone = document.getElementById('phone')
+        
+        storeUtils.fireAway().settings?.updateProfileAction()
+    },
+
+    initiateUpload(){
+      document.getElementById('logo').click()
+    },
+
+    async triggerUpload(obj){
+      await storeUtils.fireAway().auth?.handleUploadProfilePic(obj)
+    },
+
+    async handleUpload(file) {
+      if (!file.length) return;
+      this.uploadModel.type = 'logo'
+      this.uploadModel.file = file[0]
+      await this.triggerUpload(this.uploadModel)
+
+    },
+
+    doUpdateMarkup(){
+      console.log(this.markupModel)
+      storeUtils.fireAway().settings?.updateMarkup()
+    },
+
+    setIntPerPass(value){
+      this.markupModel.international_markup_per_passenger = value,
+      this.getMarkup.international_markup_per_passenger = value
+    },
+
+    setIntPerRou(value){
+      this.markupModel.international_markup_per_route = value,
+      this.getMarkup.international_markup_per_route = value
+    },
+
+    setLocalPerPass(value){
+      this.markupModel.domestic_markup_per_passenger = value,
+      this.getMarkup.domestic_markup_per_passenger = value
+    },
+
+    setLocalPerRou(value){
+      this.markupModel.domestic_markup_per_route = value,
+      this.getMarkup.domestic_markup_per_route = value
+    },
+
+    preventNav(e){
+      if(!this.isEditing) return;
+      e.preventDefault();
+      e.returnValue = ""
+    }
+
+
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.preventNav);
+  },
+
+  beforeRouteLeave(to, from, next){
+    if(this.isEditing){
+      if(!window.confirm("Are you sure? all unsaved changes won't reflect.")){
+        return;
+      }
+    }
+    next()
+  },
+
+
+  computed:{
+
+    getCurrentRoute(){
+      return router.currentRoute.value.name
+    },
+    default_theme(){
+      return storeUtils.fireAway().theme.getDefault_theme
+    },
+
+    custom_theme(){
+      return storeUtils.fireAway().theme.custom_theme
+    },
+
+    deleteLoading(){
+      return storeUtils.fireAway().settings?.getDeleteLoading
+    },
+
+    getCurrentRouteParams(){
+      return router?.currentRoute?.value?.hash?.split('#')[1]
+    },
+
+    loading(){
+      return storeUtils.fireAway().settings?.getLoading
+    },
+    domainLoading(){
+      return storeUtils.fireAway().settings?.getDomainLoading
+    },
+    rolesLoading(){
+      return storeUtils.fireAway().settings?.getRolesLoading
+    },
+    teamLoading(){
+      return storeUtils.fireAway().settings?.getTeamLoading
+    },
+
+    getError(){
+      return storeUtils.fireAway().global?.getError
+    },
+
+    getDomains(){
+      return storeUtils.fireAway().settings?.getDomains
+    },
+
+    getPersonalProfile(){
+      return storeUtils.fireAway().settings?.getPersonalProfile
+    },
+
+    getNotifications(){
+      return storeUtils.fireAway().settings?.getNotifications
+    },
+
+    getUser(){
+      if(localStorage.user){
+        return JSON.parse(localStorage.user)
+      }
+    },
+
+    getRoles(){
+      return storeUtils.fireAway().settings?.getAllRoles?.reverse()
+    },
+
+    verification_Type(){
+      return storeUtils.fireAway().global?.getVerificationType
+    },
+
+    getBusinessProfile(){
+      if(localStorage.businessProfile){
+        const business = JSON.parse(localStorage?.businessProfile)
+        return business
+      }
+
+    },
+
+    getMarkup(){
+        return storeUtils.fireAway().settings?.getMarkup
+    },
+
+    getMembers(){
+        return storeUtils.fireAway().settings?.getMembers?.reverse()
+    },
+
+    getBankAccount(){
+      return storeUtils.fireAway().settings?.getBankAccount
+    }
+
+  },
+
+  // watch:{
+  //   getError(value){
+  //     if(value){
+  //      // do nothing
+  //     }else{
+  //       this.close(false)
+  //       storeUtils.fireAway().global?.commitError(false)
+  //     }
+  //   }
+  // },
+
+
+  mounted() {
+    this.model1.first_name = this.getUser?.first_name
+    this.model1.last_name = this.getUser?.last_name
+    this.model1.email = this.getUser?.email
+    this.model1.phone = this.getUser?.phone
+    setTimeout(() => { this.currentTab = this.getCurrentRouteParams,  this.switchTab(this.getCurrentRouteParams) },500)
+    storeUtils.fireAway().global?.commitError(null)
+    storeUtils.fireAway().theme.handleGetTemplate();
+  }
+}
 </script>
 
 <style scoped lang="scss">

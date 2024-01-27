@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper" :style="{background:custom_theme ? lightenColor(custom_theme?.color) : lightenColor(default_theme.color)}">
+    <div v-if="getTenantLoaded" class="wrapper" :style="{background:custom_theme ? lightenColor(custom_theme?.color) : lightenColor(default_theme.color)}">
         <div class="top-angle" :style="{background:custom_theme ? toGradient(custom_theme.color,'220') : toGradient(default_theme.color, '220')}"></div>
         <div class="bottom-angle" :style="{background:custom_theme ? toGradient(custom_theme.color, '107') : toGradient(default_theme.color,'107')}"></div>
 
@@ -17,21 +17,31 @@
                 </div>
             </div>
         </div>
-    </div>
-  
+
+      </div>
+      <div class="splash animate__animated animate__fadeInDown" v-else>
+        <SpinnerLoader :width="'10rem'"></SpinnerLoader>
+        <!-- <img style="width:8rem;position: absolute;"  src="../../assets/Cards/logo.svg" /> -->
+
+  </div>
 </template>
 
 <script>
 import storeUtils from "../../utils/storeUtils";
 import {toGradient, lightenColor} from "@/mixins/themeUtils";
+import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
 
 export default {
     name:"CompleteRegistrationLayout",
 
+    components:{
+      SpinnerLoader
+    },
+
     data(){
       return{
         toGradient,
-        lightenColor
+        lightenColor,
       }
     },
 
@@ -42,20 +52,36 @@ export default {
 
       custom_theme(){
         return storeUtils.fireAway().theme.getCustom_theme
+      },
+
+      getTenantLoaded(){
+        return storeUtils.fireAway().global.getTenantLoaded
       }
     },
 
-    mounted() {
-      storeUtils.fireAway().global?.getTenant()
 
-    }
+    created(){
+
+      if(!storeUtils.fireAway().global.tenantLoaded)storeUtils.fireAway().global?.getTenant()
+    },
 
 }
 </script>
 
 <style  scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
-
+.splash{
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background: #fff;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
 .m5-0{
   margin: 0;
   min-height: 100vh;
@@ -110,7 +136,7 @@ export default {
     top: 70%;
     right: -20%;
     bottom: -10%;
-    //background:var(--app-default-secondary-linear-gradaint1);
+    /*background:var(--app-default-secondary-linear-gradaint1);*/
     z-index: 1
 }
 
@@ -125,7 +151,7 @@ export default {
   height: 27.51469rem;
   transform: rotate(150.931deg);
   flex-shrink: 0;
-  //background: var(--app-default-secondary-linear-gradaint2);
+  /*background: var(--app-default-secondary-linear-gradaint2);*/
   position: fixed;
   top:0;
   left: -35%;
@@ -135,7 +161,7 @@ export default {
 
 .wrapper{
     min-height: 100vh;
-    //background: var(--app-defautl-primary-light);
+    /*background: var(--app-defautl-primary-light);*/
     display: inline-block;
     width: 100%; 
     position: relative;

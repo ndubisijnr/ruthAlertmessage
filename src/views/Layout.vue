@@ -1,9 +1,7 @@
 <template>
   <permission-modal v-if="getIsUnauthorised"></permission-modal>
-  <div class="splash" v-if="loadingCus">
-    <img style="width:12rem" class="animate__animated animate__fadeInDown" :src="getBusinessProfile.logo ? getBusinessProfile.logo : '../../src/assets/Cards/logo.svg'" />
-  </div>
-  <div class="wrapper">
+ 
+  <div v-if="getTenantLoaded" class="wrapper">
     <div class="inner-wrapper">
       <NavBar v-slot:children>
         <div class="m6-0">
@@ -132,6 +130,12 @@
     </div>
     <MobileBottomNav />
   </div>
+
+  <div class="splash" v-else>
+        <SpinnerLoader :width="'10rem'"></SpinnerLoader>
+        <!-- <img style="width:8rem;position: absolute;"  :src="getBusinessProfile.logo ? getBusinessProfile.logo : '../../src/assets/Cards/logo.svg'" /> -->
+  </div>
+ 
 </template>
 
 <script>
@@ -142,11 +146,12 @@ import router from "../router";
 import MobileBottomNav from "../components/dashboardComponents/MobileBottomNav.vue";
 import {lightenColor} from "@/mixins/themeUtils";
 import PermissionModal from "@/components/modals/PermissionModal.vue";
+import SpinnerLoader from "../components/loaders/SpinnerLoader.vue";
 
 
 export default {
   name: "Layout",
-  components:{NavBar, MobileBottomNav,PermissionModal},
+  components:{NavBar, MobileBottomNav,PermissionModal,SpinnerLoader},
   data(){
     return{
       getFirstLettersOfFirstAndLastName,
@@ -199,12 +204,23 @@ export default {
     getCurrentRoute(){
       return router.currentRoute.value.fullPath
     },
+    getTenantLoaded(){
+        return storeUtils.fireAway().global.getTenantLoaded
+      }
 
   },
+
+  created(){
+    if(!storeUtils.fireAway().global.tenantLoaded)storeUtils.fireAway().global?.getTenant().then(() => {
+      storeUtils.fireAway().theme.getCustomization()
+    });
+
+  },
+
+
   mounted() {
-    if(!localStorage.tenant_id) storeUtils.fireAway().global?.getTenant();
-    if(localStorage.tenant_id) storeUtils.fireAway().theme.getCustomization();
-    if(localStorage.tenant_id) storeUtils.fireAway().theme.handleGetTemplate();
+    
+    if(this.getTenantLoaded) storeUtils.fireAway().theme.getCustomization()
     const favicon = document.getElementById('faviconIcon');
 
     if(this.getFavicon) favicon.href = this.getFavicon;
@@ -224,6 +240,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .account_indicator{

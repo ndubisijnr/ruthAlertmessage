@@ -50,7 +50,7 @@
     <Index v-slot:children>
         <div>
             <div>
-                <p>Teams</p>
+                <p class="team">Teams</p>
             </div>
 
             <div>
@@ -133,6 +133,16 @@ export default{
 </script>
 
 <style scoped>
+.team{
+  color: var(--Black-text-04, #575A65);
+
+  /* Headings/20px/bold */
+  font-family: "Product Sans";
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 140% */
+}
 .veiw-agent-card-option{
     display: flex;
     padding: 1.5rem 4.5rem 1.5rem 1.5rem;

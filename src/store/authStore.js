@@ -68,7 +68,6 @@ export const useAuthStore = defineStore('authStore', {
                     this.token = responseData.data.access_token
                     localStorage.token = responseData.data.access_token
                     await storeUtils.fireAway().auth?.getBusinessProfile()
-                    await storeUtils.fireAway().settings?.getDomainsAction()
                     localStorage.bookingStage = 'Flight Search'
                     localStorage.progressNav = JSON.stringify([])
                     localStorage.theme = JSON.stringify(responseData.data.customizations)
@@ -95,6 +94,7 @@ export const useAuthStore = defineStore('authStore', {
                             await router.push({ name: "Dashboard", params: { token: responseData.data.access_token.slice(0, 20) } })
                         }
                     }
+            
                 }
             } catch (err) {
                 this.loading = false
