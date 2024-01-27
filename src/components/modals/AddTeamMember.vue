@@ -301,13 +301,28 @@ export default {
 
     getError(){
       return storeUtils.fireAway().global?.getError
+    },
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
+    }
+  },
+
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        setTimeout(() => { this.currentTab = this.getCurrentRouteParams, this.switchTab(this.getCurrentRouteParams) }, 500)
+        storeUtils.fireAway().global?.commitError(null)
+        storeUtils.fireAway().theme.handleGetTemplate();
+      };
     }
   },
 
   mounted() {
-    storeUtils.fireAway().settings?.readAllPermissions().then(() => {
-      this.getAllPermissionsId()
-    })
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().settings?.readAllPermissions().then(() => {
+        this.getAllPermissionsId()
+      })
+    }
      // storeUtils.fireAway().settings?.readAllRoles()
   }
 

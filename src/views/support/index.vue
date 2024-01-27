@@ -230,14 +230,32 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
 
     progressNav(){
       return storeUtils.fireAway().booking?.getProgressNav
-    }
+    },
 
-  },
+      getTenantLoaded(){
+        return storeUtils.fireAway().global.getTenantLoaded
+      }
+
+
+    },
+
+    watch:{
+      'getTenantLoaded'(a,b){
+        if(a){
+          if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
+          else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+          storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+        };
+      }
+    },
 
   mounted(){
-    storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
-    if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
-    else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+      if(this.getTenantLoaded){
+        storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+        if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
+        else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+      }
+
 
   }
   }

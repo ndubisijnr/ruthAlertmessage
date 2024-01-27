@@ -1,7 +1,7 @@
 <template>
   <add-team-member v-if="isAddAgents" @close="close"></add-team-member>
   <ModalLoader v-if="getLoadingAgents" :message="'Loading Agents'"></ModalLoader>
-  <layout v-slot:child-content>
+  <layout v-slot:child-content @tenantIsReady="init">
     
     <div class="overall" style="margin: 0" v-if="getCurrentRouteName !== 'Travel Agents'">
       <div class="main-wrapper">
@@ -130,6 +130,10 @@ export default {
   methods:{
     close(value){
       this.isAddAgents = value
+    },
+    init(value){
+      console.log(value)
+      return value
     }
   },
 
@@ -166,12 +170,23 @@ export default {
       return storeUtils.fireAway().travelAgent?.getUser?.data
     },
 
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
+    }
+
 
 
   },
 
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a)storeUtils.fireAway().travelAgent?.handleGetTravelAgent();
+    }
+  },
+
   mounted() {
-    storeUtils.fireAway().travelAgent?.handleGetTravelAgent()
+    if(this.getTenantLoaded)storeUtils.fireAway().travelAgent?.handleGetTravelAgent();
+
   }
 }
 </script>
