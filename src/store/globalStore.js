@@ -66,7 +66,7 @@ export const useGlobalStore = defineStore('globalStore', {
             // import.meta.env.APP_ENV
             
             try{
-                let tenantDomain = import.meta.env.VITE_ENV !== 'production' ? import.meta.env.VITE_DEFAULT_DOMAN : newHostName
+                let tenantDomain = import.meta.env.VITE_ENV === 'dev' ? import.meta.env.VITE_DEFAULT_DOMAN : newHostName
                 const response = await AuthService.getTenantId(tenantDomain)
                 let responseData = response.data
                 if(responseData.success){
