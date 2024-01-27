@@ -3,6 +3,11 @@ import AuthService from "../service/AuthService";
 import {catchErrorHandler} from "../mixins/ErrorHandler";
 import {toValue} from "vue";
 
+// function wait(ms) {
+//     return new Promise((resolve) => setTimeout(resolve, ms));
+//   }
+// await wait(5000);
+
 export const useGlobalStore = defineStore('globalStore', {
     state:()=>({
         isSkipping:false,
@@ -11,18 +16,19 @@ export const useGlobalStore = defineStore('globalStore', {
         verificationType:'docs',
         error:null,
         isUnauthorised:false,
-
+        tenantLoaded:false,
+        tenantLoadedError:null,
     }),
 
     getters:{
         getIsSkipping:state => state.isSkipping,
-        getTenant_id:state => state.tenant_id ? state.tenant_id : localStorage.tenant_id,
+        getTenant_id:state => state.tenant_id,
         Tenant:state => state.tenant,
         getVerificationType: state => state.verificationType,
         getError:state => state.error,
-        getIsUnauthorised:state => state.isUnauthorised
-
-
+        getIsUnauthorised:state => state.isUnauthorised,
+        getTenantLoaded:state => state.tenantLoaded,
+        getTenantLoadedError:state => state.tenantLoadedError
     },
 
     actions:{
@@ -42,32 +48,38 @@ export const useGlobalStore = defineStore('globalStore', {
         },
 
         async getTenant(){
-            // const hostname = location.href
-            // let newHostName;
-            // if(hostname.includes('www')){
-            //     //split off www
-            //     const x = hostname?.split('.').filter((item, index) => {
-            //         return index !== 0
-            //     })
-            //     // split off / (ending trails)
-            //     newHostName = x?.toLocaleString()?.replace(',', '.')?.split('/')[0]
-            // }else{
-            //     newHostName = hostname?.split('//')[1]?.split('/')[0]
-            // }
-
+            const hostname = location.href
+            
+            let newHostName;
+            if(hostname.includes('www')){
+                //split off www
+                const x = hostname?.split('.').filter((item, index) => {
+                    return index !== 0
+                })
+                // split off / (ending trails)
+                newHostName = x?.toLocaleString()?.replace(',', '.')?.split('/')[0]
+            }else{
+                newHostName = hostname?.split('//')[1]?.split('/')[0]
+            }
+        
+            // 'focus_travels.localhost'
+            // import.meta.env.APP_ENV
+            
             try{
-                const response = await AuthService.getTenantId('focus_travels.localhost')
+                let tenantDomain = import.meta.env.VITE_ENV !== 'production' ? import.meta.env.VITE_DEFAULT_DOMAN : newHostName
+                const response = await AuthService.getTenantId(tenantDomain)
                 let responseData = response.data
                 if(responseData.success){
                     this.tenant_id = responseData.data[0].id
                     this.tenant = responseData.data[0]
-                    localStorage.tenant_id = responseData.data[0].id
+                    // localStorage.tenant_id = responseData.data[0].id
+                    this.tenantLoaded = true
                 }
 
-            }catch{
+            }catch(err){
+                this.tenantLoadedError = err.data
                 // do nothing
             }
-
         }
     }
 

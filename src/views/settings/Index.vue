@@ -685,7 +685,7 @@ export default {
 
     },
 
-    marry(value){
+    switchTab(value){
       switch (value) {
         case 'Account':
           storeUtils.fireAway().settings?.getPersonalProfileAction()
@@ -1073,8 +1073,9 @@ export default {
     this.model1.last_name = this.getUser?.last_name
     this.model1.email = this.getUser?.email
     this.model1.phone = this.getUser?.phone
-    setTimeout(() => { this.currentTab = this.getCurrentRouteParams,  this.marry(this.getCurrentRouteParams) },500)
+    setTimeout(() => { this.currentTab = this.getCurrentRouteParams,  this.switchTab(this.getCurrentRouteParams) },500)
     storeUtils.fireAway().global?.commitError(null)
+    storeUtils.fireAway().theme.handleGetTemplate();
   }
 }
 </script>
