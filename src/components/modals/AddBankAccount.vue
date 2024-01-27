@@ -95,10 +95,11 @@ export default {
     getError(){
       return storeUtils.fireAway().global?.getError
     },
+
   },
 
+
   mounted() {
-    storeUtils.fireAway().settings?.readBanks()
   }
 }
 </script>

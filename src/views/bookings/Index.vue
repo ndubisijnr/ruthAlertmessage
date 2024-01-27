@@ -205,13 +205,28 @@ export default {
 
     progressNav(){
       return storeUtils.fireAway().booking?.getProgressNav
+    },
+
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
     }
 
   },
 
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().booking?.getSummary()
+        storeUtils.fireAway().booking?.getAllBooking()
+      }
+    }
+  },
+
   mounted() {
-    storeUtils.fireAway().booking?.getSummary()
-    storeUtils.fireAway().booking?.getAllBooking()
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().booking?.getSummary()
+      storeUtils.fireAway().booking?.getAllBooking()
+    }
   }
 
 }

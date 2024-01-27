@@ -123,6 +123,7 @@
 
         </div>
       </NavBar>
+
       <div class="dashboard_content animate__animated animate__fadeIn">
         <slot name="child-content"></slot>
       </div>
@@ -156,7 +157,7 @@ export default {
     return{
       getFirstLettersOfFirstAndLastName,
       showDropDown:false,
-      lightenColor
+      lightenColor,
     }
   },
   methods:{
@@ -210,12 +211,17 @@ export default {
 
   },
 
-  created(){
+  beforeCreate() {
     if(!storeUtils.fireAway().global.tenantLoaded)storeUtils.fireAway().global?.getTenant().then(() => {
+      this.$emit('tenantIsReady', true)
       storeUtils.fireAway().theme.getCustomization()
     });
 
   },
+  //
+  // created(){
+  //
+  // },
 
 
   mounted() {

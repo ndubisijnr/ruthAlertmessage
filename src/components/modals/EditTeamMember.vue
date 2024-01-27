@@ -278,10 +278,7 @@ export default {
     }
 
   },
-  beforeUnmount(){
-   
-    console.log(this.opened)
-  },
+
 
   // watch:{
   //   'model.permission_ids'(old, newValue){

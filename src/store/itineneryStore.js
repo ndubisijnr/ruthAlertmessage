@@ -7,6 +7,7 @@ import { RuthdoAlert } from "ruthly";
 export const useItineneryStore = defineStore('itineneryStore', {
     state:()=>({
         loading:false,
+        summaryLoading:false,
         itineraryRequest:null,
         itineraryRequestDetails:null,
         itinerarySummary:null,
@@ -28,9 +29,9 @@ export const useItineneryStore = defineStore('itineneryStore', {
         this.summaryLoading = true
         try{
             const response = await ItineraryService.getItinerarySummary(storeUtils.fireAway().global?.getTenant_id)
+            this.summaryLoading = false
             let responseData = response.data
             if(responseData.success){
-                this.summaryLoading = false
                 this.itinerarySummary = responseData.data
             }
         }catch(errr){

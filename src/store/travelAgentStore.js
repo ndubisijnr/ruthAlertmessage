@@ -34,7 +34,7 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
     actions: {
 
         async readAgentMembers(user_id){
-            this.loadingAgents = true
+            if(!this.travelAgent)this.loadingAgents = true
             try{
                 const response = await TravelAgentsService.getAgentsTeamMembers(storeUtils.fireAway().global?.getTenant_id, user_id)
                 let responseData = response.data
@@ -107,7 +107,7 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
         },
 
         handleGetTravelAgent(searchQuery){
-            this.loadingAgents = true
+            if(!this.user) this.loadingAgents = true
             return TravelAgentsService.getTravelAgent(storeUtils.fireAway().global?.getTenant_id, searchQuery).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
