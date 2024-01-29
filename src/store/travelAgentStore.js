@@ -106,9 +106,9 @@ export const useTravelAgentStore = defineStore('travelAgentStore', {
 
         },
 
-        handleGetTravelAgent(searchQuery){
+        handleGetTravelAgent(searchQuery, page){
             if(!this.user) this.loadingAgents = true
-            return TravelAgentsService.getTravelAgent(storeUtils.fireAway().global?.getTenant_id, searchQuery).then(async response => {
+            return TravelAgentsService.getTravelAgent(storeUtils.fireAway().global?.getTenant_id, searchQuery, page).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
                     this.loadingAgents = false

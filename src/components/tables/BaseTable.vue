@@ -517,7 +517,7 @@ export default {
             }
 
             if (this.getCurrentRoute === "Travel Agents") {
-                storeUtils.fireAway().travelAgent?.handleGetTravelAgent(value);
+                storeUtils.fireAway().travelAgent?.handleGetTravelAgent("", value);
             }
 
             if (this.tableName === "markup") {

@@ -2,8 +2,8 @@ import {apiService} from "./BaseService";
 
 export default {
 
-    getTravelAgent(tenant_id,searchValue) {
-        return apiService.Client.get(`/api/${tenant_id}/business/travel-agents?keyword=${searchValue || ""}`)
+    getTravelAgent(tenant_id,searchValue,page) {
+        return apiService.Client.get(`/api/${tenant_id}/business/travel-agents?keyword=${searchValue}&page=${page}`)
     },
 
     VerifyBusiness(tenant_id,payload) {
