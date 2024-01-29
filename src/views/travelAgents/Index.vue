@@ -180,12 +180,12 @@ export default {
 
   watch:{
     'getTenantLoaded'(a,b){
-      if(a)storeUtils.fireAway().travelAgent?.handleGetTravelAgent();
+      if(a)storeUtils.fireAway().travelAgent?.handleGetTravelAgent("", 1);
     }
   },
 
   mounted() {
-    if(this.getTenantLoaded)storeUtils.fireAway().travelAgent?.handleGetTravelAgent();
+    if(this.getTenantLoaded)storeUtils.fireAway().travelAgent?.handleGetTravelAgent("", 1);
 
   }
 }
