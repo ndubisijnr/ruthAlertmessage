@@ -116,9 +116,6 @@
             </div>
 
           </div>
-
-
-
           </div>
 
         </div>
@@ -358,7 +355,7 @@ a:hover{
   border-radius: 1rem;
   background: #FFF;
   box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.12);
-  left: -100px;
+  //left: -100px;
   top: 50px;
   z-index: 9999999999;
 }

@@ -19,7 +19,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
         getLoading:state => state.loading,
         getLoadingSummary:state => state.summaryLoading,
         getItineraryRequest:state => state.itineraryRequest,
-        getItineraryRequestDetails:state => state.itineraryRequestDetails,
+        getItineraryRequestDetails:state => localStorage.ItineraryRequestDetailsData ? JSON.parse(localStorage.ItineraryRequestDetailsData) : state.itineraryRequestDetails,
         getItinerarySummaryState:state => state.itinerarySummary,
         getRequestingDetailsLoading:state => state.requestingDetailsLoading,
     },
@@ -47,7 +47,11 @@ export const useItineneryStore = defineStore('itineneryStore', {
             let responseData = response.data
             if(responseData.success){
                 this.loading = false
-                RuthdoAlert({title:responseData.data, type:'success'})
+                await RuthdoAlert({title:responseData.data, icon:'success'})
+                setTimeout(() => {
+                    location.replace('/support')
+                },500)
+                // location.reload()
             }
         }catch(errr){
             this.loading = false
@@ -65,7 +69,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
                 this.requestingDetailsLoading = false
                 this.itineraryRequest = responseData
             }
-        }catch(errr){
+        }catch(err){
             this.requestingDetailsLoading = false
         }
      
@@ -78,10 +82,9 @@ export const useItineneryStore = defineStore('itineneryStore', {
             const response = await ItineraryService.replyItineraryRequestService(storeUtils.fireAway().global?.getTenant_id, id, payload)
             let responseData = response.data
             if(responseData.success){
-                RuthdoAlert({title:responseData.date, icon:'success'})
-                console.log(responseData)
+                RuthdoAlert({title:responseData.data, icon:'success'})
             }
-        }catch(errr){
+        }catch(err){
             this.loading = false
         }
      
@@ -96,7 +99,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
                 this.requestingDetailsLoading = false
                 this.itineraryRequest = responseData
             }
-        }catch(errr){
+        }catch(err){
             this.requestingDetailsLoading = false
         }
      
@@ -110,17 +113,14 @@ export const useItineneryStore = defineStore('itineneryStore', {
             if(responseData.success){
                 this.requestingDetailsLoading = false
                 this.itineraryRequestDetails = responseData.data
-                router.push({name:"SupportDetails"})
+                localStorage.setItem('ItineraryRequestDetailsData',JSON.stringify(responseData.data))
+                await location.replace('/support/details')
             }
         }catch(errr){
             this.requestingDetailsLoading = false
         }
        
        },
-
-       getRefundAction(){
-        return ItineraryService
-       }
 
        
     },

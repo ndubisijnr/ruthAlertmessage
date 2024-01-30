@@ -483,15 +483,18 @@ export default {
 
     bookingValidation(id){
       const element = document.getElementById(id)
-      return !element.value
+      return !element?.value
     },
 
     proceedToPayment(){
       this.phoneValidation=null
       this.passportNumberValidation=null
       const phone_validation = this.bookingValidation('contactPhone')
-      const passportNumberValidation = this.bookingValidation('passportNumber')
-      if(phone_validation)this.phoneValidation = 'Contact Phone is required';  
+      let passportNumberValidation = null
+      if(this.getSelectedFlight?.document_required) passportNumberValidation = this.bookingValidation('passportNumber')
+      console.log(passportNumberValidation, phone_validation)
+
+      if(phone_validation)this.phoneValidation = 'Contact Phone is required';
       else if(passportNumberValidation)  this.passportNumberValidation = 'Password number is required'
       else{
         this.phoneValidation=null
