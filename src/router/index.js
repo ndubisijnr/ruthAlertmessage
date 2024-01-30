@@ -10,19 +10,20 @@ import hotelRoute from "./routes/hotelRoute";
 import travelAgentsRoute from "./routes/travelAgentsRoute";
 import templateRoute from "@/router/routes/templateRoute";
 import supportRoute from "@/router/routes/supportRoute";
+import errorsRoute from './routes/errorsRoute';
 
 const baseRoute = []
 
-export const routes = baseRoute.concat(authRoutes,supportRoute,templateRoute,transactionRoute,travelAgentsRoute,insuranceRoute,hotelRoute,verificationRoutes,dashboardRoute,bookingRoute,settingsRoute)
+export const routes = baseRoute.concat(authRoutes, supportRoute, templateRoute, transactionRoute, travelAgentsRoute, insuranceRoute, hotelRoute, verificationRoutes, dashboardRoute, bookingRoute, settingsRoute, errorsRoute)
 
- const router = createRouter({
+const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior() {
     // always scroll to top
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({left: 0, top: 0})
+        resolve({ left: 0, top: 0 })
       }, 100)
     })
   }
@@ -39,7 +40,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
   // If auth isn't required for the route, just continue.
   if (!authRequired) return next();
   // console.log("userManagement getter info: "+StoreUtils.rootGetters(StoreUtils.getters.auth.getUserInfo))
-  if (localStorage?.token != null){
+  if (localStorage?.token != null) {
     return next()
   }
   redirectToLogin();
