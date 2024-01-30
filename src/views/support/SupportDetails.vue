@@ -7,9 +7,11 @@ import router from "@/router";
 import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
 import storeUtils from "../../utils/storeUtils";
 import ItineraryRequest from "../../model/ItineraryRequest"
+import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
+import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
 export default {
   name: "SupportDetails",
-  components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
+  components:{OnBoardingButton, Template1,Layout,FlightPayment,ItenaryDetailsComponent,PrintItenaryModal},
   data(){
     return{
       data:null,
@@ -17,13 +19,19 @@ export default {
       formatAmount,
       convertTo12HourFormat,
       convertToWord,
-      getYYYYMMDDFormat
+      getYYYYMMDDFormat,
+      printing:false
     }
   },
 
   methods:{
     goBack(){
       router.push({name:"Bookings_Details"})
+    },
+
+    close_(value){
+      this.printing = value
+      console.log(value)
     },
 
 
@@ -35,6 +43,8 @@ export default {
       let value;
       if(this.getRequestDetails.type === 'issuance') value = 'issued';
       if(this.getRequestDetails.type === 'refund') value = 'refunded';
+      if(this.getRequestDetails.type === 'exchange') value = 'exchange';
+      if(this.getRequestDetails.type === 'void') value = 'void';
 
       const request = {"status":value}
       storeUtils.fireAway().itineneryStore.approveItineraryRequestAction(this.getRequestDetails.id, request)
@@ -92,11 +102,12 @@ export default {
 </script>
 
 <template>
-  <layout v-slot:child-content>
-   
-    <div class="overall">
 
-    
+  <layout v-slot:child-content>
+    <print-itenary-modal v-if="printing" @close="close_"></print-itenary-modal>
+
+
+    <div class="overall">
         <div class="wrapper">
         <div class="breadcrumb">
           <RouterLink to="/support"><p @click="goBack" class="breadcrumb_list">Itinerary Support</p></RouterLink>
@@ -189,7 +200,7 @@ export default {
                 <path d="M22 12C22 17.52 17.52 22 12 22C6.48 22 3.11 16.44 3.11 16.44M3.11 16.44H7.63M3.11 16.44V21.44M2 12C2 6.48 6.44 2 12 2C18.67 2 22 7.56 22 7.56M22 7.56V2.56M22 7.56H17.56" stroke="#2C6CAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <p class="itinerary-p">          {{ getRequestDetails?.type }}</p>
+            <p class="itinerary-p">{{ getRequestDetails?.type }}</p>
           </div>
 
           <div v-if="getRequestDetails?.type === 'refund'" class="action_wrapper">
@@ -216,7 +227,6 @@ export default {
               <p class="request_date_value">{{ convertToWord(getRequestDetails?.created_at) }} {{convertTo12HourFormat(getRequestDetails?.created_at)}}</p>
             </div>
 
-            <div class="email-area">
             <div class="group-inputs">
               <div>
                 <div style="margin-bottom: 0.75rem">
@@ -233,21 +243,14 @@ export default {
                 <div style="margin-bottom: 2.1rem">
                   <label class="class_label"></label>
                 </div>
-                <div>
-
-                  <div class="form-input">
-                      <div style="border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
-                        <p class="label_text">Requested By <span class="required">*</span></p>
-                      </div>
-                      <input class="form-input-input" :value="getRequestDetails?.booking?.contact_first_name + ' ' + getRequestDetails?.booking?.contact_last_name" readonly />
-                    </div>
+                <div class="form-input">
+                  <div style="width: 100%;border-right: solid #C0D3E6;height: 3.4rem;display: flex;align-items: center">
+                    <p class="label_text">Requested By <span class="required">*</span></p>
+                  </div>
+                  <input class="form-input-input" :value="getRequestDetails?.booking?.contact_first_name + ' ' + getRequestDetails?.booking?.contact_last_name" readonly />
                 </div>
               </div>
-
-
             </div>
-
-          </div>
 
             <div style="width: 100%;">
             
@@ -268,7 +271,6 @@ export default {
                 </div>
               </div>
 
-              
               <div style="width: 100%;margin-bottom: 1.5rem;">
                 <div>
                   <div class="issuance_wrapper">     
@@ -282,7 +284,7 @@ export default {
                         </div>
 
                         <div v-else style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
-                            <OnBoardingButton btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                            <OnBoardingButton @click="printing=true" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
                             <OnBoardingButton :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
 
                         </div>
@@ -290,12 +292,11 @@ export default {
                 </div>
               </div>
 
-            
             </div>
 
             <div style="width: 100%;">
               <p class="additional_comment_p">Additional Information or Comments  <span class="required">*</span></p>
-              <textarea class="additional_comment"></textarea>
+              <textarea class="additional_comment" :value="getRequestDetails?.support_comment" disabled></textarea>
             </div>
           </div>
 
@@ -304,9 +305,8 @@ export default {
                 <p class="support_comment_p">Support Team Comments</p>
                 <p class="additional_comment_p">Additional Information or Comments <span class="required">*</span></p>
             </div>
-            <textarea class="comment_area" placeholder="Kindly send any information regarding this issue if neccessary" v-model="itCommentModel.support_comment"></textarea>
+            <textarea class="comment_area" placeholder="Kindly send any information regarding this issue if neccessary" v-model="itCommentModel.support_comment" :disabled="getRequestDetails?.booking.status === 'issued'"></textarea>
           </div>
-
 
           <div v-if="getRequestDetails?.booking.status !== 'issued' && getUser?.account_type !== 'manager'" style="display: flex;justify-content: end;margin-top: 40px;">
             <OnBoardingButton btn-width="8rem" height="3rem" text-node="Submit" @click="submitSupportAction"></OnBoardingButton>
@@ -315,7 +315,7 @@ export default {
       </div> 
     </div> 
       
-      </layout>
+  </layout>
 </template>
 
 <style scoped>
@@ -441,8 +441,9 @@ export default {
 .group-inputs {
   display: flex;
   align-items: start;
-  justify-content: center;
+  justify-content: start;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .issued{

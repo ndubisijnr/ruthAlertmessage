@@ -199,13 +199,29 @@ export default{
         return JSON.parse(localStorage?.bookedFlight)
        },
        getSelectedFlight(){
-      return storeUtils.fireAway()?.flight?.getSelectedFlight
-    },
+        return storeUtils.fireAway()?.flight?.getSelectedFlight
+      },
+      getTenantLoaded(){
+        return storeUtils.fireAway().global.getTenantLoaded
+      }
     },
 
-    mounted(){
+    watch:{
+      'getTenantLoaded'(a,b){
+        if(a){
+          setTimeout(() => { this.currentTab = this.getCurrentRouteParams, this.switchTab(this.getCurrentRouteParams) }, 500)
+          storeUtils.fireAway().global?.commitError(null)
+          storeUtils.fireAway().theme.handleGetTemplate();
+        };
+      }
+    },
+
+
+  mounted(){
+      if(this.getTenantLoaded){
         storeUtils.fireAway().flight?.handleGetWallet()
         storeUtils.fireAway().flight?.handleGetFlightDetails(this.getBookedFlight?.reference)
+      }
     }
 }
 
