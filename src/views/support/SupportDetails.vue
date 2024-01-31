@@ -34,6 +34,11 @@ export default {
       console.log(value)
     },
 
+    viewDetails(obj){
+      storeUtils.fireAway().print.commitPrintLoading('', obj)
+      this.printing = true
+    },
+
 
     submitSupportAction(){
       storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getUser.id, this.itCommentModel)
@@ -87,16 +92,24 @@ export default {
     getRequestDetails(){
       return storeUtils.fireAway().itineneryStore?.getItineraryRequestDetails
 
+    },
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
     }
   },
 
-  beforeUnmount(){
-    console.log('unmounting')
+
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id)
+      };
+    }
   },
 
+
   mounted() {
-    if(!localStorage.managedBookings) return;
-    this.data = JSON.parse(localStorage.managedBookings)
+    if(this.getTenantLoaded) storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id);
   }
 }
 </script>
@@ -284,7 +297,7 @@ export default {
                         </div>
 
                         <div v-else style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
-                            <OnBoardingButton @click="printing=true" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                            <OnBoardingButton @click="viewDetails(getRequestDetails)" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
                             <OnBoardingButton :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
 
                         </div>

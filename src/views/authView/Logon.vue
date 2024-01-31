@@ -125,6 +125,7 @@ a{
   align-items: center;
   width: 100%;
   justify-content: center;
+
 }
 .remember_me{
   display: flex;
@@ -133,7 +134,10 @@ a{
 }
 .login_card{
   background-color: #FFF;
-  padding: 4rem;
+  padding:2rem 4rem;
+  border-radius: 0.5rem;
+  /* shadow-2 */
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
 }
 @media (max-width: 1024px) {
   .login_card{
@@ -230,6 +234,8 @@ line-height: 1.1875rem; /* 135.714% */
     width: 100%;
     text-align: center;
     position: relative;
+    top: 0;
+    margin-bottom: 1rem;
   }
 }
 

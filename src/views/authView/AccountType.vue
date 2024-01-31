@@ -88,6 +88,7 @@ a{
   .domain_account{
       width: 100%;
     text-align: center;
+    margin-bottom: 1rem;
   }
 }
 

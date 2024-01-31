@@ -8,7 +8,7 @@ export default [
         component: () => import('../../views/support/index.vue')
     },
     {
-        path: '/support/details',
+        path: '/support/details/:id',
         // redirect:'Register',
         name: 'SupportDetails',
         meta: {layout: 'auth',authRequired:false},

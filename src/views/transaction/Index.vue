@@ -5,7 +5,8 @@
     <div class="overall">
       <div class="booking-wrapper">
         <div>
-          <div class="get-started">
+<!--          {{getUser.account_type}}-->
+          <div class="get-started" v-if="getUser?.account_type !== 'super_admin' || getUser?.account_type !== 'admin'">
             <div class="with-tiqwa">
               <div>
                 <h3 class="wallet_balance">Total Wallet Balance</h3>

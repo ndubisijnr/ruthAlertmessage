@@ -300,6 +300,7 @@ a{
 @media (max-width: 1024px) {
   .domain_account{
     width: 100%;
+    margin-bottom: 1rem;
   }
 }
 

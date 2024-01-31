@@ -30,15 +30,21 @@
                 <div class="select_account_type">
                     <div class="logo_area">
                         <!-- users logo or travel_yakata_logo -->
-                        <img
-                            src="../../assets/TravelYakataLogo.png"
+                        <img v-if="getTenant.logo"
+                            :src="getTenant.logo"
+                             alt="TenantLogo"
                             style="width: 12.0625rem; height: 5.95919rem"
                         />
+                        <p class="tenant_name">{{getTenant.name}}</p>
                     </div>
 
-                    <slot name="sub-child"></slot>
 
-                    <slot name="children"></slot>
+                      <slot name="sub-child"></slot>
+
+                      <slot name="children"></slot>
+
+
+
                 </div>
             </div>
         </div>
@@ -77,6 +83,10 @@ export default {
             return storeUtils.fireAway().theme.getCustom_theme;
         },
 
+        getTenant(){
+          return storeUtils.fireAway().global.Tenant
+        },
+
         getTenantLoaded() {
             return storeUtils.fireAway().global.getTenantLoaded;
         },
@@ -95,6 +105,17 @@ export default {
 
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/apercu");
+.tenant_name{
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: #fff;
+  padding: .7rem;
+  border-radius: 0.5rem;
+  /* shadow-2 */
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
+  text-align: center;
+  width: auto;
+}
 .splash {
     width: 100%;
     height: 100vh;
@@ -107,6 +128,7 @@ export default {
     display: flex;
     flex-direction: column;
 }
+
 .m5-0 {
     margin: 0;
     min-height: 100vh;
@@ -137,13 +159,13 @@ export default {
 
 @media (max-width: 1024px) {
     .select_account_type {
-        max-width: 100%;
+        width: 100%;
         flex-direction: column;
         padding: 1rem;
         justify-content: start;
-        gap: 1rem;
+        gap: 0;
         height: auto;
-        display: block;
+
     }
 }
 
@@ -202,6 +224,7 @@ export default {
     position: absolute;
     top: 0;
     float: left;
+    margin: .5rem 0;
 }
 
 @media (max-width: 1024px) {

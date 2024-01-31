@@ -4,7 +4,13 @@
       <div class="inner_wrapper">
         <div class="select_account_type">
           <div class="logo_area">
-            <img src="../../../assets/TravelYakataLogo.png" style="width: 12.0625rem;height: 5.95919rem;" />
+            <!-- users logo or travel_yakata_logo -->
+            <img v-if="getTenant.logo"
+                 :src="getTenant.logo"
+                 alt="TenantLogo"
+                 style="width: 12.0625rem; height: 5.95919rem"
+            />
+            <p class="tenant_name">{{getTenant.name}}</p>
           </div>
           <div style="justify-content: center;display: flex;width: 100%;">
             <slot name="children"></slot>
@@ -18,13 +24,32 @@
 </template>
 
 <script>
+import storeUtils from "@/utils/storeUtils";
+
 export default {
-  name: "Layout"
+  name: "Layout",
+  computed:{
+    getTenant(){
+      return storeUtils.fireAway().global.Tenant
+    },
+  }
 }
 </script>
 
 <style  scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
+.tenant_name{
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: #fff;
+  padding: .7rem;
+  border-radius: 0.5rem;
+  /* shadow-2 */
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
+  text-align: center;
+  width: auto;
+}
+
 
 .m5-0{
   margin: 0;

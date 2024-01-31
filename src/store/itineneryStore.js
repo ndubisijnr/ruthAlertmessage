@@ -49,9 +49,8 @@ export const useItineneryStore = defineStore('itineneryStore', {
                 this.loading = false
                 await RuthdoAlert({title:responseData.data, icon:'success'})
                 setTimeout(() => {
-                    location.replace('/support')
+                    location.reload()
                 },500)
-                // location.reload()
             }
         }catch(errr){
             this.loading = false
@@ -113,10 +112,9 @@ export const useItineneryStore = defineStore('itineneryStore', {
             if(responseData.success){
                 this.requestingDetailsLoading = false
                 this.itineraryRequestDetails = responseData.data
-                localStorage.setItem('ItineraryRequestDetailsData',JSON.stringify(responseData.data))
-                await location.replace('/support/details')
+                await router.push({name:'SupportDetails', params:{id:payload}})
             }
-        }catch(errr){
+        }catch(err){
             this.requestingDetailsLoading = false
         }
        
