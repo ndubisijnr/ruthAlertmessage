@@ -5,8 +5,8 @@
             <div class="tag flex_center text-center">
                 <span>404 error</span>
             </div>
-            <h1>Page Not Found</h1>
-            <p>Sorry we couldn’t find the page you are looking for.</p>
+            <h1 class="capital">{{ pageTitle }}</h1>
+            <p>Sorry we couldn’t find the domain you were looking for.</p>
             <!-- <a class="flex_center" href=""><span>Back To Home</span></a> -->
         </div>
     </div>
@@ -20,10 +20,18 @@ export default {
     data() {
         return {
             showDropDown: false,
+            pageTitle: "Domain not found",
         };
     },
-    methods: {},
+    methods: {
+        updateTitle() {
+            document.title = this.pageTitle;
+        },
+    },
     computed: {},
+    mounted() {
+        this.updateTitle();
+    },
 };
 </script>
 
