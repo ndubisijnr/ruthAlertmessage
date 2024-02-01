@@ -97,6 +97,21 @@ export default {
       }
     },
 
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().transaction.handleGetTransactionSummary()
+
+        storeUtils.fireAway().transaction.handleGetUserTransaction()
+        storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id).then(() => {
+          this.isWallet = true
+          this.pageMounted = true
+
+        })
+      }
+    }
+  },
+
   mounted() {
     storeUtils.fireAway().global?.getTenant().then(() =>{
       storeUtils.fireAway().auth?.getBusinessProfile()

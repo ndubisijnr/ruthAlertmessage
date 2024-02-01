@@ -15,7 +15,6 @@
               Print</button>
           </div>
         </div>
-
         <div id="pdf-to-download">
           <!-- <img src="../../src/assets/full-black-logo.svg" id="ondownload" style="display: none;margin-bottom: 20px" /> -->
 
@@ -26,23 +25,23 @@
             <div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Full Name : </p>
-                <p class="value"> {{getData?.contact_first_name ? getData?.contact_first_name + " " + getData?.contact_last_name : 'Mr Jane Doe'}}</p>
+                <p class="value"> {{getData?.booking.contact_first_name ? getData?.booking.contact_first_name + " " + getData?.contact_last_name : 'Mr Jane Doe'}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Email:</p>
-                <p class="value">{{getData?.contact_email ? getData?.contact_email : 'janedoe@gmail.com '}}</p>
+                <p class="value">{{getData?.booking.contact_email ? getData?.booking.contact_email : 'janedoe@gmail.com '}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Class: </p>
-                <p class="value">{{getData?.flight?.outbound[0].cabin_type ? getData?.flight?.outbound[0].cabin_type : 'Economy'}} </p>
+                <p class="value">{{getData?.booking.flight?.outbound[0].cabin_type ? getData?.flight?.outbound[0].cabin_type : 'Economy'}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Booking ID : </p>
-                <p class="value"> {{getData?.reference}} </p>
+                <p class="value"> {{getData?.booking_id}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">PNR: </p>
-                <p class="value">{{ getData?.pnr }}</p>
+                <p class="value">{{ getData?.booking.flight?.pnr }}</p>
               </div>
             </div>
             
@@ -53,7 +52,7 @@
 
             <!--     outbound-->
 
-            <div v-for="(i,index) in  getData?.flight?.outbound" class="flight_info_wrapper">
+            <div v-for="(i,index) in  getData?.booking.flight?.outbound" class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2645_19017)">
@@ -98,7 +97,7 @@
                   <p class="value">Arrival</p>
                 </div>
                 <div>
-                  <p class="key">{{ getData?.flight.outbound_stops }}</p>
+                  <p class="key">{{ getData?.booking.flight.outbound_stops }}</p>
                   <p class="value">Stops </p>
                 </div>
 
@@ -119,7 +118,7 @@
               </div> 
             </div>
 
-            <div class="flight_info_wrapper">
+            <div v-if="getData?.booking.flight?.inbound.length" v-for="(i,index) in  getData?.booking.flight?.inbound" class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -136,11 +135,11 @@
               </div>
               <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
                 <div class="equal-height-table_item">
-                  <p class="flight_info_text">Lagos (LOS) </p>
+                  <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
                   <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
                     <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" fill="white"/>
                   </svg>
-                  <p class="flight_info_text">Abuja (ABV)</p>
+                  <p class="flight_info_text">{{ getCityByCityCode(i.airport_to) }} ({{ i.airport_to }})</p>
                 </div>
                 <div>
                   <p class="flight_info_text">Tues 15th Sept, 2023</p>
@@ -149,23 +148,23 @@
 
               <div class="flight_info2">
                 <div>
-                  <p class="key">WWW001 </p>
+                  <p class="key">{{ i.flight_number }} </p>
                   <p class="value">Flight</p>
                 </div>
                 <div>
-                  <p class="key">01:00 PM </p>
+                  <p class="key">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
                   <p class="value"> Departure </p>
                 </div>
                 <div>
-                  <p class="key">1h 30m  </p>
+                  <p class="key">{{convertDurationToWords(i.duration)}}  </p>
                   <p class="value">Duration</p>
                 </div>
                 <div>
-                  <p class="key">02 : 30 PM</p>
+                  <p class="key">{{i.arrival_time ? convertToWord(i.arrival_time) : '02 : 30 PM'}}</p>
                   <p class="value">Arrival</p>
                 </div>
                 <div>
-                  <p class="key">0</p>
+                  <p class="key">{{ getData?.booking.flight.outbound_stops }}</p>
                   <p class="value">Stops </p>
                 </div>
 
@@ -174,7 +173,7 @@
               <div>
                 <div class="flight_info">
                   <div class="flight_info_item">
-                    <p class="airport">Muritala Mohammed International Airport Lagos (LOS) </p>
+                    <p class="airport">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
                     <p class="time">01 : 00 PM </p>
                     <p class="time">Thurs 20th Sept, 2023</p>
                   </div>
@@ -225,7 +224,7 @@
               <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
             </div>
 
-            <div v-for="i in getData?.flight?.passengers" class="flight_info2" style="justify-content: start;">
+            <div v-for="i in getData?.booking.flight?.passengers" class="flight_info2" style="justify-content: start;">
               <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
               <p class="value" style="width: 11.25rem;">{{i.email}}</p>
               <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
@@ -241,7 +240,7 @@
 
             </div>
      
-            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
+            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.booking.amount)}} </p>
             <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
             <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>

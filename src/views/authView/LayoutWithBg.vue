@@ -5,9 +5,15 @@
 
       <div class="marger">
           <div class="inner_wrapper">
-              <div class="logo_area">
-                <img src="../../assets/TravelYakataLogo.png" style="width: 12.0625rem;height: 5.95919rem;"/>
-              </div>
+            <div class="logo_area">
+              <!-- users logo or travel_yakata_logo -->
+              <img v-if="getTenant.logo"
+                   :src="getTenant.logo"
+                   alt="TenantLogo"
+                   style="width: 12.0625rem; height: 5.95919rem"
+              />
+              <p class="tenant_name">{{getTenant.name}}</p>
+            </div>
               
               <slot name="children"></slot>
 
@@ -27,8 +33,16 @@ import storeUtils from "../../utils/storeUtils";
 
 export default {
   name:"LayoutWithBg",
+  computed:{
+    getTenant(){
+      return storeUtils.fireAway().global.Tenant
+    },
+    getTenantLoaded() {
+      return storeUtils.fireAway().global.getTenantLoaded;
+    },
+  },
   mounted() {
-    if(!localStorage.tenant_id){
+    if(!this.getTenantLoaded){
       storeUtils.fireAway().global?.getTenant()
     }
   }
@@ -37,6 +51,17 @@ export default {
 </script>
 <style  scoped>
 @import url('https://fonts.cdnfonts.com/css/apercu');
+.tenant_name{
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: #fff;
+  padding: .7rem;
+  border-radius: 0.5rem;
+  /* shadow-2 */
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
+  text-align: center;
+  width: auto;
+}
 
 .marger{
   margin: 2rem;

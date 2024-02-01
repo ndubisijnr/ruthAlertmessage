@@ -5,7 +5,8 @@
     <div class="overall">
       <div class="booking-wrapper">
         <div>
-          <div class="get-started">
+<!--          {{getUser.account_type}}-->
+          <div class="get-started" v-if="getUser?.account_type === 'manager' || getUser?.account_type === 'booker'">
             <div class="with-tiqwa">
               <div>
                 <h3 class="wallet_balance">Total Wallet Balance</h3>
@@ -32,7 +33,7 @@
             </div>
           </div>
 
-          <div>
+          <div style="margin-top: 4rem">
             <div style="width: 100%;overflow-x: scroll">
               <div class="card-area">
                   <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
@@ -116,6 +117,7 @@ import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import storeUtils from "../../utils/storeUtils";
 import WalletCreation from "@/components/modals/WalletCreation.vue";
 import AddFunds from "@/components/modals/AddFunds.vue";
+import router from "@/router";
 export default {
   name: "Index",
   components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation,AddFunds},
@@ -168,6 +170,18 @@ export default {
         if(this.getIsWalletSetupSuccess) this.close();
       }
 
+    },
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().transaction.handleGetTransactionSummary()
+
+        storeUtils.fireAway().transaction.handleGetUserTransaction()
+        storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id).then(() => {
+          this.isWallet = true
+          this.pageMounted = true
+
+        })
+      }
     }
   },
 
@@ -194,7 +208,10 @@ export default {
       if(localStorage.businessProfile){
         return JSON.parse(localStorage.businessProfile)
       }
-    }
+    },
+    getTenantLoaded() {
+      return storeUtils.fireAway().global.getTenantLoaded;
+    },
   },
 
 
@@ -202,14 +219,19 @@ export default {
     
   },
 
-  mounted(){
-    storeUtils.fireAway().transaction.handleGetTransactionSummary()
-    storeUtils.fireAway().transaction.handleGetUserTransaction()
-    storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id).then(() => {
-      this.isWallet = true
-      this.pageMounted = true
 
-    })
+
+  mounted(){
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().transaction.handleGetTransactionSummary()
+
+      storeUtils.fireAway().transaction.handleGetUserTransaction()
+      storeUtils.fireAway().transaction.handleGetUserWallet(this.getBusinessProfile?.id).then(() => {
+        this.isWallet = true
+        this.pageMounted = true
+
+      })
+    }
    
 
   }

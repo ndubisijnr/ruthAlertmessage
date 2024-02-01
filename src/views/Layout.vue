@@ -11,7 +11,12 @@
                             20
                         )}`"
                     >
-                        <img src="../../src/assets/Cards/logo.svg" />
+                      <img v-if="getTenant.logo"
+                           :src="getTenant.logo"
+                           alt="TenantLogo"
+                           style="width: 12.0625rem; height: 5.95919rem"
+                      />
+                      <p class="tenant_name">{{getTenant.name}}</p>
                     </router-link>
 
                     <div
@@ -318,10 +323,10 @@
                             {{ getUser?.account_type.replace("_", " ") }}
                         </div>
 
-                        <img
-                            src="../assets/notification.svg"
-                            class="notification_icon"
-                        />
+<!--                        <img-->
+<!--                            src="../assets/notification.svg"-->
+<!--                            class="notification_icon"-->
+<!--                        />-->
 
                         <div class="profile" @click="showDrop">
                             <div
@@ -550,53 +555,7 @@
             <div class="dashboard_content animate__animated animate__fadeIn">
                 <slot name="child-content"></slot>
             </div>
-            <div v-show="showDropDown" id="dropdown" class="dropDown animate__animated animate__fadeIn">
-            <div class="dropDown-inner-head">
-              <div class="icon-dropdown" :style="getBusinessProfile?.logo ? {backgroundImage:`url(${getBusinessProfile?.logo})`} : {backgroundColor:custom_theme ? custom_theme.color : default_theme.color}"><p v-if="!getBusinessProfile?.logo">{{getFirstLettersOfFirstAndLastName(getUser.first_name + ' ' + getUser.last_name)}}</p></div>
-              <div>
-                <p class="first_last_name">{{getUser.first_name ? getUser.first_name : '' + ' ' + getUser.last_name ? getUser.last_name : ''}}</p>
-                <p class="email">{{ getUser.email }}</p>
-              </div>
-            </div>
-            <div class="dropDown-inner-main">
-              <div class="dropDown-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M10.0005 18.8577C9.44219 18.8577 8.87552 18.7327 8.43385 18.4743L3.85052 15.8327C1.98385 14.5743 1.86719 14.3827 1.86719 12.4077V7.59101C1.86719 5.61601 1.97552 5.42435 3.80885 4.18268L8.42552 1.51602C9.30052 1.00768 10.6755 1.00768 11.5505 1.51602L16.1505 4.16602C18.0172 5.42435 18.1339 5.61601 18.1339 7.59101V12.3993C18.1339 14.3743 18.0255 14.566 16.1922 15.8077L11.5755 18.4743C11.1255 18.7327 10.5589 18.8577 10.0005 18.8577ZM10.0005 2.39102C9.65052 2.39102 9.30885 2.45768 9.06719 2.59935L4.48385 5.24935C3.12552 6.16602 3.12552 6.16602 3.12552 7.59101V12.3993C3.12552 13.8243 3.12552 13.8243 4.51719 14.766L9.06719 17.391C9.55885 17.6744 10.4505 17.6744 10.9422 17.391L15.5255 14.741C16.8755 13.8243 16.8755 13.8243 16.8755 12.3993V7.59101C16.8755 6.16602 16.8755 6.16602 15.4839 5.22435L10.9339 2.59935C10.6922 2.45768 10.3505 2.39102 10.0005 2.39102Z" fill="#1D1E2C"/>
-                <path d="M10 13.125C8.275 13.125 6.875 11.725 6.875 10C6.875 8.275 8.275 6.875 10 6.875C11.725 6.875 13.125 8.275 13.125 10C13.125 11.725 11.725 13.125 10 13.125ZM10 8.125C8.96667 8.125 8.125 8.96667 8.125 10C8.125 11.0333 8.96667 11.875 10 11.875C11.0333 11.875 11.875 11.0333 11.875 10C11.875 8.96667 11.0333 8.125 10 8.125Z" fill="#1D1E2C"/>
-               </svg>
-                <router-link :to="`/settings/${getUser?.access_token?.slice(0,20)}#Account`">Account Settings</router-link>
-                <img v-if="getCurrentRoute.includes('settings')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
-              </div>
-              <div class="dropDown-item" v-if="getUser?.account_type === 'manager'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"/>
-                </svg>
-                <router-link :to="`/verification/document-upload/${getUser?.access_token?.slice(0,20)}`">Document Verification</router-link>
-                <img v-if="getCurrentRoute.includes('documents')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
-              </div>
-              <router-link :to="`/support`">
-              <div class="dropDown-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M9.98999 22.78C9.38999 22.78 8.81999 22.48 8.42999 21.95L7.23001 20.35C7.23001 20.36 7.18 20.33 7.16 20.33H6.79001C3.37001 20.33 1.25 19.4 1.25 14.79V10.79C1.25 6.58001 3.82001 5.48001 5.98001 5.29001C6.22001 5.26001 6.50001 5.25 6.79001 5.25H13.19C16.81 5.25 18.73 7.17001 18.73 10.79V14.79C18.73 15.08 18.72 15.36 18.68 15.63C18.5 17.76 17.4 20.33 13.19 20.33H12.79L11.55 21.95C11.16 22.48 10.59 22.78 9.98999 22.78ZM6.79001 6.75C6.56001 6.75 6.34 6.76 6.13 6.78C3.81 6.98 2.75 8.25001 2.75 10.79V14.79C2.75 18.22 3.81001 18.83 6.79001 18.83H7.19C7.64 18.83 8.14999 19.08 8.42999 19.44L9.63 21.05C9.85001 21.35 10.13 21.35 10.35 21.05L11.55 19.45C11.84 19.06 12.3 18.83 12.79 18.83H13.19C15.73 18.83 17 17.76 17.19 15.48C17.22 15.24 17.23 15.02 17.23 14.79V10.79C17.23 8.00001 15.98 6.75 13.19 6.75H6.79001Z" fill="#1D1E2C"/>
-                <path d="M9.99023 14.1895C9.43023 14.1895 8.99023 13.7395 8.99023 13.1895C8.99023 12.6395 9.44023 12.1895 9.99023 12.1895C10.5402 12.1895 10.9902 12.6395 10.9902 13.1895C10.9902 13.7395 10.5502 14.1895 9.99023 14.1895Z" fill="#1D1E2C"/>
-                <path d="M13.1895 14.1895C12.6295 14.1895 12.1895 13.7395 12.1895 13.1895C12.1895 12.6395 12.6395 12.1895 13.1895 12.1895C13.7395 12.1895 14.1895 12.6395 14.1895 13.1895C14.1895 13.7395 13.7395 14.1895 13.1895 14.1895Z" fill="#1D1E2C"/>
-                <path d="M6.7998 14.1895C6.2398 14.1895 5.7998 13.7395 5.7998 13.1895C5.7998 12.6395 6.2498 12.1895 6.7998 12.1895C7.3498 12.1895 7.7998 12.6395 7.7998 13.1895C7.7998 13.7395 7.3498 14.1895 6.7998 14.1895Z" fill="#1D1E2C"/>
-                <path d="M17.9396 16.29C17.7396 16.29 17.5396 16.21 17.3996 16.06C17.2396 15.9 17.1697 15.67 17.1997 15.45C17.2297 15.24 17.2396 15.02 17.2396 14.79V10.79C17.2396 8.00001 15.9897 6.75 13.1997 6.75H6.79963C6.56963 6.75 6.34966 6.76 6.13966 6.78C5.91966 6.81 5.68964 6.72999 5.52964 6.57999C5.36964 6.41999 5.27963 6.20001 5.29963 5.98001C5.47963 3.82001 6.58963 1.25 10.7996 1.25H17.1997C20.8197 1.25 22.7396 3.17001 22.7396 6.79001V10.79C22.7396 15 20.1697 16.1 18.0097 16.29C17.9797 16.29 17.9596 16.29 17.9396 16.29ZM6.91966 5.25H13.1896C16.8096 5.25 18.7297 7.17001 18.7297 10.79V14.66C20.4297 14.24 21.2297 12.99 21.2297 10.79V6.79001C21.2297 4.00001 19.9796 2.75 17.1896 2.75H10.7897C8.58965 2.75 7.34966 3.55 6.91966 5.25Z" fill="#1D1E2C"/>
-              </svg>
-                <span>Itinerary Support</span>
-                <img v-if="getCurrentRoute.includes('support')" src="../assets/active_line.png" style="width:10rem;position:absolute;bottom:-8px;right:50px"/>
-              </div>
-              </router-link>
-              <div @click="signOut" class="dropDown-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M15.2395 22.2705H15.1095C10.6695 22.2705 8.52953 20.5205 8.15953 16.6005C8.11953 16.1905 8.41953 15.8205 8.83953 15.7805C9.23953 15.7405 9.61953 16.0505 9.65953 16.4605C9.94953 19.6005 11.4295 20.7705 15.1195 20.7705H15.2495C19.3195 20.7705 20.7595 19.3305 20.7595 15.2605V8.74047C20.7595 4.67047 19.3195 3.23047 15.2495 3.23047H15.1195C11.4095 3.23047 9.92953 4.42047 9.65953 7.62047C9.60953 8.03047 9.25953 8.34047 8.83953 8.30047C8.41953 8.27047 8.11953 7.90047 8.14953 7.49047C8.48953 3.51047 10.6395 1.73047 15.1095 1.73047H15.2395C20.1495 1.73047 22.2495 3.83047 22.2495 8.74047V15.2605C22.2495 20.1705 20.1495 22.2705 15.2395 22.2705Z" fill="#292D32"/>
-                <path d="M15.0001 12.75H3.62012C3.21012 12.75 2.87012 12.41 2.87012 12C2.87012 11.59 3.21012 11.25 3.62012 11.25H15.0001C15.4101 11.25 15.7501 11.59 15.7501 12C15.7501 12.41 15.4101 12.75 15.0001 12.75Z" fill="#292D32"/>
-                <path d="M5.85043 16.0998C5.66043 16.0998 5.47043 16.0298 5.32043 15.8798L1.97043 12.5298C1.68043 12.2398 1.68043 11.7598 1.97043 11.4698L5.32043 8.11984C5.61043 7.82984 6.09043 7.82984 6.38043 8.11984C6.67043 8.40984 6.67043 8.88984 6.38043 9.17984L3.56043 11.9998L6.38043 14.8198C6.67043 15.1098 6.67043 15.5898 6.38043 15.8798C6.24043 16.0298 6.04043 16.0998 5.85043 16.0998Z" fill="#292D32"/>
-              </svg>
-                <span>Sign Out</span></div>
-            </div>
 
-          </div>
           </div>
 
         <MobileBottomNav />
@@ -675,6 +634,9 @@ export default {
         getTenantLoaded() {
             return storeUtils.fireAway().global.getTenantLoaded;
         },
+      getTenant(){
+        return storeUtils.fireAway().global.Tenant
+      },
     },
 
     async beforeCreate() {
@@ -694,16 +656,29 @@ export default {
     // },
 
     mounted() {
-        if (this.getTenantLoaded)
+        if (this.getTenantLoaded){
             storeUtils.fireAway().theme.getCustomization();
-        const favicon = document.getElementById("faviconIcon");
+            const favicon = document.getElementById("faviconIcon");
+            const title = document.getElementById("app_title");
 
-        if (this.getFavicon) favicon.href = this.getFavicon;
+
+            if (this.getFavicon) favicon.href = this.getFavicon;
+            if (this.getTenant) title.textContent = this.getTenant.name;
+        }
     },
 };
 </script>
 
 <style scoped>
+.tenant_name{
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.3rem;
+  background: #fff;
+  /* shadow-2 */
+  width: 10rem;
+}
+
 .splash {
     width: 100%;
     height: 100vh;

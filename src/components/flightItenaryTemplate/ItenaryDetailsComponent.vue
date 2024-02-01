@@ -123,7 +123,6 @@ export default{
   <Exchange :data="getBookedFlight"  @close="close" v-show="isExchange" :id="id"></Exchange>
   <Void :data="getBookedFlight" @close="close" v-show="isVoiding" :id="id"></Void>
   <Others :data="getBookedFlight" @close="close" v-show="isOthers" :id="id"></Others>
-
   <div class="layout-modal" v-show="no_ticket">
     <div class="delete-card-option">
       <div class="card-header">
