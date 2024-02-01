@@ -97,6 +97,7 @@ export const useFlightStore = defineStore('flightStore', {
         },
 
         commitFilteredFlightResult(payload) {
+            console.log('hereLoad:', payload)
             // console.log("before store ===> ", this.filteredFlightResult)
             //TODO:refactor this
 
