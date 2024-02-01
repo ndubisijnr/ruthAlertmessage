@@ -179,7 +179,6 @@ export default {
     },
 
     handleFocus() {
-<<<<<<< HEAD
       this.isFocused = true
       this.$emit('isFocusing', true)
     },
@@ -187,14 +186,8 @@ export default {
     handleFocusOut() {
       this.isFocused = false
       this.$emit('isFocusing', false)
-=======
-      this.isFocused = true;
     },
 
-    handleFocusOut() {
-      this.isFocused = false;
->>>>>>> f562592e6194daccd7da25a8953155b27dab00bc
-    },
 
     validate() {
       if (this.isvalidate) {
