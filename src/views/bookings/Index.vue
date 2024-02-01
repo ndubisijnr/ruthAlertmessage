@@ -58,7 +58,7 @@
           </div>
           <div style="margin: 3.5rem 0">
             <div class="table-wrapper">
-              <domain-table :is-paginate="true" :items-per-page="getBookings?.per_page" :total="getBookings?.total" :current-page="getBookings?.current_page" :last-page="getBookings?.last_page" :fields="bookingFields" :data="filterResult ? filterResult : getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
+              <domain-table :table-name="'manageBookingTable'" :is-paginate="true" :items-per-page="getBookings?.per_page" :total="getBookings?.total" :current-page="getBookings?.current_page" :last-page="getBookings?.last_page" :fields="bookingFields" :data="filterResult ? filterResult : getBookings?.data" :empty-message="`Hi ${getBusinessProfile?.name}, you have not created any booking!`">
                 <template v-slot:emptyIcon>
                   <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" viewBox="0 0 116 116" fill="none">
                     <path d="M0.117188 57.883C0.117188 73.2346 6.21556 87.9574 17.0707 98.8125C27.9259 109.668 42.6487 115.766 58.0002 115.766C73.3518 115.766 88.0746 109.668 98.9297 98.8125C109.785 87.9574 115.883 73.2346 115.883 57.883C115.883 42.5315 109.785 27.8087 98.9297 16.9536C88.0746 6.09837 73.3518 0 58.0002 0C42.6487 0 27.9259 6.09837 17.0707 16.9536C6.21556 27.8087 0.117188 42.5315 0.117188 57.883Z" fill="#F1F2F6"/>

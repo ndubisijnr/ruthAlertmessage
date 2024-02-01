@@ -31,6 +31,7 @@
         </div>
     </div>
 
+
     <table class="table">
         <thead class="th">
             <tr
@@ -287,8 +288,9 @@
                             {{ j.flight.passengers[0].last_name }}</span
                         >
 
-                        <span v-else-if="h.label === 'Airline'"
-                            ><img
+                        <span v-else-if="h.label === 'Airline'">
+                              <div v-if="!j.flight?.is_multicity">
+                            <img
                                 width="20"
                                 :src="
                                     j.flight?.outbound[0]?.airline_details.logo
@@ -297,8 +299,22 @@
                             />
                             {{
                                 j.flight?.outbound[0]?.airline_details.name
-                            }}</span
-                        >
+                            }}
+                              </div>
+                           <div v-else>
+                            <img
+                                width="20"
+                                :src="
+                                    j.flight?.routes[0].segments[0].airline_details.logo
+                                "
+                                alt="flight_logo"
+                            />
+                            {{
+                               j.flight?.routes[0].segments[0].airline_details.name
+                             }}
+                              </div>
+
+                          </span>
 
                         <!-- template {bookings status} -->
 

@@ -193,7 +193,8 @@ export default {
                 // Check operating airline
                 const meetsAirlineCriteria =
                 !airlineCodes.length ||
-                (flight.outbound.length > 0 && airlineCodes.includes(flight.outbound[0].operating_airline));
+                (flight?.outbound.length > 0 && airlineCodes.includes(flight?.outbound[0].operating_airline)) ||
+                (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
 
 
                 // Check flexibility
