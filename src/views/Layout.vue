@@ -11,7 +11,12 @@
                             20
                         )}`"
                     >
-                        <img src="../../src/assets/Cards/logo.svg" />
+                      <img v-if="getTenant.logo"
+                           :src="getTenant.logo"
+                           alt="TenantLogo"
+                           style="width: 12.0625rem; height: 5.95919rem"
+                      />
+                      <p class="tenant_name">{{getTenant.name}}</p>
                     </router-link>
 
                     <div
@@ -318,10 +323,10 @@
                             {{ getUser?.account_type.replace("_", " ") }}
                         </div>
 
-                        <img
-                            src="../assets/notification.svg"
-                            class="notification_icon"
-                        />
+<!--                        <img-->
+<!--                            src="../assets/notification.svg"-->
+<!--                            class="notification_icon"-->
+<!--                        />-->
 
                         <div class="profile" @click="showDrop">
                             <div
@@ -629,6 +634,9 @@ export default {
         getTenantLoaded() {
             return storeUtils.fireAway().global.getTenantLoaded;
         },
+      getTenant(){
+        return storeUtils.fireAway().global.Tenant
+      },
     },
 
     async beforeCreate() {
@@ -648,16 +656,29 @@ export default {
     // },
 
     mounted() {
-        if (this.getTenantLoaded)
+        if (this.getTenantLoaded){
             storeUtils.fireAway().theme.getCustomization();
-        const favicon = document.getElementById("faviconIcon");
+            const favicon = document.getElementById("faviconIcon");
+            const title = document.getElementById("app_title");
 
-        if (this.getFavicon) favicon.href = this.getFavicon;
+
+            if (this.getFavicon) favicon.href = this.getFavicon;
+            if (this.getTenant) title.textContent = this.getTenant.name;
+        }
     },
 };
 </script>
 
 <style scoped>
+.tenant_name{
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.3rem;
+  background: #fff;
+  /* shadow-2 */
+  width: 10rem;
+}
+
 .splash {
     width: 100%;
     height: 100vh;

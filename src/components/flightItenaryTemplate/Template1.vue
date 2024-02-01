@@ -15,8 +15,6 @@
               Print</button>
           </div>
         </div>
-        {{getData}}
-
         <div id="pdf-to-download">
           <!-- <img src="../../src/assets/full-black-logo.svg" id="ondownload" style="display: none;margin-bottom: 20px" /> -->
 
@@ -226,7 +224,7 @@
               <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
             </div>
 
-            <div v-for="i in getData?.flight?.passengers" class="flight_info2" style="justify-content: start;">
+            <div v-for="i in getData?.booking.flight?.passengers" class="flight_info2" style="justify-content: start;">
               <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
               <p class="value" style="width: 11.25rem;">{{i.email}}</p>
               <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
@@ -242,7 +240,7 @@
 
             </div>
      
-            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
+            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.booking.amount)}} </p>
             <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
             <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>

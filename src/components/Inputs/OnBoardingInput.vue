@@ -77,10 +77,12 @@ export default {
 
     handleFocus() {
       this.isFocused = true
+      this.$emit('isFocusing', true)
     },
 
     handleFocusOut() {
       this.isFocused = false
+      this.$emit('isFocusing', false)
     },
 
     validate(){

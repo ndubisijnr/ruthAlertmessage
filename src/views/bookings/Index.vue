@@ -52,10 +52,8 @@
               <bookings-cards v-else title="Reserved Bookings" :number="getBookingSum?.total_reserved ? getBookingSum?.total_reserved: '0'"></bookings-cards>
               <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
               <bookings-cards v-else title="Issued Bookings" :number="getBookingSum?.total_issued ? getBookingSum?.total_issued : '0'"></bookings-cards>
-              <router-link :to="`/dashboard/${getUser?.access_token?.slice(0,20)}`"><div class="create-booking">
-                <img src="../../assets/Cards/add.svg" />
-                <p class="create-booking-p">Create new booking</p>
-              </div></router-link>
+              <bookings-card-loading v-if="getLoadingBooking"></bookings-card-loading>
+              <bookings-cards v-else title="Cancelled Bookings" :number="getBookingSum?.total_cancelled ? getBookingSum?.total_cancelled : '0'"></bookings-cards>
             </div>
           </div>
           <div style="margin: 3.5rem 0">

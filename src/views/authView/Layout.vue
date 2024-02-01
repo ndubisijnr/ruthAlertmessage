@@ -100,6 +100,15 @@ export default {
             }
         }
     },
+
+  mounted() {
+    const favicon = document.getElementById("faviconIcon");
+    const title = document.getElementById("app_title");
+
+
+    if (this.getFavicon) favicon.href = this.getFavicon;
+    if (this.getTenant) title.textContent = this.getTenant.name;
+  }
 };
 </script>
 

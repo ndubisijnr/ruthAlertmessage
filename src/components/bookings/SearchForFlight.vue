@@ -1,7 +1,7 @@
 <template>
   <booking-index v-slot:booking_children>
-        <div :style="{borderColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}" class="booking-div animate__animated animate__fadeIn">
-          <div class="booking-div-inner-wrapper">
+        <div id="flight_search_wrapper" :style="{borderColor:custom_theme ? lightenColor(custom_theme.color) : default_theme.color_light}" class="booking-div animate__animated animate__fadeIn">
+          <div class="booking-div-inner-wrapper" >
             <div class="booking-div-head">
               <div class="service_nav">
                 <div class="nav-a1" @click="activeService = 'Flight'" :class="{'activeSection':activeService === 'Flight'}" :style="activeService === 'Flight' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Book Flight</div>
@@ -11,9 +11,9 @@
               </div>
             </div>
 
-            <div class="booking-div-body">
-              <div v-if="activeService === 'Flight'">
-                <div v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
+            <div  class="booking-div-body">
+              <div  v-if="activeService === 'Flight'">
+                <div  v-if="getUser.account_type === 'super_admin' || getUser.account_type === 'admin' || getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true'" >
                   <div class="booking-nav">
                     <p class="booking-nav-item" :style="activeDestType==='round_trip' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='round_trip'" :class="{'activeDestType':activeDestType==='round_trip'}">Round Trip</p>
                     <p class="booking-nav-item" :style="activeDestType==='one_way' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderBottomColor:custom_theme ? custom_theme.color : default_theme.color} : {}" @click="activeDestType='one_way'" :class="{'activeDestType':activeDestType==='one_way'}">One Way</p>
@@ -22,27 +22,27 @@
                     <!--                style="cursor:not-allowed !important"-->
 
                   </div>
-                  <div class="one-round-way-multi-city">
+                  <div  class="one-round-way-multi-city">
                     <div class="form-area">
                       <div class="form-area-body">
                         <div v-show="activeDestType === 'one_way' || activeDestType === 'round_trip'" class="one-way">
                           <div class="group-inputs">
                             <div class="input-divs">
-                              <on-boarding-input is-fake-loading="true" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
+                              <on-boarding-input is-fake-loading="true" @isFocusing="handleFocus" autocomplete="off" width="100%" id="from_input" label="From" class="" @inputValue="(value) => {this.fromQuery = value, filterAirportFrom(), shouldSearch()}"/>
                               <div class="airportsDropDown" v-if="this.filteredAirportFrom.length > 0">
                                 <p @click="selectDestination('from_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportFrom" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                               </div>
                             </div>
                             <div class="input-divs">
-                              <on-boarding-input is-fake-loading="true"  autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
+                              <on-boarding-input is-fake-loading="true"  @isFocusing="handleFocus" autocomplete="off" width="100%" id="to_input" label="To" class="" @inputValue="(value) => {this.toQuery = value, filterAirportTo()}" />
                               <div v-if="this.filteredAirportTo.length > 0" class="airportsDropDown">
                                 <p @click="selectDestination('to_input', `${i.city} - ${i.name}`, `${i.iata_code}`)" class="per_airport" v-for="(i, index) in filteredAirportTo" :key="index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                               </div>
                             </div>
                           </div>
                           <div class="group-inputs">
-                            <data-picker :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
-                            <data-picker :readonly="!this.departure_date ? 'readonly' : null" @dateValue="updateDateValueTo" :min_date="this.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
+                            <data-picker @isDatePickerFocusing="handleFocus" :min_date="new Date()" @dateValue="updateDateValue" label="Departure Date"></data-picker>
+                            <data-picker @isDatePickerFocusing="handleFocus" :readonly="!this.departure_date ? 'readonly' : null" @dateValue="updateDateValueTo" :min_date="this.departure_date" v-show="activeDestType==='round_trip'" label="Return Date"></data-picker>
                           </div>
                         </div>
 
@@ -55,13 +55,13 @@
                             <div class="new_flight_body">
                               <div class="group-inputs">
                                 <div class="input-divs">
-                                  <on-boarding-input  :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
+                                  <on-boarding-input  @isFocusing="handleFocus" :name="`from_input_${index}`" is-fake-loading="true" autocomplete="off" width="100%" value="hello" :id="`multi_city_from_input_${index}`"  label="From" class="" @inputValue="(value) => {this.multiCityFromQuery = value, multiCitySearchFrom(index)}" />
                                   <div class="airportsDropDown" v-show="multiCityActiveInput === `from_${index}`">
                                     <p @click="b.origin = `${i.city_code}`, selectDestination(`multi_city_from_input_${index}`, `${i.city} - ${i.name}`, `${i.iata_code}`, index)" class="per_airport" v-for="(i, b_index) in filteredAirportFrom" :key="b_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                                   </div>
                                 </div>
                                 <div class="input-divs">
-                                  <on-boarding-input input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
+                                  <on-boarding-input @isFocusing="handleFocus" input-type="input2" autocomplete="off" is-fake-loading="true" width="100%" :id="`multi_city_to_input_${index}`" label="To" class="" @inputValue="(value) => {this.multiCityToQuery = value, multiCitySearchTo(index)}" />
                                   <div class="airportsDropDown" v-show="multiCityActiveInput === `to_${index}`">
                                     <p @click="b.destination = `${i.city_code}`, selectDestination(`multi_city_to_input_${index}`, `${i.city} - ${i.name}`, `${i.iata_code}`, index)" class="per_airport" v-for="(i, i_index) in filteredAirportTo" :key="i_index">{{i.city}} - {{i.country}} - {{i.name}}</p>
                                   </div>
@@ -69,7 +69,7 @@
 
                                 <div class="input-divs">
                                   <div class="group-inputs">
-                                    <data-picker :min_date="b.origin" @dateValue="obj => b.departure_date = obj.formattedDate" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
+                                    <data-picker @isDatePickerFocusing="handleFocus" :min_date="b.origin" @dateValue="obj => b.departure_date = obj.formattedDate" icon-id="from_icon_multicity" :id="`from_multicity_${index}`" label="Departure Date" />
                                   </div>
                                 </div>
                               </div>
@@ -96,7 +96,7 @@
 
                         </div>
 
-                        <div class="group-inputs">
+                        <div class="group-inputs" @click.stop="closeOpenedModal">
 
 
                         <div  class="choose_document_type" style="position: relative;">
@@ -311,6 +311,23 @@ export default {
     }
   },
   methods:{
+
+    handleFocus(value){
+      console.log(value)
+      if(this.showPassengers || this.showClass){
+        this.showPassengers = !value
+        this.showClass = !value
+      }
+    },
+
+    closeOpenedModal(){
+      const wrapper = document.body
+      wrapper.addEventListener('click', (e) => {
+        console.log(e)
+        if(this.showPassengers || this.showClass) {this.showPassengers = false, this.showClass=false}
+      })
+    },
+
     handleCheck(value){
       const withNonStops = document.getElementById('withNonStop')
       console.log(withNonStops.value)
@@ -626,6 +643,12 @@ export default {
 </script>
 
 <style scoped>
+.event_listener_handler{
+  background: #000;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+}
 .txt-m{
   color:  #1D1E2C;
   font-family: 'Product Sans';

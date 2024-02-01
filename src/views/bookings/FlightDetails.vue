@@ -6,16 +6,18 @@ import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryD
 import router from "@/router";
 import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
 import storeUtils from "../../utils/storeUtils";
+import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
 export default {
   name: "FlightDetails",
-  components:{OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
+  components:{PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
   data(){
     return{
       data:null,
       formatAmount,
       convertTo12HourFormat,
       convertToWord,
-      getYYYYMMDDFormat
+      getYYYYMMDDFormat,
+      showPrintModal:false
     }
   },
 
@@ -25,11 +27,15 @@ export default {
     },
      printAction(){
        storeUtils.fireAway().print?.commitPrintLoading(true, this.data)
-       if(this.getTemplateId === 1) router.push({name:'Template1'})
-       if(this.getTemplateId === 2) router.push({name:'Template2'})
-       if(this.getTemplateId === 3) router.push({name:'Template3'})
+       this.showPrintModal = true
+
+       // if(this.getTemplateId === 1) router.push({name:'Template1'})
+       // if(this.getTemplateId === 2) router.push({name:'Template2'})
+       // if(this.getTemplateId === 3) router.push({name:'Template3'})
+    },
+    close(value){
+      this.showPrintModal = value
     }
-    
   },
 
   computed: {
@@ -62,7 +68,9 @@ export default {
 
 <template>
   <layout v-slot:child-content>
-   
+    <print-itenary-modal v-if="showPrintModal" @close="close"></print-itenary-modal>
+
+
     <div class="overall">
     
         <div class="wrapper">
