@@ -1,95 +1,141 @@
-import cancel from './exit.svg'
-import error from './error.svg'
-import success from './success.svg'
+import errorIcon from './assets/svgs/error.js'
+import exitIcon from './assets/svgs/exit.js'
+import successIcon from './assets/svgs/success.js'
+import closeIcon from './assets/svgs/close.js'
 
-const cancelImg = cancel
-const errorImg = error
-const successImg = success
+// default icons
+const cancelImg = exitIcon()
+const errorImg = errorIcon()
+const successImg = successIcon()
+const closeImg = closeIcon()
 
+// define props 
+const defaultProps = ['icon', 'title', 'timeout']
+var advancedProps = {
+    header: 'An Error Occured',
+    headerColor: '#fff',
+    subtext: 'Some thing went wrong',
+    subtextColor: '#fff',
+    svg: true,
+    svgColor: '#fff',
+    svgStroke: "",
+    backgroundColor: "#EB001B",
+}
 
- const RuthdoAlert = (...props) => {
+// define toast array to hold multiple toast
+var toastArr = []
 
-   
-            const element1 = document.createElement('div')
-            const rootElement = document.getElementById('app')
-            rootElement.append(element1)
+const createToastObj = (props) => {
+    // Create main element
+    var toastObj = document.createElement('div')
+    toastObj.style.backgroundColor = props.backgroundColor
 
+    // props check prevalance 
 
-            element1.setAttribute('id', 'alertMessage')
-            element1.setAttribute('style',
-                'width:362px;\n' +
-                'min-height: 78px;\n' +
-                'z-index: 999999999;\n' +
-                'position: fixed;\n' +
-                `background: ${props[0]?.icon === 'success' ? '#BBE7AC' : '#F89191'};\n` +
-                'border-radius: 8px;\n' +
-                'top: 100px;\n' +
-                'right: 50px;\n' +
-                'padding: 10px;\n' +
-                'display: flex;\n' +
-                'align-items: center;\n' +
-                'justify-content: center;\n' +
-                'transform-origin: 0 0;\n' +
-                'zoom: 75%;\n')
-            element1.setAttribute('class', 'animate__animated animate__fadeInRight')
-            const element2 = document.createElement('div')
-            element1.append(element2)
+    // if svg is true 
+    if (props.svg) {
+        // create next child elements 
+        var iconCenter = document.createElement('div')
+        // add classes to elements
+        iconCenter.classList.add('ruth_alert_base_icon_center');
+        // ** add or create items to each child elements 
+        iconCenter.innerHTML = errorImg
+        // ** append children to main element in order
+        toastObj.appendChild(iconCenter)
+    }
 
-            element2.setAttribute('style',
-                'display: flex;\n ' +
-                'align-items: center;\n' +
-                'justify-content: space-around;\n' +
-                'width: 100%;\n' +
-                'height: inherit;\n')
+    // create next child elements 
+    var statusText = document.createElement('div')
+    var closeButton = document.createElement('button')
+    // add classes to elements 
+    toastObj.classList.add('ruth_alert_base_status_wrapper');
+    statusText.classList.add('ruth_alert_base_status_text');
+    closeButton.classList.add('ruth_alert_base_close_button');
 
-            const  elementP = document.createElement('p')
-            elementP.setAttribute('style',
-                'font-size: 18px;\n ' +
-                'line-height: 23px;\n' +
-                'letter-spacing: -0.01em;\n' +
-                `color: ${props[0]?.icon === 'success' ? '#415251' : '#FFFFFF'};\n` +
-                'width: 70%;\n' +
-                'font-family: \'IBM Plex Sans\';\n' +
-                'font-style: normal;')
+    // ** add or create items to each child elements 
 
-            elementP.textContent = props[0]?.title
+    // statusText
+    var pHead = document.createElement('p')
+    var subtext = document.createElement('span')
 
-            const elementClose = document.createElement('img')
-            elementClose.setAttribute('src', cancelImg)
-            elementClose.setAttribute('style', 'cursor:pointer')
+    pHead.classList.add('ruth_alert_base_status_text-head');
+    pHead.innerHTML = props.header
+    pHead.style.color = props.headerColor
 
-            const elementType = document.createElement('img')
-            elementType.setAttribute( 'src', props[0]?.icon === 'success' ? successImg : props[0]?.icon === 'error' ? errorImg : null)
-            element2.append(elementType)
-            element2.append(elementP)
-            element2.append(elementClose)
+    subtext.classList.add('ruth_alert_base_status_text-subtext');
+    subtext.innerHTML = props.subtext
+    subtext.style.color = props.subtextColor
 
-            const removeElement = document.getElementById('alertMessage')
+    statusText.appendChild(pHead)
+    statusText.appendChild(subtext)
 
-            const timeOut = props[0]?.timeout // auto modal dismissal timeout
+    // closeButton
+    closeButton.setAttribute('title', 'Close Toast')
+    closeButton.innerHTML = closeImg
 
-            // on click modal dismissal events
-            elementClose.addEventListener('click', () => {
-                removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-                setTimeout(() => {
-                removeElement.remove()
-            },1000)
-            })
+    // ** append children to main element in order
+    toastObj.appendChild(statusText)
+    toastObj.appendChild(closeButton)
 
+    return toastObj
+}
 
-            function autoDismissal(){
-                removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-                setTimeout(() => {
-                    removeElement.remove()
-                },1000)
+// get the body tag
+const rootElement = document.body;
+// create toast wrapper 
+const toastWrapper = document.createElement('div');
+// set base class and id for wrapper element 
+toastWrapper.classList.add('ruth_alert_base_wrapper');
+toastWrapper.id = 'alertMessage';
+
+// attach toast to body 
+rootElement.appendChild(toastWrapper);
+
+const RuthdoAlert = (props = null) => {
+
+    return {
+        showError() {
+
+        },
+
+        open() {
+            if (toastArr.length) {
+                var advP = structuredClone(advancedProps)
+                // mutate the prop with accepted variables 
+                if (props && typeof props === 'object') {
+                    Object.entries(props).forEach(([key, value]) => {
+                        if (advP.hasOwnProperty(key)) {
+                            advP[key] = value
+                        }
+                    })
+                }
+                // pushes the object to the main arr 
+                toastArr.push(advP)
+                // creates the singular toast item 
+                var toastItem = createToastObj(advP)
+                // appends to the mother wrapper 
+                toastWrapper.appendChild(toastItem)
+            } else {
+                var advP = structuredClone(advancedProps)
+                // mutate the prop with accepted variables 
+                if (props && typeof props === 'object') {
+                    Object.entries(props).forEach(([key, value]) => {
+                        if (advP.hasOwnProperty(key)) {
+                            advP[key] = value
+                        }
+                    })
+                }
+                // pushes the object to the main arr 
+                toastArr.push(advP)
+                // creates the singular toast item 
+                var toastItem = createToastObj(advP)
+                // appends to the mother wrapper 
+                toastWrapper.appendChild(toastItem)
             }
-
-            setTimeout(() => {
-                autoDismissal()
-            },timeOut ? timeOut : 3000)
+        }
+    }
 
 
-        
 
 }
 
