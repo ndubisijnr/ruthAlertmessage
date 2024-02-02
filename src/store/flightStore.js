@@ -166,6 +166,8 @@ export const useFlightStore = defineStore('flightStore', {
                 this.loading = false
                 if (responseData.success) {
                     if (responseData.data.length > 0) {
+                        localStorage.flightModel = JSON.stringify(payload
+                        );
                         localStorage.flightResults = JSON.stringify(responseData.data)
                         const bookingprogressarray = JSON.parse(localStorage.progressNav)
                         bookingprogressarray.push('Search for Flight')
