@@ -25,7 +25,7 @@
             <div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Full Name : </p>
-                <p class="value"> {{getData?.booking.contact_first_name ? getData?.booking.contact_first_name + " " + getData?.contact_last_name : 'Mr Jane Doe'}}</p>
+                <p class="value"> {{getData?.booking.contact_first_name ? getData?.booking.contact_first_name + " " + getData.booking.contact_last_name : 'Mr Jane Doe'}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Email:</p>

@@ -6,6 +6,7 @@
         <p class="itinerary_support">Itinerary Support</p>
         <div class="booking-div-head">
         <div class="service_nav">
+          <div class="nav-a1" @click="activeService = '',requestItinery()" :class="{'activeSection':activeService === ''}" :style="activeService === '' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">All</div>
           <div class="nav-a1" @click="activeService = 'Issuance',requestItinery()" :class="{'activeSection':activeService === 'Issuance'}" :style="activeService === 'Issuance' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Issuance</div>
           <div class="nav-a1" @click="activeService = 'Void',requestItinery()" :class="{'activeSection':activeService === 'Void'}" :style="activeService === 'Void' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : {color:custom_theme ? custom_theme.color : default_theme.color}">Void</div>
           <div class="nav-a1" @click="activeService = 'Exchange',requestItinery()" :class="{'activeSection':activeService === 'Exchange'}" :style="activeService === 'Exchange' ? {backgroundColor:custom_theme ? custom_theme.color : default_theme.color} : { color:custom_theme ? custom_theme.color : default_theme.color}">Exchange</div>
@@ -40,7 +41,10 @@
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>
-                <p class="filter-by-modal-p" @click="filterValue=null, doFilter()">Everything</p>
+                <p class="filter-by-modal-p" @click="filterValue='', doFilter()">Everything <svg v-if="filterValue === ''" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#159D54"/>
+                  <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg></p>
 
 
               </div>
@@ -125,16 +129,16 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
       isFilterBooking:false,
       searchQuery:null,
       filterResult:null,
-      activeService:'Issuance',
+      activeService:'',
       searchModel:{},
-      filterValue:'pending',
+      filterValue:'',
       itineneryFields:[
         {key:"customer_name", label:"Agent Name"},
         {key:"ticket_amount", label:"Ticket Amount_"},
         {key:"airline", label:"Airline_"},
         {key:"created_at", label:"Booking Date"},
         {key:"type", label:"Type"},
-        {key:"status", label:"Status"},
+        {key:"status", label:"Itinerary Status"},
         // {key:"Action", label:"Action",id:"member"},
       ],
     }

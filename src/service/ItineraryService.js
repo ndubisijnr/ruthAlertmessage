@@ -36,8 +36,8 @@ export default {
         return apiService.Client.patch(`/api/${tenant_id}/itinerary/cancel/${booking_reference}`)
     },
 
-    getItinerarySummary(tenant_id){
-        return apiService.Client.get(`/api/${tenant_id}/itinerary/summary`)
+    getItinerarySummary(tenant_id,status){
+        return apiService.Client.get(`/api/${tenant_id}/itinerary/summary?status=${status}`)
     }
 
    
