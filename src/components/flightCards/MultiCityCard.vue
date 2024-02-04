@@ -192,6 +192,7 @@
                                 v-for="(j, jId) in f.segments"
                                 :key="jId + 1889"
                             >
+                                <!-- heading -->
                                 <div class="airline_details">
                                     <div class="inner-airline_details">
                                         <div
@@ -242,6 +243,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- details -->
                                 <div class="actual-result-item_details details">
                                     <div
                                         class="actual-result-item-info-airport-details"
@@ -344,6 +346,34 @@
                                             ({{ j.airport_to }})
                                         </p>
                                     </div>
+                                </div>
+                                <!-- layover -->
+                                <div
+                                    v-if="j.layover"
+                                    class="d-flex align-center layover__wrapper__multicity"
+                                >
+                                    <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 20 20"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M10 1.66602C5.40833 1.66602 1.66666 5.40768 1.66666 9.99935C1.66666 14.591 5.40833 18.3327 10 18.3327C14.5917 18.3327 18.3333 14.591 18.3333 9.99935C18.3333 5.40768 14.5917 1.66602 10 1.66602ZM13.625 12.9743C13.5083 13.1743 13.3 13.2827 13.0833 13.2827C12.975 13.2827 12.8667 13.2577 12.7667 13.191L10.1833 11.6493C9.54166 11.266 9.06666 10.4243 9.06666 9.68268V6.26602C9.06666 5.92435 9.35 5.64102 9.69166 5.64102C10.0333 5.64102 10.3167 5.92435 10.3167 6.26602V9.68268C10.3167 9.98268 10.5667 10.4243 10.825 10.5743L13.4083 12.116C13.7083 12.291 13.8083 12.6743 13.625 12.9743Z"
+                                            fill="#1D1E2C"
+                                        />
+                                    </svg>
+
+                                    <span
+                                        >{{ convertDurationToWords(j.layover) }}
+                                        layover at
+                                        {{
+                                            getAirportNamesByCityCode(
+                                                j.airport_to
+                                            )
+                                        }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -565,7 +595,27 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+.layover__wrapper__multicity {
+    max-width: max-content;
+    width: 100%;
+    margin: 40px auto;
+    padding: 10px 20px;
+    grid-gap: 10px;
+    border-radius: 40px;
+    background-color: #eff2f7;
+    svg {
+        width: 20px;
+        min-width: 20px;
+        height: 20px;
+    }
+
+    span {
+        font-weight: 400;
+        font-size: 16px;
+        color: #1d1e2c;
+    }
+}
 .fare_rules {
     display: inline-flex;
     padding: 1rem;
