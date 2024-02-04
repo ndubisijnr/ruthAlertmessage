@@ -1,19 +1,23 @@
 {
-  "name": "ruthly",
-  "version": "1.0.2",
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "description": "simple alert message for simple applcations",
-  "main": "ruthly.js",
-  "scripts": {
-    "test": "echo \" no test specified\""
-  },
-  "keywords": [
-    "alert",
-    "messgage",
-    "popup"
-  ],
-  "author": "ndubisijnr",
-  "license": "ISC"
+    "name": "ruthly",
+    "version": "1.0.2",
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "description": "simple alert message for simple applcations",
+    "main": "ruthly.js",
+    "scripts": {
+        "test": "echo \" no test specified\"",
+        "build": "node-sass src/styles.scss dist/styles.css"
+    },
+    "keywords": [
+        "alert",
+        "messgage",
+        "popup"
+    ],
+    "author": "ndubisijnr",
+    "license": "ISC",
+    "devDependencies": {
+        "node-sass": "^9.0.0"
+    }
 }
