@@ -983,6 +983,7 @@ export default {
         ComingSoon,
         SearchMultiCity,
     },
+
     data() {
         return {
             activeDestType: "round_trip",
@@ -1015,6 +1016,7 @@ export default {
             infant_disable: null,
         };
     },
+
     methods: {
         handleFocus(value) {
             console.log(value);
@@ -1071,6 +1073,7 @@ export default {
             if (this.flightModel.destinations.length === 2) return;
             this.flightModel.destinations.splice(id, 1);
         },
+
         shouldSearch() {
             if (this.activeDestType === "round_trip") {
                 const keys_to_check_for_round_trip = [
@@ -1370,9 +1373,7 @@ export default {
 
         getAirports() {
             const airports = JSON.parse(localStorage?.airports);
-            if (airports) {
-                return airports;
-            }
+            if (airports) {return airports;}
         },
 
         getLoading() {

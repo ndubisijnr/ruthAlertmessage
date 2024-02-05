@@ -1,7 +1,6 @@
 <template>
     <booking-index v-slot:booking_children>
         <div class="flight-result animate__animated animate__fadeIn">
-            <!-- <div><p>Booking Search</p></div> -->
             <div class="breaker1"></div>
             <div
                 style="

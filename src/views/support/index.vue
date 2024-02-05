@@ -161,8 +161,14 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
     },
 
     doFilter(){
-      if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker')storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService,this.filterValue);
-      else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+      if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker'){
+        storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction(this.filterValue)
+        storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService,this.filterValue);
+      }
+      else{
+        storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction(this.filterValue)
+        storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
+      }
     },
     close(value){
       this.isFilterBooking = value
@@ -248,14 +254,14 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
         if(a){
           if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
           else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
-          storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+          storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction(this.filterValue)
         };
       }
     },
 
   mounted(){
       if(this.getTenantLoaded){
-        storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction()
+        storeUtils.fireAway()?.itineneryStore?.getItinerarySummaryAction(this.filterValue)
         if(this.getUser.account_type === 'manager' || this.getUser.account_type === 'booker') storeUtils.fireAway()?.itineneryStore?.getItineraryRequestManagerAction(this.getUser.id, this.activeService, this.filterValue)
         else storeUtils.fireAway()?.itineneryStore?.getItineraryRequestAction(this.activeService, this.filterValue)
       }

@@ -114,8 +114,6 @@ export default {
 .wrapper {
     position: relative;
     width: 100%;
-    display: flex;
-    align-items: center;
 }
 label {
     position: absolute;
