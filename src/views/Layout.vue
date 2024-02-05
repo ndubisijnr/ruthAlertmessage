@@ -14,9 +14,9 @@
                       <img v-if="getTenant.logo"
                            :src="getTenant.logo"
                            alt="TenantLogo"
-                           style="width: 12.0625rem; height: 5.95919rem"
+                           style="width: 10rem; height: 5.95919rem"
                       />
-                      <p class="tenant_name">{{getTenant.name}}</p>
+                      <p v-else class="tenant_name" :style="!getTenant.logo ? {padding:'1rem 0'}:null">{{getTenant.name}}</p>
                     </router-link>
 
                     <div
@@ -834,6 +834,7 @@ a:hover {
     gap: 1.5rem;
     /*float: right;*/
     position: relative;
+
 }
 
 .profile {
@@ -907,6 +908,7 @@ a:hover {
     justify-content: center;
     gap: 10.38rem;
     width: 100%;
+    //border: solid;
 }
 
 .dashboard_content {

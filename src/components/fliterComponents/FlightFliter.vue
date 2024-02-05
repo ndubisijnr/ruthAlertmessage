@@ -184,28 +184,58 @@ export default {
     filterFlights(array, stopsFilter, airlineCodes, flexibility, prices) {
             const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
             const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+
             return array.filter(flight => {
-                // Check outbound stops
-                const meetsStopsCriteria =
-                !stopsFilter.length ||
-                (stopsFilter.includes(flight.outbound_stops) || (stopsFilter.includes(2) && flight.outbound_stops >= 2))
+               // check if multicity
+                if(flight.routes){
+                  console.log('flight =>', flight.routes)
+                  // Check outbound stops
+                  const meetsStopsCriteria =
+                      !stopsFilter.length ||
+                      (stopsFilter.includes(flight.total_segment_stops) || (stopsFilter.includes(2) && flight.total_segment_stops >= 2))
 
-                // Check operating airline
-                const meetsAirlineCriteria =
-                !airlineCodes.length ||
-                (flight.outbound.length > 0 && airlineCodes.includes(flight.outbound[0].operating_airline));
+                  // Check operating airline
+                  const meetsAirlineCriteria =
+                      !airlineCodes.length ||
+                      (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
 
 
-                // Check flexibility
-                const meetFlexibility = 
-                !flexibility.length || (flight.outbound.length > 0 && flexibility.includes(flight.outbound[0].refundable))
+                  // Check flexibility
+                  const meetFlexibility =
+                      !flexibility.length || (flight.routes.length > 0 && flexibility.includes(flight.routes[0].segments[0].refundable))
 
-                // // Check Prize
-                // const meetPrize = 
-                // !prices || (prices >= minPrice && prices <= maxPrice)
+                  // // Check Prize
+                  // const meetPrize =
+                  // !prices || (prices >= minPrice && prices <= maxPrice)
 
-                // Return true only if both criteria are met
-                return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+                  // Return true only if both criteria are met
+                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+                }
+                else{
+                  console.log('i am still entering here')
+                  // Check outbound stops
+                  const meetsStopsCriteria =
+                      !stopsFilter.length ||
+                      (stopsFilter.includes(flight.outbound_stops) || (stopsFilter.includes(2) && flight.outbound_stops >= 2))
+
+                  // Check operating airline
+                  const meetsAirlineCriteria =
+                      !airlineCodes.length ||
+                      (flight?.outbound?.length > 0 && airlineCodes.includes(flight?.outbound[0].operating_airline))
+                  // (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
+
+
+                  // Check flexibility
+                  const meetFlexibility =
+                      !flexibility.length || (flight.outbound.length > 0 && flexibility.includes(flight.outbound[0].refundable))
+
+                  // // Check Prize
+                  // const meetPrize =
+                  // !prices || (prices >= minPrice && prices <= maxPrice)
+
+                  // Return true only if both criteria are met
+                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+                }
 
             });
         },

@@ -31,14 +31,15 @@
         </div>
     </div>
 
+
     <table class="table">
         <thead class="th">
             <tr
-                v-for="h in fields"
-                :key="h.key"
+                v-for="k in fields"
+                :key="k.key"
                 class="table-cell table-header"
             >
-                <th class="table-label">{{ h.label }}</th>
+                <th class="table-label">{{ k.label }} </th>
             </tr>
         </thead>
         <tbody class="tr" v-if="data?.length">
@@ -287,8 +288,9 @@
                             {{ j.flight.passengers[0].last_name }}</span
                         >
 
-                        <span v-else-if="h.label === 'Airline'"
-                            ><img
+                        <span v-else-if="h.label === 'Airline'">
+                              <div v-if="!j.flight?.is_multicity">
+                            <img
                                 width="20"
                                 :src="
                                     j.flight?.outbound[0]?.airline_details.logo
@@ -297,8 +299,22 @@
                             />
                             {{
                                 j.flight?.outbound[0]?.airline_details.name
-                            }}</span
-                        >
+                            }}
+                              </div>
+                           <div v-else>
+                            <img
+                                width="20"
+                                :src="
+                                    j.flight?.routes[0].segments[0].airline_details.logo
+                                "
+                                alt="flight_logo"
+                            />
+                            {{
+                               j.flight?.routes[0].segments[0].airline_details.name
+                             }}
+                              </div>
+
+                          </span>
 
                         <!-- template {bookings status} -->
 
@@ -321,6 +337,51 @@
                                       }
                             "
                         >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="6"
+                                height="6"
+                                viewBox="0 0 6 6"
+                                fill="none"
+                            >
+                                <circle
+                                    cx="3"
+                                    cy="3"
+                                    r="3"
+                                    :fill="
+                                        j.status === 'reserved'
+                                            ? '#F1D302'
+                                            : j.status === 'issued'
+                                            ? '#159D54'
+                                            : '#F04444'
+                                    "
+                                />
+                            </svg>
+                            {{ j.status }}
+                        </span>
+
+                         <!-- support {support status} -->
+                      <span
+                          v-else-if="h.label === 'Itinerary Status'"
+                          :style="
+                                j.status === 'reserved'
+                                    ? {
+                                          'text-transform': 'Capitalized',
+                                          color: '#F1D302',
+                                      }
+                                    : j.status === 'issued'
+                                    ? {
+                                          'text-transform': 'Capitalized',
+                                          color: '#159D54',
+                                      }
+                                    : {
+                                          'text-transform': 'Capitalized',
+                                          color: '#F04444',
+                                      }
+                            "
+                      >
+
+
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="6"

@@ -25,10 +25,10 @@ export const useItineneryStore = defineStore('itineneryStore', {
     },
     
     actions:{
-       async getItinerarySummaryAction(){
+       async getItinerarySummaryAction(status){
         this.summaryLoading = true
         try{
-            const response = await ItineraryService.getItinerarySummary(storeUtils.fireAway().global?.getTenant_id)
+            const response = await ItineraryService.getItinerarySummary(storeUtils.fireAway().global?.getTenant_id,status)
             this.summaryLoading = false
             let responseData = response.data
             if(responseData.success){

@@ -321,273 +321,12 @@
                                             </div>
                                         </div>
 
-                                        <div
-                                            class="multi-city"
+                                        <SearchMultiCity
+                                            :flightModel="flightModel"
                                             v-show="
                                                 activeDestType === 'multiCity'
                                             "
-                                        >
-                                            <div
-                                                class="new_flight"
-                                                v-for="(
-                                                    b, index
-                                                ) in flightModel.destinations
-                                                    ? flightModel.destinations
-                                                    : null"
-                                                :key="(index + 1) * 99"
-                                            >
-                                                <div class="new_flight_header">
-                                                    <p
-                                                        class="flight-index"
-                                                        :style="{
-                                                            backgroundColor:
-                                                                custom_theme
-                                                                    ? lightenColor(
-                                                                          custom_theme.color
-                                                                      )
-                                                                    : default_theme.color,
-                                                            color: '#fff',
-                                                        }"
-                                                    >
-                                                        Flight {{ index + 1 }}
-                                                    </p>
-                                                    <img
-                                                        v-if="
-                                                            index > 1 ||
-                                                            flightModel
-                                                                .destinations
-                                                                .length > 2
-                                                        "
-                                                        src="../../assets/cancle.svg"
-                                                        @click="
-                                                            removeFlight(index)
-                                                        "
-                                                        style="cursor: pointer"
-                                                    />
-                                                </div>
-                                                <div class="new_flight_body">
-                                                    <div class="group-inputs">
-                                                        <!-- from -->
-                                                        <div class="input-divs">
-                                                            <on-boarding-input
-                                                                @isFocusing="
-                                                                    handleFocus
-                                                                "
-                                                                :name="`from_input_${index}`"
-                                                                is-fake-loading="true"
-                                                                autocomplete="off"
-                                                                width="100%"
-                                                                value="hello"
-                                                                :id="`multi_city_from_input_${index}`"
-                                                                :newVal="
-                                                                    b.origin_name
-                                                                "
-                                                                label="From"
-                                                                class=""
-                                                                @inputValue="
-                                                                    (value) => {
-                                                                        (this.multiCityFromQuery =
-                                                                            value),
-                                                                            multiCitySearchFrom(
-                                                                                index
-                                                                            );
-                                                                    }
-                                                                "
-                                                            />
-                                                            <div
-                                                                class="airportsDropDown"
-                                                                v-show="
-                                                                    multiCityActiveInput ===
-                                                                    `from_${index}`
-                                                                "
-                                                            >
-                                                                <p
-                                                                    @click="
-                                                                        (b.origin = `${i.city_code}`),
-                                                                            (b.origin_name = `${i.city} - ${i.name}`),
-                                                                            selectDestination(
-                                                                                `multi_city_from_input_${index}`,
-                                                                                `${i.city} - ${i.name}`,
-                                                                                `${i.iata_code}`,
-                                                                                index
-                                                                            )
-                                                                    "
-                                                                    class="per_airport"
-                                                                    v-for="(
-                                                                        i,
-                                                                        b_index
-                                                                    ) in filteredAirportFrom"
-                                                                    :key="
-                                                                        b_index
-                                                                    "
-                                                                >
-                                                                    {{ i.city }}
-                                                                    -
-                                                                    {{
-                                                                        i.country
-                                                                    }}
-                                                                    -
-                                                                    {{ i.name }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <!-- to -->
-                                                        <div class="input-divs">
-                                                            <on-boarding-input
-                                                                @isFocusing="
-                                                                    handleFocus
-                                                                "
-                                                                input-type="input2"
-                                                                autocomplete="off"
-                                                                is-fake-loading="true"
-                                                                width="100%"
-                                                                :id="`multi_city_to_input_${index}`"
-                                                                :newVal="
-                                                                    b.destination_name
-                                                                "
-                                                                label="To"
-                                                                class=""
-                                                                @inputValue="
-                                                                    (value) => {
-                                                                        (this.multiCityToQuery =
-                                                                            value),
-                                                                            multiCitySearchTo(
-                                                                                index
-                                                                            );
-                                                                    }
-                                                                "
-                                                            />
-                                                            <div
-                                                                class="airportsDropDown"
-                                                                v-show="
-                                                                    multiCityActiveInput ===
-                                                                    `to_${index}`
-                                                                "
-                                                            >
-                                                                <p
-                                                                    @click="
-                                                                        (b.destination = `${i.city_code}`),
-                                                                            (b.destination_name = `${i.city} - ${i.name}`),
-                                                                            selectDestination(
-                                                                                `multi_city_to_input_${index}`,
-                                                                                `${i.city} - ${i.name}`,
-                                                                                `${i.iata_code}`,
-                                                                                index
-                                                                            )
-                                                                    "
-                                                                    class="per_airport"
-                                                                    v-for="(
-                                                                        i,
-                                                                        i_index
-                                                                    ) in filteredAirportTo"
-                                                                    :key="
-                                                                        i_index
-                                                                    "
-                                                                >
-                                                                    {{ i.city }}
-                                                                    -
-                                                                    {{
-                                                                        i.country
-                                                                    }}
-                                                                    -
-                                                                    {{ i.name }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <!-- date -->
-                                                        <div class="input-divs">
-                                                            <div
-                                                                class="group-inputs"
-                                                            >
-                                                                <data-picker
-                                                                    @isFocusing="
-                                                                        handleFocus
-                                                                    "
-                                                                    :min_date="
-                                                                        b.origin
-                                                                    "
-                                                                    @dateValue="
-                                                                        (obj) =>
-                                                                            (b.departure_date =
-                                                                                obj.formattedDate)
-                                                                    "
-                                                                    icon-id="from_icon_multicity"
-                                                                    :id="`from_multicity_${index}`"
-                                                                    label="Departure Date"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                v-if="
-                                                    !flightModel.destinations ||
-                                                    flightModel.destinations
-                                                        ?.length < 6
-                                                "
-                                                @click="beginMultiCitySearch"
-                                                class="add-new-flight"
-                                                :style="{
-                                                    backgroundColor:
-                                                        custom_theme
-                                                            ? lightenColor(
-                                                                  custom_theme.color
-                                                              )
-                                                            : default_theme.color,
-                                                }"
-                                            >
-                                                <svg
-                                                    width="32"
-                                                    height="32"
-                                                    viewBox="0 0 32 32"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <circle
-                                                        cx="16"
-                                                        cy="16"
-                                                        r="16"
-                                                        :fill="
-                                                            custom_theme
-                                                                ? custom_theme.color
-                                                                : default_theme.color
-                                                        "
-                                                    />
-                                                    <g
-                                                        clip-path="url(#clip0_305_1400)"
-                                                    >
-                                                        <path
-                                                            d="M15.2379 15.2394V10.668H16.7617V15.2394H21.3332V16.7632H16.7617V21.3346H15.2379V16.7632H10.6665V15.2394H15.2379Z"
-                                                            fill="white"
-                                                        />
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath
-                                                            id="clip0_305_1400"
-                                                        >
-                                                            <rect
-                                                                width="18.2857"
-                                                                height="18.2857"
-                                                                fill="white"
-                                                                transform="translate(6.85715 6.85742)"
-                                                            />
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                <p style="color: #fff">
-                                                    {{
-                                                        multiCityFlight.length >
-                                                        0
-                                                            ? "Add another flight"
-                                                            : "Add new flight"
-                                                    }}
-                                                </p>
-                                            </div>
-
-                                            <div class="group-inputs"></div>
-                                        </div>
+                                        />
 
                                         <div
                                             @click.stop="closeOpenedModal"
@@ -1228,6 +967,7 @@ import storeUtils from "../../utils/storeUtils";
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
 import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
+import SearchMultiCity from "./SearchMultiCity.vue";
 import FlightRequest from "../../model/FlightRequest";
 import { lightenColor } from "@/mixins/themeUtils";
 import { RuthdoAlert } from "ruthly";
@@ -1241,7 +981,9 @@ export default {
         DataPicker,
         Layout,
         ComingSoon,
+        SearchMultiCity,
     },
+
     data() {
         return {
             activeDestType: "round_trip",
@@ -1274,6 +1016,7 @@ export default {
             infant_disable: null,
         };
     },
+
     methods: {
         handleFocus(value) {
             console.log(value);
@@ -1330,6 +1073,7 @@ export default {
             if (this.flightModel.destinations.length === 2) return;
             this.flightModel.destinations.splice(id, 1);
         },
+
         shouldSearch() {
             if (this.activeDestType === "round_trip") {
                 const keys_to_check_for_round_trip = [
@@ -1629,9 +1373,7 @@ export default {
 
         getAirports() {
             const airports = JSON.parse(localStorage?.airports);
-            if (airports) {
-                return airports;
-            }
+            if (airports) {return airports;}
         },
 
         getLoading() {
