@@ -31,6 +31,7 @@
           <!-- from -->
           <div class="input-divs">
             <on-boarding-input
+              :readonly="disabled"
               :defaultValue="b.origin_name"
               @isFocusing="handleFocus"
               :name="`from_input_${index}`"
@@ -78,6 +79,7 @@
           <!-- to -->
           <div class="input-divs">
             <on-boarding-input
+              :readonly="disabled || !b.origin"
               :defaultValue="b.destination_name"
               @isFocusing="handleFocus"
               input-type="input2"
@@ -125,6 +127,7 @@
           <div class="input-divs">
             <div class="group-inputs">
               <data-picker
+                :readonly="disabled || !b.origin || !b.destination"
                 :defaultValue="b.departure_date"
                 @isFocusing="handleFocus"
                 :min_date="b.origin"
@@ -192,7 +195,6 @@
 
 <script>
 import OnBoardingInput from "../../components/Inputs/OnBoardingInput.vue";
-import OnBoardingButton from "../../components/Buttons/OnBoardingButton.vue";
 import DataPicker from "../../components/Inputs/custom-date-picker/DataPicker.vue";
 import { lightenColor } from "@/mixins/themeUtils";
 import storeUtils from "../../utils/storeUtils";
@@ -200,11 +202,10 @@ import storeUtils from "../../utils/storeUtils";
 export default {
   name: "SearchForFlight",
   components: {
-    OnBoardingButton,
     OnBoardingInput,
     DataPicker,
   },
-  props: ["flightModel"],
+  props: ["flightModel", "disabled"],
   data() {
     return {
       multiCity: [],
@@ -231,7 +232,6 @@ export default {
   },
   methods: {
     handleFocus(value) {
-      console.log(value);
       if (this.showPassengers || this.showClass) {
         this.showPassengers = !value;
         this.showClass = !value;
@@ -239,6 +239,7 @@ export default {
     },
 
     beginMultiCitySearch() {
+      if (this.disabled) return;
       const arr1 = [
         {
           departure_date: null,
@@ -266,11 +267,13 @@ export default {
     },
 
     removeFlight(id) {
+      if (this.disabled) return;
       if (this.flightModel.destinations.length === 2) return;
       this.flightModel.destinations.splice(id, 1);
     },
 
     multiCitySearchFrom(index) {
+      if (this.disabled) return;
       this.multiCityActiveInput = `from_${index}`;
       if (this.multiCityFromQuery?.length < 1) {
         this.filteredAirportFrom.length = 0;
@@ -290,6 +293,7 @@ export default {
     },
 
     multiCitySearchTo(index) {
+      if (this.disabled) return;
       this.multiCityActiveInput = `to_${index}`;
       if (this.multiCityToQuery.length < 1) {
         this.filteredAirportTo.length = 0;
@@ -307,12 +311,14 @@ export default {
     },
 
     updateMultiCityDateValue(obj) {
+      if (this.disabled) return;
       this.thisDate = obj.formattedDate;
       // this.formatteddateFrom = obj.formattedDate
       // this.flightModel.return_date = obj.formattedDate
     },
 
     selectDestination(id, destination, code, index) {
+      if (this.disabled) return;
       if (id === `multi_city_to_input_${index}`) {
         // const inputElement = document.getElementById(id);
         // inputElement.value = destination;
@@ -343,6 +349,7 @@ export default {
     },
 
     filterAirportFrom() {
+      if (this.disabled) return;
       if (this.fromQuery.length < 1) {
         this.filteredAirportFrom.length = 0;
       } else {
@@ -359,6 +366,7 @@ export default {
     },
 
     filterAirportTo() {
+      if (this.disabled) return;
       if (this.toQuery.length < 1) {
         this.filteredAirportTo.length = 0;
       } else {
