@@ -252,8 +252,8 @@ export default {
                     },
                     // booking_classes
                     {
-                        postVal: "booking_classes",
-                        label: "Booking Classes",
+                        postVal: "cabin_classes",
+                        label: "Cabin Classes",
                         id: "rule_book_c",
                         required: false,
                         val: [],
@@ -326,9 +326,9 @@ export default {
                         postVal: "booking_class_of_service",
                         label: "Booking Class of Service",
                         id: "rule_bcos",
-                        val: "",
+                        val: [],
                         inputType: {
-                            structure: "input",
+                            structure: "content-input",
                             type: "text",
                         },
                     },
