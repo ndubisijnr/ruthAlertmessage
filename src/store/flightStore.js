@@ -133,6 +133,7 @@ export const useFlightStore = defineStore('flightStore', {
         },
 
         async handleFlightSearch(payload = FlightRequest.flight) {
+            console.log({ payload })
             const user = JSON.parse(localStorage?.user)
             this.loading = true
             try {
