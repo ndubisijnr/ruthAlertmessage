@@ -190,6 +190,7 @@
                       <div class="group-inputs">
                         <div class="input-divs">
                           <on-boarding-input
+                            :defaultValue="flightModel.originName"
                             @isFocusing="handleFocus"
                             is-fake-loading="true"
                             autocomplete="off"
@@ -228,6 +229,7 @@
                         </div>
                         <div class="input-divs">
                           <on-boarding-input
+                            :defaultValue="flightModel.destinationName"
                             @isFocusing="handleFocus"
                             is-fake-loading="true"
                             autocomplete="off"
@@ -265,12 +267,14 @@
                       </div>
                       <div class="group-inputs">
                         <data-picker
+                          :defaultValue="flightModel.departure_date"
                           @isFocusing="handleFocus"
                           :min_date="new Date()"
                           @dateValue="updateDateValue"
                           label="Departure Date"
                         ></data-picker>
                         <data-picker
+                          :defaultValue="flightModel.return_date"
                           @isFocusing="handleFocus"
                           :readonly="!this.departure_date ? 'readonly' : null"
                           @dateValue="updateDateValueTo"
@@ -791,6 +795,7 @@ export default {
       destination: null,
       origin: null,
       infant_disable: null,
+      storedFlightModel: null,
     };
   },
 
@@ -1000,6 +1005,7 @@ export default {
         inputElement.value = destination;
 
         this.origin = code;
+        this.flightModel.originName = destination;
         this.filteredAirportFrom.length = 0;
       }
 
@@ -1014,6 +1020,7 @@ export default {
         inputElement.value = destination;
 
         this.destination = code;
+        this.flightModel.destinationName = destination;
         this.filteredAirportTo.length = 0;
       }
     },
@@ -1032,17 +1039,31 @@ export default {
 
     searchFlight(type) {
       if (type === "multiCity") {
+        const delItems = [
+          "destinationName",
+          "departure_date",
+          "destination",
+          "with_markup",
+          "return_date",
+          "origin",
+          "originName",
+        ];
+        delItems.forEach((el) => {
+          delete this.flightModel[el];
+        });
         storeUtils
           .fireAway()
           .flight?.handleMultiCityFlightSearch(this.flightModel);
       } else {
+        this.flightModel.destinations = [];
+        this.beginMultiCitySearch();
         if (this.activeDestType === "round_trip") {
           this.flightModel.origin = this.origin;
           this.flightModel.destination = this.destination;
           this.flightModel.return_date = this.return_date;
           this.flightModel.departure_date = this.departure_date;
           this.flightModel.with_markup = false;
-          if (!this.destination || !this.return_date) {
+          if (!this.flightModel.destination || !this.flightModel.return_date) {
             RuthdoAlert({
               title: "Travel Dates is required",
               icon: "error",
@@ -1057,14 +1078,12 @@ export default {
           }
         }
         if (this.activeDestType === "one_way") {
-          console.log(this.origin);
-          console.log(this.destination);
           this.flightModel.origin = this.origin;
           this.flightModel.destination = this.destination;
           this.flightModel.departure_date = this.departure_date;
           this.flightModel.return_date = null;
           this.flightModel.with_markup = false;
-          if (!this.departure_date) {
+          if (!this.flightModel.departure_date) {
             RuthdoAlert({
               title: "Departure  Date is required",
               icon: "error",
@@ -1172,8 +1191,37 @@ export default {
     },
   },
 
+  beforeMount() {
+    // preserves flight model
+    if (localStorage.flightModel) {
+      this.storedFlightModel = JSON.parse(localStorage.flightModel);
+      // localStorage.removeItem('flightModel')
+      FlightRequest.flight = this.storedFlightModel;
+    }
+  },
   mounted() {
-    this.beginMultiCitySearch();
+    if (this.storedFlightModel) {
+      if (!this.storedFlightModel?.return_date) this.activeDestType = "one_way";
+      else this.activeDestType = "round_trip";
+      this.flightModel = FlightRequest.flight;
+      if (!this.storedFlightModel.destinations?.length) {
+        this.beginMultiCitySearch();
+      }
+      if (
+        this.storedFlightModel.destinations?.length > 1 &&
+        this.storedFlightModel.destinations[0].origin
+      ) {
+        this.activeDestType = "multiCity";
+      } else {
+        this.origin = this.flightModel.origin;
+        this.destination = this.flightModel.destination;
+        this.return_date = this.flightModel.return_date;
+        this.departure_date = this.flightModel.departure_date;
+      }
+    } else {
+      this.beginMultiCitySearch();
+    }
+
     localStorage.bookingStage = "Flight Search";
   },
 };

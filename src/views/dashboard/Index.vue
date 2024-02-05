@@ -321,7 +321,7 @@
             <!--                style="cursor:not-allowed !important"-->
           </div>
           <div
-            v-if="activeDestType !== 'multiCity'"
+            v-show="activeDestType !== 'multiCity'"
             class="search_flight_model"
             style="display: flex; margin: 1rem 0; gap: 0.5rem"
           >
@@ -696,7 +696,7 @@
             ></on-boarding-button>
           </div>
 
-          <div v-else>
+          <div v-if="activeDestType == 'multiCity'">
             <div style="gap: 0.5rem" class="d-flex flex-column">
               <SearchMultiCity
                 :disabled="getLoading"
@@ -1075,7 +1075,7 @@ export default {
   methods: {
     disableBtn() {
       var val = false;
-      if (this.flightModel.destinations.length) {
+      if (this.flightModel.destinations?.length) {
         this.flightModel.destinations.forEach((el) => {
           Object.entries(el).forEach(([key, value]) => {
             if (!value) {
@@ -1086,9 +1086,37 @@ export default {
       }
       return { val };
     },
+
+    beginMultiCitySearch() {
+      const arr1 = [
+        {
+          departure_date: null,
+          origin: null,
+          destination: null,
+          origin_name: null,
+          destination_name: null,
+        },
+        {
+          departure_date: null,
+          origin: null,
+          destination: null,
+          origin_name: null,
+          destination_name: null,
+        },
+      ];
+
+      if (this.flightModel.destinations?.length) {
+        if (this.flightModel.destinations.length < 6) {
+          this.flightModel.destinations.push(arr1[0]);
+        }
+      } else {
+        this.flightModel.destinations = [...arr1];
+      }
+    },
     reSearch() {
-      console.log(this.flightModel);
       if (this.activeDestType === "round_trip") {
+        this.flightModel.destinations = [];
+        this.beginMultiCitySearch();
         this.flightModel.origin = this.origin;
         this.flightModel.destination = this.destination;
         this.flightModel.return_date = this.return_date;
@@ -1109,8 +1137,8 @@ export default {
             .then(() => {});
         }
       } else if (this.activeDestType === "one_way") {
-        console.log(this.origin);
-        console.log(this.destination);
+        this.flightModel.destinations = [];
+        this.beginMultiCitySearch();
         this.flightModel.origin = this.origin;
         this.flightModel.destination = this.destination;
         this.flightModel.departure_date = this.departure_date;
@@ -1129,6 +1157,18 @@ export default {
           storeUtils.fireAway().flight?.handleFlightSearch();
         }
       } else {
+        const delItems = [
+          "destinationName",
+          "departure_date",
+          "destination",
+          "with_markup",
+          "return_date",
+          "origin",
+          "originName",
+        ];
+        delItems.forEach((el) => {
+          delete this.flightModel[el];
+        });
         storeUtils
           .fireAway()
           .flight?.handleMultiCityFlightSearch(this.flightModel);
@@ -1183,7 +1223,6 @@ export default {
     },
 
     updateDateValue(obj) {
-      console.log(obj);
       this.dateFrom = obj?.date ? obj?.date : obj;
       this.formatteddateFrom = obj?.formattedDate ? obj?.formattedDate : obj;
       this.departure_date = obj?.formattedDate ? obj?.formattedDate : obj;
@@ -1340,38 +1379,46 @@ export default {
     if (localStorage.flightModel)
       this.storedFlightModel = JSON.parse(localStorage.flightModel);
     // localStorage.removeItem('flightModel')
-    console.log(this.storedFlightModel);
+    FlightRequest.flight = this.storedFlightModel;
   },
 
   mounted() {
     if (!this.storedFlightModel?.return_date) this.activeDestType = "one_way";
     else this.activeDestType = "round_trip";
 
-    if (this.storedFlightModel?.destinations?.length > 1) {
-      this.activeDestType = "multiCity";
+    if (this.storedFlightModel) {
+      this.flightModel = FlightRequest.flight;
+      if (!this.storedFlightModel.destinations?.length) {
+        this.beginMultiCitySearch();
+      } else if (this.storedFlightModel.destinations[0].origin) {
+        this.activeDestType = "multiCity";
+      }
     }
 
     if (this.activeDestType !== "multiCity") {
-      const from = document.getElementById("search_model_from_input"),
-        to = document.getElementById("search_model_to_input"),
-        departure_date = document.getElementById("departure_date_id"),
-        return_date = document.getElementById("return_date_id");
-      if (from || to || departure_date || return_date) {
-        from.value = this.getCityByCityCode(this.storedFlightModel?.origin);
-        to.value = this.getCityByCityCode(this.storedFlightModel?.destination);
-        this.updateDateValue(this.storedFlightModel?.departure_date);
-        this.updateDateValueTo(this.storedFlightModel?.return_date);
-        this.origin = this.storedFlightModel?.origin;
-        this.destination = this.storedFlightModel?.destination;
-        this.flightModel.cabin = this.storedFlightModel?.cabin;
-        this.flightModel.adults = this.storedFlightModel?.adults;
-        this.flightModel.children = this.storedFlightModel?.children;
-        this.flightModel.infants = this.storedFlightModel?.infants;
-        departure_date.value = this?.departure_date;
-        return_date.value = this?.return_date;
-      }
-    } else {
-      this.flightModel = this.storedFlightModel;
+      // the timeout to offset the vdom load as there are if statements on the vdom elements
+      setTimeout(() => {
+        const from = document.getElementById("search_model_from_input"),
+          to = document.getElementById("search_model_to_input"),
+          departure_date = document.getElementById("departure_date_id"),
+          return_date = document.getElementById("return_date_id");
+        if (from || to || departure_date || return_date) {
+          from.value = this.getCityByCityCode(this.storedFlightModel?.origin);
+          to.value = this.getCityByCityCode(
+            this.storedFlightModel?.destination
+          );
+          this.updateDateValue(this.storedFlightModel?.departure_date);
+          this.updateDateValueTo(this.storedFlightModel?.return_date);
+          this.origin = this.storedFlightModel?.origin;
+          this.destination = this.storedFlightModel?.destination;
+          this.flightModel.cabin = this.storedFlightModel?.cabin;
+          this.flightModel.adults = this.storedFlightModel?.adults;
+          this.flightModel.children = this.storedFlightModel?.children;
+          this.flightModel.infants = this.storedFlightModel?.infants;
+          departure_date.value = this?.departure_date;
+          return_date.value = this?.return_date;
+        }
+      }, 800);
     }
   },
 };
@@ -1506,7 +1553,7 @@ export default {
 }
 
 .search_flight_model_wrapper {
-  //transform: translate(-500%);
+  transform: translate(-500%);
   transition: 0.5s ease-out;
   padding: 0;
   margin: 0;
