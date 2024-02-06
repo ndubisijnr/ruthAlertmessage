@@ -8,6 +8,8 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "PrintItenaryModal",
   components:{Template1, Layout,Template2,Template3},
+  props:['booking_id','contact_first_name','contact_last_name', 'contact_email'],
+
   methods:{
     close(){
       this.$emit('close', false)
@@ -26,9 +28,9 @@ export default {
 
   <layout v-slot:children >
 
-    <Template1 v-if="getTemplateId === 1"></Template1>
-    <Template2 v-if="getTemplateId === 2"></Template2>
-    <Template3 v-if="getTemplateId === 3"></Template3>
+    <Template1 :contact_email="contact_email" :booking_id="booking_id" :contact_first_name="contact_first_name" :contact_last_name="contact_last_name" v-if="getTemplateId === 1"></Template1>
+    <Template2 :contact_email="contact_email" :booking_id="booking_id" :contact_first_name="contact_first_name" :contact_last_name="contact_last_name" v-if="getTemplateId === 2"></Template2>
+    <Template3 :contact_email="contact_email" :booking_id="booking_id" :contact_first_name="contact_first_name" :contact_last_name="contact_last_name" v-if="getTemplateId === 3"></Template3>
 
     <div class="close">
       <img src="../../assets/cancle.svg" alt="close" @click="close()"/>
