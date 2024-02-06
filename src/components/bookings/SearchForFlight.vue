@@ -190,7 +190,7 @@
                       <div class="group-inputs">
                         <div class="input-divs">
                           <on-boarding-input
-                            :defaultValue="flightModel.originName"
+                            :defaultValue="flightModel?.originName"
                             @isFocusing="handleFocus"
                             is-fake-loading="true"
                             autocomplete="off"
@@ -229,7 +229,7 @@
                         </div>
                         <div class="input-divs">
                           <on-boarding-input
-                            :defaultValue="flightModel.destinationName"
+                            :defaultValue="flightModel?.destinationName"
                             @isFocusing="handleFocus"
                             is-fake-loading="true"
                             autocomplete="off"
@@ -267,14 +267,14 @@
                       </div>
                       <div class="group-inputs">
                         <data-picker
-                          :defaultValue="flightModel.departure_date"
+                          :defaultValue="flightModel?.departure_date"
                           @isFocusing="handleFocus"
                           :min_date="new Date()"
                           @dateValue="updateDateValue"
                           label="Departure Date"
                         ></data-picker>
                         <data-picker
-                          :defaultValue="flightModel.return_date"
+                          :defaultValue="flightModel?.return_date"
                           @isFocusing="handleFocus"
                           :readonly="!this.departure_date ? 'readonly' : null"
                           @dateValue="updateDateValueTo"
@@ -814,7 +814,6 @@ export default {
       return { val };
     },
     handleFocus(value) {
-      console.log(value);
       if (this.showPassengers || this.showClass) {
         this.showPassengers = !value;
         this.showClass = !value;
@@ -824,7 +823,6 @@ export default {
     closeOpenedModal() {
       const wrapper = document.body;
       wrapper.addEventListener("click", (e) => {
-        console.log(e);
         if (this.showPassengers || this.showClass) {
           (this.showPassengers = false), (this.showClass = false);
         }
@@ -832,7 +830,6 @@ export default {
     },
     handleCheck(value) {
       const withNonStops = document.getElementById("withNonStop");
-      console.log(withNonStops.value);
       if (value === "withNonStop")
         this.flightModel.with_non_stops = withNonStops.checked;
     },
@@ -1070,7 +1067,7 @@ export default {
             });
           } else {
             localStorage.flightModel = JSON.stringify(this.flightModel);
-            console.log(localStorage.flightModel);
+            FlightRequest.flight = this.flightModel;
             storeUtils
               .fireAway()
               .flight?.handleFlightSearch()
@@ -1090,8 +1087,7 @@ export default {
             });
           } else {
             localStorage.flightModel = JSON.stringify(this.flightModel);
-            console.log(localStorage.flightModel);
-
+            FlightRequest.flight = this.flightModel;
             storeUtils.fireAway().flight?.handleFlightSearch();
           }
         }
@@ -1127,6 +1123,34 @@ export default {
           );
         });
       }
+    },
+    onLoadFn() {
+      if (this.storedFlightModel) {
+        if (!this.storedFlightModel?.return_date)
+          this.activeDestType = "one_way";
+        else this.activeDestType = "round_trip";
+        this.flightModel = FlightRequest.flight;
+        if (!this.storedFlightModel.destinations?.length) {
+          this.beginMultiCitySearch();
+        }
+        if (
+          this.storedFlightModel.destinations?.length > 1 &&
+          this.storedFlightModel.destinations[0].origin
+        ) {
+          this.activeDestType = "multiCity";
+        } else {
+          this.origin = this.flightModel.origin;
+          this.destination = this.flightModel.destination;
+          this.return_date = this.flightModel.return_date;
+          this.departure_date = this.flightModel.departure_date;
+        }
+      } else {
+        this.beginMultiCitySearch();
+      }
+
+      console.log(this.flightModel);
+
+      localStorage.bookingStage = "Flight Search";
     },
   },
 
@@ -1190,39 +1214,26 @@ export default {
       return storeUtils.fireAway().theme.custom_theme;
     },
   },
-
-  beforeMount() {
+  created() {
     // preserves flight model
     if (localStorage.flightModel) {
       this.storedFlightModel = JSON.parse(localStorage.flightModel);
       // localStorage.removeItem('flightModel')
       FlightRequest.flight = this.storedFlightModel;
-    }
-  },
-  mounted() {
-    if (this.storedFlightModel) {
-      if (!this.storedFlightModel?.return_date) this.activeDestType = "one_way";
-      else this.activeDestType = "round_trip";
-      this.flightModel = FlightRequest.flight;
-      if (!this.storedFlightModel.destinations?.length) {
-        this.beginMultiCitySearch();
-      }
-      if (
-        this.storedFlightModel.destinations?.length > 1 &&
-        this.storedFlightModel.destinations[0].origin
-      ) {
-        this.activeDestType = "multiCity";
-      } else {
-        this.origin = this.flightModel.origin;
-        this.destination = this.flightModel.destination;
-        this.return_date = this.flightModel.return_date;
-        this.departure_date = this.flightModel.departure_date;
-      }
     } else {
-      this.beginMultiCitySearch();
+      if (FlightRequest?.flight) {
+        this.flightModel = FlightRequest.flight;
+      } else {
+        this.flightModel = {
+          adults: 1,
+          cabin: "Economy",
+          children: 0,
+          infants: 0,
+        };
+        FlightRequest.flight = this.flightModel;
+      }
     }
-
-    localStorage.bookingStage = "Flight Search";
+    this.onLoadFn();
   },
 };
 </script>

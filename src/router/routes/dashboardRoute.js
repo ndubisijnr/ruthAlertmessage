@@ -3,8 +3,9 @@ export default [
         path: '/dashboard/:token',
         // redirect:'create-account',
         name: 'Dashboard',
-        meta: {layout: 'dashboard',authRequired:true},
-        component: () => import('../../components/bookings/SearchForFlight.vue')
+        meta: { layout: 'dashboard', authRequired: true },
+        component: () => import('../../components/bookings/SearchForFlight.vue'),
+        key: route => `${route.name}-${route.params.id || 'wdwdwdwdw'}`,
     },
     // {
     //     path: '/dashboard/create_new_booking/:token',
@@ -18,7 +19,7 @@ export default [
         path: '/dashboard/select_available_flights/:token',
         // redirect:'create-account',
         name: 'Select available flights',
-        meta: {layout: 'dashboard',authRequired:true},
+        meta: { layout: 'dashboard', authRequired: true },
         component: () => import('../../components/bookings/FlightResult.vue'),
     },
 
@@ -26,7 +27,7 @@ export default [
         path: '/dashboard/travellers_info/:token',
         // redirect:'create-account',
         name: 'Traveller’s Info',
-        meta: {layout: 'dashboard',authRequired:true},
+        meta: { layout: 'dashboard', authRequired: true },
         component: () => import('../../components/bookings/TravellerInfo.vue')
     },
 
@@ -34,7 +35,7 @@ export default [
         path: '/dashboard/payment',
         // redirect:'create-account',
         name: 'Flight Payment',
-        meta: {layout: 'dashboard',authRequired:true},
+        meta: { layout: 'dashboard', authRequired: true },
         component: () => import('../../components/bookings/FlightPayment.vue')
     }
 ]
