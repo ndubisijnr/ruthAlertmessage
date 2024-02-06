@@ -33,7 +33,7 @@
 
               
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p" @click="filterValue='pending', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'pending'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <p class="filter-by-modal-p" @click="filterValue='unresolved', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'unresolved'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>

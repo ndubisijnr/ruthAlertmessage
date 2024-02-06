@@ -25,23 +25,24 @@
             <div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Full Name : </p>
-                <p class="value"> {{getData?.booking.contact_first_name ? getData?.booking.contact_first_name + " " + getData.booking.contact_last_name : 'Mr Jane Doe'}}</p>
+                <p class="value"> {{contact_first_name + " " + contact_last_name}}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Email:</p>
-                <p class="value">{{getData?.booking.contact_email ? getData?.booking.contact_email : 'janedoe@gmail.com '}}</p>
+                <p class="value">{{contact_email }}</p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Class: </p>
-                <p class="value">{{getData?.booking.flight?.outbound[0].cabin_type ? getData?.flight?.outbound[0].cabin_type : 'Economy'}} </p>
+                <p class="value" v-if="getData?.is_multicity">{{getData?.routes[0].segments[0].cabin_type}} </p>
+                <p class="value" v-else>{{getData?.outbound[0]?.cabin_type}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Booking ID : </p>
-                <p class="value"> {{getData?.booking_id}} </p>
+                <p class="value"> {{booking_id}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">PNR: </p>
-                <p class="value">{{ getData?.booking.flight?.pnr }}</p>
+                <p class="value">{{ getData?.pnr }}</p>
               </div>
             </div>
             
@@ -51,8 +52,7 @@
           <div class="third-invoice-row-and-table">
 
             <!--     outbound-->
-
-            <div v-for="(i,index) in  getData?.booking.flight?.outbound" class="flight_info_wrapper">
+            <div v-for="(i,index) in  getData?.outbound" class="flight_info_wrapper" :key="index">
               <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2645_19017)">
@@ -66,7 +66,7 @@
                 </svg>
                 <span class="departure_flight">Departure Flight</span>
               </div>
-               <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
+              <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
                 <div class="equal-height-table_item">
                   <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
                   <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
@@ -97,7 +97,7 @@
                   <p class="value">Arrival</p>
                 </div>
                 <div>
-                  <p class="key">{{ getData?.booking.flight.outbound_stops }}</p>
+                  <p class="key">{{ getData?.outbound_stops }}</p>
                   <p class="value">Stops </p>
                 </div>
 
@@ -115,12 +115,80 @@
                   <p class="airport">{{getAirportNamesByCityCode(i.airport_to)}} ({{i.airport_to}})</p>
                   <p class="time">{{ convertToWord(i.arrival_time) }} {{ convertTo12HourFormat(i.arrival_time) }}</p>
                 </div>
-              </div> 
+              </div>
             </div>
 
-            <div v-if="getData?.booking.flight?.inbound.length" v-for="(i,index) in  getData?.booking.flight?.inbound" class="flight_info_wrapper">
-              <div style="display:flex;align-items: center;gap: 0.12rem">
+            <div v-for="(j,index) in  getData?.routes" class="flight_info_wrapper" :key="index">
+              <div v-for="(i, index) in j.segments" :key="index">
+                <div style="display:flex;align-items: center;gap: 0.12rem">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <g clip-path="url(#clip0_2645_19017)">
+                      <path d="M0.66 18.43H19.66V20.43H0.66V18.43ZM20.23 9.07C20.02 8.27 19.19 7.79 18.39 8.01L13.08 9.43L6.18 3L4.25 3.51L8.39 10.68L3.42 12.01L1.45 10.47L0 10.86L2.59 15.35L19.16 10.92C19.97 10.69 20.44 9.87 20.23 9.07Z" fill="#575A65"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_2645_19017">
+                        <rect width="24" height="24" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span class="departure_flight">Departure Flight</span>
+                </div>
+                 <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
+                  <div class="equal-height-table_item">
+                    <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
+                      <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" fill="white"/>
+                    </svg>
+                    <p class="flight_info_text">{{getCityByCityCode(i.airport_to)}} ({{ i.airport_to }})</p>
+                  </div>
+                  <div>
+                    <p class="flight_info_text">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                  </div>
+                </div>
 
+                <div class="flight_info2">
+                  <div>
+                    <p class="key">{{i.flight_number}} </p>
+                    <p class="value">Flight No.</p>
+                  </div>
+                  <div>
+                    <p class="key">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                    <p class="value"> Departure </p>
+                  </div>
+                  <div>
+                    <p class="key">{{convertDurationToWords(i.duration)}} </p>
+                    <p class="value">Duration</p>
+                  </div>
+                  <div>
+                    <p class="key">{{i.arrival_time ? convertToWord(i.arrival_time) : '02 : 30 PM'}}</p>
+                    <p class="value">Arrival</p>
+                  </div>
+                  <div>
+                    <p class="key">{{ getData?.outbound_stops }}</p>
+                    <p class="value">Stops </p>
+                  </div>
+
+                </div>
+
+                <div class="flight_info">
+                  <div class="flight_info_item">
+                    <p class="airport">{{getAirportNamesByCityCode(i.airport_from)}} ({{i.airport_from}})</p>
+                    <p class="time">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
+                    <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
+                  </svg>
+                  <div class="flight_info_item">
+                    <p class="airport">{{getAirportNamesByCityCode(i.airport_to)}} ({{i.airport_to}})</p>
+                    <p class="time">{{ convertToWord(i.arrival_time) }} {{ convertTo12HourFormat(i.arrival_time) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div v-if="getData?.inbound?.length" v-for="(i,index) in  getData?.inbound" class="flight_info_wrapper">
+              <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2657_19155)">
                     <path d="M23.342 18.43H4.34195V20.43H23.342V18.43ZM3.77195 9.07C3.98195 8.27 4.81195 7.79 5.61195 8.01L10.922 9.43L17.822 3L19.752 3.51L15.612 10.68L20.582 12.01L22.552 10.47L24.002 10.86L21.412 15.35L4.84195 10.92C4.03195 10.69 3.56195 9.87 3.77195 9.07Z" fill="#575A65"/>
@@ -164,7 +232,7 @@
                   <p class="value">Arrival</p>
                 </div>
                 <div>
-                  <p class="key">{{ getData?.booking.flight.outbound_stops }}</p>
+                  <p class="key">{{ getData?.outbound_stops }}</p>
                   <p class="value">Stops </p>
                 </div>
 
@@ -224,7 +292,7 @@
               <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
             </div>
 
-            <div v-for="i in getData?.booking.flight?.passengers" class="flight_info2" style="justify-content: start;">
+            <div v-for="i in getData?.passengers" class="flight_info2" style="justify-content: start;">
               <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
               <p class="value" style="width: 11.25rem;">{{i.email}}</p>
               <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
@@ -240,7 +308,7 @@
 
             </div>
      
-            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.booking.amount)}} </p>
+            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
             <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
             <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>
@@ -261,6 +329,7 @@ import storeUtils from "@/utils/storeUtils";
 import {lightenColor} from "@/mixins/themeUtils";
 export default {
   name: "Template1",
+  props:['booking_id','contact_first_name','contact_last_name', 'contact_email'],
   data(){
     return{
       formatAmount,

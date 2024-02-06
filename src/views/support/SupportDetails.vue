@@ -35,7 +35,7 @@ export default {
     },
 
     viewDetails(obj){
-      storeUtils.fireAway().print.commitPrintLoading('', obj)
+      storeUtils.fireAway().print.commitPrintLoading('', obj.booking.flight)
       this.printing = true
     },
 
@@ -117,7 +117,7 @@ export default {
 <template>
 
   <layout v-slot:child-content>
-    <print-itenary-modal v-if="printing" @close="close_"></print-itenary-modal>
+    <print-itenary-modal :contact_email="getRequestDetails?.booking.contact_email" :booking_id="getRequestDetails?.booking_id" :contact_first_name="getRequestDetails?.booking.contact_first_name" :contact_last_name="getRequestDetails?.booking.contact_last_name"  v-if="printing" @close="close_"></print-itenary-modal>
 
 
     <div class="overall">
