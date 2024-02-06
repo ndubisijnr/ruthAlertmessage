@@ -56,13 +56,13 @@
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Issuance" :number="getSummary?.issuance_count "></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
-              <bookings-cards v-else title="Voidance" :number="getSummary?.voided_count"></bookings-cards>
+              <bookings-cards v-else title="Void" :number="getSummary?.voided_count"></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Refund" :number="getSummary?.refunded_count"></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Exchange" :number="getSummary?.exchanged_count"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
-              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>
+<!--              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>-->
+<!--              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>-->
             </div>
           </div>
           <div style="margin: 3.5rem 0">
@@ -136,7 +136,7 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
         {key:"customer_name", label:"Agent Name"},
         {key:"ticket_amount", label:"Ticket Amount_"},
         {key:"airline", label:"Airline_"},
-        {key:"created_at", label:"Booking Date"},
+        {key:"created_at", label:"Request Date/Time"},
         {key:"type", label:"Type"},
         {key:"status", label:"Itinerary Status"},
         // {key:"Action", label:"Action",id:"member"},

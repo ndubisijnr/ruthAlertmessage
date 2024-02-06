@@ -127,7 +127,7 @@ export default {
         {key:"amount", label:"Ticket Amount"},
         // {key:"id", label:"Ticket ID"},
         {key:"flight", label:"Airline"},
-        {key:"created_at", label:"Booking Date"},
+        {key:"created_at", label:"Request Date/Time"},
         {key:"status", label:"Status_"},
         // {key:"Action", label:"Action",id:"member"},
       ],
