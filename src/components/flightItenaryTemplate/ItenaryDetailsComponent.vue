@@ -59,9 +59,8 @@ export default{
 
     printAction(){
        storeUtils.fireAway().print?.commitPrintLoading(true, this.getBookedFlight)
-       if(this.getTemplateId === 1) router.push({name:'Template1'})
-       if(this.getTemplateId === 2) router.push({name:'Template2'})
-       if(this.getTemplateId === 3) router.push({name:'Template3'})
+       this.$emit('openPrintModal', true)
+       this.actionClicked=!this.actionClicked
     },
 
     openItineneryModal(type){
@@ -210,13 +209,14 @@ export default{
             <div style="position: relative" v-show="activeAction === 'view_itinerary' && actionClicked">
               <div class="filter-by-modal">
                 <p class="filter-by-modal-p" @click="printAction">Print Itinerary</p>
-                <p class="filter-by-modal-p" @click="isEmailTemplate=true">Email Itinerary</p>
+                <p class="filter-by-modal-p" @click="isEmailTemplate=true, this.actionClicked=!this.actionClicked">Email Itinerary</p>
               </div>
             </div>
 
           </div>
           <div class="action_wrapper" >
-            <div class="action_items" @click="e => showAction(e, 'special_request')">
+<!--            @click="e => showAction(e, 'special_request')"-->
+            <div class="action_items">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M8 22.3194C7.72 22.3194 7.42998 22.2494 7.16998 22.1094C6.59998 21.8094 6.25 21.2094 6.25 20.5694V19.1495C3.23 18.8395 1.25 16.6194 1.25 13.4394V7.43945C1.25 3.99945 3.56 1.68945 7 1.68945H17C20.44 1.68945 22.75 3.99945 22.75 7.43945V13.4394C22.75 16.8794 20.44 19.1894 17 19.1894H13.23L8.96997 22.0295C8.67997 22.2195 8.34 22.3194 8 22.3194ZM7 3.17944C4.42 3.17944 2.75 4.84944 2.75 7.42944V13.4295C2.75 16.0095 4.42 17.6795 7 17.6795C7.41 17.6795 7.75 18.0195 7.75 18.4295V20.5595C7.75 20.6895 7.83 20.7495 7.88 20.7795C7.93001 20.8095 8.03001 20.8395 8.14001 20.7695L12.59 17.8095C12.71 17.7295 12.86 17.6795 13.01 17.6795H17.01C19.59 17.6795 21.26 16.0095 21.26 13.4295V7.42944C21.26 4.84944 19.59 3.17944 17.01 3.17944H7Z" fill="#2C6CAC"/>
                 <path d="M11.9998 12.1104C11.5898 12.1104 11.2498 11.7704 11.2498 11.3604V11.1504C11.2498 9.99039 12.0998 9.42038 12.4198 9.20038C12.7898 8.95038 12.9098 8.78039 12.9098 8.52039C12.9098 8.02039 12.4998 7.61035 11.9998 7.61035C11.4998 7.61035 11.0898 8.02039 11.0898 8.52039C11.0898 8.93039 10.7498 9.27039 10.3398 9.27039C9.92984 9.27039 9.58984 8.93039 9.58984 8.52039C9.58984 7.19039 10.6698 6.11035 11.9998 6.11035C13.3298 6.11035 14.4098 7.19039 14.4098 8.52039C14.4098 9.66039 13.5698 10.2304 13.2598 10.4404C12.8698 10.7004 12.7498 10.8704 12.7498 11.1504V11.3604C12.7498 11.7804 12.4098 12.1104 11.9998 12.1104Z" fill="#2C6CAC"/>
@@ -224,7 +224,8 @@ export default{
               </svg>
             </div>
 
-            <p class="itinerary-p" @click="e => showAction(e, 'special_request')">Special Request </p>
+<!--            @click="e => showAction(e, 'special_request')"-->
+            <p class="itinerary-p" >Special Request </p>
             <div style="position: relative" v-show="activeAction === 'special_request' && actionClicked">
               <div class="filter-by-modal">
                 <p class="filter-by-modal-p" @click="isChooseSeat=true">Choose Seat</p>
@@ -246,7 +247,8 @@ export default{
             <p class="itinerary-p">History</p>
           </div>
           <div class="action_wrapper">
-            <div class="action_items" @click="e => showAction(e, 'reprice')">
+<!--            @click="e => showAction(e, 'reprice')"-->
+            <div class="action_items">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M17.7402 22.75H12.2602C11.8502 22.75 11.5102 22.41 11.5102 22C11.5102 21.59 11.8502 21.25 12.2602 21.25H17.7402C19.4002 21.25 20.7502 19.9 20.7502 18.24V17.8H19.6002C18.0902 17.8 16.8102 16.68 16.6902 15.24C16.6102 14.41 16.9102 13.6 17.5102 13.01C18.0202 12.49 18.7202 12.2 19.4702 12.2H20.7402V11.51C20.7402 9.85001 19.3902 8.5 17.7302 8.5H6.25023C4.59023 8.5 3.24023 9.85001 3.24023 11.51V13.24C3.24023 13.65 2.90023 13.99 2.49023 13.99C2.08023 13.99 1.74023 13.65 1.74023 13.24V11.51C1.74023 9.02001 3.76023 7 6.25023 7H17.7302C20.2202 7 22.2402 9.02001 22.2402 11.51V12.95C22.2402 13.36 21.9002 13.7 21.4902 13.7H19.4702C19.1202 13.7 18.8002 13.83 18.5702 14.07C18.2802 14.35 18.1402 14.73 18.1802 15.11C18.2402 15.77 18.8702 16.3 19.5902 16.3H21.4902C21.9002 16.3 22.2402 16.64 22.2402 17.05V18.24C22.2502 20.73 20.2302 22.75 17.7402 22.75Z" fill="#2C6CAC"/>
                 <path d="M2.5 13.16C2.09 13.16 1.75 12.82 1.75 12.41V7.84006C1.75 6.35006 2.69 5.00001 4.08 4.47001L12.02 1.47001C12.84 1.16001 13.75 1.27005 14.46 1.77005C15.18 2.27005 15.6 3.08005 15.6 3.95005V7.75003C15.6 8.16003 15.26 8.50003 14.85 8.50003C14.44 8.50003 14.1 8.16003 14.1 7.75003V3.95005C14.1 3.57005 13.92 3.22003 13.6 3.00003C13.28 2.78003 12.9 2.73003 12.54 2.87003L4.60001 5.87003C3.79001 6.18003 3.24001 6.97006 3.24001 7.84006V12.41C3.25001 12.83 2.91 13.16 2.5 13.16Z" fill="#2C6CAC"/>
@@ -259,7 +261,8 @@ export default{
               </svg>
             </div>
 
-            <p class="itinerary-p" @click="e => showAction(e, 'reprice')">Reprice</p>
+<!--            @click="e => showAction(e, 'reprice')"-->
+            <p class="itinerary-p">Reprice</p>
             <div style="position: relative" v-show="activeAction === 'reprice' && actionClicked">
               <div class="filter-by-modal">
                 <p class="filter-by-modal-p">Current Class (FXP)</p>

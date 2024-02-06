@@ -37,7 +37,10 @@ export default {
     },
     close(value){
       this.showPrintModal = value
-    }
+    },
+     triggeredEvent(value){
+      this.showPrintModal = value
+     }
   },
 
   computed: {
@@ -145,7 +148,7 @@ export default {
       </div>
       
       <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 3rem;">
-            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+            <ItenaryDetailsComponent @openPrintModal="triggeredEvent" :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
           </div>
       </div>
   </layout>
