@@ -3,41 +3,30 @@
 
         <div class="modal_child_wrapper">
             <div class="modal_child_wrapper_header">
-                <p>Deduct Ticket Wallet</p>
+                <h2>Charge Wallet</h2>
                 <svg  @click="close" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M12.9406 12.0002L17.8006 7.14017C17.9099 7.01264 17.9669 6.84859 17.9604 6.68081C17.954 6.51302 17.8844 6.35386 17.7657 6.23513C17.6469 6.1164 17.4878 6.04685 17.32 6.04037C17.1522 6.03389 16.9882 6.09096 16.8606 6.20017L12.0006 11.0602L7.14063 6.19351C7.0131 6.08429 6.84905 6.02722 6.68126 6.0337C6.51348 6.04018 6.35432 6.10974 6.23559 6.22847C6.11686 6.3472 6.04731 6.50635 6.04083 6.67414C6.03434 6.84192 6.09142 7.00597 6.20063 7.13351L11.0606 12.0002L6.19397 16.8602C6.12418 16.9199 6.0675 16.9935 6.02748 17.0762C5.98747 17.1589 5.96498 17.249 5.96143 17.3408C5.95789 17.4326 5.97336 17.5242 6.00687 17.6097C6.04039 17.6953 6.09123 17.773 6.1562 17.8379C6.22117 17.9029 6.29887 17.9537 6.38442 17.9873C6.46997 18.0208 6.56152 18.0363 6.65334 18.0327C6.74515 18.0292 6.83524 18.0067 6.91795 17.9667C7.00066 17.9266 7.0742 17.87 7.13397 17.8002L12.0006 12.9402L16.8606 17.8002C16.9882 17.9094 17.1522 17.9665 17.32 17.96C17.4878 17.9535 17.6469 17.8839 17.7657 17.7652C17.8844 17.6465 17.954 17.4873 17.9604 17.3195C17.9669 17.1518 17.9099 16.9877 17.8006 16.8602L12.9406 12.0002Z" fill="#444854"/>
                 </svg>
             </div>
             <div class="modal_child_wrapper_body">
+              <div style="margin-top: 1.5rem;">
+                <label class="label">Ticket Amount</label>
+                <div style="display: flex;align-items: center;gap: 1rem">
+
+                  <input class="input_amount"  :value="amount.booking.amount"  :disabled="isDisabled"/>
+                  <span @click="isDisabled = !isDisabled">Edit</span>
+                </div>
+
+              </div>
         
                 <div class="domain-registration">
-                    <p>Wallet Details</p>
-                    <!-- <div class="role-options" :class="{'role-options-active':isWallet}"  @click="isWallet=!isWallet">
-                        <svg  v-if="isWallet" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="20" height="20" rx="10" fill="#2C6CAC"/>
-                            <rect x="2" y="2" width="16" height="16" rx="8" fill="white"/>
-                            <rect x="5" y="5" width="10" height="10" rx="5" fill="#2C6CAC"/>
-                        </svg>
-                        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" fill="white" stroke="#C0CCDA"/>
-                        </svg>
-                        <div style="width: 100%;" >
-                            <p class="p-2" >Wallet</p>
-                        </div>
-                    </div> -->
-
                     <div :class="{'error':getError}">
-                        <p class="wallet_name">{{user}}</p>
+                        <p class="wallet_name"> {{user}}</p>
                         <p class="wallet_balance">Total Wallet Balance: <span :class="{'error':getError}">₦ {{formatAmount(balance)}}</span></p>
                         <p v-if="getError" class="insufficient_funds">{{getError}}</p>
                     </div>
 
-                    <div style="margin-top: 1.5rem;">
-                        <OnBoardingInput label="Amount"></OnBoardingInput>
-                        <div>
-                            <textarea placeholder="Narrations" class="formInput"></textarea>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -59,19 +48,19 @@ import OnBoardingInput from '../Inputs/OnBoardingInput.vue';
 export default{
     name:"WalletDedut",
     components:{Layout,OnBoardingButton,OnBoardingInput},
-    props:['balance', 'user', 'reference'],
+    props:['balance', 'user', 'reference', 'amount'],
     data(){
         return{
             isWallet:false,
             formatAmount,
             convertDurationToWords,
             convertToWord,
-            convertTo12HourFormat
+            convertTo12HourFormat,
+            isDisabled:false
         }
     },
     methods:{
         close(){
-    
             this.$emit('close', false)
     },
 
@@ -98,6 +87,22 @@ export default{
 
 
 <style scoped>
+.input_amount{
+  display: flex;
+  width: 100%;
+  height: 4rem;
+  padding: 1.125rem 0 1.125rem 1.25rem;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.375rem;
+  border: 1px solid #EFF2F7;
+  background:  #F9FAFC;
+}
+
+.label{
+
+}
+
 .insufficient_funds{
     color: var(--error-red, #F04444);
     font-family: 'Product Sans';
