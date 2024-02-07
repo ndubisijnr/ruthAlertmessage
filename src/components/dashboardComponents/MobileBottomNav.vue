@@ -83,11 +83,11 @@ export default {
 </script>   
 <style scoped>
 .bottom_nav_wrapper{
-    display: none;
+  display: none;
 }
 
 @media (max-width: 1024px) {
-    
+
 
 #bottom_nav a.router-link-exact-active {
   border-radius: 1.25rem;
@@ -102,7 +102,7 @@ export default {
     font-weight: 400;
     line-height: normal;
 }
-    .bottom_nav_wrapper{
+.bottom_nav_wrapper{
         display: flex;
         padding: 1rem 1.5rem;
         align-items: center;

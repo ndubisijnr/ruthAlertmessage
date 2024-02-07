@@ -797,6 +797,7 @@ export default {
     align-items: center;
     gap: 42.625rem;
     flex-shrink: 0;
+    width: 80rem;
 }
 
 
@@ -935,7 +936,7 @@ export default {
 }
 
 .table {
-  width: 70.625rem;
+  width: 80rem;
   overflow-x: scroll;
   margin-top: 0.25rem;
 }

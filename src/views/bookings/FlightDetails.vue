@@ -73,10 +73,10 @@ export default {
 
 <template>
   <layout v-slot:child-content>
-    <print-itenary-modal :contact_email="data?.contact_email" :booking_id="data?.booking_id" :contact_first_name="data?.contact_first_name" :contact_last_name="data?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
+    <print-itenary-modal :contact_email="data?.contact_email"  :contact_first_name="data?.contact_first_name" :contact_last_name="data?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
 
 
-    <div class="overall">
+    <div class="overall" id="details_wrapper">
     
         <div class="wrapper">
         <div class="breadcrumb">
