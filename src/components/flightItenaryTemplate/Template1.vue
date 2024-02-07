@@ -1,12 +1,13 @@
 <template>
-  <div style="display: flex;justify-content: center;width: 100%" class="animate__animated animate__zoomIn">
+  <div style="transform: scale(.9)" class="animate__animated animate__zoomIn">
     <div class="invoice-wrapper">
       <div class="invoice">
 
         <div class="first-invoice-row">
           <div class="back-and-logo-area">
             <div>
-              <img src="../../assets/Cards/logo.svg" />
+              <img v-if="getUser.logo" :src="getUser.logo" />
+              <p class="tenant_name">{{getUser.name}}</p>
             </div>
           </div>
           <div class="button-area" id="hiddenOnPrint1">
@@ -38,7 +39,7 @@
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">Booking ID : </p>
-                <p class="value"> {{booking_id}} </p>
+                <p class="value"> {{getData.reference}} </p>
               </div>
               <div style="display: flex;gap: 10px;">
                 <p class="key">PNR: </p>
@@ -52,7 +53,7 @@
           <div class="third-invoice-row-and-table">
 
             <!--     outbound-->
-            <div v-for="(i,index) in  getData?.outbound" class="flight_info_wrapper" :key="index">
+            <div class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <g clip-path="url(#clip0_2645_19017)">
@@ -66,54 +67,57 @@
                 </svg>
                 <span class="departure_flight">Departure Flight</span>
               </div>
-              <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
-                <div class="equal-height-table_item">
-                  <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
+
+              <div v-for="(i,index) in  getData?.outbound" :key="index">
+                <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
+                  <div class="equal-height-table_item">
+                    <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
+                      <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" fill="white"/>
+                    </svg>
+                    <p class="flight_info_text">{{getCityByCityCode(i.airport_to)}} ({{ i.airport_to }})</p>
+                  </div>
+                  <div>
+                    <p class="flight_info_text">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                  </div>
+                </div>
+
+                <div class="flight_info2">
+                  <div>
+                    <p class="key">{{i.flight_number}} </p>
+                    <p class="value">Flight No.</p>
+                  </div>
+                  <div>
+                    <p class="key">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                    <p class="value"> Departure </p>
+                  </div>
+                  <div>
+                    <p class="key">{{convertDurationToWords(i.duration)}} </p>
+                    <p class="value">Duration</p>
+                  </div>
+                  <div>
+                    <p class="key">{{i.arrival_time ? convertToWord(i.arrival_time) : '02 : 30 PM'}}</p>
+                    <p class="value">Arrival</p>
+                  </div>
+                  <div>
+                    <p class="key">{{ getData?.outbound_stops }}</p>
+                    <p class="value">Stops </p>
+                  </div>
+
+                </div>
+
+                <div class="flight_info">
+                  <div class="flight_info_item">
+                    <p class="airport">{{getAirportNamesByCityCode(i.airport_from)}} ({{i.airport_from}})</p>
+                    <p class="time">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
+                  </div>
                   <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
-                    <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" fill="white"/>
+                    <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
                   </svg>
-                  <p class="flight_info_text">{{getCityByCityCode(i.airport_to)}} ({{ i.airport_to }})</p>
-                </div>
-                <div>
-                  <p class="flight_info_text">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
-                </div>
-              </div>
-
-              <div class="flight_info2">
-                <div>
-                  <p class="key">{{i.flight_number}} </p>
-                  <p class="value">Flight No.</p>
-                </div>
-                <div>
-                  <p class="key">{{convertToWord(i.departure_time)}} {{ convertTo12HourFormat(i.departure_time) }}</p>
-                  <p class="value"> Departure </p>
-                </div>
-                <div>
-                  <p class="key">{{convertDurationToWords(i.duration)}} </p>
-                  <p class="value">Duration</p>
-                </div>
-                <div>
-                  <p class="key">{{i.arrival_time ? convertToWord(i.arrival_time) : '02 : 30 PM'}}</p>
-                  <p class="value">Arrival</p>
-                </div>
-                <div>
-                  <p class="key">{{ getData?.outbound_stops }}</p>
-                  <p class="value">Stops </p>
-                </div>
-
-              </div>
-
-              <div class="flight_info">
-                <div class="flight_info_item">
-                  <p class="airport">{{getAirportNamesByCityCode(i.airport_from)}} ({{i.airport_from}})</p>
-                  <p class="time">{{ convertToWord(i.departure_time) }} {{ convertTo12HourFormat(i.departure_time) }}</p>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
-                  <path d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z" :fill="custom_theme ? custom_theme.color : default_theme.color"/>
-                </svg>
-                <div class="flight_info_item">
-                  <p class="airport">{{getAirportNamesByCityCode(i.airport_to)}} ({{i.airport_to}})</p>
-                  <p class="time">{{ convertToWord(i.arrival_time) }} {{ convertTo12HourFormat(i.arrival_time) }}</p>
+                  <div class="flight_info_item">
+                    <p class="airport">{{getAirportNamesByCityCode(i.airport_to)}} ({{i.airport_to}})</p>
+                    <p class="time">{{ convertToWord(i.arrival_time) }} {{ convertTo12HourFormat(i.arrival_time) }}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,8 +350,22 @@ export default {
     backToHome(){
       router.push({path:'/dashboard'})
     },
-    printPage() {
-      window.print();
+    async printPage() {
+      const mobileNave = document.getElementById('bottom_nav')
+      const closeBtn = document.getElementById('close')
+      const detailsWrapper = document.getElementById('details_wrapper')
+      const header = document.getElementById('header')
+      const modalWrapper = document.getElementById('modal_wrapper')
+      await mobileNave.classList.add('exclude-from-print')
+      await closeBtn.classList.add('exclude-from-print')
+      await header.classList.add('exclude-from-print')
+      await detailsWrapper.classList.add('exclude-from-print')
+      await modalWrapper.classList.add('set-background-white')
+      await window.print();
+      await closeBtn.classList.remove('exclude-from-print')
+      await header.classList.remove('exclude-from-print')
+      await detailsWrapper.classList.remove('exclude-from-print')
+      await modalWrapper.classList.remove('set-background-white')
     },
     saveAsPDF() {
       const element = document.getElementById('pdf-to-download'); // You can select any HTML element to save as PDF. For example, 'document.getElementById('myElement')' to save a specific element.
@@ -395,9 +413,7 @@ export default {
     },
 
     getUser(){
-      if(localStorage.user){
-        return JSON.parse(localStorage.user)
-      }
+      return storeUtils.fireAway().global.Tenant
     },
 
     getData(){
@@ -418,13 +434,16 @@ export default {
 }
 </script>
 
-<style scoped>
-@media print {
-    body {
-      -webkit-print-color-adjust: exact; /* For WebKit browsers like Chrome and Safari */
-      background-color: #fff; /* Specify a background color if needed */
-    }
-  }
+<style>
+
+.exclude-from-print {
+  display: none !important;
+}
+
+.set-background-white{
+  background: #fff !important;
+}
+
 .layover{
   display: flex;
   width: 33.25rem;
@@ -432,7 +451,6 @@ export default {
   gap:2rem;
   justify-content: center;
   margin: 0 auto;
-  border: 1px solid;
 }
 
 .layover_text{
@@ -452,21 +470,22 @@ export default {
   font-weight: 400;
   line-height: 1.75rem; /* 140% */
 }
-@media print {
-  /* Hide the element with the ID "hiddenOnPrint" when printing */
-  #hiddenOnPrint1 {
-    display: none;
-  }
-  #hiddenOnPrint2 {
-    display: none !important;
-  }
-  #hiddenOnPrint3 {
-    display: none;
-  }
 
-  #showWhenPrint{
-    display: block !important;
-  }
+@media print {
+/*    !* Hide the element with the ID "hiddenOnPrint" when printing *!*/
+    #hiddenOnPrint1 {
+        display: none;
+    }
+    #hiddenOnPrint2 {
+       display: none !important;
+   }
+    #hiddenOnPrint3 {
+        display: none;
+   }
+
+    #showWhenPrint{
+        display: block !important;
+    }
 }
 
 .flight_info_wrapper{
@@ -537,10 +556,6 @@ export default {
   line-height: 1.75rem; /* 175% */
 }
 
-#showWhenPrint{
-  display: none;
-}
-
 .time{
   color: var(--black-text-01, #1D1E2C);
   font-family: 'Product Sans';
@@ -557,9 +572,11 @@ export default {
   font-weight: 700;
   line-height: 28px; /* 175% */
 }
+
 .last-row{
   text-align: right;
 }
+
 .billing h4, h, p{
   padding-bottom: 7px;
   padding-top: 7px;
@@ -568,6 +585,7 @@ export default {
   font-weight: 400;
   line-height: 24px;
 }
+
 .equal-height-table {
   width: 100%;
   border: 1px solid #DFE6ED;
@@ -577,7 +595,6 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 
 .equal-height-table_item{
   display: flex;
@@ -592,6 +609,7 @@ export default {
   text-align: start;
 
 }
+
 .invoice{
   width: 100%;
 }
@@ -610,14 +628,12 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
-
 }
+
 .invoice-wrapper{
   width: 56.25rem;
   background-color: #FFFFFF;
   padding: 2rem 2rem;
-  transform: scale(1);
-  transform-origin: 0 0;
   display: flex;
   justify-content: center;
   margin: 2rem;
@@ -627,6 +643,11 @@ export default {
   .invoice-wrapper{
     padding: 0;
   }
+
+  .exclude-from-print {
+    display: none !important;
+  }
+
 
   .invoice{
     padding: 20px;
@@ -695,7 +716,7 @@ export default {
   font-style: normal;
   font-weight: 500;
   line-height: 24px; /* 150% */
-
 }
+
 </style>
 

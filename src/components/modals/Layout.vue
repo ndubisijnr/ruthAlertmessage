@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_wrapper ">
+  <div class="modal_wrapper" id="modal_wrapper">
     <div class="main-main animate__animated animate__zoomInDown">
       <slot name="children"></slot>
     </div>

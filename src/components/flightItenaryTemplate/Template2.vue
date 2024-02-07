@@ -47,7 +47,7 @@
                 </div>
                 <div style="display: flex;gap: 10px;">
                   <p class="key">Booking ID : </p>
-                  <p class="value"> {{booking_id}} </p>
+                  <p class="value"> {{getData.reference}} </p>
                 </div>
                 <div style="display: flex;gap: 10px;">
                   <p class="key">PNR: </p>
@@ -236,6 +236,10 @@
     #showWhenPrint{
       display: block !important;
     }
+  }
+
+  .exclude-from-print {
+    display: none !important;
   }
 
   .tenant_name{
