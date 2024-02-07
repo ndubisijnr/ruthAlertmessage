@@ -33,7 +33,7 @@
 
               
               <div class="filter-by-modal">
-                <p class="filter-by-modal-p" @click="filterValue='pending', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'pending'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <p class="filter-by-modal-p" @click="filterValue='unresolved', doFilter()">Pending Support (Default) <svg v-if="filterValue === 'unresolved'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="8" fill="#159D54"/>
                   <path d="M5.3335 7.86272L6.96313 9.33333L10.6668 6" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></p>
@@ -56,13 +56,13 @@
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Issuance" :number="getSummary?.issuance_count "></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
-              <bookings-cards v-else title="Voidance" :number="getSummary?.voided_count"></bookings-cards>
+              <bookings-cards v-else title="Void" :number="getSummary?.voided_count"></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Refund" :number="getSummary?.refunded_count"></bookings-cards>
               <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
               <bookings-cards v-else title="Exchange" :number="getSummary?.exchanged_count"></bookings-cards>
-              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>
-              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>
+<!--              <bookings-card-loading v-if="getLoadingSummary"></bookings-card-loading>-->
+<!--              <bookings-cards v-else title="Others" :number="getSummary?.others_count"></bookings-cards>-->
             </div>
           </div>
           <div style="margin: 3.5rem 0">
@@ -136,7 +136,7 @@ import ModalLoader from "../../components/loaders/ModalLoader.vue";
         {key:"customer_name", label:"Agent Name"},
         {key:"ticket_amount", label:"Ticket Amount_"},
         {key:"airline", label:"Airline_"},
-        {key:"created_at", label:"Booking Date"},
+        {key:"created_at", label:"Request Date/Time"},
         {key:"type", label:"Type"},
         {key:"status", label:"Itinerary Status"},
         // {key:"Action", label:"Action",id:"member"},

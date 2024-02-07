@@ -445,7 +445,7 @@
                         <!-- template {roles number}  -->
                         <span v-else-if="h.key === 'created_at'">{{
                             convertToWord(j?.created_at)
-                        }}</span>
+                        }}-{{convertTo12HourFormat(j?.created_at)}}</span>
 
                         <!-- template {is_coporate number}  -->
                         <span v-else-if="h.key === 'is_corporate'">{{
@@ -524,7 +524,7 @@ import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";
-import { formatAmount } from "../../mixins/flightUtil";
+import {convertTo12HourFormat, formatAmount} from "../../mixins/flightUtil";
 
 export default {
     name: "BaseTable",
@@ -557,6 +557,7 @@ export default {
     },
 
     methods: {
+      convertTo12HourFormat,
         closePop() {
             console.log("click");
         },
@@ -796,17 +797,12 @@ export default {
     align-items: center;
     gap: 42.625rem;
     flex-shrink: 0;
-}
-.table-container {
-    /* width: 68.625rem; */
-    overflow-x: scroll;
-    justify-content: center;
-    margin-top: 0.25rem;
-    /*margin-bottom: 13rem;*/
+    width: 80rem;
 }
 
+
 @media (max-width: 1024px) {
-    .table-container {
+    .table {
         overflow-x: scroll;
         width: max-content;
     }
@@ -849,10 +845,12 @@ export default {
 }
 
 .table {
-    /* border-collapse: collapse; */
-    width: 100%;
+    border-collapse: collapse;
+    //width: 100%;
     /* margin: 0 auto; */
     margin-bottom: 3rem;
+    width: 100%;
+    overflow-x: scroll;
 }
 
 .table-label {
@@ -935,5 +933,11 @@ export default {
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+.table {
+  width: 80rem;
+  overflow-x: scroll;
+  margin-top: 0.25rem;
 }
 </style>

@@ -7,9 +7,11 @@ import router from "@/router";
 import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
 import storeUtils from "../../utils/storeUtils";
 import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
+import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
 export default {
   name: "FlightDetails",
-  components:{PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
+  components:{Template1, PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
+  props:['booking_id','contact_first_name','contact_last_name', 'contact_email'],
   data(){
     return{
       data:null,
@@ -26,7 +28,7 @@ export default {
       router.push({name:"Bookings_Details"})
     },
      printAction(){
-       storeUtils.fireAway().print?.commitPrintLoading(true, this.data)
+       storeUtils.fireAway().print?.commitPrintLoading(true, this.data.flight)
        this.showPrintModal = true
 
        // if(this.getTemplateId === 1) router.push({name:'Template1'})
@@ -35,7 +37,10 @@ export default {
     },
     close(value){
       this.showPrintModal = value
-    }
+    },
+     triggeredEvent(value){
+      this.showPrintModal = value
+     }
   },
 
   computed: {
@@ -68,10 +73,10 @@ export default {
 
 <template>
   <layout v-slot:child-content>
-    <print-itenary-modal v-if="showPrintModal" @close="close"></print-itenary-modal>
+    <print-itenary-modal :contact_email="data?.contact_email"  :contact_first_name="data?.contact_first_name" :contact_last_name="data?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
 
 
-    <div class="overall">
+    <div class="overall" id="details_wrapper">
     
         <div class="wrapper">
         <div class="breadcrumb">
@@ -143,7 +148,7 @@ export default {
       </div>
       
       <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 3rem;">
-            <ItenaryDetailsComponent :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+            <ItenaryDetailsComponent @openPrintModal="triggeredEvent" :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
           </div>
       </div>
   </layout>

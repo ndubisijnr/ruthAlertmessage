@@ -8,46 +8,11 @@ import storeUtils from "@/utils/storeUtils";
 export default {
   name: "PrintItenaryModal",
   components: { Template1, Layout, Template2, Template3 },
+  props: ["booking_id", "contact_first_name", "contact_last_name", "contact_email"],
+
   methods: {
     close() {
       this.$emit("close", false);
-    },
-    printComponent(componentRef) {
-      const pdfName = "temp.pdf";
-      const elementToCapture = this.$refs[componentRef];
-      console.log(elementToCapture);
-      var HTML_Width = elementToCapture.offsetWidth;
-      var HTML_Height = elementToCapture.offsetHeight;
-      var top_left_margin = 15;
-      var PDF_Width = HTML_Width + top_left_margin * 2;
-      var PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
-      var canvas_image_width = HTML_Width;
-      var canvas_image_height = HTML_Height;
-      var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-      html2canvas(elementToCapture, { scale: 2 }).then(function (canvas) {
-        var imgData = canvas.toDataURL("image/png", 1.0);
-        var pdf = new jsPDF("p", "pt", [PDF_Width, PDF_Height]);
-        pdf.addImage(
-          imgData,
-          "PNG",
-          top_left_margin,
-          top_left_margin,
-          canvas_image_width,
-          canvas_image_height
-        );
-        for (var i = 1; i <= totalPDFPages; i++) {
-          pdf.addPage(PDF_Width, PDF_Height);
-          pdf.addImage(
-            imgData,
-            "PNG",
-            top_left_margin,
-            -(PDF_Height * i) + top_left_margin * 4,
-            canvas_image_width,
-            canvas_image_height
-          );
-        }
-        pdf.save(pdfName);
-      });
     },
   },
   computed: {
@@ -63,14 +28,28 @@ export default {
 <template>
   <layout v-slot:children>
     <Template1
-      @printComponent="printComponent"
-      ref="Template1"
+      :contact_email="contact_email"
+      :booking_id="booking_id"
+      :contact_first_name="contact_first_name"
+      :contact_last_name="contact_last_name"
       v-if="getTemplateId === 1"
     ></Template1>
-    <Template2 ref="Template2" v-if="getTemplateId === 2"></Template2>
-    <Template3 ref="Template3" v-if="getTemplateId === 3"></Template3>
+    <Template2
+      :contact_email="contact_email"
+      :booking_id="booking_id"
+      :contact_first_name="contact_first_name"
+      :contact_last_name="contact_last_name"
+      v-if="getTemplateId === 2"
+    ></Template2>
+    <Template3
+      :contact_email="contact_email"
+      :booking_id="booking_id"
+      :contact_first_name="contact_first_name"
+      :contact_last_name="contact_last_name"
+      v-if="getTemplateId === 3"
+    ></Template3>
 
-    <div class="close">
+    <div class="close" id="close">
       <img src="../../assets/cancle.svg" alt="close" @click="close()" />
     </div>
   </layout>

@@ -10,7 +10,8 @@
         <div class="first-invoice-row">
           <div class="back-and-logo-area">
             <div>
-              <img src="../../assets/Cards/logo.svg" />
+              <img v-if="getUser.logo" :src="getUser.logo" />
+              <p class="tenant_name">{{ getUser.name }}</p>
             </div>
           </div>
           <div class="button-area" id="hiddenOnPrint1">
@@ -474,8 +475,22 @@ export default {
     backToHome() {
       router.push({ path: "/dashboard" });
     },
-    printPage() {
-      window.print();
+    async printPage() {
+      const mobileNave = document.getElementById("bottom_nav");
+      const closeBtn = document.getElementById("close");
+      const detailsWrapper = document.getElementById("details_wrapper");
+      const header = document.getElementById("header");
+      const modalWrapper = document.getElementById("modal_wrapper");
+      await mobileNave.classList.add("exclude-from-print");
+      await closeBtn.classList.add("exclude-from-print");
+      await header.classList.add("exclude-from-print");
+      await detailsWrapper.classList.add("exclude-from-print");
+      await modalWrapper.classList.add("set-background-white");
+      await window.print();
+      await closeBtn.classList.remove("exclude-from-print");
+      await header.classList.remove("exclude-from-print");
+      await detailsWrapper.classList.remove("exclude-from-print");
+      await modalWrapper.classList.remove("set-background-white");
     },
 
     printComponent() {
@@ -732,6 +747,7 @@ p {
   font-weight: 400;
   line-height: 24px;
 }
+
 .equal-height-table {
   width: 100%;
   border: 1px solid #dfe6ed;
@@ -778,8 +794,6 @@ p {
   width: 56.25rem;
   background-color: #ffffff;
   padding: 2rem 2rem;
-  transform: scale(1);
-  transform-origin: 0 0;
   display: flex;
   justify-content: center;
   margin: 2rem;

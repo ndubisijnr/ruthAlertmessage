@@ -29,10 +29,7 @@ Client.interceptors.request.use(config => {
     return config
 })
 
-Client.interceptors.response.use(async response => {
-
-    return response
-}, error => {
+Client.interceptors.response.use(async response => {return response}, error => {
     console.log(error)
     // this needs to be && not || 
     if (error.response.status !== 200 || error.response.status !== 201) catchErrorHandler(error);

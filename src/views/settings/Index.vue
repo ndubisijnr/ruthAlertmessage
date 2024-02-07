@@ -3095,13 +3095,12 @@ export default {
 }
 
 .inner-tab-nav {
-    display: inline-flex;
-    justify-content: start;
+    display:flex;
+    justify-content: center;
     gap: 1.5rem;
     list-style: none;
     padding: 0;
     width: 100%;
-    overflow: scroll;
 }
 
 .inner-tab-nav > a {
