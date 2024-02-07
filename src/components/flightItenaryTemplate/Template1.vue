@@ -1,10 +1,5 @@
 <template>
-  <div
-    id="print-component"
-    style="display: flex; justify-content: center; width: 100%"
-    class="print-component animate__animated animate__zoomIn"
-    ref="printComponent"
-  >
+  <div class="animate__animated animate__zoomIn">
     <div class="invoice-wrapper">
       <div class="invoice">
         <div class="first-invoice-row">
@@ -484,12 +479,12 @@ export default {
       await mobileNave.classList.add("exclude-from-print");
       await closeBtn.classList.add("exclude-from-print");
       await header.classList.add("exclude-from-print");
-      await detailsWrapper.classList.add("exclude-from-print");
+      await detailsWrapper?.classList.add("exclude-from-print");
       await modalWrapper.classList.add("set-background-white");
       await window.print();
       await closeBtn.classList.remove("exclude-from-print");
       await header.classList.remove("exclude-from-print");
-      await detailsWrapper.classList.remove("exclude-from-print");
+      await detailsWrapper?.classList.remove("exclude-from-print");
       await modalWrapper.classList.remove("set-background-white");
     },
 
@@ -578,13 +573,7 @@ export default {
 };
 </script>
 
-<style>
-@media print {
-  /* body {
-    -webkit-print-color-adjust: exact;
-    background-color: #fff; 
-     visibility: hidden;
-  } */
+<style scoped>
 
   body * {
     visibility: hidden;
