@@ -142,7 +142,7 @@ export default {
 
   <layout v-slot:child-content>
     <print-itenary-modal :contact_email="getRequestDetails?.booking.contact_email" :booking_id="getRequestDetails?.booking_id" :contact_first_name="getRequestDetails?.booking.contact_first_name" :contact_last_name="getRequestDetails?.booking.contact_last_name"  v-if="printing" @close="close_"></print-itenary-modal>
-    <wallet-dedut :amount="getRequestDetails" :user="getWallet?.wallet_name" :balance="getWallet?.balance"  @close="close" v-if="showChargeWallet"></wallet-dedut>
+    <wallet-dedut :amount="getRequestDetails" :reference="getRequestDetails.booking.reference" :user="getWallet?.wallet_name" :balance="getWallet?.balance"  @close="close" v-if="showChargeWallet"></wallet-dedut>
     <div class="overall">
         <div class="wrapper">
         <div class="breadcrumb">

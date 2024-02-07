@@ -13,8 +13,9 @@
                 <label class="label">Ticket Amount</label>
                 <div style="display: flex;align-items: center;gap: 1rem">
 
-                  <input class="input_amount"  :value="amount.booking.amount"  :disabled="isDisabled"/>
-                  <span @click="isDisabled = !isDisabled">Edit</span>
+
+                  <input class="input_amount" id="input_amount"  v-model="amountValue"  :disabled="isDisabled"/>
+                  <span class="edit" @click="isDisabled = !isDisabled">Edit</span>
                 </div>
 
               </div>
@@ -31,7 +32,7 @@
             </div>
 
             <div class="modal_child_wrapper_footer">
-                <OnBoardingButton :loading="getLoading" border="none" @click="doPay(reference)" :disabled="!isWallet || getLoading" textNode="Dedut Wallet"></OnBoardingButton>
+                <OnBoardingButton :loading="getLoading" border="none" @click="doPay"  textNode="Charge Wallet"></OnBoardingButton>
             </div>
         </div>
 
@@ -44,6 +45,7 @@ import OnBoardingButton from '../Buttons/OnBoardingButton.vue';
 import { formatAmount, convertDurationToWords, convertToWord, convertTo12HourFormat } from '../../mixins/flightUtil';
 import storeUtils from '../../utils/storeUtils';
 import OnBoardingInput from '../Inputs/OnBoardingInput.vue';
+import flightRequest from "@/model/FlightRequest";
 
 export default{
     name:"WalletDedut",
@@ -56,7 +58,9 @@ export default{
             convertDurationToWords,
             convertToWord,
             convertTo12HourFormat,
-            isDisabled:false
+            isDisabled:false,
+            model:flightRequest.chargeWallet,
+            amountValue:this.amount.booking.amount
         }
     },
     methods:{
@@ -64,8 +68,11 @@ export default{
             this.$emit('close', false)
     },
 
-    doPay(value){
-      storeUtils.fireAway().flight?.handleFlightPayment(value)
+    doPay(){
+      const amount = document.getElementById('input_amount')
+      this.model.booking_reference = this.reference
+      this.model.amount = amount.value
+      storeUtils.fireAway().flight?.chargeWallet(this.model)
     }
     },
 
@@ -87,6 +94,16 @@ export default{
 
 
 <style scoped>
+.edit{
+  color: #F1A002;
+  cursor: pointer;
+  /* 16px/bold */
+  font-family: "Product Sans";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+}
 .input_amount{
   display: flex;
   width: 100%;
@@ -99,9 +116,6 @@ export default{
   background:  #F9FAFC;
 }
 
-.label{
-
-}
 
 .insufficient_funds{
     color: var(--error-red, #F04444);
@@ -367,39 +381,16 @@ background: var(--primary-05, #EAF0F7);
 
 }
 
-.label.focused{
-  position:absolute;
-  top:0.3rem;
-  left:1.25rem;
-  width: auto;
-  height:1.50rem;
-  font-size:0.88rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  text-transform: capitalize;
-  line-height: 1.5rem; /* 171.429% */
-  font-style: normal;
-  font-weight: 300;
-  color:  #575A65;
-  transition: ease-in-out .2s;
-  background-color: white;
-}
 
 .label{
-  position:absolute;
-  top:.5rem;
-  left:1.25rem;
-  width: auto;
-  height:1.50rem;
-  font-size:1rem;
-  text-transform: capitalize;
-  line-height: 1.7rem; /* 171.429% */
+  color: #1D1E2C;
+  /* 16px/bold */
+  font-family: "Product Sans";
+  font-size: 1rem;
   font-style: normal;
-  font-weight: 300;
-  color:  #575A65;
-  transition: ease-in .2s;
-  /*border: solid;*/
+  font-weight: 700;
+  line-height: 1.75rem; /* 175% */
+  margin-bottom: 1rem;
 }
 
 @media (max-width:1024px) {
