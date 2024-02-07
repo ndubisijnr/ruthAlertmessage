@@ -1,31 +1,53 @@
-import errorIcon from './assets/svgs/error.js'
-import exitIcon from './assets/svgs/exit.js'
-import successIcon from './assets/svgs/success.js'
-import closeIcon from './assets/svgs/close.js'
-
 // default icons
-const cancelImg = exitIcon()
-const errorImg = errorIcon()
-const successImg = successIcon()
-const closeImg = closeIcon()
-
-// define props 
+// import closeIcon from "./assets/svgs/close";
+// import successIcon from "./assets/svgs/success";
+// import exitIcon from "./assets/svgs/exit";
+// import errorIcon from "./assets/svgs/error";
+//
+// const cancelImg = errorIcon()
+// const errorImg =exitIcon()
+// const successImg = successIcon()
+// const closeImg = closeIcon()
+//
+// // define props
 const defaultProps = ['icon', 'title', 'timeout']
+
 var advancedProps = {
     header: 'An Error Occured',
     headerColor: '#fff',
     subtext: 'Some thing went wrong',
     subtextColor: '#fff',
+    errorTextColor:'#F04444',
+    successTextColor:'',
     svg: true,
     svgColor: '#fff',
     svgStroke: "",
-    backgroundColor: "#EB001B",
+    backgroundColor: "#FEEFEF", // updated the color
 }
 
 // define toast array to hold multiple toast
 var toastArr = []
 
-const createToastObj = (props) => {
+
+// functions
+
+function setTextColor(type){
+    switch (type) {
+        case 'error':
+            break;
+        case 'success':
+            break
+        case 'warning':
+            break
+        default:
+            0
+
+    }
+}
+
+
+const createToastObj = (props => {
+    console.log(props)
     // Create main element
     var toastObj = document.createElement('div')
     toastObj.style.backgroundColor = props.backgroundColor
@@ -33,16 +55,16 @@ const createToastObj = (props) => {
     // props check prevalance 
 
     // if svg is true 
-    if (props.svg) {
-        // create next child elements 
-        var iconCenter = document.createElement('div')
-        // add classes to elements
-        iconCenter.classList.add('ruth_alert_base_icon_center');
-        // ** add or create items to each child elements 
-        iconCenter.innerHTML = errorImg
-        // ** append children to main element in order
-        toastObj.appendChild(iconCenter)
-    }
+    // if (props.svg) {
+    //     // create next child elements
+    //     var iconCenter = document.createElement('div')
+    //     // add classes to elements
+    //     iconCenter.classList.add('ruth_alert_base_icon_center');
+    //     // ** add or create items to each child elements
+    //     // iconCenter.innerHTML = errorImg
+    //     // ** append children to main element in order
+    //     toastObj.appendChild(iconCenter)
+    // }
 
     // create next child elements 
     var statusText = document.createElement('div')
@@ -63,15 +85,15 @@ const createToastObj = (props) => {
     pHead.style.color = props.headerColor
 
     subtext.classList.add('ruth_alert_base_status_text-subtext');
-    subtext.innerHTML = props.subtext
-    subtext.style.color = props.subtextColor
+    subtext.innerHTML = props.title
+    subtext.style.color = "red"
 
     statusText.appendChild(pHead)
     statusText.appendChild(subtext)
 
     // closeButton
     closeButton.setAttribute('title', 'Close Toast')
-    closeButton.innerHTML = closeImg
+    // closeButton.innerHTML = closeImg
 
     // ** append children to main element in order
     toastObj.appendChild(statusText)
@@ -91,53 +113,52 @@ toastWrapper.id = 'alertMessage';
 // attach toast to body 
 rootElement.appendChild(toastWrapper);
 
-const RuthdoAlert = (props = null) => {
+const Ruth = {
 
-    return {
-        showError() {
-
-        },
-
-        open() {
-            if (toastArr.length) {
-                var advP = structuredClone(advancedProps)
-                // mutate the prop with accepted variables 
-                if (props && typeof props === 'object') {
-                    Object.entries(props).forEach(([key, value]) => {
-                        if (advP.hasOwnProperty(key)) {
-                            advP[key] = value
-                        }
-                    })
-                }
-                // pushes the object to the main arr 
-                toastArr.push(advP)
-                // creates the singular toast item 
-                var toastItem = createToastObj(advP)
-                // appends to the mother wrapper 
-                toastWrapper.appendChild(toastItem)
-            } else {
-                var advP = structuredClone(advancedProps)
-                // mutate the prop with accepted variables 
-                if (props && typeof props === 'object') {
-                    Object.entries(props).forEach(([key, value]) => {
-                        if (advP.hasOwnProperty(key)) {
-                            advP[key] = value
-                        }
-                    })
-                }
-                // pushes the object to the main arr 
-                toastArr.push(advP)
-                // creates the singular toast item 
-                var toastItem = createToastObj(advP)
-                // appends to the mother wrapper 
-                toastWrapper.appendChild(toastItem)
-            }
-        }
-    }
+     status(props = defaultProps){
+         // creates the singular toast item
+         var toastItem = createToastObj(props)
+         // appends to the mother wrapper
+         toastWrapper.appendChild(toastItem)
+         // if (toastArr.length) {
+         //     var advP = structuredClone(advancedProps)
+         //     // mutate the prop with accepted variables
+         //     if (props && typeof props === 'object') {
+         //         Object.entries(props).forEach(([key, value]) => {
+         //             if (advP.hasOwnProperty(key)) {
+         //                 advP[key] = value
+         //             }
+         //         })
+         //     }
+         //     // pushes the object to the main arr
+         //     toastArr.push(advP)
+         //     // creates the singular toast item
+         //     var toastItem = createToastObj(advP)
+         //     // appends to the mother wrapper
+         //     toastWrapper.appendChild(toastItem)
+         // }
+         // else {
+         //     var advP = structuredClone(advancedProps)
+         //     // mutate the prop with accepted variables
+         //     if (props && typeof props === 'object') {
+         //         Object.entries(props).forEach(([key, value]) => {
+         //             if (advP.hasOwnProperty(key)) {
+         //                 advP[key] = value
+         //             }
+         //         })
+         //     }
+         //     // pushes the object to the main arr
+         //     toastArr.push(advP)
+         //     // creates the singular toast item
+         //     var toastItem = createToastObj(advP)
+         //     // appends to the mother wrapper
+         //     toastWrapper.appendChild(toastItem)
+         // }
+     }
 
 
 }
 
-export default RuthdoAlert
+// export default RuthdoAlert
 
 

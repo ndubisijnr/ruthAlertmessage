@@ -4,11 +4,29 @@
   justify-content: flex-end;
   position: fixed;
   grid-gap: 24px;
-  bottom: 0;
-  right: 0;
   z-index: 99999;
   width: max-content;
   overflow: hidden;
+  border: solid;
+  background: black;
+}
+
+.ruth_alert_base_wrapper top_right{
+  bottom: 0;
+  right: 0;
+
+}
+.ruth_alert_base_wrapper top_left{
+  top: 0;
+  left: 0;
+}
+.ruth_alert_base_wrapper bottom_right{
+  bottom: 0;
+  right: 0;
+}
+.ruth_alert_base_wrapper bottom_left{
+  bottom: 0;
+  left: 0;
 }
 
 .ruth_alert_base_wrapper:has(.ruth_alert_base_status_wrapper) {
@@ -37,6 +55,7 @@
   min-width: 40px;
   width: 40px;
   height: 40px;
+  border: solid;
 }
 
 .ruth_alert_base_wrapper .ruth_alert_base_status_wrapper .ruth_alert_base_icon_center,
