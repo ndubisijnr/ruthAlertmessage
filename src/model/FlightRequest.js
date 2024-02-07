@@ -7,6 +7,13 @@ class FlightRequest{
         infants: 0,
       }
 
+      static chargeWallet =
+        {
+            booking_reference: null,
+            amount: null
+        }
+
+
       static multiCity = {
           destinations: [],
           adults: 1,

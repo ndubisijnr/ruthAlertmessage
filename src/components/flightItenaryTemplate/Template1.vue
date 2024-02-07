@@ -1,5 +1,5 @@
 <template>
-  <div style="transform: scale(.9)" class="animate__animated animate__zoomIn">
+  <div class="animate__animated animate__zoomIn">
     <div class="invoice-wrapper">
       <div class="invoice">
 
@@ -359,12 +359,12 @@ export default {
       await mobileNave.classList.add('exclude-from-print')
       await closeBtn.classList.add('exclude-from-print')
       await header.classList.add('exclude-from-print')
-      await detailsWrapper.classList.add('exclude-from-print')
+      await detailsWrapper?.classList.add('exclude-from-print')
       await modalWrapper.classList.add('set-background-white')
       await window.print();
       await closeBtn.classList.remove('exclude-from-print')
       await header.classList.remove('exclude-from-print')
-      await detailsWrapper.classList.remove('exclude-from-print')
+      await detailsWrapper?.classList.remove('exclude-from-print')
       await modalWrapper.classList.remove('set-background-white')
     },
     saveAsPDF() {
@@ -434,7 +434,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .exclude-from-print {
   display: none !important;

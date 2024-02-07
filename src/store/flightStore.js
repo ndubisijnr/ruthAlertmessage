@@ -5,6 +5,7 @@ import storeUtils from "../utils/storeUtils";
 import FlightRequest from '../model/FlightRequest';
 import { RuthdoAlert } from 'ruthly';
 import ItineraryService from "@/service/ItineraryService";
+import flightRequest from "../model/FlightRequest";
 
 export const useFlightStore = defineStore('flightStore', {
     state: () => ({
@@ -92,6 +93,22 @@ export const useFlightStore = defineStore('flightStore', {
                     break;
                 default:
                     break;
+
+            }
+        },
+
+
+        async chargeWallet(payload) {
+            this.loading = true
+            try {
+                const response = await FlightService.chargeWallet(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+                this.loading = false
+                if (responseData.success) {
+                    RuthdoAlert({tile:responseData.data, icon:'error'})
+                }
+            } catch (err) {
+                this.loading = false
 
             }
         },

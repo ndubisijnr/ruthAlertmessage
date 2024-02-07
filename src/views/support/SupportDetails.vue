@@ -9,9 +9,11 @@ import storeUtils from "../../utils/storeUtils";
 import ItineraryRequest from "../../model/ItineraryRequest"
 import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
 import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
+import ChargeWallet from "@/components/modals/ChargeWallet.vue";
+import walletDedut from "@/components/modals/WalletDedut.vue";
 export default {
   name: "SupportDetails",
-  components:{OnBoardingButton, Template1,Layout,FlightPayment,ItenaryDetailsComponent,PrintItenaryModal},
+  components:{OnBoardingButton,walletDedut, Template1,Layout,FlightPayment,ItenaryDetailsComponent,PrintItenaryModal},
   data(){
     return{
       data:null,
@@ -20,7 +22,8 @@ export default {
       convertTo12HourFormat,
       convertToWord,
       getYYYYMMDDFormat,
-      printing:false
+      printing:false,
+      showChargeWallet:false,
     }
   },
 
@@ -34,28 +37,38 @@ export default {
       console.log(value)
     },
 
+    close(value){
+      this.showChargeWallet = value
+    },
+
     viewDetails(obj){
       storeUtils.fireAway().print.commitPrintLoading('', obj.booking.flight)
       this.printing = true
     },
-
 
     submitSupportAction(){
       storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getUser.id, this.itCommentModel)
     },
 
     issueTicket(){
-      let value;
-      if(this.getRequestDetails.type === 'issuance') value = 'issued';
-      if(this.getRequestDetails.type === 'refund') value = 'refunded';
-      if(this.getRequestDetails.type === 'exchange') value = 'exchange';
-      if(this.getRequestDetails.type === 'void') value = 'void';
+      if(this.getRequestDetails.transition){
+        let value;
+        if(this.getRequestDetails.type === 'issuance') value = 'issued';
+        if(this.getRequestDetails.type === 'refund') value = 'refunded';
+        if(this.getRequestDetails.type === 'exchange') value = 'exchange';
+        if(this.getRequestDetails.type === 'void') value = 'void';
 
-      const request = {"status":value}
-      storeUtils.fireAway().itineneryStore.approveItineraryRequestAction(this.getRequestDetails.id, request)
+        const request = {"status":value}
+        storeUtils.fireAway().itineneryStore.approveItineraryRequestAction(this.getRequestDetails.id, request)
+      }else{
+        console.log(this.getRequestDetails)
+        this.showChargeWallet = true
+        storeUtils.fireAway().transaction.handleGetUserWallet(this.getRequestDetails?.manager_id)
+      }
+
     },
 
-     printAction(){
+    printAction(){
        storeUtils.fireAway().print?.commitPrintLoading(true, this.data)
        if(this.getTemplateId === 1) router.push({name:'Template1'})
        if(this.getTemplateId === 2) router.push({name:'Template2'})
@@ -65,6 +78,13 @@ export default {
   },
 
   computed: {
+    default_theme() {
+      return storeUtils.fireAway().theme.getDefault_theme;
+    },
+
+    custom_theme() {
+      return storeUtils.fireAway().theme.custom_theme;
+    },
     
     getFlights() {
       if (!this.data) return;
@@ -95,7 +115,10 @@ export default {
     },
     getTenantLoaded(){
       return storeUtils.fireAway().global.getTenantLoaded
-    }
+    },
+    getWallet(){
+      return storeUtils.fireAway().transaction.getUserWallet
+    },
   },
 
 
@@ -104,12 +127,13 @@ export default {
       if(a){
         storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id)
       };
-    }
+    },
   },
 
-
   mounted() {
-    if(this.getTenantLoaded) storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id);
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id);
+    }
   }
 }
 </script>
@@ -118,8 +142,7 @@ export default {
 
   <layout v-slot:child-content>
     <print-itenary-modal :contact_email="getRequestDetails?.booking.contact_email" :booking_id="getRequestDetails?.booking_id" :contact_first_name="getRequestDetails?.booking.contact_first_name" :contact_last_name="getRequestDetails?.booking.contact_last_name"  v-if="printing" @close="close_"></print-itenary-modal>
-
-
+    <wallet-dedut :amount="getRequestDetails" :reference="getRequestDetails.booking.reference" :user="getWallet?.wallet_name" :balance="getWallet?.balance"  @close="close" v-if="showChargeWallet"></wallet-dedut>
     <div class="overall">
         <div class="wrapper">
         <div class="breadcrumb">
@@ -129,6 +152,7 @@ export default {
           </svg>
             <p class="breadcrumb_list">{{ getRequestDetails?.booking?.contact_first_name }} {{getRequestDetails?.booking?.contact_last_name}}</p>
         </div>
+
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
            <p class="flight_details">Itinerary Support details</p>
@@ -178,7 +202,8 @@ export default {
               </div>
 
             </div>
-          </div>          
+          </div>
+
           <div style="width: 100%;margin-top: 3rem;">
           <p class="travel_section_info">Itinerary Request</p>
 
@@ -266,11 +291,9 @@ export default {
             </div>
 
             <div style="width: 100%;">
-            
               <div v-if="getRequestDetails?.type !== 'issuance'" style="margin-bottom: 1.5rem;">
                 <p class="label_text_ticket">Ticket Number <span class="required">*</span></p>
                 <div style="border: solid #C0D3E6;padding: 1rem;border-radius: 0.375rem;border: 1px solid var(--primary-15, #C0D3E6);background: var(--Color, #FFF);">
-                
                   <div v-for="(i, index) in getRequestDetails?.passengers" :key="index" style="display: flex;gap:1.5rem;align-items: center;justify-content: flex-start;margin-bottom: 0.5rem;">
                     <p class="ticket_name">{{ i.traveler }}</p>
                     <div style="padding: 0.25rem 0.75rem;border-radius: 1.25rem;background: #EAF0F7;">
@@ -280,10 +303,8 @@ export default {
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
-
               <div style="width: 100%;margin-bottom: 1.5rem;">
                 <div>
                   <div class="issuance_wrapper">     
@@ -292,19 +313,19 @@ export default {
                             
                         </div>
 
-                        <div v-if="getRequestDetails?.booking.status === 'issued'">
-                          <p class="issued">Issued</p>
+
+                        <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
+                          <OnBoardingButton :color="custom_theme ? custom_theme.color : default_theme.color"  @click="viewDetails(getRequestDetails)" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
+                          <div v-if="getRequestDetails?.booking.status === 'issued'">
+                            <p class="issued">Issued</p>
+                          </div>
+                          <OnBoardingButton v-else :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="!getRequestDetails.transition ? 'Charge Wallet' : getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
                         </div>
 
-                        <div v-else style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
-                            <OnBoardingButton @click="viewDetails(getRequestDetails)" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                            <OnBoardingButton :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
 
-                        </div>
                     </div>
                 </div>
               </div>
-
             </div>
 
             <div style="width: 100%;">
