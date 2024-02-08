@@ -1,7 +1,6 @@
 <template>
-  <div class="animate__animated animate__zoomIn">
-    <div class="invoice-wrapper">
-      <div class="invoice">
+    <div class="invoice-wrapper" id="invoice-wrapper">
+      <div class="invoice" id="invoice">
 
         <div class="first-invoice-row">
           <div class="back-and-logo-area">
@@ -17,9 +16,8 @@
           </div>
         </div>
         <div id="pdf-to-download">
-          <!-- <img src="../../src/assets/full-black-logo.svg" id="ondownload" style="display: none;margin-bottom: 20px" /> -->
 
-          <div class="invoice-receipt"> Flight Itinerary</div>
+          <p class="invoice-receipt"> Flight Itinerary</p>
 
           <div style="display: flex;justify-content: space-between;">
 
@@ -46,7 +44,7 @@
                 <p class="value">{{ getData?.pnr }}</p>
               </div>
             </div>
-            
+
           </div>
 
 
@@ -124,19 +122,6 @@
 
             <div v-for="(j,index) in  getData?.routes" class="flight_info_wrapper" :key="index">
               <div v-for="(i, index) in j.segments" :key="index">
-                <div style="display:flex;align-items: center;gap: 0.12rem">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <g clip-path="url(#clip0_2645_19017)">
-                      <path d="M0.66 18.43H19.66V20.43H0.66V18.43ZM20.23 9.07C20.02 8.27 19.19 7.79 18.39 8.01L13.08 9.43L6.18 3L4.25 3.51L8.39 10.68L3.42 12.01L1.45 10.47L0 10.86L2.59 15.35L19.16 10.92C19.97 10.69 20.44 9.87 20.23 9.07Z" fill="#575A65"/>
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_2645_19017">
-                        <rect width="24" height="24" fill="white"/>
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span class="departure_flight">Departure Flight</span>
-                </div>
                  <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
                   <div class="equal-height-table_item">
                     <p class="flight_info_text">{{ getCityByCityCode(i.airport_from) }} ({{ i.airport_from }})</p>
@@ -189,7 +174,6 @@
                 </div>
               </div>
             </div>
-
 
             <div v-if="getData?.inbound?.length" v-for="(i,index) in  getData?.inbound" class="flight_info_wrapper">
               <div style="display:flex;align-items: center;gap: 0.12rem">
@@ -287,42 +271,42 @@
               </div>
 
             </div>
-          </div>
 
-          <div class="flight_info_wrapper">
-            <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color,justifyContent: 'start', gap: '3.48rem'}">
-              <p class="flight_info_text" style="width: 11.25rem;">Passenger Name </p>
-              <p class="flight_info_text" style="width: 11.25rem;">Email</p>
-              <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
-            </div>
 
-            <div v-for="i in getData?.passengers" class="flight_info2" style="justify-content: start;">
-              <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
-              <p class="value" style="width: 11.25rem;">{{i.email}}</p>
-              <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
-            </div>
+            <div class="flight_info_wrapper">
+              <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color,justifyContent: 'start', gap: '3.48rem'}">
+                <p class="flight_info_text" style="width: 11.25rem;">Passenger Name </p>
+                <p class="flight_info_text" style="width: 11.25rem;">Email</p>
+                <p class="flight_info_text" style="width: 11.25rem;">Ticket </p>
+              </div>
 
-          </div>
-
-          <div class="last-row">
-            <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
-              <div class="equal-height-table_item">
-                <p class="flight_info_text">Ticket Receipt </p>
+              <div v-for="i in getData?.passengers" class="flight_info2" style="justify-content: start;">
+                <p class="value" style="width: 11.25rem;">{{i.title + ' ' +  i.first_name + ' ' +  i.last_name}}</p>
+                <p class="value" style="width: 11.25rem;">{{i.email}}</p>
+                <!-- <p class="value" style="width: 11.25rem;">Ticket </p> -->
               </div>
 
             </div>
-     
-            <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
-            <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
-            <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
+
+            <div class="last-row">
+              <div class="equal-height-table" :style="{background:custom_theme ? custom_theme.color : default_theme.color}">
+                <div class="equal-height-table_item">
+                  <p class="flight_info_text">Ticket Receipt </p>
+                </div>
+
+              </div>
+
+              <p><span class="sub-total">Total :</span>₦ {{formatAmount(getData?.amount)}} </p>
+              <!-- <h4><span class="sub-total">Sub-Total :</span> {{ formatAmount(getBookedFlight.amount) }} </h4>
+              <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
+            </div>
           </div>
+
+
         </div>
 
       </div>
-
     </div>
-  </div>
-
 </template>
 
 <script>
@@ -350,23 +334,25 @@ export default {
     backToHome(){
       router.push({path:'/dashboard'})
     },
+
     async printPage() {
-      const mobileNave = document.getElementById('bottom_nav')
-      const closeBtn = document.getElementById('close')
-      const detailsWrapper = document.getElementById('details_wrapper')
-      const header = document.getElementById('header')
-      const modalWrapper = document.getElementById('modal_wrapper')
-      await mobileNave.classList.add('exclude-from-print')
-      await closeBtn.classList.add('exclude-from-print')
-      await header.classList.add('exclude-from-print')
-      await detailsWrapper?.classList.add('exclude-from-print')
-      await modalWrapper.classList.add('set-background-white')
+      // const mobileNave = document.getElementById('bottom_nav')
+      // const closeBtn = document.getElementById('close')
+      // const detailsWrapper = document.getElementById('details_wrapper')
+      // const header = document.getElementById('header')
+      // const modalWrapper = document.getElementById('modal_wrapper')
+      // await mobileNave.classList.add('exclude-from-print')
+      // await closeBtn.classList.add('exclude-from-print')
+      // await header.classList.add('exclude-from-print')
+      // await detailsWrapper?.classList.add('exclude-from-print')
+      // await modalWrapper.classList.add('set-background-white')
       await window.print();
-      await closeBtn.classList.remove('exclude-from-print')
-      await header.classList.remove('exclude-from-print')
-      await detailsWrapper?.classList.remove('exclude-from-print')
-      await modalWrapper.classList.remove('set-background-white')
+      // await closeBtn.classList.remove('exclude-from-print')
+      // await header.classList.remove('exclude-from-print')
+      // await detailsWrapper?.classList.remove('exclude-from-print')
+      // await modalWrapper.classList.remove('set-background-white')
     },
+
     saveAsPDF() {
       const element = document.getElementById('pdf-to-download'); // You can select any HTML element to save as PDF. For example, 'document.getElementById('myElement')' to save a specific element.
       document.getElementById('ondownload').style.display='block'
@@ -389,6 +375,8 @@ export default {
       },100)
 
     },
+
+
     getAirportNamesByCityCode(city_code) {
       const airports = JSON.parse(localStorage?.airports)
       if (airports) {
@@ -425,25 +413,15 @@ export default {
     },
   },
 
-  mounted(){
-      if(this.$router.currentRoute.value.path === '/templates_1') this.printPage();
-      if(this.$router.currentRoute.value.path === '/templates_3') this.printPage();
-      if(this.$router.currentRoute.value.path === '/templates_2') this.printPage();
-   
-  }
+  mounted(){}
 }
 </script>
 
 <style scoped>
 
-.exclude-from-print {
-  display: none !important;
-}
+@media print {
 
-.set-background-white{
-  background: #fff !important;
 }
-
 .layover{
   display: flex;
   width: 33.25rem;
@@ -451,6 +429,7 @@ export default {
   gap:2rem;
   justify-content: center;
   margin: 0 auto;
+  background: #2C6CAC;
 }
 
 .layover_text{
@@ -634,9 +613,12 @@ export default {
   width: 56.25rem;
   background-color: #FFFFFF;
   padding: 2rem 2rem;
-  display: flex;
-  justify-content: center;
-  margin: 2rem;
+  //transform: scale(.8);
+  transform-origin:0 0 ;
+  height: 100vh;
+  overflow: scroll;
+  //display: flex;
+  //justify-content: center;
 }
 
 @media (max-width: 1024px) {

@@ -155,6 +155,12 @@ export default {
 </template>
 
 <style scoped>
+@media print {
+  #details_wrapper * {
+    visibility: hidden;
+  }
+}
+
 .overall{
   display: flex;
   align-items: center;

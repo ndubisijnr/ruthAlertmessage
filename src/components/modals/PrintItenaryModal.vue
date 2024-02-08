@@ -40,6 +40,11 @@ export default {
 </template>
 
 <style scoped>
+@media print {
+  .close {
+    visibility: hidden;
+  }
+}
 .close{
   //box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
   margin: 20px auto;
