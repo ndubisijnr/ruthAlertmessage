@@ -86,8 +86,8 @@ export default {
 
 
 
-          <div class="footer" v-if="isButtonRequired">
-            <on-boarding-button text-node="I have made payment" background="none" color="black" :border="``"></on-boarding-button>
+          <div class="modal_child_wrapper_footer" v-if="isButtonRequired">
+            <on-boarding-button text-node="I have made payment" @click="close"></on-boarding-button>
           </div>
 
         </div>

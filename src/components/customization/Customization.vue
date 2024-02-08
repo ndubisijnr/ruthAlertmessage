@@ -63,7 +63,7 @@ export default {
     },
 
 
-    uploadLogo(value){
+    logo_upload(value){
       this.logo = value
     },
 
@@ -154,7 +154,6 @@ export default {
             <p class="upload_favicon">Upload new logo</p>
           </div>
 
-
           <div v-if="getTenant.logo && !isChangingCacDocument" class="doc_pending_wrapper">
             <div  style="text-align: end">
               <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingCacDocument = true" alt="favicon_preview"/>
@@ -165,8 +164,7 @@ export default {
           </div>
 
 
-          <upload-documents-component v-else  @uploadLogo="uploadLogo" id="favicon" title="Upload  your website logo."></upload-documents-component>
-          <p> {{logo}}</p>
+          <upload-documents-component v-else  @file="logo_upload" id="logo" title="Upload  your website logo."></upload-documents-component>
 
 
         </div>
