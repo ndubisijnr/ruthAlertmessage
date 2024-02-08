@@ -574,34 +574,32 @@ export default {
 </script>
 
 <style scoped>
+body * {
+  visibility: hidden;
+}
+.print-component,
+.print-component * {
+  visibility: visible;
+}
 
-  body * {
-    visibility: hidden;
-  }
-  .print-component,
-  .print-component * {
-    visibility: visible;
-  }
+.print-component .invoice-wrapper {
+  padding-top: 0;
+  margin: 0;
+}
 
-  .print-component .invoice-wrapper {
-    padding-top: 0;
-    margin: 0;
-  }
+/* Hide the element with the ID "hiddenOnPrint" when printing */
+#hiddenOnPrint1 {
+  display: none;
+}
+#hiddenOnPrint2 {
+  display: none !important;
+}
+#hiddenOnPrint3 {
+  display: none;
+}
 
-  /* Hide the element with the ID "hiddenOnPrint" when printing */
-  #hiddenOnPrint1 {
-    display: none;
-  }
-  #hiddenOnPrint2 {
-    display: none !important;
-  }
-  #hiddenOnPrint3 {
-    display: none;
-  }
-
-  #showWhenPrint {
-    display: block !important;
-  }
+#showWhenPrint {
+  display: block !important;
 }
 </style>
 
