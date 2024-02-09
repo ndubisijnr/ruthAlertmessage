@@ -197,7 +197,7 @@ export default {
  
 } */
 
-.on_boarding_button:hover {
+.on_boarding_button:not(:disabled):hover {
   transition-duration: 0.1s;
   background-color: #3a3a3a;
 }
@@ -214,7 +214,7 @@ export default {
   transition: 0s;
 } */
 
-.on_boarding_button:active {
+.on_boarding_button:not(:disabled):active {
   top: 1px;
 }
 
@@ -234,7 +234,7 @@ export default {
   /* box-shadow: 0 0 10px 40px white; */
 }
 
-.on_boarding_button:active:after {
+.on_boarding_button:not(:disabled):active:after {
   box-shadow: 0 0 0 0 white;
   position: absolute;
   border-radius: 4em;
@@ -244,7 +244,7 @@ export default {
   transition: 0s;
 }
 
-.on_boarding_button:active {
+.on_boarding_button:not(:disabled):active {
   top: 1px;
 }
 </style>
