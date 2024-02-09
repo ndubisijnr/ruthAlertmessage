@@ -4,184 +4,249 @@ import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
 import router from "@/router";
-import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat } from "../../mixins/flightUtil";
+import {
+  formatAmount,
+  convertTo12HourFormat,
+  convertToWord,
+  getYYYYMMDDFormat,
+} from "../../mixins/flightUtil";
 import storeUtils from "../../utils/storeUtils";
 import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
 import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
 import ModalLoader from "@/components/loaders/ModalLoader.vue";
 export default {
   name: "FlightDetails",
-  components:{Template1, PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent,ModalLoader},
-  props:['booking_id','contact_first_name','contact_last_name', 'contact_email'],
-  data(){
-    return{
-      data:null,
+  components: {
+    Template1,
+    PrintItenaryModal,
+    OnBoardingButton,
+    Layout,
+    FlightPayment,
+    ItenaryDetailsComponent,
+    ModalLoader,
+  },
+  props: ["booking_id", "contact_first_name", "contact_last_name", "contact_email"],
+  data() {
+    return {
+      data: null,
       formatAmount,
       convertTo12HourFormat,
       convertToWord,
       getYYYYMMDDFormat,
-      showPrintModal:false
-    }
+      showPrintModal: false,
+    };
   },
 
-  methods:{
+  methods: {
+    printAction() {
+      storeUtils.fireAway().print?.commitPrintLoading(true, this.flightDetails);
+      // Open a new tab or window
 
-     printAction(){
-       storeUtils.fireAway().print?.commitPrintLoading(true, this.flightDetails)
-       // Open a new tab or window
-
-
-       // if(this.getTemplateId === 1) router.push({name:'Template1'})
-       // if(this.getTemplateId === 2) router.push({name:'Template2'})
-       // if(this.getTemplateId === 3) router.push({name:'Template3'})
+      // if(this.getTemplateId === 1) router.push({name:'Template1'})
+      // if(this.getTemplateId === 2) router.push({name:'Template2'})
+      // if(this.getTemplateId === 3) router.push({name:'Template3'})
     },
-    close(value){
-      this.showPrintModal = value
+    close(value) {
+      this.showPrintModal = value;
     },
-     triggeredEvent(value){
-      this.showPrintModal = value
-     }
+    triggeredEvent(value) {
+      this.showPrintModal = value;
+    },
   },
 
   computed: {
     getFlights() {
       if (!this.flightDetails) return;
-      return this.flightDetails?.passengers
+      return this.flightDetails?.passengers;
     },
     airlineDetails() {
       if (!this.flightDetails) return;
-      return this.flightDetails
+      return this.flightDetails;
     },
-    getLoadingFlightDetails(){
-      return storeUtils.fireAway().flight.getLoadingFlightDetails
+    getLoadingFlightDetails() {
+      return storeUtils.fireAway().flight.getLoadingFlightDetails;
     },
-    flightDetails(){
-      return storeUtils.fireAway().flight.getFlightDetails
+    flightDetails() {
+      return storeUtils.fireAway().flight.getFlightDetails;
     },
     getUser() {
       if (localStorage.user) {
-        return JSON.parse(localStorage.user)
+        return JSON.parse(localStorage.user);
       }
     },
-    getTemplateId(){    
-      if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
+    getTemplateId() {
+      if (storeUtils.fireAway().theme.custom_theme)
+        return storeUtils.fireAway().theme.custom_theme.template_id;
       return storeUtils.fireAway().theme.custom_theme.template_id;
-
     },
-    getTenantLoaded(){
-      return storeUtils.fireAway().global.getTenantLoaded
+    getTenantLoaded() {
+      return storeUtils.fireAway().global.getTenantLoaded;
     },
   },
 
-
-  watch:{
-    'getTenantLoaded'(a,b){
-      if(a){
-        storeUtils.fireAway().flight.handleGetFlightDetails(router?.currentRoute.value.params.id)
-      };
+  watch: {
+    getTenantLoaded(a, b) {
+      if (a) {
+        storeUtils
+          .fireAway()
+          .flight.handleGetFlightDetails(router?.currentRoute.value.params.id);
+      }
     },
   },
 
   mounted() {
-    if(this.getTenantLoaded && !this.flightDetails){
-      storeUtils.fireAway().flight.handleGetFlightDetails(router?.currentRoute.value.params.id);
+    if (this.getTenantLoaded && !this.flightDetails) {
+      storeUtils
+        .fireAway()
+        .flight.handleGetFlightDetails(router?.currentRoute.value.params.id);
     }
-  }
-
-
-}
+  },
+};
 </script>
 
 <template>
   <modal-loader v-if="getLoadingFlightDetails" message="Loading Flight"></modal-loader>
 
   <layout v-slot:child-content>
-    <print-itenary-modal :reference="flightDetails?.reference" :contact_email="flightDetails?.contact_details?.contact_email"  :contact_first_name="flightDetails?.contact_details?.contact_first_name" :contact_last_name="flightDetails?.contact_details?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
+    <print-itenary-modal
+      :reference="flightDetails?.reference"
+      :contact_email="flightDetails?.contact_details?.contact_email"
+      :contact_first_name="flightDetails?.contact_details?.contact_first_name"
+      :contact_last_name="flightDetails?.contact_details?.contact_last_name"
+      v-if="showPrintModal"
+      @close="close"
+    ></print-itenary-modal>
     <div class="overall" id="details_wrapper">
-        <div class="wrapper">
+      <div class="wrapper">
         <div class="breadcrumb">
-          <router-link :to="`/bookings/`"><p class="breadcrumb_list">Manage Flight Bookings</p></router-link>
-          <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
+          <router-link :to="`/bookings/`"
+            ><p class="breadcrumb_list">Manage Flight Bookings</p></router-link
+          >
+          <svg
+            style="margin-top: 0.5rem"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z"
+              fill="#575A65"
+            />
           </svg>
-            <p class="breadcrumb_list">{{ flightDetails?.contact_details?.contact_first_name }} {{flightDetails?.contact_details?.contact_last_name}}</p>
+          <p class="breadcrumb_list">
+            {{ flightDetails?.contact_details?.contact_first_name }}
+            {{ flightDetails?.contact_details?.contact_last_name }}
+          </p>
         </div>
 
-         <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
-           <p class="flight_details">Flight Details</p>
-           <on-boarding-button @click="printAction" btn-width="9.31rem" height="2.5rem" text-node="Print Itinerary"></on-boarding-button>
-         </div>
+        <div
+          class="align-center"
+          style="display: flex; justify-content: space-between; margin-top: 1.5rem"
+        >
+          <p class="flight_details">Flight Details</p>
+          <div class="flex_center gap-3">
+            <div v-if="flightDetails?.office_id" class="officeIdTag flex_center">
+              <span>Office ID {{ flightDetails.office_id }}</span>
+            </div>
+            <on-boarding-button
+              @click="printAction"
+              btn-width="9.31rem"
+              height="2.5rem"
+              text-node="Print Itinerary"
+            ></on-boarding-button>
+          </div>
+        </div>
 
-          <div>
-            <p class="travel_section_info">Travellers Information</p>
-            <div class="travel_section_info_box">
-              <div v-for="(i, index) in getFlights" style="display: flex;gap: 5.81rem">
-                <section>
-                  <p class="key">Customer {{ index + 1 }} Name</p>
-                  <p class="value">{{i.first_name}} {{i.last_name}}</p>
-                </section>
-                <section>
-                  <p class="key">Category</p>
-                  <p class="value">{{i.passenger_type}}</p>
-                </section>
+        <div>
+          <p class="travel_section_info">Travellers Information</p>
+          <div class="travel_section_info_box">
+            <div v-for="(i, index) in getFlights" style="display: flex; gap: 5.81rem">
+              <section>
+                <p class="key">Customer {{ index + 1 }} Name</p>
+                <p class="value">{{ i.first_name }} {{ i.last_name }}</p>
+              </section>
+              <section>
+                <p class="key">Category</p>
+                <p class="value">{{ i.passenger_type }}</p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="travel_section_info">Payment Details</p>
+          <div class="travel_section_info_box">
+            <div style="display: flex; justify-content: space-between; width: 70%">
+              <div>
+                <p class="key">Payment Date</p>
+                <p class="value">
+                  {{ convertToWord(airlineDetails?.created_at) }}
+                  {{ convertTo12HourFormat(airlineDetails?.created_at) }}
+                </p>
               </div>
-
-            </div>
-          </div>
-
-          <div>
-            <p class="travel_section_info">Payment Details</p>
-            <div class="travel_section_info_box">
-              <div style="display: flex;justify-content: space-between;width: 70%">
-                <div>
-                  <p class="key">Payment Date</p>
-                  <p class="value">{{convertToWord(airlineDetails?.created_at)}} {{ convertTo12HourFormat(airlineDetails?.created_at) }}</p>
-                </div>
-                <div>
-                  <p class="key">Pnr Number</p>
-                  <p class="value">{{airlineDetails?.pnr}}</p>
-                </div>
-                <div>
-                  <p class="key">Amount</p>
-                  <p class="value">₦{{formatAmount(airlineDetails?.amount)}}</p>
-                </div>
-                <div>
-                  <p class="key">Anchor Ref</p>
-                  <p class="value">{{airlineDetails?.reference}}</p>
-                </div>
-                <div>
-                  <p class="key">status</p>
-                  <p class="value">{{airlineDetails?.status}}</p>
-                </div>
+              <div>
+                <p class="key">Pnr Number</p>
+                <p class="value">{{ airlineDetails?.pnr }}</p>
               </div>
-
+              <div>
+                <p class="key">Amount</p>
+                <p class="value">₦{{ formatAmount(airlineDetails?.amount) }}</p>
+              </div>
+              <div>
+                <p class="key">Anchor Ref</p>
+                <p class="value">{{ airlineDetails?.reference }}</p>
+              </div>
+              <div>
+                <p class="key">status</p>
+                <p class="value">{{ airlineDetails?.status }}</p>
+              </div>
             </div>
           </div>
-          <div>
-            <p class="travel_section_info">Itinerary Details</p>
+        </div>
+        <div>
+          <p class="travel_section_info">Itinerary Details</p>
 
-            <div>
+          <div></div>
+        </div>
+      </div>
 
-            </div>
-          </div>
-         
+      <div
+        style="width: 100%; display: flex; justify-content: center; margin-bottom: 3rem"
+      >
+        <ItenaryDetailsComponent
+          @openPrintModal="triggeredEvent"
+          :get-booked-flight="airlineDetails"
+          :id="flightDetails?.id"
+          :get-user="getFlights ? getFlights[0] : []"
+        ></ItenaryDetailsComponent>
       </div>
-      
-      <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 3rem;">
-            <ItenaryDetailsComponent @openPrintModal="triggeredEvent" :get-booked-flight="airlineDetails" :id="flightDetails?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
-          </div>
-      </div>
+    </div>
   </layout>
 </template>
 
 <style scoped>
+.officeIdTag {
+  background: rgba(230, 245, 237, 1);
+  padding: 8px 16px;
+  width: 100%;
+  max-width: max-content;
+  border-radius: 40px;
+}
+.officeIdTag span {
+  color: rgba(21, 157, 84, 1);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: "Product Sans";
+}
 @media print {
   #details_wrapper * {
     visibility: hidden;
   }
 }
 
-.overall{
+.overall {
   display: flex;
   align-items: center;
   width: 100%;
@@ -189,25 +254,24 @@ export default {
   position: relative;
 }
 
-.breadcrumb{
+.breadcrumb {
   display: flex;
   gap: 0.41rem;
 }
 
-.key{
-  color:  #444854;
-  font-family: 'Product Sans';
+.key {
+  color: #444854;
+  font-family: "Product Sans";
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5rem; /* 200% */
   text-transform: capitalize;
-
 }
 
-.value{
+.value {
   color: #444854;
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -215,19 +279,18 @@ export default {
   text-transform: capitalize;
 }
 
-.wrapper{
+.wrapper {
   /*width: 100%;*/
   height: auto;
   position: relative;
   /*padding: 0 5.5rem;*/
   width: 90rem;
   margin-bottom: 5.5rem;
-
 }
 
-.travel_section_info{
-  color:  #2C6CAC;
-  font-family: 'Product Sans';
+.travel_section_info {
+  color: #2c6cac;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
@@ -235,7 +298,7 @@ export default {
   margin-top: 2rem;
 }
 
-.travel_section_info_box{
+.travel_section_info_box {
   display: flex;
   width: 100%;
   /* height: 7.5625rem; */
@@ -246,26 +309,26 @@ export default {
   gap: 1rem;
   flex-shrink: 0;
   border-radius: 0.25rem;
-  border: 1px solid var(--secondarytext-default-text-textfield, #E5E9F2);
+  border: 1px solid var(--secondarytext-default-text-textfield, #e5e9f2);
 }
 
-.flight_details{
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
+.flight_details {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 100% */
 }
 
-.breadcrumb_list{
-  color: #575A65;
+.breadcrumb_list {
+  color: #575a65;
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
-  margin-top:0.50rem;
+  margin-top: 0.5rem;
 }
 </style>
