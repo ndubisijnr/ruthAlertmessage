@@ -19,9 +19,7 @@
           />
         </svg>
 
-        <span class="links" v-if="getCurrentRoute.includes('dashboard')"
-          >Dashboard</span
-        >
+        <span class="links" v-if="getCurrentRoute.includes('dashboard')">Dashboard</span>
       </div>
     </router-link>
     <router-link
@@ -61,13 +59,11 @@
             fill="#1B041C"
           />
         </svg>
-        <span class="links" v-if="getCurrentRoute.includes('agents')"
-          >Travel Agents</span
-        >
+        <span class="links" v-if="getCurrentRoute.includes('agents')">Travel Agents</span>
       </div>
     </router-link>
 
-    <router-link :to="`/bookings/${getUser?.access_token?.slice(0, 20)}`">
+    <router-link :to="`/bookings`">
       <div class="links-item">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -93,9 +89,7 @@
             fill="#000"
           />
         </svg>
-        <span class="links" v-if="getCurrentRoute.includes('bookings')"
-          >My Bookings</span
-        >
+        <span class="links" v-if="getCurrentRoute.includes('bookings')">My Bookings</span>
       </div>
     </router-link>
 
