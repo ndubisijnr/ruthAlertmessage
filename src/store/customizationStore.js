@@ -77,7 +77,7 @@ export const useCustomizationStore = defineStore('customizationStore', {
             this.loading = true
             try {
                 let response;
-                if (payload.favicon) {
+                if (payload.favicon || payload.logo) {
 
                     response = await customization.saveFaviconCustomizationSettings(storeUtils.fireAway().global?.getTenant_id, payload)
 

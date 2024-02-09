@@ -1,23 +1,23 @@
 <template>
   <booking-index v-slot:booking_children>
     <div
-      :style="{
+        :style="{
         borderColor: custom_theme
           ? lightenColor(custom_theme.color)
           : default_theme.color_light,
       }"
-      class="booking-div animate__animated animate__fadeIn"
+        class="booking-div"
     >
       <div class="booking-div-inner-wrapper">
         <div class="booking-div-head">
           <div class="service_nav">
             <div
-              class="nav-a1"
-              @click="activeService = 'Flight'"
-              :class="{
+                class="nav-a1"
+                @click="activeService = 'Flight'"
+                :class="{
                 activeSection: activeService === 'Flight',
               }"
-              :style="
+                :style="
                 activeService === 'Flight'
                   ? {
                       backgroundColor: custom_theme
@@ -34,12 +34,12 @@
               Book Flight
             </div>
             <div
-              class="nav-a1"
-              @click="activeService = 'Hotels'"
-              :class="{
+                class="nav-a1"
+                @click="activeService = 'Hotels'"
+                :class="{
                 activeSection: activeService === 'Hotels',
               }"
-              :style="
+                :style="
                 activeService === 'Hotels'
                   ? {
                       backgroundColor: custom_theme
@@ -56,10 +56,10 @@
               Find Hotels
             </div>
             <div
-              class="nav-a1"
-              @click="activeService = 'Visa'"
-              :class="{ activeSection: activeService === 'Visa' }"
-              :style="
+                class="nav-a1"
+                @click="activeService = 'Visa'"
+                :class="{ activeSection: activeService === 'Visa' }"
+                :style="
                 activeService === 'Visa'
                   ? {
                       backgroundColor: custom_theme
@@ -76,12 +76,12 @@
               Visa
             </div>
             <div
-              class="nav-a1"
-              @click="activeService = 'Insurance'"
-              :class="{
+                class="nav-a1"
+                @click="activeService = 'Insurance'"
+                :class="{
                 activeSection: activeService === 'Insurance',
               }"
-              :style="
+                :style="
                 activeService === 'Insurance'
                   ? {
                       backgroundColor: custom_theme
@@ -103,7 +103,7 @@
         <div class="booking-div-body">
           <div v-if="activeService === 'Flight'">
             <div
-              v-if="
+                v-if="
                 getUser.account_type === 'super_admin' ||
                 getUser.account_type === 'admin' ||
                 (getBusinessProfile?.is_cac_verified === 'true' &&
@@ -112,8 +112,8 @@
             >
               <div class="booking-nav">
                 <p
-                  class="booking-nav-item"
-                  :style="
+                    class="booking-nav-item"
+                    :style="
                     activeDestType === 'round_trip'
                       ? {
                           color: custom_theme
@@ -125,16 +125,16 @@
                         }
                       : {}
                   "
-                  @click="activeDestType = 'round_trip'"
-                  :class="{
+                    @click="activeDestType = 'round_trip'"
+                    :class="{
                     activeDestType: activeDestType === 'round_trip',
                   }"
                 >
                   Round Trip
                 </p>
                 <p
-                  class="booking-nav-item"
-                  :style="
+                    class="booking-nav-item"
+                    :style="
                     activeDestType === 'one_way'
                       ? {
                           color: custom_theme
@@ -146,8 +146,8 @@
                         }
                       : {}
                   "
-                  @click="activeDestType = 'one_way'"
-                  :class="{
+                    @click="activeDestType = 'one_way'"
+                    :class="{
                     activeDestType: activeDestType === 'one_way',
                   }"
                 >
@@ -155,8 +155,8 @@
                 </p>
                 <!-- <p class="booking-nav-item" @click="activeDestType='multiCity'" :class="{'activeDestType':activeDestType==='multiCity'}">Multi City</p> -->
                 <p
-                  class="booking-nav-item"
-                  :style="
+                    class="booking-nav-item"
+                    :style="
                     activeDestType === 'multiCity'
                       ? {
                           color: custom_theme
@@ -168,8 +168,8 @@
                         }
                       : {}
                   "
-                  @click="activeDestType = 'multiCity'"
-                  :class="{
+                    @click="activeDestType = 'multiCity'"
+                    :class="{
                     activeDestType: activeDestType === 'multiCity',
                   }"
                 >
@@ -181,24 +181,24 @@
                 <div class="form-area">
                   <div class="form-area-body">
                     <div
-                      v-show="
+                        v-show="
                         activeDestType === 'one_way' ||
                         activeDestType === 'round_trip'
                       "
-                      class="one-way"
+                        class="one-way"
                     >
                       <div class="group-inputs">
                         <div class="input-divs">
                           <on-boarding-input
-                            :defaultValue="flightModel?.originName"
-                            @isFocusing="handleFocus"
-                            is-fake-loading="true"
-                            autocomplete="off"
-                            width="100%"
-                            id="from_input"
-                            label="From"
-                            class=""
-                            @inputValue="
+                              :defaultValue="flightModel?.originName"
+                              @isFocusing="handleFocus"
+                              is-fake-loading="true"
+                              autocomplete="off"
+                              width="100%"
+                              id="from_input"
+                              label="From"
+                              class=""
+                              @inputValue="
                               (value) => {
                                 (this.fromQuery = value),
                                   filterAirportFrom(),
@@ -207,20 +207,20 @@
                             "
                           />
                           <div
-                            class="airportsDropDown"
-                            v-if="this.filteredAirportFrom.length > 0"
+                              class="airportsDropDown"
+                              v-if="this.filteredAirportFrom.length > 0"
                           >
                             <p
-                              @click="
+                                @click="
                                 selectDestination(
                                   'from_input',
                                   `${i.city} - ${i.name}`,
                                   `${i.iata_code}`
                                 )
                               "
-                              class="per_airport"
-                              v-for="(i, index) in filteredAirportFrom"
-                              :key="index"
+                                class="per_airport"
+                                v-for="(i, index) in filteredAirportFrom"
+                                :key="index"
                             >
                               {{ i.city }} - {{ i.country }} -
                               {{ i.name }}
@@ -229,35 +229,35 @@
                         </div>
                         <div class="input-divs">
                           <on-boarding-input
-                            :defaultValue="flightModel?.destinationName"
-                            @isFocusing="handleFocus"
-                            is-fake-loading="true"
-                            autocomplete="off"
-                            width="100%"
-                            id="to_input"
-                            label="To"
-                            class=""
-                            @inputValue="
+                              :defaultValue="flightModel?.destinationName"
+                              @isFocusing="handleFocus"
+                              is-fake-loading="true"
+                              autocomplete="off"
+                              width="100%"
+                              id="to_input"
+                              label="To"
+                              class=""
+                              @inputValue="
                               (value) => {
                                 (this.toQuery = value), filterAirportTo();
                               }
                             "
                           />
                           <div
-                            v-if="this.filteredAirportTo.length > 0"
-                            class="airportsDropDown"
+                              v-if="this.filteredAirportTo.length > 0"
+                              class="airportsDropDown"
                           >
                             <p
-                              @click="
+                                @click="
                                 selectDestination(
                                   'to_input',
                                   `${i.city} - ${i.name}`,
                                   `${i.iata_code}`
                                 )
                               "
-                              class="per_airport"
-                              v-for="(i, index) in filteredAirportTo"
-                              :key="index"
+                                class="per_airport"
+                                v-for="(i, index) in filteredAirportTo"
+                                :key="index"
                             >
                               {{ i.city }} - {{ i.country }} -
                               {{ i.name }}
@@ -267,92 +267,92 @@
                       </div>
                       <div class="group-inputs">
                         <data-picker
-                          :defaultValue="flightModel?.departure_date"
-                          @isFocusing="handleFocus"
-                          :min_date="new Date()"
-                          @dateValue="updateDateValue"
-                          label="Departure Date"
+                            :defaultValue="flightModel?.departure_date"
+                            @isFocusing="handleFocus"
+                            :min_date="new Date()"
+                            @dateValue="updateDateValue"
+                            label="Departure Date"
                         ></data-picker>
                         <data-picker
-                          :defaultValue="flightModel?.return_date"
-                          @isFocusing="handleFocus"
-                          :readonly="!this.departure_date ? 'readonly' : null"
-                          @dateValue="updateDateValueTo"
-                          :min_date="this.departure_date"
-                          v-show="activeDestType === 'round_trip'"
-                          label="Return Date"
+                            :defaultValue="flightModel?.return_date"
+                            @isFocusing="handleFocus"
+                            :readonly="!this.departure_date ? 'readonly' : null"
+                            @dateValue="updateDateValueTo"
+                            :min_date="this.departure_date"
+                            v-show="activeDestType === 'round_trip'"
+                            label="Return Date"
                         ></data-picker>
                       </div>
                     </div>
 
                     <SearchMultiCity
-                      :disabled="getLoading"
-                      :flightModel="flightModel"
-                      v-show="activeDestType === 'multiCity'"
+                        :disabled="getLoading"
+                        :flightModel="flightModel"
+                        v-show="activeDestType === 'multiCity'"
                     />
 
                     <div @click.stop="closeOpenedModal" class="group-inputs">
                       <div
-                        class="choose_document_type"
-                        style="position: relative"
+                          class="choose_document_type"
+                          style="position: relative"
                       >
                         <label class="class_label">Passengers </label>
                         <p
-                          style="color: #f00"
-                          v-if="
+                            style="color: #f00"
+                            v-if="
                             flightModel.adults < 1 &&
                             flightModel.children < 1 &&
                             flightModel.infants < 1
                           "
-                          class="selected-item"
+                            class="selected-item"
                         >
                           Please add passengers
                         </p>
                         <p class="selected-item">
                           {{
                             flightModel.adults > 0
-                              ? `${flightModel.adults} Adult`
-                              : null
+                                ? `${flightModel.adults} Adult`
+                                : null
                           }}
                           {{
                             flightModel.infants > 0 && flightModel.adults > 0
-                              ? ","
-                              : null
+                                ? ","
+                                : null
                           }}
                           {{
                             flightModel.infants > 0
-                              ? `${flightModel.infants} Infants`
-                              : null
+                                ? `${flightModel.infants} Infants`
+                                : null
                           }}
                           {{
                             flightModel.children > 0 &&
                             flightModel.adults > 0 &&
                             flightModel.infants > 0
-                              ? "and"
-                              : null
+                                ? "and"
+                                : null
                           }}
                           {{
                             flightModel.children > 0
-                              ? `${flightModel.children} ${
-                                  flightModel.children > 1
-                                    ? "Children"
-                                    : "child"
+                                ? `${flightModel.children} ${
+                                    flightModel.children > 1
+                                        ? "Children"
+                                        : "child"
                                 } `
-                              : null
+                                : null
                           }}
                         </p>
                         <div v-if="showPassengers" class="dropDown">
                           <div class="doc_type_options">
                             <div class="passenger-type">
                               <div
-                                style="display: flex; flex-direction: column"
+                                  style="display: flex; flex-direction: column"
                               >
                                 <p class="passenger-type-text-1">Adults</p>
                                 <p class="text-2">12+ and above</p>
                               </div>
 
                               <div
-                                style="
+                                  style="
                                   display: flex;
                                   justify-content: space-between;
                                   width: 40%;
@@ -360,11 +360,11 @@
                                 "
                               >
                                 <button
-                                  :disabled="flightModel.adults < 1"
-                                  @click="
+                                    :disabled="flightModel.adults < 1"
+                                    @click="
                                     passengerSelectionControl('adult', 'minus')
                                   "
-                                  class="minus-button"
+                                    class="minus-button"
                                 >
                                   -
                                 </button>
@@ -372,11 +372,11 @@
                                   {{ flightModel.adults }}
                                 </p>
                                 <button
-                                  :disabled="passenger_disable_buttons"
-                                  @click="
+                                    :disabled="passenger_disable_buttons"
+                                    @click="
                                     passengerSelectionControl('adult', 'add')
                                   "
-                                  class="add-button"
+                                    class="add-button"
                                 >
                                   +
                                 </button>
@@ -384,14 +384,14 @@
                             </div>
                             <div class="passenger-type">
                               <div
-                                style="display: flex; flex-direction: column"
+                                  style="display: flex; flex-direction: column"
                               >
                                 <p class="passenger-type-text-1">Children</p>
                                 <p class="text-2">2-11</p>
                               </div>
 
                               <div
-                                style="
+                                  style="
                                   display: flex;
                                   justify-content: space-between;
                                   width: 40%;
@@ -399,14 +399,14 @@
                                 "
                               >
                                 <button
-                                  :disabled="flightModel.children < 1"
-                                  @click="
+                                    :disabled="flightModel.children < 1"
+                                    @click="
                                     passengerSelectionControl(
                                       'children',
                                       'minus'
                                     )
                                   "
-                                  class="minus-button"
+                                    class="minus-button"
                                 >
                                   -
                                 </button>
@@ -414,11 +414,11 @@
                                   {{ flightModel.children }}
                                 </p>
                                 <button
-                                  :disabled="passenger_disable_buttons"
-                                  @click="
+                                    :disabled="passenger_disable_buttons"
+                                    @click="
                                     passengerSelectionControl('children', 'add')
                                   "
-                                  class="add-button"
+                                    class="add-button"
                                 >
                                   +
                                 </button>
@@ -426,14 +426,14 @@
                             </div>
                             <div class="passenger-type">
                               <div
-                                style="display: flex; flex-direction: column"
+                                  style="display: flex; flex-direction: column"
                               >
                                 <p class="passenger-type-text-1">Infant</p>
                                 <p class="text-2">under 2(years)</p>
                               </div>
 
                               <div
-                                style="
+                                  style="
                                   display: flex;
                                   justify-content: space-between;
                                   width: 40%;
@@ -441,14 +441,14 @@
                                 "
                               >
                                 <button
-                                  :disabled="flightModel.infants < 1"
-                                  @click="
+                                    :disabled="flightModel.infants < 1"
+                                    @click="
                                     passengerSelectionControl(
                                       'infants',
                                       'minus'
                                     )
                                   "
-                                  class="minus-button"
+                                    class="minus-button"
                                 >
                                   -
                                 </button>
@@ -456,13 +456,13 @@
                                   {{ flightModel.infants }}
                                 </p>
                                 <button
-                                  :disabled="
+                                    :disabled="
                                     passenger_disable_buttons || infant_disable
                                   "
-                                  @click="
+                                    @click="
                                     passengerSelectionControl('infants', 'add')
                                   "
-                                  class="add-button"
+                                    class="add-button"
                                 >
                                   +
                                 </button>
@@ -479,18 +479,18 @@
                           </div>
                         </div>
                         <img
-                          @click="
+                            @click="
                             (showPassengers = !showPassengers),
                               (showClass = false)
                           "
-                          src="../../assets/Monotone.svg"
-                          style="cursor: pointer"
+                            src="../../assets/Monotone.svg"
+                            style="cursor: pointer"
                         />
                       </div>
 
                       <div
-                        class="choose_document_type"
-                        style="position: relative"
+                          class="choose_document_type"
+                          style="position: relative"
                       >
                         <label class="class_label">Class</label>
                         <p class="selected-item">
@@ -500,56 +500,56 @@
                           <div class="doc_type_options">
                             <div class="passenger-type" style="width: 100%">
                               <p
-                                class="passenger-type-text-1"
-                                @click="
+                                  class="passenger-type-text-1"
+                                  @click="
                                   (flightModel.cabin = 'economy'),
                                     (showClass = !showClass)
                                 "
                               >
                                 Economy
                                 <svg
-                                  v-if="flightModel.cabin === 'economy'"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
+                                    v-if="flightModel.cabin === 'economy'"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
                                 >
                                   <circle cx="8" cy="8" r="8" fill="#159D54" />
                                   <path
-                                    d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
-                                    stroke="white"
-                                    stroke-width="1.33333"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                      d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
+                                      stroke="white"
+                                      stroke-width="1.33333"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
                                   />
                                 </svg>
                               </p>
                             </div>
                             <div class="passenger-type" style="border: none">
                               <p
-                                class="passenger-type-text-1"
-                                @click="
+                                  class="passenger-type-text-1"
+                                  @click="
                                   (flightModel.cabin = 'premium_economy'),
                                     (showClass = !showClass)
                                 "
                               >
                                 Premium Economy
                                 <svg
-                                  v-if="flightModel.cabin === 'premium_economy'"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
+                                    v-if="flightModel.cabin === 'premium_economy'"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
                                 >
                                   <circle cx="8" cy="8" r="8" fill="#159D54" />
                                   <path
-                                    d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
-                                    stroke="white"
-                                    stroke-width="1.33333"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                      d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
+                                      stroke="white"
+                                      stroke-width="1.33333"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
                                   />
                                 </svg>
                               </p>
@@ -557,28 +557,28 @@
 
                             <div class="passenger-type" style="border: none">
                               <p
-                                class="passenger-type-text-1"
-                                @click="
+                                  class="passenger-type-text-1"
+                                  @click="
                                   (flightModel.cabin = 'business'),
                                     (showClass = !showClass)
                                 "
                               >
                                 Business Class
                                 <svg
-                                  v-if="flightModel.cabin === 'business'"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
+                                    v-if="flightModel.cabin === 'business'"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
                                 >
                                   <circle cx="8" cy="8" r="8" fill="#159D54" />
                                   <path
-                                    d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
-                                    stroke="white"
-                                    stroke-width="1.33333"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                      d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
+                                      stroke="white"
+                                      stroke-width="1.33333"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
                                   />
                                 </svg>
                               </p>
@@ -586,28 +586,28 @@
 
                             <div class="passenger-type" style="border: none">
                               <p
-                                class="passenger-type-text-1"
-                                @click="
+                                  class="passenger-type-text-1"
+                                  @click="
                                   (flightModel.cabin = 'first'),
                                     (showClass = !showClass)
                                 "
                               >
                                 First Class
                                 <svg
-                                  v-if="flightModel.cabin === 'first'"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
+                                    v-if="flightModel.cabin === 'first'"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
                                 >
                                   <circle cx="8" cy="8" r="8" fill="#159D54" />
                                   <path
-                                    d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
-                                    stroke="white"
-                                    stroke-width="1.33333"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                      d="M5.3335 7.86272L6.96313 9.33333L10.6668 6"
+                                      stroke="white"
+                                      stroke-width="1.33333"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
                                   />
                                 </svg>
                               </p>
@@ -615,11 +615,11 @@
                           </div>
                         </div>
                         <img
-                          @click="
+                            @click="
                             (showClass = !showClass), (showPassengers = false)
                           "
-                          src="../../assets/Monotone.svg"
-                          style="cursor: pointer"
+                            src="../../assets/Monotone.svg"
+                            style="cursor: pointer"
                         />
                       </div>
                     </div>
@@ -633,32 +633,32 @@
                       <div class="form-area-checkbox-item">
                         <p class="txt-m">Non-Stops Only</p>
                         <input
-                          style="cursor: pointer"
-                          id="withNonStop"
-                          type="checkbox"
-                          @change="handleCheck('withNonStop')"
+                            style="cursor: pointer"
+                            id="withNonStop"
+                            type="checkbox"
+                            @change="handleCheck('withNonStop')"
                         />
                       </div>
                     </div>
 
                     <div class="form-area-footer">
                       <on-boarding-button
-                        v-if="activeDestType === 'multiCity'"
-                        :loading="getLoading"
-                        :disabled="getLoading || disableBtn().val"
-                        btn-width="100%"
-                        border="none"
-                        @click="searchFlight('multiCity')"
-                        text-node="Search for Flights"
+                          v-if="activeDestType === 'multiCity'"
+                          :loading="getLoading"
+                          :disabled="getLoading || disableBtn().val"
+                          btn-width="100%"
+                          border="none"
+                          @click="searchFlight('multiCity')"
+                          text-node="Search for Flights"
                       ></on-boarding-button>
                       <on-boarding-button
-                        v-else
-                        :loading="getLoading"
-                        :disabled="getLoading"
-                        btn-width="100%"
-                        border="none"
-                        @click="searchFlight('one-round')"
-                        text-node="Search for Flights"
+                          v-else
+                          :loading="getLoading"
+                          :disabled="getLoading"
+                          btn-width="100%"
+                          border="none"
+                          @click="searchFlight('one-round')"
+                          text-node="Search for Flights"
                       ></on-boarding-button>
                     </div>
                   </div>
@@ -667,8 +667,8 @@
             </div>
 
             <div
-              v-else
-              style="
+                v-else
+                style="
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -681,7 +681,7 @@
               </div>
               <div>
                 <p
-                  style="
+                    style="
                     color: #0e0842;
                     text-align: center;
                     font-family: 'Product Sans';
@@ -695,7 +695,7 @@
                   Yakata 🎉
                 </p>
                 <p
-                  style="
+                    style="
                     color: #575a65;
                     text-align: center;
                     font-family: 'Product Sans';
@@ -712,19 +712,19 @@
               </div>
               <div>
                 <router-link
-                  style="text-decoration: none"
-                  :to="`/verification/document-upload/${getUser?.access_token?.slice(
+                    style="text-decoration: none"
+                    :to="`/verification/document-upload/${getUser?.access_token?.slice(
                     0,
                     20
                   )}`"
-                  ><on-boarding-button
+                ><on-boarding-button
                     btn-width="11.25rem"
                     height="3.5rem"
                     color="#2C6CAC"
                     border="none"
                     background="#EAF0F7"
                     text-node="Complete Profile"
-                  ></on-boarding-button
+                ></on-boarding-button
                 ></router-link>
               </div>
             </div>
@@ -2263,7 +2263,13 @@ export default {
 @media (max-width: 1024px) {
   .booking-div {
     margin: 0;
-    padding: 0.5rem;
+    padding: 0;
+  }
+
+  .booking-div-head {
+    height: auto;
+    border: solid;
+    align-items: flex-start;
   }
 
   .group-inputs {
@@ -2326,7 +2332,8 @@ export default {
   }
 
   .booking-div-inner-wrapper {
-    margin: 1rem 0;
+    width: 100%;
+    //margin: 1rem 0;
   }
 
   a {

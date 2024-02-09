@@ -1664,4 +1664,11 @@ export default {
   line-height: 1.75rem;
   font-family: "Product Sans";
 }
+
+@media (max-width: 1024px) {
+  .dashboard_wrapper {
+    width: 100%;
+    margin: 0 1rem;
+  }
+}
 </style>
