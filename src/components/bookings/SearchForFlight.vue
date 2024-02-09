@@ -1,13 +1,11 @@
 <template>
   <booking-index v-slot:booking_children>
-    <div
-        :style="{
+    <div :style="{
         borderColor: custom_theme
           ? lightenColor(custom_theme.color)
           : default_theme.color_light,
       }"
-        class="booking-div"
-    >
+        class="booking-div">
       <div class="booking-div-inner-wrapper">
         <div class="booking-div-head">
           <div class="service_nav">
@@ -2266,10 +2264,21 @@ export default {
     padding: 0;
   }
 
+  .service_nav {
+    display: flex;
+    margin-left: 0;
+    overflow-x: scroll;
+    align-items: center;
+  }
+
+  .booking-div-body {
+    margin: 0 0.5rem;
+  }
+
   .booking-div-head {
     height: auto;
-    border: solid;
     align-items: flex-start;
+    margin: 0.5rem;
   }
 
   .group-inputs {
@@ -2333,7 +2342,7 @@ export default {
 
   .booking-div-inner-wrapper {
     width: 100%;
-    //margin: 1rem 0;
+    margin: 0;
   }
 
   a {

@@ -8,7 +8,7 @@
             <img v-if="getTenant.logo"
                  :src="getTenant.logo"
                  alt="TenantLogo"
-                 style="width: 5rem; height: 5rem"
+                 class="logo"
             />
             <p v-else class="tenant_name">{{getTenant.name}}</p>
           </div>
@@ -48,6 +48,11 @@ export default {
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.10);
   text-align: center;
   width: auto;
+}
+
+.logo{
+  max-width: 6rem;
+  max-height: 2.35713rem;
 }
 
 
