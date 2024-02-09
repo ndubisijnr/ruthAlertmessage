@@ -714,9 +714,7 @@ export default {
         this.bookFlightModal.contact_first_name = this.getUser?.first_name ? this.getUser?.first_name : first_name
         this.bookFlightModal.contact_last_name = this.getUser?.last_name ? this.getUser?.last_name : last_name
         this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
-        console.log(this.bookFlightModal)
-        // storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
-
+        storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
       }
     },
 
