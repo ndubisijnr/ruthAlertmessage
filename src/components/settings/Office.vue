@@ -122,12 +122,15 @@
     </header>
 
     <template v-if="officeData">
-      <div class="" v-for="item in officeData" :key="item.id + 3232">
-        <div class="card__wrapper">
+      <div class="" v-for="(item, id) in officeData" :key="item.id + 3232">
+        <div
+          :class="{ disabled: item.status !== 'active' && isEdit !== id }"
+          class="card__wrapper"
+        >
           <!-- input -->
           <div class="office-input">
             <on-boarding-input
-              :readonly="disableAll && isEdit !== item.id"
+              :readonly="disableAll || isEdit !== id"
               @inputValue="item.office_id = $event"
               :defaultValue="item.office_id"
               autocomplete="off"
@@ -139,7 +142,7 @@
           <!-- rates -->
           <div class="office-rate">
             <on-boarding-input
-              :readonly="disableAll && isEdit !== item.id"
+              :readonly="disableAll || isEdit !== id"
               @inputValue="item.rate = $event"
               type="number"
               :defaultValue="item.rate"
@@ -152,7 +155,7 @@
           <!-- currency select -->
           <div class="relative office-currency-select">
             <select
-              :disabled="disableAll && isEdit !== item.id"
+              :disabled="disableAll || isEdit !== id"
               class="relative"
               v-model="item.currency"
               id="office-currency-select"
@@ -229,12 +232,26 @@
           <!-- buttons -->
           <div style="max-width: max-content" class="office-btn">
             <on-boarding-button
+              @click="allowEditForm(id)"
               :disabled="disableAll"
+              :loading="loader.edit == id + 1"
               style="margin-bottom: 1rem"
               btn-width="max-content"
               background="transparent"
-              color="rgba(44, 108, 172, 1)"
-              text-node="Edit"
+              :color="
+                isEdit === id
+                  ? !checkObj(id).show
+                    ? 'rgba(29, 30, 44, 1)'
+                    : 'rgba(21, 157, 84, 1)'
+                  : 'rgba(44, 108, 172, 1)'
+              "
+              :text-node="
+                isEdit === id
+                  ? !checkObj(id).show
+                    ? 'Cancel'
+                    : 'Save'
+                  : 'Edit'
+              "
             ></on-boarding-button>
           </div>
           <!-- status -->
@@ -251,14 +268,16 @@
                   ? 'rgba(241, 211, 2, 1)'
                   : 'rgba(29, 30, 44, 1)'
               "
-              :text-node="item.status == 'active' ? 'Deativate' : 'activate'"
+              :text-node="
+                item.status == 'active' ? 'Deativate' : 'Activate &nbsp;'
+              "
             ></on-boarding-button>
           </div>
           <!-- delete -->
           <div style="max-width: max-content" class="office-btn">
             <on-boarding-button
               :disabled="disableAll"
-              @click="deleteOfficeId(item.id)"
+              @click="deleteOfficeId(item.id, id)"
               :loading="loader.delete == id + 1"
               style="margin-bottom: 1rem"
               btn-width="max-content"
@@ -294,6 +313,7 @@ export default {
         currency: null,
       },
       officeData: null,
+      backupOfficeData: null,
       loader: {
         fetch: false,
         create: false,
@@ -316,6 +336,7 @@ export default {
     },
     async fetchOfficeId() {
       try {
+        this.isEdit = null;
         this.loader.fetch = true;
         const { data: res } = await RequestService.getRequest(
           {
@@ -324,6 +345,7 @@ export default {
           true
         );
         this.officeData = null;
+        this.backupOfficeData = structuredClone(res.data.data);
         this.$nextTick(() => {
           this.officeData = res.data.data;
         });
@@ -336,13 +358,14 @@ export default {
         this.loader.fetch = false;
       }
     },
-    async deleteOfficeId(id) {
+    async deleteOfficeId(val, id) {
       this.loader.delete = id + 1;
+      this.isEdit = null;
       try {
         const { data: res } = await RequestService.deleteRequest(
           {
             path: "office_id",
-            id,
+            id: val,
           },
           true
         );
@@ -351,7 +374,7 @@ export default {
           icon: "success",
         });
         this.officeData = this.officeData.filter((el) => {
-          return el.id !== id;
+          return el.id !== val;
         });
       } catch (err) {
         RuthdoAlert({
@@ -364,6 +387,7 @@ export default {
     },
     async changeStatus(val, id) {
       this.loader.status = id + 1;
+      this.isEdit = null;
       try {
         const { data: res } = await RequestService.patchRequest(
           {
@@ -389,7 +413,36 @@ export default {
         this.loader.status = false;
       }
     },
+    async updateOfficeId(index) {
+      this.loader.edit = index + 1;
+      var data = this.officeData[index];
+      delete data.created_at;
+      delete data.updated_at;
+      delete data.status;
+      try {
+        const { data: res } = await RequestService.patchRequest(
+          {
+            path: "office_id",
+            payload: data,
+          },
+          true
+        );
+        RuthdoAlert({
+          title: res.data,
+          icon: "success",
+        });
+        this.fetchOfficeId();
+      } catch (err) {
+        RuthdoAlert({
+          title: err?.response?.message,
+          icon: "error",
+        });
+      } finally {
+        this.loader.edit = false;
+      }
+    },
     async createOfficeId() {
+      this.isEdit = null;
       this.loader.create = true;
       try {
         const { data: res } = await RequestService.postRequest(
@@ -420,6 +473,27 @@ export default {
       } finally {
         this.loader.create = false;
       }
+    },
+    allowEditForm(index) {
+      if (this.isEdit === index) {
+        if (this.checkObj(index).show) {
+          this.updateOfficeId(index);
+          this.isEdit = null;
+        } else {
+          this.isEdit = null;
+        }
+      } else if (this.isEdit === null) {
+        this.isEdit = index;
+      }
+    },
+    checkObj(index) {
+      var show = false;
+      Object.entries(this.officeData[index]).forEach(([key, value]) => {
+        if (value != this.backupOfficeData[index][key]) {
+          show = true;
+        }
+      });
+      return { show };
     },
   },
   computed: {
@@ -492,7 +566,15 @@ export default {
 
     & > * {
       flex: auto;
-      width: 100%;
+      &:not(.office-btn) {
+        min-width: 100px;
+      }
+    }
+
+    &.disabled {
+      & > *:not(.office-btn) {
+        opacity: 0.5;
+      }
     }
 
     select {
@@ -516,6 +598,10 @@ export default {
         border-color: var(--primary_color);
         caret-color: var(--primary_color);
         outline-color: var(--primary_color);
+      }
+
+      &:disabled {
+        background-color: rgba(239, 239, 239, 0.3) !important;
       }
 
       optgroup,
@@ -616,6 +702,15 @@ export default {
           }
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .officeId {
+    .card__wrapper {
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
   }
 }
