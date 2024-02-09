@@ -82,12 +82,6 @@ export default {
 }
 </script>   
 <style scoped>
-@media print {
-  #bottom_nav{
-    display: none;
-  }
-}
-
 .bottom_nav_wrapper{
   display: none;
 }

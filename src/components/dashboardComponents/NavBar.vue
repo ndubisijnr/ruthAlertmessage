@@ -24,7 +24,7 @@ export default {
 .nav_wrapper{
   width: 100%;
   background: #FFF;
-  padding: 0 5.5rem;
+  padding: 1rem 5.5rem;
   display: flex;
   justify-content: center;
 }

@@ -1,5 +1,7 @@
 <template>
   <filter-booking-modal v-show="isFilterBooking" @close="close"></filter-booking-modal>
+  <modal-loader v-if="getLoadingFlightDetails" message="Loading Flight"></modal-loader>
+
   <layout v-slot:child-content>
     <div class="overall" id="overall">
       <div class="booking-div-head">
@@ -108,10 +110,12 @@ import BookingsCardLoading from "../../components/bookings/BookingsCardLoading.v
 import filterBookingModal from "@/components/modals/FilterBookingModal.vue";
 import ComingSoon from "@/components/ComingSoon.vue";
 import BookingsRequest from "../../model/BookingsRequest";
+import ModalLoader from "@/components/loaders/ModalLoader.vue";
 
 export default {
   name: "Bookings",
   components:{
+    ModalLoader,
     ComingSoon,
     RouteNav,OnBoardingInput, filterBookingModal, Layout,BookingsCards,DomainTable,OnBoardingButton,DataPicker,BookingsCardLoading},
   data(){
@@ -157,6 +161,10 @@ export default {
 
 
   computed: {
+    getLoadingFlightDetails(){
+      return storeUtils.fireAway().flight.getLoadingFlightDetails
+    },
+
     getCurrentRoute(){
       return router.currentRoute.value.name
     },

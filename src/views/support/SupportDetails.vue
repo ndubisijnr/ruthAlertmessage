@@ -31,7 +31,7 @@ export default {
 
   methods:{
     goBack(){
-      router.push({name:"Bookings_Details"})
+      router.back()
     },
 
     close_(value){
@@ -137,7 +137,7 @@ export default {
   },
 
   mounted() {
-    if(this.getTenantLoaded){
+    if(this.getTenantLoaded && !this.getRequestDetails){
       storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id);
     }
   }
@@ -148,7 +148,7 @@ export default {
 
   <layout v-slot:child-content>
     <add-funds @close="close" v-if="showRefunds" :isButtonRequired="true" :wallet_name="getWallet?.wallet_name" :account_number="getWallet?.wallet_number"  header_action="Refund Actions"></add-funds>
-    <print-itenary-modal :contact_email="getRequestDetails?.booking.contact_email" :booking_id="getRequestDetails?.booking_id" :contact_first_name="getRequestDetails?.booking.contact_first_name" :contact_last_name="getRequestDetails?.booking.contact_last_name"  v-if="printing" @close="close_"></print-itenary-modal>
+    <print-itenary-modal  v-if="printing" @close="close_"></print-itenary-modal>
     <wallet-dedut :amount="getRequestDetails" :reference="getRequestDetails.booking.reference" :user="getWallet?.wallet_name" :balance="getWallet?.balance"  @close="close" v-if="showChargeWallet"></wallet-dedut>
     <div class="overall">
         <div class="wrapper">
