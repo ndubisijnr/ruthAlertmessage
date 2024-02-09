@@ -147,7 +147,7 @@
               >
               <!-- booking -->
               <router-link
-                :to="`/bookings/${getUser?.access_token?.slice(0, 20)}`"
+                :to="`/bookings/`"
               >
                 <div
                   class="links-item"

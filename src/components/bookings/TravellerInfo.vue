@@ -650,8 +650,8 @@ export default {
         number: null,
         issuing_date: null,
         expiry_date: null,
-        issuing_country: this.countries[0].name,
-        nationality_country: this.countries[0].name,
+        issuing_country: this.countries[0].code,
+        nationality_country: this.countries[0].code,
         document_type: "passport",
         holder: true,
       };
