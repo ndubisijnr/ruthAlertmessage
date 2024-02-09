@@ -437,8 +437,8 @@ export default {
             number: null,
             issuing_date: null,
             expiry_date: null,
-            issuing_country: this.countries[0].name,
-            nationality_country: this.countries[0].name,
+            issuing_country: this.countries[0].code,
+            nationality_country: this.countries[0].code,
             document_type: 'passport',
             holder: false
         };
@@ -487,6 +487,7 @@ export default {
     },
 
     proceedToPayment(){
+      console.log(this.bookFlightModal)
       this.phoneValidation=null
       this.passportNumberValidation=null
       const phone_validation = this.bookingValidation('contactPhone')
@@ -506,7 +507,8 @@ export default {
         this.bookFlightModal.contact_first_name = this.getUser?.first_name ? this.getUser?.first_name : first_name
         this.bookFlightModal.contact_last_name = this.getUser?.last_name ? this.getUser?.last_name : last_name
         this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
-        storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
+        console.log(this.bookFlightModal)
+        // storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
       }
      
     },

@@ -677,8 +677,8 @@ export default {
 }
 
 .logo{
-  width: 3rem;
-  height: 2rem;
+  max-width: 6rem;
+  max-height: 2.35713rem;
 }
 
 .splash {
