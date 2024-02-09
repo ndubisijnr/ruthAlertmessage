@@ -3,15 +3,15 @@ export default [
         path: '/bookings/',
         // redirect:'create-account',
         name: 'Bookings',
-        meta: {layout: 'dashboard',authRequired:true},
+        meta: { layout: 'dashboard', authRequired: true },
         component: () => import('../../views/bookings/Index.vue'),
-        children:[]
+        children: []
     },
     {
-        path:'/bookings/details/:id',
+        path: '/bookings/details/:id',
         name: 'Bookings_Details',
-        meta: {layout: 'dashboard',authRequired:true},
+        meta: { layout: 'dashboard', authRequired: true },
         component: () => import('../../views/bookings/FlightDetails.vue'),
-        children:[]
+        children: []
     }
 ]

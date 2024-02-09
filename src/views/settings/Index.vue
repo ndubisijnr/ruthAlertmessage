@@ -3,10 +3,7 @@
   <add-new-role v-show="addRole" @close="close"></add-new-role>
   <add-domain v-show="addDomain" @close="close"></add-domain>
   <add-bank-account v-show="addAccount" @close="close"></add-bank-account>
-  <edit-bank-account
-    v-show="editBankAccount"
-    @close="close"
-  ></edit-bank-account>
+  <edit-bank-account v-show="editBankAccount" @close="close"></edit-bank-account>
   <div v-show="inModal" class="layout-modal">
     <div v-show="showDeleteBankModal" class="delete-card-option">
       <div class="card-header">
@@ -14,13 +11,11 @@
       </div>
 
       <div style="margin: 2rem">
-        <p class="are-you-sure">
-          Are you sure you want to delete this bank account?
-        </p>
+        <p class="are-you-sure">Are you sure you want to delete this bank account?</p>
 
         <p class="are-you-sure-p">
-          You're about to remove this bank {{ bankName?.bank_name }}; This
-          action is irreversible.
+          You're about to remove this bank {{ bankName?.bank_name }}; This action is
+          irreversible.
         </p>
       </div>
 
@@ -48,9 +43,9 @@
         <p class="are-you-sure">Sorry!</p>
 
         <p class="are-you-sure-p">
-          You cannot delete this bank account information because you have just
-          one bank account saved in your payment method. Please add a new bank
-          account to replace this card so you can delete this card information..
+          You cannot delete this bank account information because you have just one bank
+          account saved in your payment method. Please add a new bank account to replace
+          this card so you can delete this card information..
         </p>
       </div>
     </div>
@@ -283,9 +278,7 @@
                         height="3rem"
                         :background="
                           lightenColor(
-                            custom_theme
-                              ? custom_theme.color
-                              : default_theme?.color
+                            custom_theme ? custom_theme.color : default_theme?.color
                           )
                         "
                         border="none"
@@ -315,9 +308,9 @@
                 <div>
                   <p class="p-info">Domain</p>
                   <p class="p-sub-domain">
-                    By default, your site is always accessible via a Tiqwa
-                    subdomain based on the site name. Custom domains allow you
-                    to access your site via one or more custom domain names.
+                    By default, your site is always accessible via a Tiqwa subdomain based
+                    on the site name. Custom domains allow you to access your site via one
+                    or more custom domain names.
                   </p>
                 </div>
 
@@ -548,8 +541,8 @@
                       <div style="text-align: center">
                         <p class="no-team-member-h">
                           Hi
-                          {{ getBusinessProfile?.name }}, you have not added any
-                          team member yet!
+                          {{ getBusinessProfile?.name }}, you have not added any team
+                          member yet!
                         </p>
                         <p class="no-team-member-sub">
                           Yeah, your team member will appear here.
@@ -700,8 +693,8 @@
                       <div style="text-align: center">
                         <p class="no-team-member-h">
                           Hi
-                          {{ getBusinessProfile?.name }}, you have not created
-                          any role yet!
+                          {{ getBusinessProfile?.name }}, you have not created any role
+                          yet!
                         </p>
                         <p class="no-team-member-sub">
                           Yeah, your roles will appear here.
@@ -860,8 +853,8 @@
                   <div>
                     <p class="n-1">Message Notification</p>
                     <p class="n-2">
-                      These are general notifications about updates and
-                      goings-on on the platform
+                      These are general notifications about updates and goings-on on the
+                      platform
                     </p>
                   </div>
 
@@ -933,8 +926,8 @@
                   <div>
                     <p class="n-1">Reminder Notification</p>
                     <p class="n-2">
-                      These are general notifications about updates and
-                      goings-on on the platform
+                      These are general notifications about updates and goings-on on the
+                      platform
                     </p>
                   </div>
 
@@ -1006,8 +999,8 @@
                   <div>
                     <p class="n-1">Adverts & Newsletter</p>
                     <p class="n-2">
-                      These are general notifications about updates and
-                      goings-on on the platform
+                      These are general notifications about updates and goings-on on the
+                      platform
                     </p>
                   </div>
 
@@ -1021,9 +1014,7 @@
                           (getNotifications.ads_newsletter_in_app_notification = 0),
                             updateNotification()
                         "
-                        v-if="
-                          getNotifications?.ads_newsletter_in_app_notification
-                        "
+                        v-if="getNotifications?.ads_newsletter_in_app_notification"
                       />
                       <img
                         src="../../assets/Switchoff.svg"
@@ -1043,9 +1034,7 @@
                           (getNotifications.ads_newsletter_email_notification = 0),
                             updateNotification()
                         "
-                        v-if="
-                          getNotifications?.ads_newsletter_email_notification
-                        "
+                        v-if="getNotifications?.ads_newsletter_email_notification"
                       />
                       <img
                         src="../../assets/Switchoff.svg"
@@ -1166,13 +1155,8 @@
                               {{ i.bank_name }}
                             </p>
                           </div>
-                          <div
-                            v-if="index === bankIndex && show"
-                            class="card-option"
-                          >
-                            <p class="edit" @click="editBank(i)">
-                              Edit Bank Account
-                            </p>
+                          <div v-if="index === bankIndex && show" class="card-option">
+                            <p class="edit" @click="editBank(i)">Edit Bank Account</p>
 
                             <p class="delete" @click="deleteBank(i)">
                               Delete Bank Account
@@ -1315,12 +1299,11 @@
                         <div style="text-align: center">
                           <p class="no-team-member-h">
                             Hi
-                            {{ getBusinessProfile?.name }}, let’s set up your
-                            account now!
+                            {{ getBusinessProfile?.name }}, let’s set up your account now!
                           </p>
                           <p class="no-team-member-sub">
-                            Yeah, you currently have not added a bank account.
-                            Add one today.
+                            Yeah, you currently have not added a bank account. Add one
+                            today.
                           </p>
                         </div>
                       </div>
@@ -1414,7 +1397,7 @@
             <!-- office-id -->
 
             <div v-show="currentTab === 'office-id'">
-              <Office ref="office" />
+              <Office :getBusinessProfile="getBusinessProfile" ref="office" />
             </div>
             <!-- customization -->
             <div
@@ -1513,8 +1496,7 @@ export default {
     return {
       pureColor: "red",
       isFocused: false,
-      gradientColor:
-        "linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
+      gradientColor: "linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
       currentTab: this.getCurrentRouteParams,
       verificationType: "business",
       model: SettingsRequest.updateBusinessProfile,
@@ -1781,24 +1763,15 @@ export default {
     },
 
     updateNotification() {
-      this.model3.message_in_app_notification =
-        this.getNotifications.message_in_app_notification;
-      this.model3.message_email_notification =
-        this.getNotifications.message_email_notification;
-      this.model3.message_sms_notification =
-        this.getNotifications.message_sms_notification;
-      this.model3.reminder_email_notification =
-        this.getNotifications.reminder_email_notification;
-      this.model3.reminder_in_app_notification =
-        this.getNotifications.reminder_in_app_notification;
-      this.model3.reminder_sms_notification =
-        this.getNotifications.reminder_sms_notification;
-      this.model3.ads_newsletter_email_notification =
-        this.getNotifications.ads_newsletter_email_notification;
-      this.model3.ads_newsletter_in_app_notification =
-        this.getNotifications.ads_newsletter_in_app_notification;
-      this.model3.ads_newsletter_sms_notification =
-        this.getNotifications.ads_newsletter_sms_notification;
+      this.model3.message_in_app_notification = this.getNotifications.message_in_app_notification;
+      this.model3.message_email_notification = this.getNotifications.message_email_notification;
+      this.model3.message_sms_notification = this.getNotifications.message_sms_notification;
+      this.model3.reminder_email_notification = this.getNotifications.reminder_email_notification;
+      this.model3.reminder_in_app_notification = this.getNotifications.reminder_in_app_notification;
+      this.model3.reminder_sms_notification = this.getNotifications.reminder_sms_notification;
+      this.model3.ads_newsletter_email_notification = this.getNotifications.ads_newsletter_email_notification;
+      this.model3.ads_newsletter_in_app_notification = this.getNotifications.ads_newsletter_in_app_notification;
+      this.model3.ads_newsletter_sms_notification = this.getNotifications.ads_newsletter_sms_notification;
       storeUtils
         .fireAway()
         ?.settings.updateNotification(this.model3)
