@@ -15,7 +15,6 @@ export default {
     },
 
     airports() {return apiService.Client.get(`/api/airports`)},
-
     details(tenant_id, flight_id) {
         return apiService.Client.get(`/api/${tenant_id}/flight/${flight_id}`)
     },

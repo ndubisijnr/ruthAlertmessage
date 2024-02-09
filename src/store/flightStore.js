@@ -6,6 +6,7 @@ import FlightRequest from '../model/FlightRequest';
 import { RuthdoAlert } from 'ruthly';
 import ItineraryService from "@/service/ItineraryService";
 import flightRequest from "../model/FlightRequest";
+import router from "@/router";
 
 export const useFlightStore = defineStore('flightStore', {
     state: () => ({
@@ -14,6 +15,7 @@ export const useFlightStore = defineStore('flightStore', {
         flightLoading: false,
         bookingLoading: false,
         bookFlightId: null,
+        flightDetails:null,
         errors: null,
         successMsg: null,
         airlines: null,
@@ -32,6 +34,7 @@ export const useFlightStore = defineStore('flightStore', {
         invoicePayload: null,
         showingPaymentMethod: false,
         flightResults: null,
+        loadingFlightDetails:false,
         wallet: null,
         filteredFlightResult: [],
         confirmingBookingLoading: false,
@@ -51,6 +54,7 @@ export const useFlightStore = defineStore('flightStore', {
         getQuery: state => state.query,
         getCheckout: state => state.checkout,
         getLoading: state => state.loading,
+        getLoadingFlightDetails: state => state.loadingFlightDetails,
         getInBound: state => state.inbound,
         getOutBound: state => state.outbound,
         getFlightLoading: state => state.flightLoading,
@@ -73,7 +77,8 @@ export const useFlightStore = defineStore('flightStore', {
         getFilteredFlight: state => state.filteredFlightResult,
         // .slice().sort((a, b) => a - b).reverse(),
         getConfirmingBookingLoading: state => state.confirmingBookingLoading,
-        getIsSuccess: state => state.isSuccess
+        getIsSuccess: state => state.isSuccess,
+        getFlightDetails:state => state.flightDetails
     },
 
     actions: {
@@ -317,13 +322,17 @@ export const useFlightStore = defineStore('flightStore', {
 
         async handleGetFlightDetails(flight_id) {
             console.log(flight_id)
+            this.loadingFlightDetails = true
             try {
                 const response = await FlightService.details(storeUtils.fireAway().global?.getTenant_id, flight_id)
                 let responseData = response.data
                 if (responseData.success) {
-                    localStorage.bookedFlight = JSON.stringify(responseData.data)
+                    this.loadingFlightDetails = false
+                    this.flightDetails = responseData.data
+                    router.push({name:'Bookings_Details', params:{id:flight_id}})
                 }
             } catch (err) {
+                this.loadingFlightDetails = false
                 catchErrorHandler(err)
             }
 

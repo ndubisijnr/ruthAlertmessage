@@ -10,6 +10,7 @@
 
 <script>
 import {stickyHeader} from "../../mixins/sticky";
+
 export default {
     name:"NavBar",
   mounted() {
@@ -19,10 +20,11 @@ export default {
 </script>
 
 <style scoped>
+
 .nav_wrapper{
   width: 100%;
   background: #FFF;
-  padding: 0 5.5rem;
+  padding: 1rem 5.5rem;
   display: flex;
   justify-content: center;
 }

@@ -10,7 +10,7 @@
                  alt="TenantLogo"
                  style="width: 12.0625rem; height: 5.95919rem"
             />
-            <p class="tenant_name">{{getTenant.name}}</p>
+            <p v-else class="tenant_name">{{getTenant.name}}</p>
           </div>
           <div style="justify-content: center;display: flex;width: 100%;">
             <slot name="children"></slot>

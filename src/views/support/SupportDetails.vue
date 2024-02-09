@@ -11,9 +11,10 @@ import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
 import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
 import ChargeWallet from "@/components/modals/ChargeWallet.vue";
 import walletDedut from "@/components/modals/WalletDedut.vue";
+import AddFunds from "@/components/modals/AddFunds.vue";
 export default {
   name: "SupportDetails",
-  components:{OnBoardingButton,walletDedut, Template1,Layout,FlightPayment,ItenaryDetailsComponent,PrintItenaryModal},
+  components:{OnBoardingButton,walletDedut, AddFunds,Template1,Layout,FlightPayment,ItenaryDetailsComponent,PrintItenaryModal},
   data(){
     return{
       data:null,
@@ -24,12 +25,13 @@ export default {
       getYYYYMMDDFormat,
       printing:false,
       showChargeWallet:false,
+      showRefunds:false,
     }
   },
 
   methods:{
     goBack(){
-      router.push({name:"Bookings_Details"})
+      router.back()
     },
 
     close_(value){
@@ -39,6 +41,7 @@ export default {
 
     close(value){
       this.showChargeWallet = value
+      this.showRefunds = value
     },
 
     viewDetails(obj){
@@ -60,7 +63,10 @@ export default {
 
         const request = {"status":value}
         storeUtils.fireAway().itineneryStore.approveItineraryRequestAction(this.getRequestDetails.id, request)
-      }else{
+      }else if(this.getRequestDetails.type === 'refund'){
+        this.showRefunds = true
+      }
+      else{
         console.log(this.getRequestDetails)
         this.showChargeWallet = true
         storeUtils.fireAway().transaction.handleGetUserWallet(this.getRequestDetails?.manager_id)
@@ -131,7 +137,7 @@ export default {
   },
 
   mounted() {
-    if(this.getTenantLoaded){
+    if(this.getTenantLoaded && !this.getRequestDetails){
       storeUtils.fireAway().itineneryStore.getItineraryRequestDetailsAction(router?.currentRoute.value.params.id);
     }
   }
@@ -141,7 +147,8 @@ export default {
 <template>
 
   <layout v-slot:child-content>
-    <print-itenary-modal :contact_email="getRequestDetails?.booking.contact_email" :booking_id="getRequestDetails?.booking_id" :contact_first_name="getRequestDetails?.booking.contact_first_name" :contact_last_name="getRequestDetails?.booking.contact_last_name"  v-if="printing" @close="close_"></print-itenary-modal>
+    <add-funds @close="close" v-if="showRefunds" :isButtonRequired="true" :wallet_name="getWallet?.wallet_name" :account_number="getWallet?.wallet_number"  header_action="Refund Actions"></add-funds>
+    <print-itenary-modal  v-if="printing" @close="close_"></print-itenary-modal>
     <wallet-dedut :amount="getRequestDetails" :reference="getRequestDetails.booking.reference" :user="getWallet?.wallet_name" :balance="getWallet?.balance"  @close="close" v-if="showChargeWallet"></wallet-dedut>
     <div class="overall">
         <div class="wrapper">
@@ -316,10 +323,14 @@ export default {
 
                         <div style="display: flex;justify-content: space-between;align-items: center;gap:0.5rem">
                           <OnBoardingButton :color="custom_theme ? custom_theme.color : default_theme.color"  @click="viewDetails(getRequestDetails)" btn-width="8rem" height="3rem" text-node="View Details" border="none" color="#2C6CAC" background="transparent"></OnBoardingButton>
-                          <div v-if="getRequestDetails?.booking.status === 'issued'">
-                            <p class="issued">Issued</p>
-                          </div>
-                          <OnBoardingButton v-else :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="!getRequestDetails.transition ? 'Charge Wallet' : getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
+                          <div v-if="getRequestDetails.type==='issuance'">
+                            <div v-if="getRequestDetails?.booking.status === 'issued'">
+                              <p class="issued">Issued</p>
+                            </div>
+                            <OnBoardingButton v-else :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="!getRequestDetails.transition ? 'Charge Wallet' : getRequestDetails?.type === 'issuance' ?  'Issue Ticket': getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
+                            </div>
+                         <OnBoardingButton v-else :loading="getLoading" @click="issueTicket"  btn-width="8rem" height="3rem" :text-node="getRequestDetails?.type === 'refund' ? 'Refund Ticket' : getRequestDetails?.type === 'exchange' ? 'Exchange Ticket' : 'Void Ticket'" v-if="getUser?.account_type !== 'manager'"></OnBoardingButton>
+
                         </div>
 
 

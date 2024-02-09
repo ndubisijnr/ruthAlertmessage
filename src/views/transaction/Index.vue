@@ -1,6 +1,6 @@
 <template>
   <WalletCreation v-if="isWallet && getUser.account_type === 'manger' && !getWallet?.wallet_number || setup" @cancel="close"></WalletCreation>
-  <add-funds @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number" :wallet_name="getWallet?.wallet_name"></add-funds>
+  <add-funds :isButtonRequired="false" @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number" :wallet_name="getWallet?.wallet_name"></add-funds>
   <layout v-slot:child-content>
     <div class="overall">
       <div class="booking-wrapper">

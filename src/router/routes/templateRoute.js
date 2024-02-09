@@ -1,10 +1,11 @@
+
 export default [
     {
-        path: '/templates_1',
+        path: '/bookings/details/print/:data',
         // redirect:'create-account',
-        name: 'Template1',
+        name: 'PrintItenaryModal',
         meta: {layout: 'dashboard',authRequired:true},
-        component: () => import('../../components/flightItenaryTemplate/Template1.vue'),
+        component: () => import('../../components/modals/PrintItenaryModal.vue'),
         children:[]
     },
     {

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import router from "@/router";
 
 export const usePrintStore = defineStore('PrintStore', {
     state: () => ({
@@ -12,10 +13,13 @@ export const usePrintStore = defineStore('PrintStore', {
     },
 
     actions: {
-        commitPrintLoading(loading, payload){
+        async commitPrintLoading(loading, payload){
             console.log(payload)
             this.loading = loading
             this.data = payload
+            await router.push({name:"PrintItenaryModal", params:{data:payload.reference}})
+            // window.open(this.router.currentRoute.value.fullPath + '/print/'+payload, '_blank');
+
         }
     }
 })
