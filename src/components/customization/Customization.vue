@@ -55,6 +55,7 @@ export default {
       if(this.logo) this.model.logo = this.logo
       if(this.favicon) this.model.favicon = this.favicon;
       if(this.getTemplateId) this.model.template_id = this.getTemplateId;
+      console.log(this.model)
       storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {
         this.model = {};
         this.favicon = null;
@@ -68,6 +69,7 @@ export default {
     },
 
     changeLogo(value){
+      console.log(value)
       this.logo = value
     },
 

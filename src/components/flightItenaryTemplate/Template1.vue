@@ -5,7 +5,7 @@
         <div class="first-invoice-row">
           <div class="back-and-logo-area">
             <div>
-              <img v-if="getUser?.logo" :src="getUser?.logo" />
+              <img v-if="getUser?.logo" :src="getUser?.logo" class="logo"/>
               <p v-else class="tenant_name">{{getUser?.name}}</p>
             </div>
           </div>
@@ -443,6 +443,11 @@ export default {
   .flight_info_text{
     color: #0F0F0F !important;
   }
+}
+
+.logo{
+  width: 5rem;
+  height: 5rem;
 }
 
 .third-invoice-row-and-table{

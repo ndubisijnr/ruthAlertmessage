@@ -14,7 +14,7 @@
                       <img v-if="getTenant.logo"
                            :src="getTenant.logo"
                            alt="TenantLogo"
-                           style="width: 10rem; height: 5.95919rem"
+                           class="logo"
                       />
                       <p v-else class="tenant_name" :style="!getTenant.logo ? {padding:'1rem 0'}:null">{{getTenant.name}}</p>
                     </router-link>
@@ -674,6 +674,11 @@ export default {
   background: #fff;
   /* shadow-2 */
   width: 10rem;
+}
+
+.logo{
+  width: 3rem;
+  height: 2rem;
 }
 
 .splash {
