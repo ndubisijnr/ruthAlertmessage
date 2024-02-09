@@ -8,7 +8,7 @@
           <div v-if="getCurrentRoute === 'Dashboard'">
             <h3
               class="user-name"
-              style="margin-top: 3.5rem"
+              style="margin-top: 2rem"
               v-show="
                 (getBusinessProfile?.id_document &&
                   getBusinessProfile?.cac_document) ||
@@ -1668,7 +1668,7 @@ export default {
 @media (max-width: 1024px) {
   .dashboard_wrapper {
     width: 100%;
-    margin: 0 1rem;
+    padding: 1rem;
   }
 }
 </style>

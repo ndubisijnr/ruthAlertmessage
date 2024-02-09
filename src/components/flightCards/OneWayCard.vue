@@ -32,7 +32,7 @@
       v-for="(i, index) in paginate(getFinalResult, currentPage, itemsPerPage)"
       :key="index">
     
-      <div class="actual-result" >
+      <div class="actual-result">
         <div class="best_offer" v-if="i.amount === sortByCheapest">Best Offer</div>
         <div style="width: 100%" @click="showDetails(index)">
           <div :class="i.outbound[0].refundable ? 'refundable' : 'not-refundable'">{{i.outbound[0].refundable ? 'Refundable' : 'Non Refundable'}}</div>

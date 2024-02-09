@@ -12,7 +12,7 @@
               v-if="getTenant.logo"
               :src="getTenant.logo"
               alt="TenantLogo"
-              style="width: 10rem; height: 5.95919rem"
+              class="logo"
             />
             <p
               v-else
@@ -147,7 +147,7 @@
               >
               <!-- booking -->
               <router-link
-                :to="`/bookings/${getUser?.access_token?.slice(0, 20)}`"
+                :to="`/bookings/`"
               >
                 <div
                   class="links-item"
@@ -634,9 +634,9 @@ export default {
   width: 10rem;
 }
 
-.logo {
-  width: 3rem;
-  height: 2rem;
+.logo{
+  max-width: 6rem;
+  max-height: 2.35713rem;
 }
 
 .splash {

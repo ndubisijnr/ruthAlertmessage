@@ -33,7 +33,7 @@
                         <img v-if="getTenant.logo"
                             :src="getTenant.logo"
                              alt="TenantLogo"
-                            style="width: 5rem; height: 5rem"
+                             class="logo"
                         />
                         <p v-else class="tenant_name">{{getTenant.name}}</p>
                     </div>
@@ -114,6 +114,10 @@ export default {
 
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/apercu");
+.logo{
+  max-width: 6rem;
+  max-height: 2.35713rem;
+}
 .tenant_name{
   font-size: 2.5rem;
   font-weight: 700;

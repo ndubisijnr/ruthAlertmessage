@@ -604,4 +604,13 @@ input[type=checkbox] {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-}</style>
+}
+
+@media (max-width: 1024px) {
+  .fliter_wrapper {
+    display: none;
+  }
+
+}
+
+</style>
