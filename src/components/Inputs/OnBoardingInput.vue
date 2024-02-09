@@ -86,6 +86,7 @@
             :placeholder="type === 'tel' ? null : placeholder"
             :class="{ focused: isFocused }"
             :readonly="readonly"
+            :disabled="readonly"
             v-model="inputValue"
             @focus="handleFocus"
             @focusout="handleFocusOut"
@@ -179,15 +180,14 @@ export default {
     },
 
     handleFocus() {
-      this.isFocused = true
-      this.$emit('isFocusing', true)
+      this.isFocused = true;
+      this.$emit("isFocusing", true);
     },
 
     handleFocusOut() {
-      this.isFocused = false
-      this.$emit('isFocusing', false)
+      this.isFocused = false;
+      this.$emit("isFocusing", false);
     },
-
 
     validate() {
       if (this.isvalidate) {

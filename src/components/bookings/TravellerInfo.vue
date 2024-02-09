@@ -1,10 +1,8 @@
 <template>
   <booking-index v-slot:booking_children>
     <div class="flight-result animate__animated animate__fadeIn">
-    
-
       <!-- {{ getSelectedFlight }} -->
-    
+
       <div class="breaker1"></div>
 
       <!-- <div class="intro_summary_wrapper">
@@ -50,7 +48,7 @@
 
     </div> -->
 
-    <!-- <div v-if="getSelectedFlight.inbound.length > 0"  class="intro_summary_wrapper">
+      <!-- <div v-if="getSelectedFlight.inbound.length > 0"  class="intro_summary_wrapper">
 
 
       <div class="into-summary" v-for="(i, index) in getSelectedFlight.inbound" :key="index">
@@ -95,68 +93,133 @@
 
       </div> -->
 
-
       <div class="travellers_wrapper">
         <div class="travellers-info">
           <div class="adding-travellers-info">
             <div class="contact-details">
               <p class="contact_details">Contact Details</p>
-             
+
               <div class="group-inputs">
-                <on-boarding-input :default-value="getUser?.email" width="100%" @inputValue="value => bookFlightModal.contact_email = value" label="Email Address"></on-boarding-input>
-                <on-boarding-input :id="'contactPhone'"  :error="phoneValidation" width="100%" @inputValue="value => bookFlightModal.contact_phone = value" label="phone"></on-boarding-input>
+                <on-boarding-input
+                  :default-value="getUser?.email"
+                  width="100%"
+                  @inputValue="(value) => (bookFlightModal.contact_email = value)"
+                  label="Email Address"
+                ></on-boarding-input>
+                <on-boarding-input
+                  :id="'contactPhone'"
+                  :error="phoneValidation"
+                  width="100%"
+                  @inputValue="(value) => (bookFlightModal.contact_phone = value)"
+                  label="phone"
+                ></on-boarding-input>
               </div>
             </div>
 
+            <div
+              style="margin-bottom: 6rem"
+              v-for="(w, index) in passengers"
+              :key="index"
+            >
+              <div class="contact-details">
+                <p class="contact_details">Passenger {{ index + 1 }} Details</p>
+              </div>
 
-            <div style="margin-bottom: 6rem;" v-for="(w, index) in passengers" :key="index">
+              <div class="simple-info">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z"
+                    fill="#1D1E2C"
+                  />
+                </svg>
+                <p style="font-size: 0.875rem; font-weight: 400">
+                  Use all given names and surnames exactly as they appear in your
+                  passport/ID to avoid boarding complications.
+                </p>
+              </div>
 
-          
-            <div class="contact-details">
-              <p class="contact_details">Passenger {{index+1}} Details</p>
-            </div>
-
-            <div class="simple-info">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
-              </svg>
-              <p style="font-size: 0.875rem;font-weight: 400;">
-                Use all given names and surnames exactly as they appear in your
-                passport/ID to avoid boarding complications.
-              </p>
-            </div>
-
-            <div class="form">
+              <div class="form">
                 <!-- <div v-for="(w, index) in passengers" :key="index"> -->
-            
+
                 <!-- passengerList -->
-            
-                <p class="key">{{ w.passenger_type }} </p>
+
+                <p class="key">{{ w.passenger_type }}</p>
 
                 <div>
                   <div class="title">
                     <div class="title-item">
-                      <input style="cursor: pointer;" type="radio" @change="isTitle = 'mr', isTitle ? w.title = 'mr' : null" :checked="w.title==='mr'" />
+                      <input
+                        style="cursor: pointer"
+                        type="radio"
+                        @change="(isTitle = 'mr'), isTitle ? (w.title = 'mr') : null"
+                        :checked="w.title === 'mr'"
+                      />
                       <span>Mr</span>
                     </div>
                     <div class="title-item">
-                      <input style="cursor: pointer;" type="radio"  @change="isTitle = 'mrs', isTitle ? w.title = 'mrs' : null" :checked="w.title==='mrs'"/>
+                      <input
+                        style="cursor: pointer"
+                        type="radio"
+                        @change="(isTitle = 'mrs'), isTitle ? (w.title = 'mrs') : null"
+                        :checked="w.title === 'mrs'"
+                      />
                       <span>Mrs</span>
                     </div>
                     <div class="title-item">
-                      <input style="cursor: pointer;" type="radio" @change="isTitle = 'ms', isTitle ? w.title = 'ms' : null" :checked="w.title==='ms'"/>
+                      <input
+                        style="cursor: pointer"
+                        type="radio"
+                        @change="(isTitle = 'ms'), isTitle ? (w.title = 'ms') : null"
+                        :checked="w.title === 'ms'"
+                      />
                       <span> Ms</span>
                     </div>
                   </div>
 
                   <div class="input-area">
-                      <div class="group-inputs no_gap">
-                        <on-boarding-input style="border-bottom-right-radius: 0;border-top-right-radius: 0;border-right: none;" autocomplete="off" width="100%" label="Frist Name" class="" @inputValue="(value) => w.first_name = value"/>
-                        <on-boarding-input style="border-radius: 0; border-right: none;border-left: none;" autocomplete="off" width="100%" label="Middle Name" class="" />
-                        <on-boarding-input style="border-bottom-left-radius: 0;border-top-left-radius: 0;border-left: none;" autocomplete="off" width="100%" label="Last Name" class="" @inputValue="(value) => w.last_name = value" />
-                      </div>
-                      <div class="group-inputs">
-                        <!-- <div class="choose_document_type" style="position: relative;">
+                    <div class="group-inputs no_gap">
+                      <on-boarding-input
+                        style="
+                          border-bottom-right-radius: 0;
+                          border-top-right-radius: 0;
+                          border-right: none;
+                        "
+                        autocomplete="off"
+                        width="100%"
+                        label="Frist Name"
+                        class=""
+                        @inputValue="(value) => (w.first_name = value)"
+                      />
+                      <on-boarding-input
+                        style="border-radius: 0; border-right: none; border-left: none"
+                        autocomplete="off"
+                        width="100%"
+                        label="Middle Name"
+                        class=""
+                      />
+                      <on-boarding-input
+                        style="
+                          border-bottom-left-radius: 0;
+                          border-top-left-radius: 0;
+                          border-left: none;
+                        "
+                        autocomplete="off"
+                        width="100%"
+                        label="Last Name"
+                        class=""
+                        @inputValue="(value) => (w.last_name = value)"
+                      />
+                    </div>
+                    <div class="group-inputs">
+                      <!-- <div class="choose_document_type" style="position: relative;">
                             <label class="class_label">Gender</label>
                             <p class="selected-item">{{ w?.gender }}</p>
                             <div  v-if="showGender && index === showingGenderIndex" class="dropDown">
@@ -170,76 +233,174 @@
                             <img @click="showGender = !showGender, showingGenderIndex = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
                           </div> -->
 
-                          <DataPicker v-if="w.passenger_type === 'infant'" :max_date="new Date(new Date().setDate(new Date().getDate() - 1))" :min_date="getYYYYMMDDFormat(infantMax)" label="Infant Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                          <DataPicker v-else-if="w.passenger_type === 'child'" :max_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 5))" :min_date="getYYYYMMDDFormat(new Date().setFullYear(new Date().getFullYear() - 22))" label="Child Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
-                          <DataPicker v-else :max_date="getYYYYMMDDFormat(dobMax)" label="Adult Date of birth" @dateValue="obj => w.dob = obj.formattedDate"/>
+                      <DataPicker
+                        v-if="w.passenger_type === 'infant'"
+                        :max_date="new Date(new Date().setDate(new Date().getDate() - 1))"
+                        :min_date="getYYYYMMDDFormat(infantMax)"
+                        label="Infant Date of birth"
+                        @dateValue="(obj) => (w.dob = obj.formattedDate)"
+                      />
+                      <DataPicker
+                        v-else-if="w.passenger_type === 'child'"
+                        :max_date="
+                          getYYYYMMDDFormat(
+                            new Date().setFullYear(new Date().getFullYear() - 5)
+                          )
+                        "
+                        :min_date="
+                          getYYYYMMDDFormat(
+                            new Date().setFullYear(new Date().getFullYear() - 22)
+                          )
+                        "
+                        label="Child Date of birth"
+                        @dateValue="(obj) => (w.dob = obj.formattedDate)"
+                      />
+                      <DataPicker
+                        v-else
+                        :max_date="getYYYYMMDDFormat(dobMax)"
+                        label="Adult Date of birth"
+                        @dateValue="(obj) => (w.dob = obj.formattedDate)"
+                      />
+                    </div>
 
-                      </div>
-
-                      <!-- <div class="group-inputs">
+                    <!-- <div class="group-inputs">
                         <on-boarding-input autocomplete="off" width="100%" label="Email" class="" @inputValue="(value) => w.email = value"/>
 
                         <on-boarding-input autocomplete="off" width="100%" label="Phone Number" class="" @inputValue="(value) => w.phone_number = value" />
                       </div> -->
 
-                      <!-- <div style="display: flex;justify-content: end;">
+                    <!-- <div style="display: flex;justify-content: end;">
                         <div class="remove_button" @click="removePassengers(i.id)">
                           Remove Passanger
                         </div>
                       </div> -->
                   </div>
                 </div>
-            </div>
-            <div class="contact-details" v-if="getSelectedFlight?.document_required">
-              <div style="margin-bottom: 1rem">
-                <span class="contact_details">Passport Information</span><br />
-                <span style="font-size: 1rem; font-weight: 700;">Please ensure your passport is valid for at least 6 months from the departure date</span>
               </div>
-
-              <div class="group-inputs">
-                <on-boarding-input :id="'passportNumber'" :error="passportNumberValidation"  width="100%" @inputValue="value => w.documents.number = value" label="Passport Number"></on-boarding-input>
-              </div>
-
-              <div class="group-inputs">
-                <div class="choose_document_type" style="position: relative;">
-                  <label class="class_label">Passport Nationality</label>
-                  <p class="selected-item">{{ selectedNationalityCountry ? selectedNationalityCountry :  countries[0].name }}</p>
-                  <div  v-if="showCountries && label === 'pn' && index_ === index" class="dropDown">
-                    <div class="doc_type_options">
-                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
-                        <p class="passenger-type-text-1" @click="w.documents.nationality_country = i.code, selectedNationalityCountry=i.name, showCountries=!showCountries">{{ i.name }}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <img @click="showCountries = !showCountries, label = 'pn',index_ = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+              <div class="contact-details" v-if="getSelectedFlight?.document_required">
+                <div style="margin-bottom: 1rem">
+                  <span class="contact_details">Passport Information</span><br />
+                  <span style="font-size: 1rem; font-weight: 700"
+                    >Please ensure your passport is valid for at least 6 months from the
+                    departure date</span
+                  >
                 </div>
 
-                <div class="choose_document_type" style="position: relative;">
-                  <label class="class_label">Passport Issuing Country</label>
-                  <p class="selected-item">{{selectedIssuingCountry ? selectedIssuingCountry : countries[0].name }}</p>
-                  <div  v-if="showCountries && label === 'pic' && index_ === index" class="dropDown">
-                    <div class="doc_type_options">
-                      <div class="passenger-type" v-for="i in countries" style="width: 100%">
-                        <p class="passenger-type-text-1" @click="w.documents.issuing_country = i.code, selectedIssuingCountry=i.name,showCountries=!showCountries">{{ i.name }}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <img @click="showCountries = !showCountries, label = 'pic',index_ = index" src="../../assets/Monotone.svg" style="cursor: pointer" />
+                <div class="group-inputs">
+                  <on-boarding-input
+                    :id="'passportNumber'"
+                    :error="passportNumberValidation"
+                    width="100%"
+                    @inputValue="(value) => (w.documents.number = value)"
+                    label="Passport Number"
+                  ></on-boarding-input>
                 </div>
 
+                <div class="group-inputs">
+                  <div class="choose_document_type" style="position: relative">
+                    <label class="class_label">Passport Nationality</label>
+                    <p class="selected-item">
+                      {{
+                        selectedNationalityCountry
+                          ? selectedNationalityCountry
+                          : countries[0].name
+                      }}
+                    </p>
+                    <div
+                      v-if="showCountries && label === 'pn' && index_ === index"
+                      class="dropDown"
+                    >
+                      <div class="doc_type_options">
+                        <div
+                          class="passenger-type"
+                          v-for="i in countries"
+                          style="width: 100%"
+                        >
+                          <p
+                            class="passenger-type-text-1"
+                            @click="
+                              (w.documents.nationality_country = i.code),
+                                (selectedNationalityCountry = i.name),
+                                (showCountries = !showCountries)
+                            "
+                          >
+                            {{ i.name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <img
+                      @click="
+                        (showCountries = !showCountries), (label = 'pn'), (index_ = index)
+                      "
+                      src="../../assets/Monotone.svg"
+                      style="cursor: pointer"
+                    />
+                  </div>
 
-<!--                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>-->
-<!--                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>-->
+                  <div class="choose_document_type" style="position: relative">
+                    <label class="class_label">Passport Issuing Country</label>
+                    <p class="selected-item">
+                      {{
+                        selectedIssuingCountry
+                          ? selectedIssuingCountry
+                          : countries[0].name
+                      }}
+                    </p>
+                    <div
+                      v-if="showCountries && label === 'pic' && index_ === index"
+                      class="dropDown"
+                    >
+                      <div class="doc_type_options">
+                        <div
+                          class="passenger-type"
+                          v-for="i in countries"
+                          style="width: 100%"
+                        >
+                          <p
+                            class="passenger-type-text-1"
+                            @click="
+                              (w.documents.issuing_country = i.code),
+                                (selectedIssuingCountry = i.name),
+                                (showCountries = !showCountries)
+                            "
+                          >
+                            {{ i.name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <img
+                      @click="
+                        (showCountries = !showCountries),
+                          (label = 'pic'),
+                          (index_ = index)
+                      "
+                      src="../../assets/Monotone.svg"
+                      style="cursor: pointer"
+                    />
+                  </div>
+
+                  <!--                <on-boarding-input  width="100%" @inputValue="value => documents.nationality_country = value" label="Passport Nationality"></on-boarding-input>-->
+                  <!--                <on-boarding-input  width="100%" @inputValue="value => documents.issuing_country = value" label="Passport Issuing Country"></on-boarding-input>-->
+                </div>
+
+                <div class="group-inputs">
+                  <DataPicker
+                    :max_date="new Date()"
+                    label="Issued Date"
+                    @dateValue="(obj) => (w.documents.issuing_date = obj.formattedDate)"
+                  />
+
+                  <DataPicker
+                    :min_date="new Date()"
+                    label="Expiry Date"
+                    @dateValue="(obj) => (w.documents.expiry_date = obj.formattedDate)"
+                  />
+
+                  <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
+                </div>
               </div>
-
-              <div class="group-inputs">
-                <DataPicker :max_date="new Date()" label="Issued Date" @dateValue="obj => w.documents.issuing_date = obj.formattedDate"/>
-
-                <DataPicker :min_date="new Date()" label="Expiry Date" @dateValue="obj => w.documents.expiry_date = obj.formattedDate"/>
-
-                <!--                <on-boarding-input  width="100%" @inputValue="value => documents.document_type = value" label="Document Type"></on-boarding-input>-->
-              </div>
-            </div>
               <!-- <div class="simple-info">
               <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M4.57617 19.4238C6.56104 21.409 9.19482 22.5 12 22.5C14.8052 22.5 17.4434 21.409 19.4238 19.4238C21.4087 17.4387 22.5 14.8055 22.5 12C22.5 9.19455 21.4087 6.55719 19.4238 4.57617C17.4434 2.59103 14.8052 1.5 12 1.5C9.19482 1.5 6.55664 2.59103 4.57617 4.57617C2.59131 6.55719 1.5 9.19455 1.5 12C1.5 14.8055 2.59131 17.4428 4.57617 19.4238ZM10.6875 6.75C10.6875 6.02399 11.2734 5.4375 12 5.4375C12.7266 5.4375 13.3125 6.02399 13.3125 6.75V13.3125C13.3125 14.0385 12.7266 14.625 12 14.625C11.2734 14.625 10.6875 14.0385 10.6875 13.3125V6.75ZM13.3125 17.25C13.3125 16.524 12.7266 15.9375 12 15.9375C11.2734 15.9375 10.6875 16.524 10.6875 17.25C10.6875 17.976 11.2734 18.5625 12 18.5625C12.7266 18.5625 13.3125 17.976 13.3125 17.25Z" fill="#1D1E2C"/>
@@ -248,56 +409,76 @@
                 or directly on your airline's website.
                 Please also consult your local health authorities for updated information.</p>
               </div>  -->
-            <!-- </div> -->
-          </div>
-
-           
-
-
-
+              <!-- </div> -->
+            </div>
 
             <!-- <div class="add-new-flight" @click="passengers.length < getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  ? addPassenger() : null" :class="{'disabled':passengers.length === getSelectedFlight.price_summary.map(it => it.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0) }">
                 <img src="../../assets/Cards/add.svg" width="20" />
                 <p>Add New Passenger</p>
             </div> -->
 
-        
-
-
             <div class="">
               <p class="contact_details">Paying Now, or Later</p>
 
-              <p class="text-1">To reserve your flights, click <span class="span-1">"Book on Hold." </span>
-                You will then be given complete instructions on how to make payment whenever you are ready during the stipulated time. 
-                Please mention your booking reference.
-                Until payment is confirmed, the advertised fare / pricing is not guaranteed.</p>
+              <p class="text-1">
+                To reserve your flights, click
+                <span class="span-1">"Book on Hold." </span> You will then be given
+                complete instructions on how to make payment whenever you are ready during
+                the stipulated time. Please mention your booking reference. Until payment
+                is confirmed, the advertised fare / pricing is not guaranteed.
+              </p>
 
-
-                <div :class="{'onHold':showBookHold}">
-                    <div class="choose_document_type" style="position: relative;">
-                          <p class="book_on_hold">Book on Hold</p>
-                          <svg v-if="!showBookHold" @click="showBookHold = !showBookHold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M16.8 12.0005C16.8 12.7005 16.53 13.4005 16 13.9305L9.48001 20.4505C9.19001 20.7405 8.71001 20.7405 8.42001 20.4505C8.13001 20.1605 8.13001 19.6805 8.42001 19.3905L14.94 12.8705C15.42 12.3905 15.42 11.6105 14.94 11.1305L8.42001 4.61047C8.13001 4.32047 8.13001 3.84047 8.42001 3.55047C8.71001 3.26047 9.19001 3.26047 9.48001 3.55047L16 10.0705C16.53 10.6005 16.8 11.3005 16.8 12.0005Z" fill="#292D32"/>
-                          </svg> 
-                          <svg @click="showBookHold = !showBookHold" v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z" fill="#292D32"/>
-                          </svg>                  
-                    </div>
-
-
-                    <div v-if="showBookHold">
-                          <p class="dropDown_p">Hold price and space and you have the flexibility to pay at a later date, 
-                            Hold price and space and you have the flexibility to pay at a later date
-                          </p>
-                    </div>
+              <div :class="{ onHold: showBookHold }">
+                <div class="choose_document_type" style="position: relative">
+                  <p class="book_on_hold">Book on Hold</p>
+                  <svg
+                    v-if="!showBookHold"
+                    @click="showBookHold = !showBookHold"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M16.8 12.0005C16.8 12.7005 16.53 13.4005 16 13.9305L9.48001 20.4505C9.19001 20.7405 8.71001 20.7405 8.42001 20.4505C8.13001 20.1605 8.13001 19.6805 8.42001 19.3905L14.94 12.8705C15.42 12.3905 15.42 11.6105 14.94 11.1305L8.42001 4.61047C8.13001 4.32047 8.13001 3.84047 8.42001 3.55047C8.71001 3.26047 9.19001 3.26047 9.48001 3.55047L16 10.0705C16.53 10.6005 16.8 11.3005 16.8 12.0005Z"
+                      fill="#292D32"
+                    />
+                  </svg>
+                  <svg
+                    @click="showBookHold = !showBookHold"
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M12 16.7996C11.3 16.7996 10.6 16.5296 10.07 15.9996L3.55002 9.47965C3.26002 9.18965 3.26002 8.70965 3.55002 8.41965C3.84002 8.12965 4.32002 8.12965 4.61002 8.41965L11.13 14.9396C11.61 15.4196 12.39 15.4196 12.87 14.9396L19.39 8.41965C19.68 8.12965 20.16 8.12965 20.45 8.41965C20.74 8.70965 20.74 9.18965 20.45 9.47965L13.93 15.9996C13.4 16.5296 12.7 16.7996 12 16.7996Z"
+                      fill="#292D32"
+                    />
+                  </svg>
                 </div>
-              
 
-                <OnBoardingButton  style="margin-top:4rem;margin-bottom: 8.87rem;border: none;" @click="proceedToPayment" :loading="getLoading" :disabled="getLoading" btn-width="100%" text-node="Continue"></OnBoardingButton>
-            
-            
+                <div v-if="showBookHold">
+                  <p class="dropDown_p">
+                    Hold price and space and you have the flexibility to pay at a later
+                    date, Hold price and space and you have the flexibility to pay at a
+                    later date
+                  </p>
+                </div>
+              </div>
+
+              <OnBoardingButton
+                style="margin-top: 4rem; margin-bottom: 8.87rem; border: none"
+                @click="proceedToPayment"
+                :loading="getLoading"
+                :disabled="getLoading"
+                btn-width="100%"
+                text-node="Continue"
+              ></OnBoardingButton>
             </div>
-
           </div>
 
           <div class="booking_summary">
@@ -305,17 +486,27 @@
               <p class="booking_summary_header-summary">Booking Summary</p>
             </div>
             <div class="booking_summary_body">
-<!--              {{getSelectedFlight.routes[0].segments}}-->
+              <!--              {{getSelectedFlight.routes[0].segments}}-->
               <div class="airline_details" v-if="!getSelectedFlight.is_multicity">
-                <img :src="getSelectedFlight?.outbound[0]?.airline_details?.logo" class="logo" />
-                <p class="airline_name">{{getSelectedFlight?.outbound[0].airline_details?.name}}</p>
-            </div>
+                <img
+                  :src="getSelectedFlight?.outbound[0]?.airline_details?.logo"
+                  class="logo"
+                />
+                <p class="airline_name">
+                  {{ getSelectedFlight?.outbound[0].airline_details?.name }}
+                </p>
+              </div>
               <div v-else class="airline_details">
-                <img :src="getSelectedFlight.routes[0].segments[0]?.airline_details?.logo" class="logo" />
-                <p class="airline_name">{{getSelectedFlight.routes[0].segments[0].airline_details?.name}}</p>
+                <img
+                  :src="getSelectedFlight.routes[0].segments[0]?.airline_details?.logo"
+                  class="logo"
+                />
+                <p class="airline_name">
+                  {{ getSelectedFlight.routes[0].segments[0].airline_details?.name }}
+                </p>
               </div>
 
-            <div class="airline_info">
+              <div class="airline_info">
                 <!-- <div class="actual-result-item-info">
                   <div>
                     <p class="dest"> {{convertToWord(getSelectedFlight.outbound[0].departure_time.split('T')[0])}}</p>
@@ -334,29 +525,48 @@
                   </div>
                 </div> -->
                 <div class="actual-result-item-info-2">
-                  <div v-for="(i, index) in getSelectedFlight?.price_summary" :key="index" class="extra-charge-info">
-                      <div style="margin-bottom: 0.38rem;">
-                        <div style="display: flex;gap: 0.5rem;align-items: center;justify-content: space-between">
-                          <div style="display: flex;gap: 0.5rem;align-items: center;">
-                            <p class="dest">{{i.passenger_type}} </p>
-                            <p style="text-transform: lowercase;border-radius: 50%;width:18px;height:auto;text-align: center;">X {{i.quantity}}</p>
-                          </div>
-                          <p class="">₦ {{formatAmount(i.total_price)}}</p>
-
+                  <div
+                    v-for="(i, index) in getSelectedFlight?.price_summary"
+                    :key="index"
+                    class="extra-charge-info"
+                  >
+                    <div style="margin-bottom: 0.38rem">
+                      <div
+                        style="
+                          display: flex;
+                          gap: 0.5rem;
+                          align-items: center;
+                          justify-content: space-between;
+                        "
+                      >
+                        <div style="display: flex; gap: 0.5rem; align-items: center">
+                          <p class="dest">{{ i.passenger_type }}</p>
+                          <p
+                            style="
+                              text-transform: lowercase;
+                              border-radius: 50%;
+                              width: 18px;
+                              height: auto;
+                              text-align: center;
+                            "
+                          >
+                            X {{ i.quantity }}
+                          </p>
                         </div>
+                        <p class="">₦ {{ formatAmount(i.total_price) }}</p>
                       </div>
-<!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
-<!--                        <p class="dest">Base Fare</p>-->
-<!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
-<!--                      </div>-->
-<!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
-<!--                        <p class="dest">Tax Fare</p>-->
-<!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
-<!--                      </div>-->
+                    </div>
+                    <!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
+                    <!--                        <p class="dest">Base Fare</p>-->
+                    <!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
+                    <!--                      </div>-->
+                    <!--                      <div style="display: flex;gap: 0.5rem;justify-content: space-between;">-->
+                    <!--                        <p class="dest">Tax Fare</p>-->
+                    <!--                        <p class="">₦ {{formatAmount(i.total_price)}}</p>-->
+                    <!--                      </div>-->
                   </div>
-                  
                 </div>
-            </div>
+              </div>
             </div>
             <div class="booking_summary_footer">
               <p class="total">Total</p>
@@ -367,123 +577,120 @@
       </div>
     </div>
   </booking-index>
-
 </template>
 
 <script>
-import BookingIndex from "../../views/dashboard/Index.vue"
+import BookingIndex from "../../views/dashboard/Index.vue";
 import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import storeUtils from "../../utils/storeUtils";
 import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
 import DataPicker from "../Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest";
 import countries from "@/mixins/countries";
-import { formatAmount, getYYYYMMDDFormat, convertDurationToWords, convertToWord, convertTo12HourFormat } from "../../mixins/flightUtil";
+import {
+  formatAmount,
+  getYYYYMMDDFormat,
+  convertDurationToWords,
+  convertToWord,
+  convertTo12HourFormat,
+} from "../../mixins/flightUtil";
 export default {
   name: "TravellerInfo",
-  components:{OnBoardingInput, BookingIndex, OnBoardingButton, DataPicker},
-  data(){
-    return{
-      showBookHold:false,
+  components: { OnBoardingInput, BookingIndex, OnBoardingButton, DataPicker },
+  data() {
+    return {
+      showBookHold: false,
       countries,
-      bookFlightModal:FlightRequest.bookFlight,
-      phoneValidation:null,
-      passportNumberValidation:null,
+      bookFlightModal: FlightRequest.bookFlight,
+      phoneValidation: null,
+      passportNumberValidation: null,
       formatAmount,
       convertToWord,
       convertTo12HourFormat,
       convertDurationToWords,
       getYYYYMMDDFormat,
-      passengers:[],
-      index_:null,
-      passengerIdCounter:1,
-      showCountries:null,
-      label:null,
-      selectedIssuingCountry:null,
-      selectedNationalityCountry:null,
-      showingGenderIndex:null,
-      showGender:false,
-      isTitle:false,
-      dobMax:new Date().setFullYear(new Date().getFullYear() - 12),
-      infantMax:new Date(new Date().setFullYear(new Date().getFullYear() - 2))
+      passengers: [],
+      index_: null,
+      passengerIdCounter: 1,
+      showCountries: null,
+      label: null,
+      selectedIssuingCountry: null,
+      selectedNationalityCountry: null,
+      showingGenderIndex: null,
+      showGender: false,
+      isTitle: false,
+      dobMax: new Date().setFullYear(new Date().getFullYear() - 12),
+      infantMax: new Date(new Date().setFullYear(new Date().getFullYear() - 2)),
       // new Date().setFullYear(new Date().getFullYear() - 2),
-    }
+    };
   },
-  methods:{
-    
+  methods: {
     addPassenger(value) {
       let value_;
-      if(value.toLowerCase() === 'held_infant') {
-          value_ = value.split('_')[1]
-      }else{
-          value_ = value
+      if (value.toLowerCase() === "held_infant") {
+        value_ = value.split("_")[1];
+      } else {
+        value_ = value;
       }
 
-      console.log(value_)
-
+      console.log(value_);
 
       const newPassenger = {
-          passenger_type: value_,
-          first_name: null,
-          last_name: null,
-          dob: null,
-          gender:null,
-          title: null,
-          email: null,
-          phone_number: null,
-        };
+        passenger_type: value_,
+        first_name: null,
+        last_name: null,
+        dob: null,
+        gender: null,
+        title: null,
+        email: null,
+        phone_number: null,
+      };
 
       const documents = {
-            number: null,
-            issuing_date: null,
-            expiry_date: null,
-            issuing_country: this.countries[0].code,
-            nationality_country: this.countries[0].code,
-            document_type: 'passport',
-            holder: false
-        };
+        number: null,
+        issuing_date: null,
+        expiry_date: null,
+        issuing_country: this.countries[0].name,
+        nationality_country: this.countries[0].name,
+        document_type: "passport",
+        holder: true,
+      };
 
-        // Create a new passenger object with a unique ID
-        if(value === 'child' || value === 'held_infant' || 'adult'){
-          if(newPassenger.title === 'mrs' || newPassenger.title === 'ms'){
-            newPassenger.gender = 'female'
-          }else{
-            newPassenger.gender = 'male'
-          }
-           
+      // Create a new passenger object with a unique ID
+      if (value === "child" || value === "held_infant" || "adult") {
+        if (newPassenger.title === "mrs" || newPassenger.title === "ms") {
+          newPassenger.gender = "female";
+        } else {
+          newPassenger.gender = "male";
         }
+      }
 
-        if(this.getSelectedFlight?.document_required){
-           newPassenger.documents = documents
-        }
+      if (this.getSelectedFlight?.document_required) {
+        newPassenger.documents = documents;
+      }
 
-        newPassenger.email = this.getUser?.email
-        newPassenger.phone_number = this.bookFlightModal?.phone_number
-
-        
+      newPassenger.email = this.getUser?.email;
+      newPassenger.phone_number = this.bookFlightModal?.phone_number;
 
       this.passengers.push(newPassenger);
-
-
     },
 
-
     passengerList() {
-      for(let i = 0; i < this.getSelectedFlight?.travelers_price.length;i++){
-        const key = Object.keys(this.getSelectedFlight?.travelers_price[i]).toLocaleString()
-        this.addPassenger(key)
+      for (let i = 0; i < this.getSelectedFlight?.travelers_price.length; i++) {
+        const key = Object.keys(
+          this.getSelectedFlight?.travelers_price[i]
+        ).toLocaleString();
+        this.addPassenger(key);
       }
     },
 
-
-
-    removePassengers(value){
-      this.passengers = this.passengers.filter(it => it.id !== value)
+    removePassengers(value) {
+      this.passengers = this.passengers.filter((it) => it.id !== value);
     },
 
-    bookingValidation(id){
-      const element = document.getElementById(id)
-      return !element?.value
+    bookingValidation(id) {
+      const element = document.getElementById(id);
+      return !element?.value;
     },
 
     proceedToPayment(){
@@ -509,100 +716,95 @@ export default {
         this.bookFlightModal.contact_email = this.bookFlightModal.contact_email ? this.bookFlightModal.contact_email : this.getUser?.email
         console.log(this.bookFlightModal)
         // storeUtils.fireAway().flight?.handleBookFlight(this.bookFlightModal, this.getSelectedFlight?.id)
-      }
-     
-    },
 
-    getAirportNamesByCityCode(city_code){
-      const airports = JSON.parse(localStorage?.airports)
-      if(airports){
-        const airportName = airports.filter(it => it.city_code === city_code)[0]?.name
-        return airportName
       }
     },
 
-    getCityByCityCode(city_code){
-      const airports = JSON.parse(localStorage?.airports)
-      if(airports){
-        const cityName = airports.filter(it => it.city_code === city_code)[0]?.city
-        return cityName
+    getAirportNamesByCityCode(city_code) {
+      const airports = JSON.parse(localStorage?.airports);
+      if (airports) {
+        const airportName = airports.filter((it) => it.city_code === city_code)[0]?.name;
+        return airportName;
       }
     },
-    
+
+    getCityByCityCode(city_code) {
+      const airports = JSON.parse(localStorage?.airports);
+      if (airports) {
+        const cityName = airports.filter((it) => it.city_code === city_code)[0]?.city;
+        return cityName;
+      }
+    },
   },
-  computed:{
-
-    getUser(){
-      if(localStorage.user){
-        return JSON.parse(localStorage.user)
+  computed: {
+    getUser() {
+      if (localStorage.user) {
+        return JSON.parse(localStorage.user);
       }
     },
-    getBusinessProfile(){
-      if(localStorage.businessProfile){
-        const business = JSON.parse(localStorage?.businessProfile)
-        return business
+    getBusinessProfile() {
+      if (localStorage.businessProfile) {
+        const business = JSON.parse(localStorage?.businessProfile);
+        return business;
       }
-
     },
 
-    getSelectedFlight(){
-      return storeUtils.fireAway()?.flight?.getSelectedFlight
+    getSelectedFlight() {
+      return storeUtils.fireAway()?.flight?.getSelectedFlight;
     },
 
-    getLoading(){
-      return storeUtils.fireAway()?.flight?.getBookingLoading
-    }
+    getLoading() {
+      return storeUtils.fireAway()?.flight?.getBookingLoading;
+    },
   },
 
-  mounted(){
-    this.passengerList()
-  }
-
-
-}
+  mounted() {
+    this.passengerList();
+  },
+};
 </script>
 
 <style scoped>
-.book_on_hold{
-  color: var(--neutrals-onlock-berry, #1D242E);
+.book_on_hold {
+  color: var(--neutrals-onlock-berry, #1d242e);
   /* 16px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 175% */
 }
-.booking_summary_header-summary{
-  color: #2D3139;
-  font-family: 'Product Sans';
+.booking_summary_header-summary {
+  color: #2d3139;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 150% */
 }
-.passenger-type{
+.passenger-type {
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 0.37rem;
 }
 
-.selected-item{
+.selected-item {
   padding: 1.3rem 0 0.25rem 0;
   /* border: solid; */
-  color: var(--black-text-01, #1D1E2C);
-  font-family: 'Product Sans';
+  color: var(--black-text-01, #1d1e2c);
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
 }
 
-.passenger-type-text-1{
+.passenger-type-text-1 {
   color: #222;
 
   /* medium/input/16px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
@@ -610,75 +812,73 @@ export default {
   cursor: pointer;
 }
 
-.passenger-type-text-1:hover{
+.passenger-type-text-1:hover {
   transform: scale(1);
   font-size: 1.1rem;
 }
 
-
-.travellers_wrapper{
+.travellers_wrapper {
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
   margin-bottom: 1.44rem;
   justify-content: space-between;
 }
-.into-summary-item-p{
-  color: #1D1E2C;
-  font-family: 'Product Sans';
+.into-summary-item-p {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5rem; /* 133.333% */
 }
-.class_label{
+.class_label {
   position: absolute;
   top: 5px;
-  color:  #2D3139;
+  color: #2d3139;
   /* sanslight/12px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 0.95rem;
   font-style: normal;
   font-weight: 300;
   line-height: 1.25rem; /* 166.667% */
-
 }
 
-.airline_name{
+.airline_name {
   color: var(--black-text-03, #444854);
   text-align: center;
 
   /* subtext/medium/14px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 171.429% */
 }
 
-.key{
+.key {
   display: flex;
   padding: 4px 8px;
   align-items: center;
   gap: 10px;
   border-radius: 15px;
-  background: var(--primary-05, #EAF0F7);   
+  background: var(--primary-05, #eaf0f7);
   width: 10%;
   text-transform: capitalize;
   justify-content: center;
   margin: 1rem 0;
 }
-.disabled{
-  cursor:not-allowed !important;
-  background:transparent !important;
+.disabled {
+  cursor: not-allowed !important;
+  background: transparent !important;
   border: solid var(--app-default-primary) !important;
 }
 
-.contact-details{
+.contact-details {
   margin-bottom: 2rem;
 }
 
-.duration{
+.duration {
   display: flex;
   padding: 0.5rem 1rem;
   align-items: flex-start;
@@ -689,8 +889,7 @@ export default {
   width: 5.817rem;
 }
 
-
-.remove_button{
+.remove_button {
   display: flex;
   width: 11rem;
   padding: 0.625rem 1rem;
@@ -698,9 +897,9 @@ export default {
   align-items: center;
   gap: 0.625rem;
   border-radius: 0.25rem;
-  background: var(--red-error, #FEF6F6);
-  color: var(--error-red, #F04444);
-  font-family: 'Product Sans' Medium;
+  background: var(--red-error, #fef6f6);
+  color: var(--error-red, #f04444);
+  font-family: "Product Sans" Medium;
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
@@ -708,67 +907,67 @@ export default {
   cursor: pointer;
 }
 
-.intro_summary_wrapper{
+.intro_summary_wrapper {
   padding-bottom: 2.5rem;
   margin-bottom: 1.75rem;
   border: solid;
 }
-.into-summary{
+.into-summary {
   width: 100%;
- 
+
   display: flex;
   position: relative;
   align-items: start;
   gap: 1.25rem;
   margin-top: 3rem;
 }
-.into-summary-item{
+.into-summary-item {
   display: flex;
   flex-direction: column;
   gap: 4rem;
 }
 
-.span-1{
-  color:  #2C6CAC;
-/* Body/16px/Regular */
-font-family: 'Product Sans';
-font-size: 1rem;
-font-style: normal;
-font-weight: 400;
-line-height: 1.75rem;
+.span-1 {
+  color: #2c6cac;
+  /* Body/16px/Regular */
+  font-family: "Product Sans";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem;
 }
 
-.dropDown_p{
-  color: #575A65;
+.dropDown_p {
+  color: #575a65;
 
-/* link/16px/Regular */
-font-family: 'Product Sans';
-font-size: 1rem;
-font-style: normal;
-font-weight: 400;
-line-height: 1.5rem; /* 150% */
+  /* link/16px/Regular */
+  font-family: "Product Sans";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 150% */
 }
 
-.booking_summary_body{
+.booking_summary_body {
   margin: 1rem;
 }
-.airline_details{
+.airline_details {
   display: inline-flex;
   gap: 0.37rem;
   align-items: center;
 }
-.booking_summary_header{
-  border-bottom: solid #DFE6ED;
+.booking_summary_header {
+  border-bottom: solid #dfe6ed;
   padding: 0.5rem;
   margin: 0 1rem;
 }
-.title-item{
+.title-item {
   display: inline-flex;
   gap: 0.88rem;
   align-items: center;
 }
 
-.onHold{
+.onHold {
   width: 43.875rem;
   /* height: 9.8125rem; */
   padding: 1.25rem;
@@ -776,24 +975,23 @@ line-height: 1.5rem; /* 150% */
   align-items: flex-start;
   flex-shrink: 0;
   border-radius: 0.5rem;
-  border: 1px solid var(--primary-main, #2C6CAC);
+  border: 1px solid var(--primary-main, #2c6cac);
   margin-bottom: 4rem;
-  background-color: #FFF;
-
+  background-color: #fff;
 }
-.title{
+.title {
   display: flex;
-width: 17.1875rem;
-align-items: center;
-gap: 3rem;
-margin-bottom: 1rem;
-align-items: center;
+  width: 17.1875rem;
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
-.text-1{
-  color: #575A65;
+.text-1 {
+  color: #575a65;
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -802,59 +1000,59 @@ align-items: center;
   margin: 0.75rem 0;
 }
 
-.add-new-flight{
+.add-new-flight {
   display: flex;
   width: 14.411rem;
   padding: 0.5rem 1.25rem 0.5rem 1rem;
   align-items: center;
   gap: 0.625rem;
-  color:  var(--app-default-primary);
-  font-family: 'Product Sans';
+  color: var(--app-default-primary);
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem; /* 175% */
   border-radius: 0.25rem;
-  background:  var(--app-defautl-primary-light);
+  background: var(--app-defautl-primary-light);
   margin: 2rem 0;
   cursor: pointer;
 }
 
-.form{
+.form {
   width: 100%;
   margin: 0;
 }
-.group-inputs{
+.group-inputs {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
 }
-.contact_details{
-  color:#1D1E2C;
+.contact_details {
+  color: #1d1e2c;
 
   /* bold/24px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 116.667% */
-  margin:0 0 1.6rem 0;
+  margin: 0 0 1.6rem 0;
 }
-.simple-info{
+.simple-info {
   display: flex;
   width: 43rem;
   padding: 0.375rem 1rem;
   gap: 0.5rem;
   border-radius: 0.25rem;
-  background: #F9FAFC;
+  background: #f9fafc;
   align-items: center;
   justify-content: center;
 }
 
-.simple-info p{
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
+.simple-info p {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
@@ -862,7 +1060,7 @@ align-items: center;
   letter-spacing: 0.0035rem;
 }
 
-.travellers-info{
+.travellers-info {
   display: flex;
   gap: 1.5rem;
   align-items: start;
@@ -870,21 +1068,21 @@ align-items: center;
   justify-content: space-between;
 }
 
-.adding-travellers-info{
+.adding-travellers-info {
   width: 43.875rem;
 }
 
-.booking_summary{
+.booking_summary {
   width: 21.75rem;
   height: auto;
   flex-shrink: 0;
   border-radius: 0.25rem;
-  border: 1px solid  #E5E9F2;
-  background: #FFF;
+  border: 1px solid #e5e9f2;
+  background: #fff;
   position: relative;
 }
 
-.booking_summary_footer{
+.booking_summary_footer {
   /* position: absolute; */
   bottom: 0;
   width: 100%;
@@ -892,47 +1090,45 @@ align-items: center;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
-
 }
 
-.extra-charge-info{
+.extra-charge-info {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: space-between;
-  border-bottom: solid #E5E9F2;
+  border-bottom: solid #e5e9f2;
   /* margin: 0.5rem 0; */
   padding: 0.5rem 0;
   flex-direction: column;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
-.progress{
+.progress {
   width: 100%;
-  background-color: #89128A;
+  background-color: #89128a;
   height: 0.25rem;
   transition: 1s ease-in;
 }
-.u-hide{
+.u-hide {
   border-radius: 0.5rem;
-  border: 1px solid  #F9FAFC;
-  background:  #F9FAFC;
-
+  border: 1px solid #f9fafc;
+  background: #f9fafc;
 }
-.book-flight-details-btn{
+.book-flight-details-btn {
   width: 100%;
   display: inline-flex;
   justify-content: center;
   padding: 4rem;
 }
-.extra-baggage-p{
-  color:  #1D1E2C;
+.extra-baggage-p {
+  color: #1d1e2c;
 
   /* Subtext/14px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
@@ -942,67 +1138,62 @@ a{
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
-.price{
-  color:  #1D1E2C !important;
+.price {
+  color: #1d1e2c !important;
 
   /* Headings/black/24px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.5rem !important;
   font-style: normal;
   font-weight: 900 !important;
   line-height: 3.875rem !important;
 }
 
-.breaker-3{
+.breaker-3 {
   width: 0.0625rem;
   height: 2.25rem;
-  background: #E0E6ED;
+  background: #e0e6ed;
 }
 
-.additional-details-info-item{
+.additional-details-info-item {
   display: flex;
   width: auto;
   height: 2rem;
   gap: 0.5rem;
   align-items: center;
   justify-content: start;
-
 }
-.text-1{
-  color:#575A65;
-  font-family: 'Product Sans';
+.text-1 {
+  color: #575a65;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   /*line-height: 1.5rem; !* 150% *!*/
-
 }
 
-.text-2{
-  color: #1D1E2C;
+.text-2 {
+  color: #1d1e2c;
 
   /* medium/input/16px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   /*line-height: 1.75rem;*/
-
-
 }
-.additional-details-info{
+.additional-details-info {
   display: flex;
   justify-content: start;
-  border-top: solid #E0E6ED;
-  border-bottom: solid #E0E6ED;
+  border-top: solid #e0e6ed;
+  border-bottom: solid #e0e6ed;
   width: 100%;
   gap: 1.5rem;
   height: 5.375rem;
   align-items: center;
   margin-top: 3.5rem;
-
 }
-.dropDown{
+.dropDown {
   width: 17.625rem;
   display: flex;
   flex-direction: column;
@@ -1011,76 +1202,69 @@ a{
   gap: 1.25rem;
   border-radius: 0.5rem;
   top: 80%;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   position: absolute;
   z-index: 999999999;
 }
-.depart_date-info{
+.depart_date-info {
   display: flex;
   align-items: center;
   gap: 3.25rem;
 }
-.depart-date-info-stops{
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
+.depart-date-info-stops {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5rem; /* 150% */
 }
-.depart-date{
-  color: #1D1E2C;
+.depart-date {
+  color: #1d1e2c;
 
   /* Headings/20px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 140% */
 }
 
-
-.actual-result-wrapper{
+.actual-result-wrapper {
   margin-bottom: 2.06rem;
   border-radius: 0.25rem;
   /*border: 1px solid  #E5E9F2;*/
-
-
 }
-.details{
+.details {
   border-radius: 0.25rem;
   /*border: 1px solid  #E5E9F2;*/
   padding: 1.5rem;
-
-
-
 }
-.component87{
+.component87 {
   width: 100%;
   height: auto;
   flex-shrink: 0;
   border-radius: 0.5rem;
-  border: 1px solid #E0E6ED;
-  background: #FFF;
+  border: 1px solid #e0e6ed;
+  background: #fff;
   margin-top: 2rem;
   padding: 1.5rem;
-
 }
-.view-details{
-  color:#89128A;
+.view-details {
+  color: #89128a;
   width: 4.8125rem;
   height: 1.5rem;
 
   /* subtext/medium/14px */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 171.429% */
   cursor: pointer;
 }
-.spiralLines-div{
+.spiralLines-div {
   position: absolute;
   top: -100px;
   right: -150px;
@@ -1089,7 +1273,7 @@ a{
   /*border: solid;*/
   z-index: -1;
 }
-.choose_document_type{
+.choose_document_type {
   display: flex;
   width: 100%;
   height: 4rem;
@@ -1097,15 +1281,13 @@ a{
   justify-content: space-between;
   align-items: center;
   border-radius: 0.375rem;
-  border: 1px solid  #EFF2F7;
+  border: 1px solid #eff2f7;
   margin-bottom: 1rem;
-  background-color: #FFF;
+  background-color: #fff;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
-
-
 }
 
-.doc_type_options{
+.doc_type_options {
   display: flex;
   width: 16rem;
   height: 200px;
@@ -1122,55 +1304,54 @@ a{
   /* m4 */
 }
 
-.form-area-footer{
+.form-area-footer {
   margin-top: 4rem;
 }
-.group-inputs{
+.group-inputs {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
 }
 
-.no_gap{
+.no_gap {
   gap: 0;
 }
 
-.stops{
-  color:  #444854;
-  font-family: 'Product Sans';
+.stops {
+  color: #444854;
+  font-family: "Product Sans";
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 133.333% */
 }
-.activeDestType{
-  border-bottom:2px solid #89128A;
-  color:#89128A !important;
+.activeDestType {
+  border-bottom: 2px solid #89128a;
+  color: #89128a !important;
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.75rem;
-  font-family: 'Product Sans';
-
+  font-family: "Product Sans";
 }
-.more-flight-info{
+.more-flight-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.dest{
-  color:  #444854;
-  font-family: 'Product Sans';
+.dest {
+  color: #444854;
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 114.286% */
   text-transform: capitalize;
 }
-.logo-area{
+.logo-area {
   display: flex;
   width: 15.1875rem;
   align-items: center;
@@ -1178,129 +1359,128 @@ a{
   height: 2rem;
 }
 
-.flight-name{
-  color:  #444854;
+.flight-name {
+  color: #444854;
   text-align: center;
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 150% */
 }
 
-.time{
-  color: #1D1E2C;
-  font-family: 'Product Sans';
+.time {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 133.333% */
 }
 
-.amount{
-  color:  #1D1E2C;
+.amount {
+  color: #1d1e2c;
   text-align: center;
   /* Headings/20px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 140% */
   margin-bottom: 1.25rem;
 }
-.amount-book-area{
+.amount-book-area {
   border-radius: 0.25rem;
-  background:  #F9FAFC;
+  background: #f9fafc;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   height: 15.888rem;
   display: flex;
   align-items: center;
 }
-.breaker-2{
+.breaker-2 {
   width: 85%;
   height: 0.1rem;
-  background: #E5E9F2;
+  background: #e5e9f2;
 }
-.actual-result-item{
+.actual-result-item {
   width: 100%;
   height: 7rem;
   flex-shrink: 0;
   border-radius: 0rem 0rem 0.25rem 0.25rem;
-  background: #FFF;
+  background: #fff;
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 0.5rem;
-  padding-left:1.5rem;
+  padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
-.logo{
+.logo {
   width: 2rem;
   height: 2rem;
   border-radius: 30%;
 }
 
-.actual-result-item-info{
+.actual-result-item-info {
   display: flex;
   justify-content: space-between;
   width: 100%;
   align-items: center;
   margin-top: 1rem;
-  border-bottom: solid #DFE6ED;
+  border-bottom: solid #dfe6ed;
   padding-bottom: 1rem;
 }
-.actual-result-item-info-2{
+.actual-result-item-info-2 {
   display: block;
   width: 100%;
   align-items: center;
 }
 
-.actual-result{
+.actual-result {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
   border-radius: 0.25rem;
-  border: 1px solid  #E5E9F2;
+  border: 1px solid #e5e9f2;
   box-sizing: content-box;
 }
 
-.one-round-way-multi-city{
+.one-round-way-multi-city {
   margin-top: 2rem;
 }
 
-.search-result-filter-area{
+.search-result-filter-area {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
 
-.filter-item{
+.filter-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  color:  #1D1E2C;
+  color: #1d1e2c;
 
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
 
-.filter-items{
+.filter-items {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.result-details{
-  color: #2D3139;
-  font-family:'Product Sans';
+.result-details {
+  color: #2d3139;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -1308,145 +1488,144 @@ a{
   margin-bottom: 1rem;
 }
 
-.seperator_1{
+.seperator_1 {
   width: 0.0625rem;
   height: 2.5rem;
-  border: 1px solid  #EFF2F7;
+  border: 1px solid #eff2f7;
 }
 
-.and-filter-by{
-  color: #6A8297;
-  font-family: 'Product Sans';
+.and-filter-by {
+  color: #6a8297;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 100% */
 }
 
-.result-details-info{
+.result-details-info {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
 }
 
-.filter-by{
+.filter-by {
   display: flex;
   padding: 0rem 1rem;
   align-items: center;
   gap: 1.1875rem;
   border-radius: 1rem;
-  border: 1px solid #EFF2F7;
-  background:  #FFF;
+  border: 1px solid #eff2f7;
+  background: #fff;
 }
 
-.breaker1{
+.breaker1 {
   width: 100%;
   height: 0.0625rem;
-  background: #DFE6ED;
+  background: #dfe6ed;
   margin-top: 0.56rem;
 }
 
-.dest-abv{
+.dest-abv {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.dest-abv-it{
-  color: #1D1E2C;
-  font-family: 'Product Sans';
+.dest-abv-it {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: 2rem; /* 133.333% */
 }
 
-.booking-info{
+.booking-info {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.search-info-area{
+.search-info-area {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.search-info{
+.search-info {
   display: flex;
   padding: 0.625rem 1.25rem;
   align-items: flex-start;
   width: auto !important;
   gap: 0.625rem;
   border-radius: 31.25rem;
-  background: #EFF2F7;
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
+  background: #eff2f7;
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5rem; /* 150% */
 }
 
-.flight-result{
+.flight-result {
   margin: 0;
-  
 }
 
-.destination_type{
+.destination_type {
   margin: 0 2rem;
   padding: 0.38rem;
-  color:  #1D1E2C;
+  color: #1d1e2c;
 
   /* Headings/20px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 140% */
 }
 
-.booking-div-inner-wrapper{
+.booking-div-inner-wrapper {
   margin: 0.5rem;
   padding: 1.5rem;
 }
 
-.booking-nav-item{
+.booking-nav-item {
   padding: 0.5rem;
   cursor: pointer;
-  color:  #201F1E;
+  color: #201f1e;
 
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
 
-.booking-div{
+.booking-div {
   margin: 2.88rem 4.75rem;
 }
 
-.booking-nav{
+.booking-nav {
   display: flex;
-  border-bottom: 1px solid  #E5E9F2;
+  border-bottom: 1px solid #e5e9f2;
   gap: 5rem;
 }
 
-.progress-or{
+.progress-or {
   display: flex;
   justify-content: center;
   margin: 2rem auto;
 }
 
-.stage{
-  color:  #9DA8B6;
+.stage {
+  color: #9da8b6;
   text-align: left;
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -1454,91 +1633,88 @@ a{
   margin-left: -2rem;
 }
 
-.activeProgress{
-  background: #89128A !important;
+.activeProgress {
+  background: #89128a !important;
 }
-.activeStage{
-  color: #89128A !important;
-}
-
-
-.progress-or-item{
+.activeStage {
+  color: #89128a !important;
 }
 
-.circle{
+.progress-or-item {
+}
+
+.circle {
   width: 2rem;
   height: 2rem;
   flex-shrink: 0;
-  background: #E5E9F2;
+  background: #e5e9f2;
   border-radius: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color:  #FFF;
+  color: #fff;
 
   /* Headings/20px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 140% */
 }
 
-.line{
+.line {
   width: 9.8125rem;
   height: 0.25rem;
   flex-shrink: 0;
   border-radius: 0.3125rem;
-  background: #E5E9F2;
+  background: #e5e9f2;
 }
 
-.spiralLines{
+.spiralLines {
   width: inherit;
   height: inherit;
 }
 
-
-
-.create-booking-process{
+.create-booking-process {
   width: 68.125rem;
   height: auto;
   flex-shrink: 0;
   position: relative;
 }
 
-.current-tab{
-  color:  #1D1E2C;
+.current-tab {
+  color: #1d1e2c;
   text-align: center;
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 175% */
 }
 
-.one-way{}
+.one-way {
+}
 
-.travel_type_booking{
+.travel_type_booking {
   width: 68.125rem;
   height: auto;
   flex-shrink: 0;
   border-radius: 1rem;
-  border: 1px solid  #D8B0D8;
-  background: #FFF;
+  border: 1px solid #d8b0d8;
+  background: #fff;
   z-index: 99;
-  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.20);
+  box-shadow: 0px 4px 20px 0px rgba(232, 237, 250, 0.2);
   position: relative;
-
 }
 
 @media (max-width: 1024px) {
-  .travel_type_booking{
+  .travel_type_booking {
     width: 100% !important;
   }
 }
 
-.filter-div{
-  background: #FFFFFF;
+.filter-div {
+  background: #ffffff;
   padding-left: 1rem;
   padding-right: 1rem;
   display: flex;
@@ -1548,26 +1724,26 @@ a{
   cursor: pointer;
 }
 
-.filter-span{
-  color:  #1D1E2C;
-  font-family: 'Product Sans';
+.filter-span {
+  color: #1d1e2c;
+  font-family: "Product Sans";
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem; /* 171.429% */
 }
 
-.overall{
+.overall {
   display: flex;
   justify-content: center;
 }
 
-.filter{
+.filter {
   display: flex;
   gap: 1.25rem;
 }
 
-.search_filter{
+.search_filter {
   margin-top: 1rem;
   margin-bottom: 3rem;
   display: flex;
@@ -1575,54 +1751,54 @@ a{
   align-items: center;
 }
 
-.table-wrapper{
+.table-wrapper {
   overflow-x: scroll;
   width: 68.625rem;
 }
 
-.booking-wrapper{
+.booking-wrapper {
   width: 68.625rem;
   height: auto;
   position: relative;
 }
 
-.search{
+.search {
   display: flex;
   width: 19.4375rem;
   padding: 0.5rem 5rem 0.5rem 1.25rem;
   align-items: center;
   gap: 1.0625rem;
   flex-shrink: 0;
-  outline:none;
+  outline: none;
   border-radius: 0.375rem;
-  border: 0.6px solid #E5E9F2;
-  background: #FFF;
+  border: 0.6px solid #e5e9f2;
+  background: #fff;
 }
 
-.create-booking{
+.create-booking {
   display: flex;
   padding: 0.8125rem 0.6875rem 0.8125rem 1.5rem;
   align-items: center;
   border-radius: 0.25rem;
-  background:  #F8F1F8;
+  background: #f8f1f8;
   width: 15.9375rem;
   height: 5rem;
   gap: 0.75rem;
   cursor: pointer;
 }
 
-.create-booking-p{
-  color:  #1D1E2C;
+.create-booking-p {
+  color: #1d1e2c;
 
   /* medium/input/16px */
-  font-family: 'Product Sans' ;
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
 
-.card-area{
+.card-area {
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
@@ -1630,12 +1806,12 @@ a{
   width: 100%;
 }
 
-.no-team-member-h{
-  color: #0E0842;
+.no-team-member-h {
+  color: #0e0842;
   text-align: center;
 
   /* Headings/20px/bold */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
@@ -1643,28 +1819,27 @@ a{
   text-transform: capitalize;
 }
 
-.no-team-member-sub{
-  color: #575A65;
+.no-team-member-sub {
+  color: #575a65;
   text-align: center;
 
   /* Body/16px/Regular */
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
 }
 
-.no-team-member-text{
+.no-team-member-text {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   justify-content: center;
   align-items: center;
-
 }
 
-.no-team-member{
+.no-team-member {
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -1674,47 +1849,44 @@ a{
 }
 
 @media (max-width: 1024px) {
-  .card-area{
+  .card-area {
     overflow-x: scroll;
-    width:1024px;
+    width: 1024px;
   }
 
-  .search_filter{
+  .search_filter {
     flex-direction: column-reverse;
   }
 
-  .search{
+  .search {
     width: 80%;
   }
 
-  .filter{
+  .filter {
     flex-direction: column;
     width: 100%;
     justify-content: center;
     align-items: center;
-    margin:10px 0;
+    margin: 10px 0;
   }
 
-  .filter-div{
+  .filter-div {
     width: 80%;
   }
-  .filter-btn{
+  .filter-btn {
     width: 80% !important;
   }
 
-  .booking-wrapper{
+  .booking-wrapper {
     width: 100%;
   }
 
-  .table-wrapper{
+  .table-wrapper {
     width: auto !important;
   }
-
-
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
-
 </style>
