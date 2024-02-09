@@ -8,9 +8,10 @@ import { formatAmount, convertTo12HourFormat, convertToWord, getYYYYMMDDFormat }
 import storeUtils from "../../utils/storeUtils";
 import PrintItenaryModal from "@/components/modals/PrintItenaryModal.vue";
 import Template1 from "@/components/flightItenaryTemplate/Template1.vue";
+import ModalLoader from "@/components/loaders/ModalLoader.vue";
 export default {
   name: "FlightDetails",
-  components:{Template1, PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent},
+  components:{Template1, PrintItenaryModal, OnBoardingButton, Layout,FlightPayment,ItenaryDetailsComponent,ModalLoader},
   props:['booking_id','contact_first_name','contact_last_name', 'contact_email'],
   data(){
     return{
@@ -24,12 +25,11 @@ export default {
   },
 
   methods:{
-    goBack(){
-      router.push({name:"Bookings_Details"})
-    },
+
      printAction(){
-       storeUtils.fireAway().print?.commitPrintLoading(true, this.data.flight)
-       this.showPrintModal = true
+       storeUtils.fireAway().print?.commitPrintLoading(true, this.flightDetails)
+       // Open a new tab or window
+
 
        // if(this.getTemplateId === 1) router.push({name:'Template1'})
        // if(this.getTemplateId === 2) router.push({name:'Template2'})
@@ -45,12 +45,18 @@ export default {
 
   computed: {
     getFlights() {
-      if (!this.data) return;
-      return this.data?.flight?.passengers
+      if (!this.flightDetails) return;
+      return this.flightDetails?.passengers
     },
     airlineDetails() {
-      if (!this.data) return; 
-      return this.data?.flight
+      if (!this.flightDetails) return;
+      return this.flightDetails
+    },
+    getLoadingFlightDetails(){
+      return storeUtils.fireAway().flight.getLoadingFlightDetails
+    },
+    flightDetails(){
+      return storeUtils.fireAway().flight.getFlightDetails
     },
     getUser() {
       if (localStorage.user) {
@@ -61,30 +67,44 @@ export default {
       if(storeUtils.fireAway().theme.custom_theme) return storeUtils.fireAway().theme.custom_theme.template_id;
       return storeUtils.fireAway().theme.custom_theme.template_id;
 
-    },  
+    },
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
+    },
+  },
+
+
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().flight.handleGetFlightDetails(router?.currentRoute.value.params.id)
+      };
+    },
   },
 
   mounted() {
-    if(!localStorage.managedBookings) return;
-    this.data = JSON.parse(localStorage.managedBookings)
+    if(this.getTenantLoaded && !this.flightDetails){
+      storeUtils.fireAway().flight.handleGetFlightDetails(router?.currentRoute.value.params.id);
+    }
   }
+
+
 }
 </script>
 
 <template>
+  <modal-loader v-if="getLoadingFlightDetails" message="Loading Flight"></modal-loader>
+
   <layout v-slot:child-content>
-    <print-itenary-modal :contact_email="data?.contact_email"  :contact_first_name="data?.contact_first_name" :contact_last_name="data?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
-
-
+    <print-itenary-modal :reference="flightDetails?.reference" :contact_email="flightDetails?.contact_details?.contact_email"  :contact_first_name="flightDetails?.contact_details?.contact_first_name" :contact_last_name="flightDetails?.contact_details?.contact_last_name"  v-if="showPrintModal" @close="close"></print-itenary-modal>
     <div class="overall" id="details_wrapper">
-    
         <div class="wrapper">
         <div class="breadcrumb">
-          <router-link :to="`/bookings/${getUser?.access_token?.slice(0,20)}`"><p class="breadcrumb_list">Manage Flight Bookings</p></router-link>
+          <router-link :to="`/bookings/`"><p class="breadcrumb_list">Manage Flight Bookings</p></router-link>
           <svg style="margin-top:0.50rem;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M7.49998 2.77474C7.65831 2.77474 7.81664 2.83307 7.94164 2.95807L13.375 8.39141C14.2583 9.27474 14.2583 10.7247 13.375 11.6081L7.94164 17.0414C7.69998 17.2831 7.29998 17.2831 7.05831 17.0414C6.81664 16.7997 6.81664 16.3997 7.05831 16.1581L12.4916 10.7247C12.8916 10.3247 12.8916 9.67474 12.4916 9.27474L7.05831 3.84141C6.81664 3.59974 6.81664 3.19974 7.05831 2.95807C7.18331 2.8414 7.34164 2.77474 7.49998 2.77474Z" fill="#575A65"/>
           </svg>
-            <p class="breadcrumb_list">{{ data?.contact_first_name }} {{data?.contact_last_name}}</p>
+            <p class="breadcrumb_list">{{ flightDetails?.contact_details?.contact_first_name }} {{flightDetails?.contact_details?.contact_last_name}}</p>
         </div>
 
          <div style="display: flex; justify-content: space-between;margin-top: 1.5rem">
@@ -148,13 +168,19 @@ export default {
       </div>
       
       <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 3rem;">
-            <ItenaryDetailsComponent @openPrintModal="triggeredEvent" :get-booked-flight="airlineDetails" :id="data?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
+            <ItenaryDetailsComponent @openPrintModal="triggeredEvent" :get-booked-flight="airlineDetails" :id="flightDetails?.id" :get-user="getFlights ? getFlights[0] : []"></ItenaryDetailsComponent>
           </div>
       </div>
   </layout>
 </template>
 
 <style scoped>
+@media print {
+  #details_wrapper * {
+    visibility: hidden;
+  }
+}
+
 .overall{
   display: flex;
   align-items: center;

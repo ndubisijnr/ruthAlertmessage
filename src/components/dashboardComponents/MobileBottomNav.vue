@@ -19,7 +19,9 @@
           />
         </svg>
 
-        <span class="links" v-if="getCurrentRoute.includes('dashboard')">Dashboard</span>
+        <span class="links" v-if="getCurrentRoute.includes('dashboard')"
+          >Dashboard</span
+        >
       </div>
     </router-link>
     <router-link
@@ -59,7 +61,9 @@
             fill="#1B041C"
           />
         </svg>
-        <span class="links" v-if="getCurrentRoute.includes('agents')">Travel Agents</span>
+        <span class="links" v-if="getCurrentRoute.includes('agents')"
+          >Travel Agents</span
+        >
       </div>
     </router-link>
 
@@ -89,7 +93,9 @@
             fill="#000"
           />
         </svg>
-        <span class="links" v-if="getCurrentRoute.includes('bookings')">My Bookings</span>
+        <span class="links" v-if="getCurrentRoute.includes('bookings')"
+          >My Bookings</span
+        >
       </div>
     </router-link>
 

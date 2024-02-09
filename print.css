@@ -1,0 +1,20 @@
+#bottom_nav{
+    display: none !important;
+}
+
+#header{
+    display: none !important;
+}
+
+.close {
+    display: none !important;
+}
+
+.new_page{
+    page-break-before: always !important;
+}
+
+.equal-height-table{
+    border: 1px solid;
+
+}

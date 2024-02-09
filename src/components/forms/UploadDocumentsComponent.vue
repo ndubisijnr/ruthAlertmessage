@@ -53,7 +53,6 @@ export default {
 
         if (file) {
            this.$emit('file', file)
-
           // Use FileReader to read the selected file as a data URL
           const reader = new FileReader();
 

@@ -21,8 +21,10 @@ export default {
     return{
       customization:'add_favicon',
       isChangingCacDocument:false,
+      uploadType:null,
       model:CustomizationRequest.saveCustomization,
       color:null,
+      logo:null,
       favicon:null,
       template_id:null,
       selectedTemplateIndex:0,
@@ -50,14 +52,25 @@ export default {
     saveCustomization(){
       // this.model
       if(this.color) this.model.color = this.color;
+      if(this.logo) this.model.logo = this.logo
       if(this.favicon) this.model.favicon = this.favicon;
       if(this.getTemplateId) this.model.template_id = this.getTemplateId;
-      storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {this.model = {}})
+      console.log(this.model)
+      storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {
+        this.model = {};
+        this.favicon = null;
+        this.logo = null;
+      })
 
     },
 
     file(value){
       this.favicon = value
+    },
+
+    changeLogo(value){
+      console.log(value)
+      this.logo = value
     },
 
     updateTemplate(index){
@@ -91,6 +104,9 @@ export default {
       return storeUtils.fireAway().theme.custom_theme
     },
 
+    getTenant(){
+      return storeUtils.fireAway().global.Tenant
+    },
     getLoading(){
       return storeUtils.fireAway().theme.getLoading
     }
@@ -108,10 +124,32 @@ export default {
 
         <div class="customization_tab">
           <ul class="customization_tab_ul">
+            <a class="customization_tab_li" :style="customization==='change_logo' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null"  @click="customization='change_logo'" :class="{'active_customization_tab_li':customization==='change_logo'}">Change Logo</a>
             <a class="customization_tab_li" :style="customization==='add_favicon' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null"  @click="customization='add_favicon'" :class="{'active_customization_tab_li':customization==='add_favicon'}">Add Favicon</a>
             <a class="customization_tab_li" :style="customization==='style' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='style'" :class="{'active_customization_tab_li':customization==='style'}">Choose Color Style</a>
             <a class="customization_tab_li" :style="customization==='template' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
           </ul>
+        </div>
+        <div v-if="customization==='change_logo'">
+
+          <div style="margin-top: 2.5rem">
+            <p class="favicon">Change Logo</p>
+            <p class="upload_favicon">Upload new logo</p>
+          </div>
+
+          <div v-if="getTenant.logo && !isChangingCacDocument" class="doc_pending_wrapper">
+            <div  style="text-align: end">
+              <img src="../../components/forms/close_icon.svg" style="cursor: pointer"  @click="isChangingCacDocument = true" alt="favicon_preview"/>
+            </div>
+            <div class="doc_pending">
+              <img class="img-uploaded" id="company_image_preview" :src="getTenant.logo" />
+            </div>
+          </div>
+
+
+          <upload-documents-component v-else  @file="changeLogo" id="change_logo" title="Upload  your website logo."></upload-documents-component>
+
+
         </div>
 
         <div v-if="customization==='add_favicon'">
@@ -135,7 +173,6 @@ export default {
 
 
         </div>
-
 
         <div v-if="customization==='template'">
           <div style="margin-top: 2.5rem">
@@ -188,6 +225,7 @@ export default {
         </div>
 
         <div v-if="customization === 'template'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
+
           <Template_1 v-if="getTemplateId === 1"></Template_1>
           <Template_2 v-if="getTemplateId === 2"></Template_2>
           <Template_3 v-if="getTemplateId === 3"></Template_3>

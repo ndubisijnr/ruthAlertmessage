@@ -627,13 +627,8 @@ export default {
                 this.readAgent(obj);
             }
             if (this.getCurrentRoute.toLowerCase() === "bookings") {
-                localStorage.managedBookings = JSON.stringify(obj);
-                router.push({
-                    path: `/bookings/details/${this.getUser?.access_token?.slice(
-                        0,
-                        20
-                    )}`,
-                });
+
+                storeUtils.fireAway().flight.handleGetFlightDetails(obj.reference)
             }
 
             if (this.getCurrentRoute.toLowerCase() === "support") {

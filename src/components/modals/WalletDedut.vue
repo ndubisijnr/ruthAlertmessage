@@ -15,7 +15,7 @@
 
 
                   <input class="input_amount" id="input_amount"  v-model="amountValue"  :disabled="isDisabled"/>
-                  <span class="edit" @click="isDisabled = !isDisabled">Edit</span>
+                  <span class="edit" @click="focusInput">Edit</span>
                 </div>
 
               </div>
@@ -60,10 +60,14 @@ export default{
             convertTo12HourFormat,
             isDisabled:false,
             model:flightRequest.chargeWallet,
-            amountValue:this.amount.booking.amount
+            amountValue:formatAmount(this.amount.booking.amount)
         }
     },
     methods:{
+      focusInput(){
+        const inputToFocus = document.getElementById('input_amount')
+        inputToFocus.focus()
+      },
         close(){
             this.$emit('close', false)
     },
