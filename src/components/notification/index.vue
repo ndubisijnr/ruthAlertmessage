@@ -1,6 +1,44 @@
 <script>
+import storeUtils from "@/utils/storeUtils";
+
 export default {
-  name: "index"
+  name: "index",
+  data(){
+    return{
+      activeNav:'all'
+    }
+  },
+
+  methods:{
+    close(){
+      this.$emit('close', false)
+    }
+  },
+
+  computed:{
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
+    },
+
+    getNotifications(){
+      return storeUtils.fireAway().global.getNotification
+    }
+  },
+
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().global.getNotifications()
+      }
+    }
+  },
+
+  mounted() {
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().global.getNotifications()
+    }
+  }
+
 }
 </script>
 
@@ -12,19 +50,19 @@ export default {
     </div>
 
     <div class="notification-nav">
-      <p class="notification-nav-item">All <span class="count">3</span></p>
-      <p class="notification-nav-item">Bookings <span class="count">1</span></p>
-      <p class="notification-nav-item">Transaction <span class="count"></span></p>
+      <p class="notification-nav-item" @click="activeNav='all'" :class="{'active':activeNav === 'all'}">All <span class="count">{{getNotifications?.length}}</span></p>
+<!--      <p class="notification-nav-item" @click="activeNav='bookings'" :class="{'active':activeNav === 'bookings'}">Bookings <span class="count">1</span></p>-->
+<!--      <p class="notification-nav-item" @click="activeNav='transaction'" :class="{'active':activeNav === 'transaction'}">Transaction <span class="count"></span></p>-->
     </div>
 
 
     <div class="notification_area">
-      <div style="width: 100%;">
-        <div style="display: flex;align-items: center;justify-content: space-between;width: 100%">
-          <p class="notification-message">Bukola Adedayo was added to the Team <br /> <span class="created_at">5hrs. ago</span></p>
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-            <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
-          </svg>
+      <div v-if="activeNav === 'all'" v-for="(i,index) in getNotifications" :key="index">
+          <div style="display: flex;align-items: center;justify-content: space-between;width: 100%;margin-bottom: 2.5rem">
+            <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{i.created_at}}. ago</span></p>
+            <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+              <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
+            </svg>
         </div>
       </div>
     </div>
@@ -60,6 +98,14 @@ export default {
   margin-bottom: 1rem;
 }
 
+.active{
+  border-bottom:solid #2C6CAC .3rem;
+  //height: 0.25rem;
+  flex-shrink: 0;
+  transform: translateY(10%);
+  padding-bottom: 0.2rem;
+}
+
 .notification-title{
   color:  #1D1E2C;
   text-align: center;
@@ -90,6 +136,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 }
 
 .created_at{
@@ -105,7 +152,7 @@ export default {
 .count{
   color: #8492A6;
   font-family: "Product Sans";
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 200% */
@@ -119,9 +166,11 @@ export default {
 }
 
 .notification_area{
-  margin: 2.5rem 0;
+  margin: 1rem 0;
   padding: 0 1rem;
   width: 100%;
+  height: 30rem;
+  overflow-y: scroll;
 }
 
 .notification-message{

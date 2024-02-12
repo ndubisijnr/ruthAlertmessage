@@ -18,6 +18,9 @@ export const useGlobalStore = defineStore('globalStore', {
         isUnauthorised: false,
         tenantLoaded: false,
         tenantLoadedError: null,
+        notification:null,
+        notificationLoading:false,
+        loading:false
     }),
 
     getters: {
@@ -28,10 +31,16 @@ export const useGlobalStore = defineStore('globalStore', {
         getError: state => state.error,
         getIsUnauthorised: state => state.isUnauthorised,
         getTenantLoaded: state => state.tenantLoaded,
-        getTenantLoadedError: state => state.tenantLoadedError
+        getTenantLoadedError: state => state.tenantLoadedError,
+        getNotificationLoading:state => state.notificationLoading,
+        getLoading:state => state.loading,
+        getNotification:state => state.notification,
     },
 
     actions: {
+
+
+
         commitIsSkipping(value) {
             this.isSkipping = value
         },
@@ -82,7 +91,39 @@ export const useGlobalStore = defineStore('globalStore', {
                 return err
                 // do nothing
             }
-        }
+        },
+
+        async getNotifications(){
+            this.notificationLoading = true
+            try{
+                const response =  await AuthService.getNotifications(this.getTenant_id)
+                let responseData = response.data
+                if(responseData.success){
+                    this.notificationLoading = false
+                    this.notification = responseData.data
+                }
+
+            }catch{
+                this.notificationLoading = false
+            }
+
+        },
+
+        async markNotificationsAsRead(payload){
+            this.loading = true
+            try{
+                const response =  await AuthService.setNotificationStatus(this.getTenant_id,payload)
+                let responseData = response.data
+                if(responseData.success){
+                    this.loading = false
+                }
+
+            }catch{
+                this.loading = false
+            }
+
+        },
+
     }
 
 })

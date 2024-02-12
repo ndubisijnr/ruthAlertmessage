@@ -1405,7 +1405,7 @@
               class="customization_wrapper animate__animated animate__fadeIn"
               v-show="currentTab === 'Customization'"
             >
-              <Customization></Customization>
+              <Customization @saveRequired="isSaveRequired"></Customization>
             </div>
             <!-- verifications -->
             <div
@@ -1496,6 +1496,7 @@ export default {
     return {
       pureColor: "red",
       isFocused: false,
+      saveRequired:false,
       gradientColor: "linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
       currentTab: this.getCurrentRouteParams,
       verificationType: "business",
@@ -1589,6 +1590,11 @@ export default {
       this.updateRole = value;
     },
 
+    isSaveRequired(value){
+      this.saveRequired = value
+      console.log(this.saveRequired)
+    },
+
     searchMarkup() {
       if (this.markupSearch) {
         storeUtils.fireAway().settings.setStoreData({
@@ -1639,6 +1645,7 @@ export default {
           this.currentTab = "Account";
       }
     },
+
     handleFocus() {
       this.isFocused = true;
     },
@@ -1888,7 +1895,7 @@ export default {
     },
 
     preventNav(e) {
-      if (!this.isEditing) return;
+      if (!this.saveRequired) return;
       e.preventDefault();
       e.returnValue = "";
     },
@@ -1899,7 +1906,7 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-    if (this.isEditing) {
+    if (this.saveRequired) {
       if (!window.confirm("Are you sure? all unsaved changes won't reflect.")) {
         return;
       }

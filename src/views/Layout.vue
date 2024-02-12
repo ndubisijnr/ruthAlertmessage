@@ -1,6 +1,6 @@
 <template>
   <permission-modal v-if="getIsUnauthorised"></permission-modal>
-<!--  <notification></notification>-->
+  <notification v-if="notification" @close="close"></notification>
 
   <div v-if="getTenantLoaded" class="wrapper">
     <div class="inner-wrapper">
@@ -280,7 +280,7 @@
                 src="../assets/notification.svg"
                 class="notification_icon"
                 alt="notification_icon"
-                @click="openNotification"
+                @click="notification=!notification"
             />
 
             <div class="profile" @click="showDrop">
@@ -444,7 +444,7 @@
 
   <div class="splash" v-else>
     <SpinnerLoader :width="'10rem'"></SpinnerLoader>
-    <!-- <img style="width:8rem;position: absolute;"  :src="getBusinessProfile.logo ? getBusinessProfile.logo : '../../src/assets/Cards/logo.svg'" /> -->
+     <img v-if="getBusinessProfile.logo" style="width:8rem;position: absolute;"  :src="getBusinessProfile.logo" alt="logo" />
   </div>
 </template>
 
@@ -467,6 +467,7 @@ export default {
       getFirstLettersOfFirstAndLastName,
       showDropDown: false,
       lightenColor,
+      notification:false
     };
   },
   methods: {
@@ -479,6 +480,9 @@ export default {
     signOut() {
       localStorage.clear();
       router.push({ name: "Logon" });
+    },
+    close(value){
+      this.notification = value
     },
     closeMenu() {
       this.showDropDown = false;
@@ -561,7 +565,7 @@ export default {
       const title = document.getElementById("app_title");
 
       if (this.getFavicon) favicon.href = this.getFavicon;
-      if (this.getTenant) title.textContent = this.getTenant.name;
+      if (this.custom_theme) title.textContent = this.custom_theme.site_title;
     }
   },
 };

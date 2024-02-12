@@ -51,8 +51,13 @@ export default {
 
     deActivateAccount(tenant_id, user_id, payload){
         return apiService.Client.patch(`api/${tenant_id}/user/profile/${user_id}`, payload)
+    },
+
+    getNotifications(tenant_id) {
+        return apiService.Client.get(`api/${tenant_id}/user/notifications`)
+    },
+
+    setNotificationStatus(tenant_id, payload) {
+        return apiService.Client.patch(`api/${tenant_id}/user/notifications`, payload)
     }
-
-
-
 }

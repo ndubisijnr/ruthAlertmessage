@@ -28,6 +28,7 @@ export default {
       favicon:null,
       template_id:null,
       selectedTemplateIndex:0,
+      saveRequired:false,
       templates:[
         {
           name:"Template 1",
@@ -60,22 +61,25 @@ export default {
         this.model = {};
         this.favicon = null;
         this.logo = null;
+        this.$emit('saveRequired', false)
       })
 
     },
 
+
     file(value){
       this.favicon = value
+      this.$emit('saveRequired', true)
     },
 
     changeLogo(value){
-      console.log(value)
       this.logo = value
+      this.$emit('saveRequired', true)
     },
 
     updateTemplate(index){
       storeUtils.fireAway().theme.commitColor(index, 'template')
-
+      this.$emit('saveRequired', true)
     }
   },
 
@@ -83,6 +87,7 @@ export default {
     'color'(newPayload){
       if(newPayload){
         storeUtils.fireAway().theme.commitColor(newPayload, 'color')
+        this.$emit('saveRequired', true)
       }
     }
   },
