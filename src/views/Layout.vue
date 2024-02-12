@@ -1,5 +1,6 @@
 <template>
   <permission-modal v-if="getIsUnauthorised"></permission-modal>
+<!--  <notification></notification>-->
 
   <div v-if="getTenantLoaded" class="wrapper">
     <div class="inner-wrapper">
@@ -275,10 +276,12 @@
               {{ getUser?.account_type.replace("_", " ") }}
             </div>
 
-            <!--                        <img-->
-            <!--                            src="../assets/notification.svg"-->
-            <!--                            class="notification_icon"-->
-            <!--                        />-->
+            <img
+                src="../assets/notification.svg"
+                class="notification_icon"
+                alt="notification_icon"
+                @click="openNotification"
+            />
 
             <div class="profile" @click="showDrop">
               <div
@@ -454,10 +457,11 @@ import MobileBottomNav from "../components/dashboardComponents/MobileBottomNav.v
 import { lightenColor } from "@/mixins/themeUtils";
 import PermissionModal from "@/components/modals/PermissionModal.vue";
 import SpinnerLoader from "../components/loaders/SpinnerLoader.vue";
+import Notification from "@/components/notification/index.vue";
 
 export default {
   name: "Layout",
-  components: { NavBar, MobileBottomNav, PermissionModal, SpinnerLoader },
+  components: { NavBar, MobileBottomNav, PermissionModal, SpinnerLoader,Notification },
   data() {
     return {
       getFirstLettersOfFirstAndLastName,
@@ -468,6 +472,9 @@ export default {
   methods: {
     showDrop() {
       this.showDropDown = !this.showDropDown;
+    },
+    openNotification(){
+      this.$emit('open', true)
     },
     signOut() {
       localStorage.clear();
@@ -628,6 +635,8 @@ a {
 
 .notification_icon {
   display: block;
+  width: 2.5rem;
+  cursor: pointer;
 }
 
 a:hover {

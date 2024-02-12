@@ -33,7 +33,7 @@
       :key="index">
     
       <div class="actual-result">
-        <div class="best_offer" v-if="i.amount === sortByCheapest">Best Offer</div>
+        <div v-if="i.office_id && getUser?.account_type ==='admin' || getUser?.account_type ==='super_admin'" class="best_offer">{{ i.office_id }}</div>
         <div style="width: 100%" @click="showDetails(index)">
           <div :class="i.outbound[0].refundable ? 'refundable' : 'not-refundable'">{{i.outbound[0].refundable ? 'Refundable' : 'Non Refundable'}}</div>
           <div style="width: 100%" v-if="i.outbound?.length > 1" v-for="(x, itemindex) in i.outbound" :key="itemindex">
@@ -547,8 +547,8 @@ export default {
   align-items: flex-start;
   gap: 0.625rem;
   border-radius: 0.5rem;
-  background: rgba(21, 157, 84, 0.08);
-  color: #159D54;
+  background: rgba(243, 241, 51, 0.08);
+  color: #8e9614;
   font-family: 'Product Sans';
   font-size: 0.75rem;
   font-style: normal;

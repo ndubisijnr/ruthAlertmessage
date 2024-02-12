@@ -22,7 +22,8 @@ export function toGradient(color, degree){
 
 export function lightenColor(color, factor = 0.7) {
     // Remove the hash if it exists
-    color = color.replace(/^#/, '');
+    let defaultColor = '#2C6CAC'
+    color = color ?  color?.replace(/^#/, '') : defaultColor.replace(/^#/, '')
 
     // Parse the hex components
     const bigint = parseInt(color, 16);
