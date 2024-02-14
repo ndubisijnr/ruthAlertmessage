@@ -159,7 +159,7 @@
                     }}
                   </p>
                   <p class="search-info">
-                    {{ getFlightResult[0]?.price_summary[0]?.quantity }}
+                    {{ getFlightResult[0]?.travelers_price?.length }}
                     Passengers
                   </p>
                   <p class="search-info">

@@ -53,8 +53,8 @@ export default {
         return apiService.Client.patch(`api/${tenant_id}/user/profile/${user_id}`, payload)
     },
 
-    getNotifications(tenant_id) {
-        return apiService.Client.get(`api/${tenant_id}/user/notifications`)
+    getNotifications(tenant_id, type, status) {
+        return apiService.Client.get(`api/${tenant_id}/user/notifications?type=${type}&status=${status}`)
     },
 
     setNotificationStatus(tenant_id, payload) {

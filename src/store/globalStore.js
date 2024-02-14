@@ -93,10 +93,10 @@ export const useGlobalStore = defineStore('globalStore', {
             }
         },
 
-        async getNotifications(){
+        async getNotifications(type,status){
             this.notificationLoading = true
             try{
-                const response =  await AuthService.getNotifications(this.getTenant_id)
+                const response =  await AuthService.getNotifications(this.getTenant_id,type,status)
                 let responseData = response.data
                 if(responseData.success){
                     this.notificationLoading = false

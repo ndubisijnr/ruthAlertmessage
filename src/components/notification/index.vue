@@ -1,15 +1,24 @@
 <script>
 import storeUtils from "@/utils/storeUtils";
+import spinnerLoader from "@/components/loaders/SpinnerLoader.vue";
+import {convertToWord, convertTo12HourFormat} from "@/mixins/flightUtil";
 
 export default {
   name: "index",
+  components:{spinnerLoader},
   data(){
     return{
-      activeNav:'all'
+      activeNav:'all',
+      convertToWord,
+      convertTo12HourFormat
     }
   },
 
   methods:{
+    gtNotiAction(value, type, status){
+      this.activeNav = value
+      storeUtils.fireAway().global.getNotifications(type,status)
+    },
     close(){
       this.$emit('close', false)
     }
@@ -18,6 +27,10 @@ export default {
   computed:{
     getTenantLoaded(){
       return storeUtils.fireAway().global.getTenantLoaded
+    },
+
+    getNotificationLoading(){
+      return storeUtils.fireAway().global.getNotificationLoading
     },
 
     getNotifications(){
@@ -35,7 +48,7 @@ export default {
 
   mounted() {
     if(this.getTenantLoaded){
-      storeUtils.fireAway().global.getNotifications()
+      storeUtils.fireAway().global.getNotifications('', 'unread')
     }
   }
 
@@ -50,22 +63,43 @@ export default {
     </div>
 
     <div class="notification-nav">
-      <p class="notification-nav-item" @click="activeNav='all'" :class="{'active':activeNav === 'all'}">All <span class="count">{{getNotifications?.length}}</span></p>
-<!--      <p class="notification-nav-item" @click="activeNav='bookings'" :class="{'active':activeNav === 'bookings'}">Bookings <span class="count">1</span></p>-->
-<!--      <p class="notification-nav-item" @click="activeNav='transaction'" :class="{'active':activeNav === 'transaction'}">Transaction <span class="count"></span></p>-->
+      <p class="notification-nav-item" @click="gtNotiAction('all', '', 'unread')" :class="{'active':activeNav === 'all'}">All <span class="count" v-if="activeNav==='all'">{{getNotifications?.length}}</span></p>
+      <p class="notification-nav-item" @click="gtNotiAction('bookings', 'booking', 'unread')" :class="{'active':activeNav === 'bookings'}">Bookings <span class="count" v-if="activeNav==='bookings'">{{getNotifications?.length}}</span></p>
+      <p class="notification-nav-item" @click="gtNotiAction('transaction', 'transaction', 'unread')" :class="{'active':activeNav === 'transaction'}">Transaction <span class="count" v-if="activeNav==='transaction'">{{getNotifications?.length}}</span></p>
     </div>
 
-
-    <div class="notification_area">
+    <div v-if="getNotificationLoading" style="font-size:0.888rem;width:100%;height:100%;display: flex;flex-direction: column;align-items: center;justify-content: center">
+      <spinner-loader></spinner-loader>
+      <div style="font-family: monospace">Loading notifications.....</div>
+    </div>
+    <div v-else class="notification_area">
       <div v-if="activeNav === 'all'" v-for="(i,index) in getNotifications" :key="index">
-          <div style="display: flex;align-items: center;justify-content: space-between;width: 100%;margin-bottom: 2.5rem">
-            <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{i.created_at}}. ago</span></p>
+          <div class="notification-item">
+            <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
             <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
               <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
             </svg>
         </div>
       </div>
+      <div v-if="activeNav === 'bookings'" v-for="(i,index) in getNotifications" :key="index">
+        <div class="notification-item">
+          <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
+          <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
+          </svg>
+        </div>
+      </div>
+      <div v-if="activeNav === 'transaction'" v-for="(i,index) in getNotifications" :key="index">
+        <div class="notification-item">
+          <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
+          <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
+          </svg>
+        </div>
+      </div>
     </div>
+
+
 
   </div>
 
@@ -86,6 +120,24 @@ export default {
   top: 100px;
   z-index: 99999;
   box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.12);
+
+}
+
+.notification-item{
+  cursor:pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  padding: 0;
+  transition: .1s ease-out;
+}
+
+.notification-item:hover{
+  background: rgba(44, 62, 80, 0.34);
+  padding:0 .5rem 0 0;
+  transition: .1s ease-in;
 
 }
 
