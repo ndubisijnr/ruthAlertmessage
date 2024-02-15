@@ -25,7 +25,7 @@ export default {
         //pass do nothing
       }else{
         if(action_type === 'ISSUED_TICKET') router.push({name:'Bookings'})
-        if(action_type === 'MEMBER_INVITED') router.push({name:'Settings', query:{anchor:'#Teams'}})
+        if(action_type === 'MEMBER_INVITED') router.push({path:'Settings/section#Team'})
       }
     },
     close(){
