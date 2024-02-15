@@ -50,7 +50,7 @@
                     ({{ i.outbound[0]?.airport_from }})</p>
                 </div>
                 <div class="more-flight-info">
-                  <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
+                  <span class="duration">{{ convertDurationToWords(i.total_outbound_duration) }}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="69" height="16" viewBox="0 0 69 16" fill="none">
                     <path
                       d="M68.3536 8.35355C68.5488 8.15829 68.5488 7.84171 68.3536 7.64645L65.1716 4.46447C64.9763 4.2692 64.6597 4.2692 64.4645 4.46447C64.2692 4.65973 64.2692 4.97631 64.4645 5.17157L67.2929 8L64.4645 10.8284C64.2692 11.0237 64.2692 11.3403 64.4645 11.5355C64.6597 11.7308 64.9763 11.7308 65.1716 11.5355L68.3536 8.35355ZM0 8.5H1.88889V7.5H0V8.5ZM5.66667 8.5H9.44444V7.5H5.66667V8.5ZM13.2222 8.5H17V7.5H13.2222V8.5ZM20.7778 8.5H24.5556V7.5H20.7778V8.5ZM28.3333 8.5H32.1111V7.5H28.3333V8.5ZM35.8889 8.5H39.6667V7.5H35.8889V8.5ZM43.4445 8.5H47.2222V7.5H43.4445V8.5ZM51 8.5H54.7778V7.5H51V8.5ZM58.5556 8.5H62.3333V7.5H58.5556V8.5ZM66.1111 8.5H68V7.5H66.1111V8.5ZM68.7071 8.70711C69.0976 8.31658 69.0976 7.68342 68.7071 7.29289L62.3431 0.928932C61.9526 0.538408 61.3195 0.538408 60.9289 0.928932C60.5384 1.31946 60.5384 1.95262 60.9289 2.34315L66.5858 8L60.9289 13.6569C60.5384 14.0474 60.5384 14.6805 60.9289 15.0711C61.3195 15.4616 61.9526 15.4616 62.3431 15.0711L68.7071 8.70711ZM0 9H1.88889V7H0V9ZM5.66667 9H9.44444V7H5.66667V9ZM13.2222 9H17V7H13.2222V9ZM20.7778 9H24.5556V7H20.7778V9ZM28.3333 9H32.1111V7H28.3333V9ZM35.8889 9H39.6667V7H35.8889V9ZM43.4445 9H47.2222V7H43.4445V9ZM51 9H54.7778V7H51V9ZM58.5556 9H62.3333V7H58.5556V9ZM66.1111 9H68V7H66.1111V9Z"
@@ -63,9 +63,7 @@
                   <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                   <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                 </div>
-
               </div>
-
             </div>
           </div>
 
@@ -95,11 +93,6 @@
                   <p class="time"> {{ convertTo12HourFormat(j.arrival_time) }}</p>
                   <p class="dest">{{ getCityByCityCode(j.airport_to) }} ({{ j.airport_to }})</p>
                 </div>
-                <!-- <div v-if="i.inbound.length < 1">
-                                      <span class="view-details" v-show="currentShowingDetailsIndex !== index"
-                                          @click="showingDetails = true, currentShowingDetailsIndex = index">View
-                                          Details</span>
-                                  </div> -->
               </div>
             </div>
           </div>
@@ -158,7 +151,7 @@
                         </div>
                         <div class="inner-airline_details-item type">
                           <p class="key">Aircraft Type: </p>
-                          <p class="value">{{ j.marketing_airline }}</p>
+                          <p class="value">{{ j.equipment_type }}</p>
                         </div>
                         <div class="inner-airline_details-item class-type">
                           <p class="key">Class Type: </p>

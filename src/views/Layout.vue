@@ -368,7 +368,7 @@
                     />
                   </svg>
                   <router-link
-                    :to="`/settings/${getUser?.access_token?.slice(0, 20)}#Account`"
+                    :to="`/settings/#Account`"
                     >Account Settings</router-link
                   >
                   <img
@@ -477,9 +477,10 @@ export default {
     openNotification(){
       this.$emit('open', true)
     },
-    signOut() {
-      localStorage.clear();
-      router.push({ name: "Logon" });
+    async signOut() {
+      await localStorage.clear();
+      await router.push({ name: "Logon" });
+      await location.reload()
     },
     close(value){
       this.notification = value

@@ -12,10 +12,13 @@ import Template_1 from "../flightItenaryTemplate/Template1.vue"
 import Template_2 from "../flightItenaryTemplate/Template2.vue"
 import Template_3 from "../flightItenaryTemplate/Template3.vue"
 import DashboardPreview from "@/views/dashboard/DashboardPreview.vue";
+import OnBoardingInput from "@/components/Inputs/OnBoardingInput.vue";
 export default {
   name: "Customization",
 
-  components:{ColorPicker,UploadDocumentsComponent,OnBoardingButton, Template_1,Template_2,Template_3, DashboardPreview},
+  components:{
+    OnBoardingInput,
+    ColorPicker,UploadDocumentsComponent,OnBoardingButton, Template_1,Template_2,Template_3, DashboardPreview},
 
   data(){
     return{
@@ -26,6 +29,8 @@ export default {
       color:null,
       logo:null,
       favicon:null,
+      site_title:null,
+      site_description:null,
       template_id:null,
       selectedTemplateIndex:0,
       saveRequired:false,
@@ -56,7 +61,8 @@ export default {
       if(this.logo) this.model.logo = this.logo
       if(this.favicon) this.model.favicon = this.favicon;
       if(this.getTemplateId) this.model.template_id = this.getTemplateId;
-      console.log(this.model)
+      if(this.site_title) this.model.site_title = this.site_title;
+      if(this.site_description) this.model.site_description = this.site_description;
       storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {
         this.model = {};
         this.favicon = null;
@@ -133,6 +139,7 @@ export default {
             <a class="customization_tab_li" :style="customization==='add_favicon' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null"  @click="customization='add_favicon'" :class="{'active_customization_tab_li':customization==='add_favicon'}">Add Favicon</a>
             <a class="customization_tab_li" :style="customization==='style' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='style'" :class="{'active_customization_tab_li':customization==='style'}">Choose Color Style</a>
             <a class="customization_tab_li" :style="customization==='template' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='template'" :class="{'active_customization_tab_li':customization==='template'}">Itinerary Template</a>
+            <a class="customization_tab_li" :style="customization==='site_description' ? {color:custom_theme ? custom_theme.color : default_theme.color, borderColor:custom_theme ? custom_theme.color : default_theme.color} : null" @click="customization='site_description'" :class="{'active_customization_tab_li':customization==='site_description'}">Site Description</a>
           </ul>
         </div>
         <div v-if="customization==='change_logo'">
@@ -211,6 +218,19 @@ export default {
             <color-picker v-model:pure-color="color" format="hex" is-widget  />
           </div>
         </div>
+        <div v-if="customization==='site_description'">
+          <div style="margin-top: 2.5rem;margin-bottom: 1.5rem">
+            <p class="favicon">Site Name</p>
+            <p class="upload_favicon">Site name for your business can be edited here.</p>
+          </div>
+          <div>
+            <on-boarding-input label="Site Title" @inputValue="value => site_title = value"></on-boarding-input>
+          </div>
+
+          <div>
+            <on-boarding-input label="Site Description"  @inputValue="value => site_description = value" placeholder="This is a travel management business board."></on-boarding-input>
+          </div>
+        </div>
 
 
         <div style="margin-top: 3rem;width: 100%">
@@ -225,11 +245,11 @@ export default {
 
     <div class="receiver_wrapper">
       <div class="customization_reciever">
-        <div v-if="customization === 'style'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
-         <dashboard-preview></dashboard-preview>
-        </div>
+<!--        <div v-if="customization === 'style'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">-->
+<!--         <dashboard-preview></dashboard-preview>-->
+<!--        </div>-->
 
-        <div v-if="customization === 'template'" style="transform: scale(0.5, 0.5);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
+        <div v-if="customization === 'template'" style="transform: scale(0.8, 0.8);transform-origin: 0 0; width: 750px;height: 1000px;border: none;">
 
           <Template_1 v-if="getTemplateId === 1"></Template_1>
           <Template_2 v-if="getTemplateId === 2"></Template_2>
@@ -304,7 +324,7 @@ export default {
 }
 
 .customization_sender{
-  width: 35.435rem;
+  width: 40.435rem;
 }
 
 .customize{
@@ -355,11 +375,11 @@ export default {
   color: var(--black-text-05, #9DA8B6);
   text-align: center;
   font-family: 'Product Sans';
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.75rem; /* 175% */
-  padding: 0.38rem 0.5rem;
+  //padding: 0.38rem;
   cursor: pointer;
 }
 
@@ -388,7 +408,7 @@ export default {
 }
 
 .customization_reciever{
-  width: 35.1875rem;
+  width: 30.1875rem;
   height: 45.6875rem;
   overflow: scroll;
   background: #D5E2EE;

@@ -181,10 +181,6 @@
                   </p>
                   <p class="value">Arrival</p>
                 </div>
-                <div>
-                  <p class="key">{{ getData?.outbound_stops }}</p>
-                  <p class="value">Stops</p>
-                </div>
               </div>
 
               <div class="flight_info">
@@ -485,7 +481,6 @@
                 </div>
               </div>
 
-
               <div
                   class="layover"
                   :style="{
@@ -494,33 +489,37 @@
                       : default_theme.color_light,
                   }"
                   v-if="i.layover > 0"
-                >
-                  <div
-                    class="line"
-                    :style="{
-                      background: custom_theme
-                        ? custom_theme.color
-                        : default_theme.color_light,
-                    }"
-                  ></div>
-                  <div style="display: flex; flex-direction: column">
-                    <span class="layover_text">Lay Over</span>
-                    <span class="layover_text">{{convertDurationToWords(i.layover)}}</span>
-                  </div>
-                  <div
-                    class="line"
-                    :style="{
-                      background: custom_theme
-                        ? custom_theme.color
-                        : default_theme.color_light,
-                    }"
-                  ></div>
+              >
+                <!--                  <div-->
+                <!--                    class="line"-->
+                <!--                    :style="{-->
+                <!--                      background: custom_theme-->
+                <!--                        ? custom_theme.color-->
+                <!--                        : default_theme.color_light,-->
+                <!--                    }"-->
+                <!--                  ></div>-->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 1.66602C5.40835 1.66602 1.66669 5.40768 1.66669 9.99935C1.66669 14.591 5.40835 18.3327 10 18.3327C14.5917 18.3327 18.3334 14.591 18.3334 9.99935C18.3334 5.40768 14.5917 1.66602 10 1.66602ZM13.625 12.9743C13.5084 13.1743 13.3 13.2827 13.0834 13.2827C12.975 13.2827 12.8667 13.2577 12.7667 13.191L10.1834 11.6493C9.54169 11.266 9.06669 10.4243 9.06669 9.68268V6.26602C9.06669 5.92435 9.35002 5.64102 9.69169 5.64102C10.0334 5.64102 10.3167 5.92435 10.3167 6.26602V9.68268C10.3167 9.98268 10.5667 10.4243 10.825 10.5743L13.4084 12.116C13.7084 12.291 13.8084 12.6743 13.625 12.9743Z" fill="#1D1E2C"/>
+                </svg>
+                <div>
+
+                  <p class="layover_text">  {{convertDurationToWords(i.layover)}} - layover in {{getAirportNamesByCityCode(i.airport_to)}}</p>
+
                 </div>
+                <!--                  <div-->
+                <!--                    class="line"-->
+                <!--                    :style="{-->
+                <!--                      background: custom_theme-->
+                <!--                        ? custom_theme.color-->
+                <!--                        : default_theme.color_light,-->
+                <!--                    }"-->
+                <!--                  ></div>-->
+              </div>
+
               </div>
             </div>
-          </div>
 
-          <!--            <div class="new_page"></div>-->
+          </div>
 
           <div class="flight_info_wrapper">
             <div
@@ -575,205 +574,6 @@
               <h4><span>Total :</span>  {{ formatAmount(getBookedFlight.amount) }} </h4> -->
           </div>
 
-<!--          <template v-if="getData?.booking.flight?.inbound.length">-->
-<!--            <div-->
-<!--              v-for="(i, index) in getData?.booking.flight?.inbound"-->
-<!--              :key="index + 9923"-->
-<!--              class="flight_info_wrapper"-->
-<!--            >-->
-<!--              <div style="display: flex; align-items: center; gap: 0.12rem">-->
-<!--                <svg-->
-<!--                  xmlns="http://www.w3.org/2000/svg"-->
-<!--                  width="24"-->
-<!--                  height="24"-->
-<!--                  viewBox="0 0 24 24"-->
-<!--                  fill="none"-->
-<!--                >-->
-<!--                  <g clip-path="url(#clip0_2657_19155)">-->
-<!--                    <path-->
-<!--                      d="M23.342 18.43H4.34195V20.43H23.342V18.43ZM3.77195 9.07C3.98195 8.27 4.81195 7.79 5.61195 8.01L10.922 9.43L17.822 3L19.752 3.51L15.612 10.68L20.582 12.01L22.552 10.47L24.002 10.86L21.412 15.35L4.84195 10.92C4.03195 10.69 3.56195 9.87 3.77195 9.07Z"-->
-<!--                      fill="#575A65"-->
-<!--                    />-->
-<!--                  </g>-->
-<!--                  <defs>-->
-<!--                    <clipPath id="clip0_2657_19155">-->
-<!--                      <rect-->
-<!--                        width="24"-->
-<!--                        height="24"-->
-<!--                        fill="white"-->
-<!--                        transform="matrix(-1 0 0 1 24.002 0)"-->
-<!--                      />-->
-<!--                    </clipPath>-->
-<!--                  </defs>-->
-<!--                </svg>-->
-<!--                <span class="departure_flight">Return Flight</span>-->
-<!--              </div>-->
-<!--              <div-->
-<!--                class="equal-height-table"-->
-<!--                :style="{-->
-<!--                  background: custom_theme-->
-<!--                    ? custom_theme.color-->
-<!--                    : default_theme.color,-->
-<!--                }"-->
-<!--              >-->
-<!--                <div class="equal-height-table_item">-->
-<!--                  <p class="flight_info_text">-->
-<!--                    {{ getCityByCityCode(i.airport_from) }} ({{-->
-<!--                      i.airport_from-->
-<!--                    }})-->
-<!--                  </p>-->
-<!--                  <svg-->
-<!--                    xmlns="http://www.w3.org/2000/svg"-->
-<!--                    width="52"-->
-<!--                    height="18"-->
-<!--                    viewBox="0 0 52 18"-->
-<!--                    fill="none"-->
-<!--                  >-->
-<!--                    <path-->
-<!--                      d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z"-->
-<!--                      fill="white"-->
-<!--                    />-->
-<!--                  </svg>-->
-<!--                  <p class="flight_info_text">-->
-<!--                    {{ getCityByCityCode(i.airport_to) }} ({{ i.airport_to }})-->
-<!--                  </p>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <p class="flight_info_text">Tues 15th Sept, 2023</p>-->
-<!--                </div>-->
-<!--              </div>-->
-
-<!--              <div class="flight_info2">-->
-<!--                <div>-->
-<!--                  <p class="key">{{ i.flight_number }}</p>-->
-<!--                  <p class="value">Flight</p>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <p class="key">-->
-<!--                    {{ convertToWord(i.departure_time) }}-->
-<!--                    {{ convertTo12HourFormat(i.departure_time) }}-->
-<!--                  </p>-->
-<!--                  <p class="value">Departure</p>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <p class="key">{{ convertDurationToWords(i.duration) }}</p>-->
-<!--                  <p class="value">Duration</p>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <p class="key">-->
-<!--                    {{-->
-<!--                      i.arrival_time-->
-<!--                        ? convertToWord(i.arrival_time)-->
-<!--                        : "02 : 30 PM"-->
-<!--                    }}-->
-<!--                  </p>-->
-<!--                  <p class="value">Arrival</p>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <p class="key">-->
-<!--                    {{ getData?.booking.flight.outbound_stops }}-->
-<!--                  </p>-->
-<!--                  <p class="value">Stops</p>-->
-<!--                </div>-->
-<!--              </div>-->
-
-<!--              <div>-->
-<!--                <div class="flight_info">-->
-<!--                  <div class="flight_info_item">-->
-<!--                    <p class="airport">-->
-<!--                      {{ convertToWord(i.departure_time) }}-->
-<!--                      {{ convertTo12HourFormat(i.departure_time) }}-->
-<!--                    </p>-->
-<!--                    <p class="time">01 : 00 PM</p>-->
-<!--                    <p class="time">Thurs 20th Sept, 2023</p>-->
-<!--                  </div>-->
-<!--                  <svg-->
-<!--                    xmlns="http://www.w3.org/2000/svg"-->
-<!--                    width="52"-->
-<!--                    height="18"-->
-<!--                    viewBox="0 0 52 18"-->
-<!--                    fill="none"-->
-<!--                  >-->
-<!--                    <path-->
-<!--                      d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z"-->
-<!--                      :fill="-->
-<!--                        custom_theme ? custom_theme.color : default_theme.color-->
-<!--                      "-->
-<!--                    />-->
-<!--                  </svg>-->
-<!--                  <div class="flight_info_item">-->
-<!--                    <p class="airport">-->
-<!--                      Muritala Mohammed International Airport Lagos (LOS)-->
-<!--                    </p>-->
-<!--                    <p class="time">01 : 00 PM</p>-->
-<!--                    <p class="time">Thurs 20th Sept, 2023</p>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                <div-->
-<!--                  class="layover"-->
-<!--                  :style="{-->
-<!--                    borderColor: custom_theme-->
-<!--                      ? custom_theme.color-->
-<!--                      : default_theme.color_light,-->
-<!--                  }"-->
-<!--                >-->
-<!--                  <div-->
-<!--                    class="line"-->
-<!--                    :style="{-->
-<!--                      background: custom_theme-->
-<!--                        ? custom_theme.color-->
-<!--                        : default_theme.color_light,-->
-<!--                    }"-->
-<!--                  ></div>-->
-<!--                  <div style="display: flex; flex-direction: column">-->
-<!--                    <span class="layover_text">Lay Over</span>-->
-<!--                    <span class="layover_text">7h 30m</span>-->
-<!--                  </div>-->
-<!--                  <div-->
-<!--                    class="line"-->
-<!--                    :style="{-->
-<!--                      background: custom_theme-->
-<!--                        ? custom_theme.color-->
-<!--                        : default_theme.color_light,-->
-<!--                    }"-->
-<!--                  ></div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div>-->
-<!--                <div class="flight_info">-->
-<!--                  <div class="flight_info_item">-->
-<!--                    <p class="airport">-->
-<!--                      Muritala Mohammed International Airport Lagos (LOS)-->
-<!--                    </p>-->
-<!--                    <p class="time">01 : 00 PM</p>-->
-<!--                    <p class="time">Thurs 20th Sept, 2023</p>-->
-<!--                  </div>-->
-<!--                  <svg-->
-<!--                    xmlns="http://www.w3.org/2000/svg"-->
-<!--                    width="52"-->
-<!--                    height="18"-->
-<!--                    viewBox="0 0 52 18"-->
-<!--                    fill="none"-->
-<!--                  >-->
-<!--                    <path-->
-<!--                      d="M52 9L37 0.339746V17.6603L52 9ZM0 10.5H38.5V7.5H0V10.5Z"-->
-<!--                      :fill="-->
-<!--                        custom_theme ? custom_theme.color : default_theme.color-->
-<!--                      "-->
-<!--                    />-->
-<!--                  </svg>-->
-<!--                  <div class="flight_info_item">-->
-<!--                    <p class="airport">-->
-<!--                      Muritala Mohammed International Airport Lagos (LOS)-->
-<!--                    </p>-->
-<!--                    <p class="time">01 : 00 PM</p>-->
-<!--                    <p class="time">Thurs 20th Sept, 2023</p>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </template>-->
         </div>
       </div>
     </div>
@@ -937,20 +737,22 @@ export default {
 .layover {
   display: flex;
   width: 33.25rem;
-  align-items: center;
-  gap: 2rem;
+  padding: 10px 20px;
   justify-content: center;
-  margin: 0 auto;
-  background: #2c6cac;
+  align-items: center;
+  margin: 20px auto;
+  gap: 10px;
+  border-radius: 500px;
+  background:  #EFF2F7;
 }
 
 .layover_text {
-  color: #000;
+  color: var(--Black-text-01, #1D1E2C);
   font-family: "Product Sans";
-  font-size: 1rem;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.75rem; /* 175% */
+  line-height: 24px; /* 150% */
 }
 
 .departure_flight {

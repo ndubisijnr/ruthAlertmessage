@@ -51,6 +51,11 @@ class AuthRequest{
         password:null
     }
 
+    static notification = {
+        status: null,  //read, unread
+        notification_ids: []
+    }
+
     // document upload and verification request
 }
 export default AuthRequest

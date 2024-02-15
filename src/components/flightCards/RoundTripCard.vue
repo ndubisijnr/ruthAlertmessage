@@ -47,14 +47,14 @@
                         ({{ i.outbound[0]?.airport_from }})</p>
                     </div>
                       <div class="more-flight-info">
-                        <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
+                        <span class="duration">{{ convertDurationToWords(i.total_outbound_duration) }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="69" height="16" viewBox="0 0 69 16" fill="none">
                         <path
                             d="M68.3536 8.35355C68.5488 8.15829 68.5488 7.84171 68.3536 7.64645L65.1716 4.46447C64.9763 4.2692 64.6597 4.2692 64.4645 4.46447C64.2692 4.65973 64.2692 4.97631 64.4645 5.17157L67.2929 8L64.4645 10.8284C64.2692 11.0237 64.2692 11.3403 64.4645 11.5355C64.6597 11.7308 64.9763 11.7308 65.1716 11.5355L68.3536 8.35355ZM0 8.5H1.88889V7.5H0V8.5ZM5.66667 8.5H9.44444V7.5H5.66667V8.5ZM13.2222 8.5H17V7.5H13.2222V8.5ZM20.7778 8.5H24.5556V7.5H20.7778V8.5ZM28.3333 8.5H32.1111V7.5H28.3333V8.5ZM35.8889 8.5H39.6667V7.5H35.8889V8.5ZM43.4445 8.5H47.2222V7.5H43.4445V8.5ZM51 8.5H54.7778V7.5H51V8.5ZM58.5556 8.5H62.3333V7.5H58.5556V8.5ZM66.1111 8.5H68V7.5H66.1111V8.5ZM68.7071 8.70711C69.0976 8.31658 69.0976 7.68342 68.7071 7.29289L62.3431 0.928932C61.9526 0.538408 61.3195 0.538408 60.9289 0.928932C60.5384 1.31946 60.5384 1.95262 60.9289 2.34315L66.5858 8L60.9289 13.6569C60.5384 14.0474 60.5384 14.6805 60.9289 15.0711C61.3195 15.4616 61.9526 15.4616 62.3431 15.0711L68.7071 8.70711ZM0 9H1.88889V7H0V9ZM5.66667 9H9.44444V7H5.66667V9ZM13.2222 9H17V7H13.2222V9ZM20.7778 9H24.5556V7H20.7778V9ZM28.3333 9H32.1111V7H28.3333V9ZM35.8889 9H39.6667V7H35.8889V9ZM43.4445 9H47.2222V7H43.4445V9ZM51 9H54.7778V7H51V9ZM58.5556 9H62.3333V7H58.5556V9ZM66.1111 9H68V7H66.1111V9Z"
                             fill="#9DA8B6" />
                         </svg>
                         <span class="stops">{{ i.outbound_stops === 0 ? 'Direct' :
-                        `${i.outbound_stops} - Stops` }}</span>
+                        `${i.outbound_stops} stop` }}</span>
                     </div>
                     <div>
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
@@ -76,12 +76,12 @@
                     <p class="dest">{{ getCityByCityCode(j.airport_from) }} ({{ j.airport_from }})</p>
                   </div>
                   <div class="more-flight-info">
-                      <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
+                      <span class="duration">{{ convertDurationToWords(i.total_inbound_duration) }}</span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="232" height="16" viewBox="0 0 232 16" fill="none">
                       <path d="M231.354 8.35355C231.549 8.15829 231.549 7.84171 231.354 7.64645L228.172 4.46447C227.976 4.2692 227.66 4.2692 227.464 4.46447C227.269 4.65973 227.269 4.97631 227.464 5.17157L230.293 8L227.464 10.8284C227.269 11.0237 227.269 11.3403 227.464 11.5355C227.66 11.7308 227.976 11.7308 228.172 11.5355L231.354 8.35355ZM0 8.5H1.99138V7.5H0V8.5ZM5.97414 8.5H9.9569V7.5H5.97414V8.5ZM13.9397 8.5H17.9224V7.5H13.9397V8.5ZM21.9052 8.5H25.8879V7.5H21.9052V8.5ZM29.8707 8.5H33.8534V7.5H29.8707V8.5ZM37.8362 8.5H41.819V7.5H37.8362V8.5ZM45.8017 8.5H49.7845V7.5H45.8017V8.5ZM53.7672 8.5H57.75V7.5H53.7672V8.5ZM61.7327 8.5H65.7155V7.5H61.7327V8.5ZM69.6983 8.5H73.681V7.5H69.6983V8.5ZM77.6638 8.5H81.6465V7.5H77.6638V8.5ZM85.6293 8.5H89.6121V7.5H85.6293V8.5ZM93.5948 8.5H97.5776V7.5H93.5948V8.5ZM101.56 8.5H105.543V7.5H101.56V8.5ZM109.526 8.5H113.509V7.5H109.526V8.5ZM117.491 8.5H121.474V7.5H117.491V8.5ZM125.457 8.5H129.44V7.5H125.457V8.5ZM133.422 8.5H137.405V7.5H133.422V8.5ZM141.388 8.5H145.371V7.5H141.388V8.5ZM149.353 8.5H153.336V7.5H149.353V8.5ZM157.319 8.5H161.302V7.5H157.319V8.5ZM165.284 8.5H169.267V7.5H165.284V8.5ZM173.25 8.5H177.233V7.5H173.25V8.5ZM181.215 8.5H185.198V7.5H181.215V8.5ZM189.181 8.5H193.164V7.5H189.181V8.5ZM197.147 8.5H201.129V7.5H197.147V8.5ZM205.112 8.5H209.095V7.5H205.112V8.5ZM213.078 8.5H217.06V7.5H213.078V8.5ZM221.043 8.5H225.026V7.5H221.043V8.5ZM229.009 8.5H231V7.5H229.009V8.5ZM231.707 8.70711C232.098 8.31658 232.098 7.68342 231.707 7.29289L225.343 0.928932C224.953 0.538408 224.319 0.538408 223.929 0.928932C223.538 1.31946 223.538 1.95262 223.929 2.34315L229.586 8L223.929 13.6569C223.538 14.0474 223.538 14.6805 223.929 15.0711C224.319 15.4616 224.953 15.4616 225.343 15.0711L231.707 8.70711ZM0 9H1.99138V7H0V9ZM5.97414 9H9.9569V7H5.97414V9ZM13.9397 9H17.9224V7H13.9397V9ZM21.9052 9H25.8879V7H21.9052V9ZM29.8707 9H33.8534V7H29.8707V9ZM37.8362 9H41.819V7H37.8362V9ZM45.8017 9H49.7845V7H45.8017V9ZM53.7672 9H57.75V7H53.7672V9ZM61.7327 9H65.7155V7H61.7327V9ZM69.6983 9H73.681V7H69.6983V9ZM77.6638 9H81.6465V7H77.6638V9ZM85.6293 9H89.6121V7H85.6293V9ZM93.5948 9H97.5776V7H93.5948V9ZM101.56 9H105.543V7H101.56V9ZM109.526 9H113.509V7H109.526V9ZM117.491 9H121.474V7H117.491V9ZM125.457 9H129.44V7H125.457V9ZM133.422 9H137.405V7H133.422V9ZM141.388 9H145.371V7H141.388V9ZM149.353 9H153.336V7H149.353V9ZM157.319 9H161.302V7H157.319V9ZM165.284 9H169.267V7H165.284V9ZM173.25 9H177.233V7H173.25V9ZM181.215 9H185.198V7H181.215V9ZM189.181 9H193.164V7H189.181V9ZM197.147 9H201.129V7H197.147V9ZM205.112 9H209.095V7H205.112V9ZM213.078 9H217.06V7H213.078V9ZM221.043 9H225.026V7H221.043V9ZM229.009 9H231V7H229.009V9Z" fill="#9DA8B6" />
                       </svg>
                       <span class="stops">{{ i.outbound_stops + i.inbound_stops === 0 ? 'Direct' :
-                      `${i.outbound_stops + i.inbound_stops} - Stops` }}</span>
+                      `${i.outbound_stops + i.inbound_stops} stop` }}</span>
                   </div>
                   <div>
                       <p class="time"> {{ convertTo12HourFormat(j.arrival_time) }}</p>
@@ -105,14 +105,14 @@
                       ({{ i.inbound[0]?.airport_from }})</p>
                   </div>
                   <div class="more-flight-info">
-                      <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
+                      <span class="duration">{{ convertDurationToWords(i.total_inbound_duration) }}</span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="69" height="16" viewBox="0 0 69 16" fill="none">
                       <path
                           d="M68.3536 8.35355C68.5488 8.15829 68.5488 7.84171 68.3536 7.64645L65.1716 4.46447C64.9763 4.2692 64.6597 4.2692 64.4645 4.46447C64.2692 4.65973 64.2692 4.97631 64.4645 5.17157L67.2929 8L64.4645 10.8284C64.2692 11.0237 64.2692 11.3403 64.4645 11.5355C64.6597 11.7308 64.9763 11.7308 65.1716 11.5355L68.3536 8.35355ZM0 8.5H1.88889V7.5H0V8.5ZM5.66667 8.5H9.44444V7.5H5.66667V8.5ZM13.2222 8.5H17V7.5H13.2222V8.5ZM20.7778 8.5H24.5556V7.5H20.7778V8.5ZM28.3333 8.5H32.1111V7.5H28.3333V8.5ZM35.8889 8.5H39.6667V7.5H35.8889V8.5ZM43.4445 8.5H47.2222V7.5H43.4445V8.5ZM51 8.5H54.7778V7.5H51V8.5ZM58.5556 8.5H62.3333V7.5H58.5556V8.5ZM66.1111 8.5H68V7.5H66.1111V8.5ZM68.7071 8.70711C69.0976 8.31658 69.0976 7.68342 68.7071 7.29289L62.3431 0.928932C61.9526 0.538408 61.3195 0.538408 60.9289 0.928932C60.5384 1.31946 60.5384 1.95262 60.9289 2.34315L66.5858 8L60.9289 13.6569C60.5384 14.0474 60.5384 14.6805 60.9289 15.0711C61.3195 15.4616 61.9526 15.4616 62.3431 15.0711L68.7071 8.70711ZM0 9H1.88889V7H0V9ZM5.66667 9H9.44444V7H5.66667V9ZM13.2222 9H17V7H13.2222V9ZM20.7778 9H24.5556V7H20.7778V9ZM28.3333 9H32.1111V7H28.3333V9ZM35.8889 9H39.6667V7H35.8889V9ZM43.4445 9H47.2222V7H43.4445V9ZM51 9H54.7778V7H51V9ZM58.5556 9H62.3333V7H58.5556V9ZM66.1111 9H68V7H66.1111V9Z"
                           fill="#9DA8B6" />
                       </svg>
                       <span class="stops">{{ i.inbound_stops === 0 ? 'Direct' :
-                      `${i.inbound_stops} - Stops` }}</span>
+                      `${i.inbound_stops} stop` }}</span>
                   </div>
                   <div>
                       <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
@@ -133,14 +133,14 @@
                         <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                     </div>
                     <div class="more-flight-info">
-                        <span class="duration">{{ convertDurationToWords(i.total_duration) }}</span>
+                        <span class="duration">{{ convertDurationToWords(i.total_inbound_duration) }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="232" height="16" viewBox="0 0 232 16" fill="none">
                         <path
                             d="M231.354 8.35355C231.549 8.15829 231.549 7.84171 231.354 7.64645L228.172 4.46447C227.976 4.2692 227.66 4.2692 227.464 4.46447C227.269 4.65973 227.269 4.97631 227.464 5.17157L230.293 8L227.464 10.8284C227.269 11.0237 227.269 11.3403 227.464 11.5355C227.66 11.7308 227.976 11.7308 228.172 11.5355L231.354 8.35355ZM0 8.5H1.99138V7.5H0V8.5ZM5.97414 8.5H9.9569V7.5H5.97414V8.5ZM13.9397 8.5H17.9224V7.5H13.9397V8.5ZM21.9052 8.5H25.8879V7.5H21.9052V8.5ZM29.8707 8.5H33.8534V7.5H29.8707V8.5ZM37.8362 8.5H41.819V7.5H37.8362V8.5ZM45.8017 8.5H49.7845V7.5H45.8017V8.5ZM53.7672 8.5H57.75V7.5H53.7672V8.5ZM61.7327 8.5H65.7155V7.5H61.7327V8.5ZM69.6983 8.5H73.681V7.5H69.6983V8.5ZM77.6638 8.5H81.6465V7.5H77.6638V8.5ZM85.6293 8.5H89.6121V7.5H85.6293V8.5ZM93.5948 8.5H97.5776V7.5H93.5948V8.5ZM101.56 8.5H105.543V7.5H101.56V8.5ZM109.526 8.5H113.509V7.5H109.526V8.5ZM117.491 8.5H121.474V7.5H117.491V8.5ZM125.457 8.5H129.44V7.5H125.457V8.5ZM133.422 8.5H137.405V7.5H133.422V8.5ZM141.388 8.5H145.371V7.5H141.388V8.5ZM149.353 8.5H153.336V7.5H149.353V8.5ZM157.319 8.5H161.302V7.5H157.319V8.5ZM165.284 8.5H169.267V7.5H165.284V8.5ZM173.25 8.5H177.233V7.5H173.25V8.5ZM181.215 8.5H185.198V7.5H181.215V8.5ZM189.181 8.5H193.164V7.5H189.181V8.5ZM197.147 8.5H201.129V7.5H197.147V8.5ZM205.112 8.5H209.095V7.5H205.112V8.5ZM213.078 8.5H217.06V7.5H213.078V8.5ZM221.043 8.5H225.026V7.5H221.043V8.5ZM229.009 8.5H231V7.5H229.009V8.5ZM231.707 8.70711C232.098 8.31658 232.098 7.68342 231.707 7.29289L225.343 0.928932C224.953 0.538408 224.319 0.538408 223.929 0.928932C223.538 1.31946 223.538 1.95262 223.929 2.34315L229.586 8L223.929 13.6569C223.538 14.0474 223.538 14.6805 223.929 15.0711C224.319 15.4616 224.953 15.4616 225.343 15.0711L231.707 8.70711ZM0 9H1.99138V7H0V9ZM5.97414 9H9.9569V7H5.97414V9ZM13.9397 9H17.9224V7H13.9397V9ZM21.9052 9H25.8879V7H21.9052V9ZM29.8707 9H33.8534V7H29.8707V9ZM37.8362 9H41.819V7H37.8362V9ZM45.8017 9H49.7845V7H45.8017V9ZM53.7672 9H57.75V7H53.7672V9ZM61.7327 9H65.7155V7H61.7327V9ZM69.6983 9H73.681V7H69.6983V9ZM77.6638 9H81.6465V7H77.6638V9ZM85.6293 9H89.6121V7H85.6293V9ZM93.5948 9H97.5776V7H93.5948V9ZM101.56 9H105.543V7H101.56V9ZM109.526 9H113.509V7H109.526V9ZM117.491 9H121.474V7H117.491V9ZM125.457 9H129.44V7H125.457V9ZM133.422 9H137.405V7H133.422V9ZM141.388 9H145.371V7H141.388V9ZM149.353 9H153.336V7H149.353V9ZM157.319 9H161.302V7H157.319V9ZM165.284 9H169.267V7H165.284V9ZM173.25 9H177.233V7H173.25V9ZM181.215 9H185.198V7H181.215V9ZM189.181 9H193.164V7H189.181V9ZM197.147 9H201.129V7H197.147V9ZM205.112 9H209.095V7H205.112V9ZM213.078 9H217.06V7H213.078V9ZM221.043 9H225.026V7H221.043V9ZM229.009 9H231V7H229.009V9Z"
                             fill="#9DA8B6" />
                         </svg>
                         <span class="stops">{{ i.inbound_stops === 0 ? 'Direct' :
-                        `${i.inbound_stops} - Stops` }}</span>
+                        `${i.inbound_stops} stop` }}</span>
                     </div>
                     <div>
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
@@ -180,7 +180,7 @@
                         convertToWord(i.outbound[0]?.departure_time.split("T")[0]) }} from "{{
                         getCityByCityCode(i.outbound[0]?.airport_from).toUpperCase() }}" to
                       "{{ getCityByCityCode(i.outbound[i.outbound.length - 1]?.airport_to).toUpperCase() }}"</p>
-                    <p class="depart-date-info-stops">{{ i.outbound_stops }} - Stops</p>
+                    <p class="depart-date-info-stops">{{ i.outbound_stops }} stop</p>
                   </div>
                   <svg class="dropdown_icon" @click="isDepartureActive = !isDepartureActive" style="cursor: pointer;"
                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -215,7 +215,7 @@
                         </div>
                         <div class="inner-airline_details-item type">
                           <p class="key">Aircraft Type: </p>
-                          <p class="value">{{ j.marketing_airline }}</p>
+                          <p class="value">{{ j.equipment_type }}</p>
                         </div>
                         <div class="inner-airline_details-item class-type">
                           <p class="key">Class Type: </p>
@@ -269,7 +269,7 @@
                         convertToWord(i.inbound[0]?.departure_time.split("T")[0]) }} from "{{
                         getCityByCityCode(i.inbound[0]?.airport_from).toUpperCase() }}"  to
                       "{{ getCityByCityCode(i.inbound[i.inbound.length - 1]?.airport_to).toUpperCase()}}"</p>
-                    <p class="depart-date-info-stops">{{ i.inbound_stops }} Stops</p>
+                    <p class="depart-date-info-stops">{{ i.inbound_stops }} stop</p>
                   </div>
                   <svg class="dropdown_icon" @click="isReturnActive = !isReturnActive" style="cursor: pointer;"
                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -306,7 +306,7 @@
                         </div>
                         <div class="inner-airline_details-item type">
                           <p class="key">Aircraft Type: </p>
-                          <p class="value">{{ j.marketing_airline }}</p>
+                          <p class="value">{{ j.equipment_type }}</p>
                         </div>
                         <div class="inner-airline_details-item class-type">
                           <p class="key">Class Type: </p>

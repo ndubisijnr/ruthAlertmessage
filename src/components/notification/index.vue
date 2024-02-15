@@ -2,6 +2,7 @@
 import storeUtils from "@/utils/storeUtils";
 import spinnerLoader from "@/components/loaders/SpinnerLoader.vue";
 import {convertToWord, convertTo12HourFormat} from "@/mixins/flightUtil";
+import router from "@/router";
 
 export default {
   name: "index",
@@ -18,6 +19,14 @@ export default {
     gtNotiAction(value, type, status){
       this.activeNav = value
       storeUtils.fireAway().global.getNotifications(type,status)
+    },
+    notificationAction(action_type, action_id){
+      if(action_id !== "" && action_id !== null){
+        //pass do nothing
+      }else{
+        if(action_type === 'ISSUED_TICKET') router.push({name:'Bookings'})
+        if(action_type === 'MEMBER_INVITED') router.push({name:'Settings', query:{anchor:'#Teams'}})
+      }
     },
     close(){
       this.$emit('close', false)
@@ -73,15 +82,27 @@ export default {
       <div style="font-family: monospace">Loading notifications.....</div>
     </div>
     <div v-else class="notification_area">
-      <div v-if="activeNav === 'all'" v-for="(i,index) in getNotifications" :key="index">
+      <div v-if="getNotifications?.length < 1" style="font-size:0.888rem;width:100%;height:100%;display: flex;flex-direction: column;align-items: center;justify-content: center">
+        <div style="font-family: monospace">No Notifications.</div>
+      </div>
+      <div v-else>
+        <div v-if="activeNav === 'all'" v-for="(i,index) in getNotifications" :key="index">
+            <div class="notification-item" @click="notificationAction(i.data.action_type, i.data.action_id)">
+              <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
+              <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
+              </svg>
+          </div>
+        </div>
+        <div v-if="activeNav === 'bookings'" v-for="(i,index) in getNotifications" :key="index">
           <div class="notification-item">
             <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
             <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
               <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
             </svg>
+          </div>
         </div>
-      </div>
-      <div v-if="activeNav === 'bookings'" v-for="(i,index) in getNotifications" :key="index">
+        <div v-if="activeNav === 'transaction'" v-for="(i,index) in getNotifications" :key="index">
         <div class="notification-item">
           <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
           <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
@@ -89,13 +110,6 @@ export default {
           </svg>
         </div>
       </div>
-      <div v-if="activeNav === 'transaction'" v-for="(i,index) in getNotifications" :key="index">
-        <div class="notification-item">
-          <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
-          <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
-            <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>
-          </svg>
-        </div>
       </div>
     </div>
 

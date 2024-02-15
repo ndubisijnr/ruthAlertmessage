@@ -1,6 +1,6 @@
 export default [
     {
-        path: '/settings/:token',
+        path: '/settings/:anchor',
         // redirect:'create-account',
         name: 'Settings',
         meta: {layout: 'settings',authRequired:true},
