@@ -368,7 +368,7 @@
                     />
                   </svg>
                   <router-link
-                    :to="`/settings/section#Account`"
+                    :to="`/settings/#Account`"
                     >Account Settings</router-link
                   >
                   <img
