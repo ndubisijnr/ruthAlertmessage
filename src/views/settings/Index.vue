@@ -263,10 +263,10 @@
             </div>
             <!-- teams -->
             <div id="teams" class="teams animate__animated animate__fadeIn" v-show="currentTab === 'Teams'">
-              <!--              <div class="manage-roles">-->
-              <!--                <p :style="activeManageRole === 'team'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>-->
-              <!--                <p :style="activeManageRole === 'permissions'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>-->
-              <!--              </div>-->
+<!--                            <div class="manage-roles">-->
+<!--                              <p :style="activeManageRole === 'team'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" :class="{'activeManageRole':activeManageRole === 'team'}" class="manage-item"  @click="activeManageRole = 'team'">Team Members</p>-->
+<!--                              <p :style="activeManageRole === 'permissions'? {backgroundColor:lightenColor(custom_theme ? custom_theme.color:default_theme.color), color:custom_theme ? custom_theme.color : default_theme.color} : null" class="manage-item" :class="{'activeManageRole':activeManageRole === 'permissions'}" @click="activeManageRole = 'permissions'">Roles & Permissions</p>-->
+<!--                            </div>-->
 
               <div class="teams-header">
                 <div class="search-team">
@@ -294,9 +294,32 @@
                     placeholder="Search team members"
                   />
                 </div>
+
+
+              <div class="btn3">
+                <on-boarding-button
+                    v-show="activeManageRole === 'team'"
+                    class="role"
+                    @click="addMember = true"
+                    btn-width="10.625rem"
+                    height="2.5rem"
+                    text-node="Add New Member"
+                    fontsize="12px"
+                ></on-boarding-button>
+                <on-boarding-button
+                    v-show="activeManageRole === 'permissions'"
+                    class="role"
+                    @click="addRole = true"
+                    btn-width="10.625rem"
+                    height="2.5rem"
+                    text-node="Create role"
+                    fontsize="12px"
+                ></on-boarding-button>
+              </div>
               </div>
 
-              <div class="teams-main" v-if="!noUser">
+
+            <div class="teams-main" v-if="!noUser">
                 <div>
                   <div v-if="getMembers?.length > 0" class="table-wrapper">
                     <domain-table
