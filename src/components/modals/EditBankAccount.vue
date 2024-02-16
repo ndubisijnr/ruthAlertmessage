@@ -103,9 +103,7 @@ export default {
   watch:{
     'getTenantLoaded'(a,b){
       if(a){
-        setTimeout(() => { this.currentTab = this.getCurrentRouteParams, this.switchTab(this.getCurrentRouteParams) }, 500)
-        storeUtils.fireAway().global?.commitError(null)
-        storeUtils.fireAway().theme.handleGetTemplate();
+        storeUtils.fireAway().settings?.readBanks()
       };
     }
   },

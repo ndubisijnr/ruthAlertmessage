@@ -319,9 +319,7 @@ export default {
 
 
   mounted() {
-    console.log(this.opened)
     if(this.opened) this.selectedRole = this.model.permission_ids
-    console.log(this.selectedRole)
     // storeUtils.fireAway().settings?.readAllRoles()
   }
 
