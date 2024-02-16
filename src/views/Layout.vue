@@ -544,7 +544,7 @@ export default {
 
     'getTenantLoaded'(a,b){
       if(a){
-        storeUtils.fireAway().theme.getCustomization();
+        storeUtils.fireAway().theme.getCustomization().then(() => {});
       }
     }
   },
@@ -554,7 +554,19 @@ export default {
       const res = await storeUtils.fireAway().global?.getTenant();
       if (res.length) {
         this.$emit("tenantIsReady", true);
-        storeUtils.fireAway().theme.getCustomization();
+        storeUtils.fireAway().theme.getCustomization().then(() => {
+          const favicon = document.getElementById("faviconIcon");
+          const title = document.getElementById("app_title");
+          const description_tag = document.getElementById('description_head')
+
+          if (this.custom_theme){
+            favicon.href = this.custom_theme ? this.custom_theme.logo : this.getBusinessProfile.logo;
+            title.textContent = this.custom_theme.site_title;
+            description_tag.setAttribute('content', this.custom_theme.description)
+          }
+
+          console.log(favicon)
+        })
       } else {
         this.$router.push("/domain-error");
       }
@@ -566,17 +578,20 @@ export default {
   // },
 
   mounted() {
-    if (this.getTenantLoaded) {
-      storeUtils.fireAway().theme.getCustomization();
-      const favicon = document.getElementById("faviconIcon");
-      const title = document.getElementById("app_title");
-      const description_tag = document.getElementById('description_head')
+    if(this.getTenantLoaded){
+      storeUtils.fireAway().theme.getCustomization().then(() => {
+        const favicon = document.getElementById("faviconIcon");
+        const title = document.getElementById("app_title");
+        const description_tag = document.getElementById('description_head')
 
-      if (this.custom_theme){
-        favicon.href =this.custom_theme ? this.custom_theme.favicon : this.custom_theme.logo;
-        title.textContent = this.custom_theme.site_title;
-        description_tag.setAttribute('content', this.custom_theme.description)
-      }
+        if (this.custom_theme){
+          favicon.href = this.custom_theme ? this.custom_theme.logo : this.getBusinessProfile.logo;
+          title.textContent = this.custom_theme.site_title;
+          description_tag.setAttribute('content', this.custom_theme.description)
+        }
+
+        console.log(favicon)
+      })
     }
   },
 };

@@ -1372,7 +1372,11 @@ export default {
     getLoading() {
       return storeUtils.fireAway().flight?.getLoading;
     },
+    getTenantLoaded(){
+      return storeUtils.fireAway().global.getTenantLoaded
+    }
   },
+
 
   beforeMount() {
     // preserves flight model
@@ -1380,7 +1384,18 @@ export default {
       this.storedFlightModel = JSON.parse(localStorage.flightModel);
     // localStorage.removeItem('flightModel')
     FlightRequest.flight = this.storedFlightModel;
+
+
   },
+
+  watch:{
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().theme.getCustomization().then(() => {});
+      }
+    }
+  },
+
 
   mounted() {
     if (!this.storedFlightModel?.return_date) this.activeDestType = "one_way";

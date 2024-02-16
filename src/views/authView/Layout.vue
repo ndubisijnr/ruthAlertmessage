@@ -75,6 +75,15 @@ export default {
         };
     },
 
+    methods:{
+      setFavTitle(){
+        const favicon = document.getElementById("faviconIcon");
+        const title = document.getElementById("app_title");
+        title.textContent = this.getTenant?.name;
+        favicon.href = this.getTenant?.logo
+      }
+    },
+
     computed: {
         default_theme() {
             return storeUtils.fireAway().theme.getDefault_theme;
@@ -94,10 +103,13 @@ export default {
     },
 
     async beforeCreate() {
+
         if (!storeUtils.fireAway().global.tenantLoaded) {
             const res = await storeUtils.fireAway().global?.getTenant();
             if (!res.length) {
                 this.$router.push("/domain-error");
+            }else{
+              await this.setFavTitle()
             }
         }
     },
@@ -106,12 +118,7 @@ export default {
   },
 
   mounted() {
-    const favicon = document.getElementById("faviconIcon");
-    const title = document.getElementById("app_title");
 
-
-    if (this.getFavicon) favicon.href = this.getFavicon;
-    if (this.getTenant) title.textContent = this.getTenant.name;
   }
 };
 </script>
@@ -120,7 +127,7 @@ export default {
 @import url("https://fonts.cdnfonts.com/css/apercu");
 .logo{
   max-width: 6rem;
-  max-height: 2.35713rem;
+  max-height: 6.35713rem;
 }
 .tenant_name{
   font-size: 2.5rem;

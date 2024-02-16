@@ -28,11 +28,31 @@ import storeUtils from "@/utils/storeUtils";
 
 export default {
   name: "Layout",
+  methods:{
+    setFavTitle(){
+      const favicon = document.getElementById("faviconIcon");
+      const title = document.getElementById("app_title");
+      title.textContent = this.getTenant?.name;
+      favicon.href = this.getTenant?.logo
+    }
+  },
   computed:{
     getTenant(){
       return storeUtils.fireAway().global.Tenant
     },
-  }
+  },
+  async beforeCreate() {
+    if (!storeUtils.fireAway().global.tenantLoaded) {
+      const res = await storeUtils.fireAway().global?.getTenant();
+      if (!res.length) {
+        this.$router.push("/domain-error");
+      }else{
+        await this.setFavTitle()
+      }
+    }
+  },
+
+  mounted() {}
 }
 </script>
 
@@ -52,7 +72,7 @@ export default {
 
 .logo{
   max-width: 6rem;
-  max-height: 2.35713rem;
+  max-height: 6.35713rem;
 }
 
 

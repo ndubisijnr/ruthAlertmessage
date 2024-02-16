@@ -2,8 +2,8 @@ export const convertDurationToWords = (duration) => {
     const hours = Math.floor(duration / 60);
     const minutes = duration % 60;
 
-    const hoursInWords = hours > 0 ? `${hours}h` : '';
-    const minutesInWords = minutes > 0 ? `${minutes}m` : '';
+    const hoursInWords = hours > 1 ? `${hours}hrs` : `${hours}hr`;
+    const minutesInWords = minutes > 1 ? `${minutes}mins` : `${minutes}min`;
 
     if (hoursInWords && minutesInWords) {
         return `${hoursInWords} ${minutesInWords}`;
