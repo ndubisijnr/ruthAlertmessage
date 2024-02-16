@@ -11,7 +11,7 @@
 
         <div>
           <div style="position: relative">
-          <on-boarding-input id="banks" :placeholder="model.bank_name"  width="100%" label="Bank Name" @inputValue="(value) => handleFilter(value)"></on-boarding-input>
+          <on-boarding-input id="banks_add" :placeholder="model.bank_name"  width="100%" label="Bank Name" @inputValue="(value) => handleFilter(value)"></on-boarding-input>
           <div class="doc_type_options" v-if="filteredBank?.length > 0">
             <p class="doc_type_item" @click="selectBank(i)" v-for="i in filteredBank" :key="i.id">{{i.name}}</p>
           </div>
@@ -76,7 +76,7 @@ export default {
     },
 
     selectBank(obj){
-      const input = document.getElementById('banks')
+      const input = document.getElementById('banks_add')
       input.value = obj.name
       this.model.bank_name = obj.name
       this.model.code = obj.code

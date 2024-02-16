@@ -12,7 +12,7 @@
           <div class="email-area">
             <div class="on_boarding_input">
               <label class="label" :class="{'focused':isFocused}">Role Name</label>
-              <input id="invite-input"  :class="{'focused':isFocused}" v-model="model.name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Give your role a name" />
+              <input :class="{'focused':isFocused}" v-model="model.name" @focus="handleFocus" @focusout="handleFocusOut"  type="email" class="formInput" placeholder="Give your role a name" />
             </div>
 
           </div>
