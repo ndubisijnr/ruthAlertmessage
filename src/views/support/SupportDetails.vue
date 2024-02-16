@@ -60,9 +60,9 @@ export default {
 
     viewDetails(obj) {
       obj.booking.flight.contact_details = {
-        contact_email:obj.booking.flight.contact_email,
-        contact_first_name:obj.booking.flight.contact_first_name,
-        contact_last_name: obj.booking.flight.contact_last_name
+        contact_email:obj.booking.contact_email,
+        contact_first_name:obj.booking.contact_first_name,
+        contact_last_name: obj.booking.contact_last_name
       }
       storeUtils.fireAway().print.commitPrintLoading("", obj.booking.flight);
       this.printing = true;
