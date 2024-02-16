@@ -59,6 +59,7 @@
 import storeUtils from "../../utils/storeUtils";
 import { toGradient, lightenColor } from "@/mixins/themeUtils";
 import SpinnerLoader from "../../components/loaders/SpinnerLoader.vue";
+import router from "@/router";
 
 export default {
     name: "CompleteRegistrationLayout",
@@ -100,6 +101,9 @@ export default {
             }
         }
     },
+  beforeMount() {
+    if(localStorage.token) router.push({name:'Dashboard',params: {token:localStorage.token.slice(0,20)}})
+  },
 
   mounted() {
     const favicon = document.getElementById("faviconIcon");
