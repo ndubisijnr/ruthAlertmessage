@@ -59,6 +59,11 @@ export default {
     },
 
     viewDetails(obj) {
+      obj.booking.flight.contact_details = {
+        contact_email:obj.booking.flight.contact_email,
+        contact_first_name:obj.booking.flight.contact_first_name,
+        contact_last_name: obj.booking.flight.contact_last_name
+      }
       storeUtils.fireAway().print.commitPrintLoading("", obj.booking.flight);
       this.printing = true;
     },
@@ -569,7 +574,7 @@ export default {
                         color="#2C6CAC"
                         background="transparent"
                       ></OnBoardingButton>
-                      <div v-if="getRequestDetails.type === 'issuance'">
+                      <div v-if="getRequestDetails?.type === 'issuance'">
                         <div v-if="getRequestDetails?.booking.status === 'issued'">
                           <p class="issued">Issued</p>
                         </div>

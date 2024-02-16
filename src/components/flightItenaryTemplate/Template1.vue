@@ -55,6 +55,7 @@
       <div id="pdf-to-download">
         <p class="invoice-receipt">Flight Itinerary</p>
 
+<!--        {{getData}}-->
         <div style="display: flex; justify-content: space-between">
           <div>
             <section style="display: flex; gap: 10px">

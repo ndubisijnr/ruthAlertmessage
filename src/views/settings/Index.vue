@@ -1561,7 +1561,7 @@ export default {
           break;
         case "Teams":
           this.currentTab = "Teams";
-          // storeUtils.fireAway().settings?.readAllMembers();
+          storeUtils.fireAway().settings?.readAllMembers();
           break;
         case "Notifications":
           this.currentTab = "Notifications";
@@ -1898,7 +1898,8 @@ export default {
     },
 
     getMembers() {
-      return storeUtils.fireAway().settings?.getMembers?.reverse();
+      return storeUtils.fireAway().settings?.getMembers;
+    // .reverse()
     },
 
     getBankAccount() {
