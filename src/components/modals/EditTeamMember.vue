@@ -155,7 +155,7 @@ export default {
       choosePermissions:"custom",
       currentPerm:[],
       ellipsis,
-      opened:false,
+      // opened:false,
       options:[
         {
           type:"Owner",

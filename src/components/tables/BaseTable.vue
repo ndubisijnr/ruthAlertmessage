@@ -1,38 +1,38 @@
 <template>
-    <div v-show="inModal" class="layout-modal">
-        <div class="delete-card-option">
-            <div class="card-header">
-                <p class="card-header-h">Confirm Action</p>
-            </div>
+<!--    <div v-show="inModal" class="layout-modal">-->
+<!--        <div class="delete-card-option">-->
+<!--            <div class="card-header">-->
+<!--                <p class="card-header-h">Confirm Action</p>-->
+<!--            </div>-->
 
-            <div style="margin: 2rem">
-                <p class="are-you-sure">
-                    Are you sure you want to delete this bank account?
-                </p>
+<!--            <div style="margin: 2rem">-->
+<!--                <p class="are-you-sure">-->
+<!--                    Are you sure you want to delete this bank account?-->
+<!--                </p>-->
 
-                <p class="are-you-sure-p">
-                    You're about to remove this bank {{ bankName?.bank_name }};
-                    This action is irreversible.
-                </p>
-            </div>
+<!--                <p class="are-you-sure-p">-->
+<!--                    You're about to remove this bank {{ bankName?.bank_name }};-->
+<!--                    This action is irreversible.-->
+<!--                </p>-->
+<!--            </div>-->
 
-            <div class="card-footer">
-                <p @click="cancelAction">Cancel</p>
-                <on-boarding-button
-                    :loading="deleteLoading"
-                    :disabled="deleteLoading"
-                    @click="deleteBankAction"
-                    btn-width="11.0625rem"
-                    border="none"
-                    background="#F04444"
-                    text-node="Yes, Delete"
-                ></on-boarding-button>
-            </div>
-        </div>
-    </div>
+<!--            <div class="card-footer">-->
+<!--                <p @click="cancelAction">Cancel</p>-->
+<!--                <on-boarding-button-->
+<!--                    :loading="deleteLoading"-->
+<!--                    :disabled="deleteLoading"-->
+<!--                    @click="deleteBankAction"-->
+<!--                    btn-width="11.0625rem"-->
+<!--                    border="none"-->
+<!--                    background="#F04444"-->
+<!--                    text-node="Yes, Delete"-->
+<!--                ></on-boarding-button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
-    <table class="table">
+    <table  class="table">
         <thead class="th">
             <tr
                 v-for="k in fields"
@@ -645,19 +645,14 @@ export default {
       },
 
       deactivateTeamMember(obj) {
-          this.$emit("deactivatingTeamMember", {
-              openModal: true,
-              userId: obj.id,
-          });
+          this.$emit("deactivatingTeamMember", {openModal: true, userId: obj.id});
       },
 
       table_row_onclick_action(obj) {
-          console.log(obj);
           if (this.getCurrentRoute.toLowerCase() === "travel agents") {
               this.readAgent(obj);
           }
           if (this.getCurrentRoute.toLowerCase() === "bookings") {
-
               storeUtils.fireAway().flight.handleGetFlightDetails(obj.reference)
           }
 
@@ -841,7 +836,7 @@ export default {
 @media (max-width: 1024px) {
     .table {
         overflow-x: scroll;
-        width: max-content;
+        width: 80rem;
     }
 }
 
