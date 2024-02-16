@@ -368,7 +368,7 @@
                     />
                   </svg>
                   <router-link
-                    :to="`/settings/#Account`"
+                    :to="`/settings/`"
                     >Account Settings</router-link
                   >
                   <img
@@ -541,6 +541,12 @@ export default {
         document.removeEventListener("click", this.closeMenu);
       }
     },
+
+    'getTenantLoaded'(a,b){
+      if(a){
+        storeUtils.fireAway().theme.getCustomization();
+      }
+    }
   },
 
   async beforeCreate() {
@@ -564,9 +570,13 @@ export default {
       storeUtils.fireAway().theme.getCustomization();
       const favicon = document.getElementById("faviconIcon");
       const title = document.getElementById("app_title");
+      const description_tag = document.getElementById('description_head')
 
-      if (this.getFavicon) favicon.href = this.getFavicon;
-      if (this.custom_theme) title.textContent = this.custom_theme.site_title;
+      if (this.custom_theme){
+        favicon.href =this.custom_theme ? this.custom_theme.favicon : this.custom_theme.logo;
+        title.textContent = this.custom_theme.site_title;
+        description_tag.setAttribute('content', this.custom_theme.description)
+      }
     }
   },
 };

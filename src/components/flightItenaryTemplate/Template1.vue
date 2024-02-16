@@ -92,7 +92,7 @@
         <div class="third-invoice-row-and-table">
           <!--     outbound-->
           <div class="flight_info_wrapper">
-            <div style="display: flex; align-items: center; gap: 0.5rem">
+            <div style="display: flex; align-items: center; gap: 0.5rem;margin: .5rem 0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -112,7 +112,7 @@
                   </clipPath>
                 </defs>
               </svg>
-              <span class="departure_flight">Departure Flight</span>
+              <span class="departure_flight">Departure Flight - ( {{getData?.outbound_stops}} ) Stop</span>
             </div>
 
 
@@ -220,6 +220,41 @@
                     {{ convertTo12HourFormat(i.arrival_time) }}
                   </p>
                 </div>
+              </div>
+
+              <div
+                  class="layover"
+                  :style="{
+                    borderColor: custom_theme
+                      ? custom_theme.color
+                      : default_theme.color_light,
+                  }"
+                  v-if="i.layover > 0"
+              >
+                <!--                  <div-->
+                <!--                    class="line"-->
+                <!--                    :style="{-->
+                <!--                      background: custom_theme-->
+                <!--                        ? custom_theme.color-->
+                <!--                        : default_theme.color_light,-->
+                <!--                    }"-->
+                <!--                  ></div>-->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 1.66602C5.40835 1.66602 1.66669 5.40768 1.66669 9.99935C1.66669 14.591 5.40835 18.3327 10 18.3327C14.5917 18.3327 18.3334 14.591 18.3334 9.99935C18.3334 5.40768 14.5917 1.66602 10 1.66602ZM13.625 12.9743C13.5084 13.1743 13.3 13.2827 13.0834 13.2827C12.975 13.2827 12.8667 13.2577 12.7667 13.191L10.1834 11.6493C9.54169 11.266 9.06669 10.4243 9.06669 9.68268V6.26602C9.06669 5.92435 9.35002 5.64102 9.69169 5.64102C10.0334 5.64102 10.3167 5.92435 10.3167 6.26602V9.68268C10.3167 9.98268 10.5667 10.4243 10.825 10.5743L13.4084 12.116C13.7084 12.291 13.8084 12.6743 13.625 12.9743Z" fill="#1D1E2C"/>
+                </svg>
+                <div>
+
+                  <p class="layover_text">  {{convertDurationToWords(i.layover)}} - layover in {{getAirportNamesByCityCode(i.airport_to)}}</p>
+
+                </div>
+                <!--                  <div-->
+                <!--                    class="line"-->
+                <!--                    :style="{-->
+                <!--                      background: custom_theme-->
+                <!--                        ? custom_theme.color-->
+                <!--                        : default_theme.color_light,-->
+                <!--                    }"-->
+                <!--                  ></div>-->
               </div>
             </div>
           </div>
@@ -343,7 +378,7 @@
           </div>
 
           <div v-if="getData?.inbound?.length" class="flight_info_wrapper">
-            <div style="display: flex; align-items: center; gap: 0.12rem">
+            <div style="display: flex; align-items: center; gap: 0.12rem;margin: .5rem 0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -368,7 +403,7 @@
                   </clipPath>
                 </defs>
               </svg>
-              <span class="departure_flight">Return Flight</span>
+              <span class="departure_flight">Return Flight - ( {{getData?.inbound_stops}} ) Stop</span>
             </div>
 
             <div v-for="(i, index) in getData?.inbound" :key="index">
@@ -436,10 +471,7 @@
                   </p>
                   <p class="value">Arrival</p>
                 </div>
-                <div>
-                  <p class="key">{{ getData?.inbound_stops }}</p>
-                  <p class="value">Stops</p>
-                </div>
+
               </div>
 
               <div class="flight_info">
@@ -542,7 +574,7 @@
             <div
               v-for="i in getData?.passengers"
               class="flight_info2"
-              style="justify-content: start; padding: 0.5rem; border-top: solid"
+              style="justify-content: start; padding: 0.5rem;"
             >
               <p class="value" style="width: 11.25rem">
                 {{ i.title + " " + i.first_name + " " + i.last_name }}
@@ -576,7 +608,7 @@
 
         </div>
       </div>
-    </div>
+  </div>
   <div class="close" id="close">
     <img
       src="../../assets/cancle.svg"
@@ -789,12 +821,14 @@ export default {
   font-style: normal;
   font-weight: 700;
   line-height: 1.75rem; /* 175% */
+  text-transform: capitalize;
 }
 
 .flight_info2 {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   gap: 3.48rem;
+  margin: .5rem 0;
 }
 
 .flight_info {
@@ -902,6 +936,7 @@ export default {
   background-color: #ffffff;
   padding: 2rem 2rem;
   overflow: scroll;
+  margin: 2rem 0;
 }
 
 .back-and-logo-area {

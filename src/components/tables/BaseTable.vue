@@ -211,9 +211,20 @@
                                     >
                                         Edit Member
                                     </p>
+
+                                  <p
+                                        class="menu-item animate_animated"
+                                        @click=" doInvite(j.id)"
+                                        v-if="j.status !== 'active'"
+                                        id="resend_invite"
+
+                                    >
+                                        {{!getIsInviteLoading ? 'Resend Invite Link' : 'Resending...'}}
+                                    </p>
                                     <p
                                         class="menu-item deactivate"
                                         @click="deactivateTeamMember(j)"
+                                        v-if="j.status !== 'deactivated'"
                                     >
                                         Deactivate Member
                                     </p>
@@ -443,9 +454,9 @@
                         >
 
                         <!-- template {roles number}  -->
-                        <span v-else-if="h.key === 'created_at'">{{
-                            convertToWord(j?.created_at)
-                        }}-{{convertTo12HourFormat(j?.created_at)}}</span>
+                        <span :title="convertToWord(j.created_at)" v-else-if="h.key === 'created_at'">{{
+                            ellipsis(convertToWord(j?.created_at), 9)
+                        }} {{convertTo12HourFormat(j?.created_at)}}</span>
 
                         <!-- template {is_coporate number}  -->
                         <span v-else-if="h.key === 'is_corporate'">{{
@@ -460,6 +471,15 @@
                                 h.label.toLowerCase() === 'no.of permission'
                             "
                             >{{ j?.permissions?.length }}</span
+                        >
+
+                      <!-- template {emails}  -->
+                        <span
+                            v-else-if="
+                                h.key === 'email'
+                            "
+                            :title="j.email"
+                            >{{ ellipsis(j.email, 9) }}</span
                         >
 
                         <span v-else>
@@ -524,7 +544,8 @@ import OnBoardingButton from "../Buttons/OnBoardingButton.vue";
 import SettingsRequest from "../../model/SettingsRequest";
 import storeUtils from "../../utils/storeUtils";
 import router from "../../router";
-import {convertTo12HourFormat, formatAmount} from "../../mixins/flightUtil";
+import {convertTo12HourFormat, formatAmount,ellipsis} from "../../mixins/flightUtil";
+
 
 export default {
     name: "BaseTable",
@@ -547,6 +568,7 @@ export default {
         return {
             convertToWord,
             paginate,
+            ellipsis,
             formatAmount,
             currentActionIndex: null,
             show: false,
@@ -562,88 +584,96 @@ export default {
             console.log("click");
         },
 
-        next(value) {
-            if (this.currentPage == value) return;
-            if (this.getCurrentRoute === "Support") {
-                storeUtils
-                    .fireAway()
-                    ?.itineneryStore?.getItineraryRequestAction(
-                        this.other.activeService,
-                        this.other.filterValue,
-                        value
-                    );
-            }
+      doInvite(id){
+        if(this.getIsInviteLoading) document.getElementById('resend_invite').classList.add('animate__shakeX')
+        else{
+          document.getElementById('resend_invite').classList.remove('animate__shakeX')
+          storeUtils.fireAway().auth.handleInvite(id)
+        }
+      },
 
-            if (this.getCurrentRoute === "Bookings") {
-                storeUtils.fireAway().booking?.getAllBooking(value);
-            }
+      next(value) {
+          if (this.currentPage == value) return;
+          if (this.getCurrentRoute === "Support") {
+              storeUtils
+                  .fireAway()
+                  ?.itineneryStore?.getItineraryRequestAction(
+                      this.other.activeService,
+                      this.other.filterValue,
+                      value
+                  );
+          }
 
-            if (this.getCurrentRoute === "Travel Agents") {
-                storeUtils.fireAway().travelAgent?.handleGetTravelAgent("", value);
-            }
+          if (this.getCurrentRoute === "Bookings") {
+              storeUtils.fireAway().booking?.getAllBooking(value);
+          }
 
-            if (this.tableName === "markup") {
-                storeUtils.fireAway().settings?.readMarkupSettings(value);
-            }
-        },
+          if (this.getCurrentRoute === "Travel Agents") {
+              storeUtils.fireAway().travelAgent?.handleGetTravelAgent("", value);
+          }
 
-        readAgent(obj) {
-            localStorage.userWallet = JSON.stringify(obj.wallet);
-            storeUtils.fireAway().travelAgent?.handleGetUser(obj);
-        },
+          if (this.tableName === "markup") {
+              storeUtils.fireAway().settings?.readMarkupSettings(value);
+          }
+      },
 
-        editRole(obj) {
-            this.model.id = obj.id;
-            this.model.name = obj?.name;
-            this.model.permission_ids = obj?.permissions.map((item) => item.id);
-            this.$emit("updatingRole", true);
-        },
+      readAgent(obj) {
+          localStorage.userWallet = JSON.stringify(obj.wallet);
+          storeUtils.fireAway().travelAgent?.handleGetUser(obj);
+      },
 
-        itineneryDetails(obj) {
-            console.log(obj);
-            storeUtils
-                .fireAway()
-                .itineneryStore?.getItineraryRequestDetailsAction(obj.id);
-        },
+      editRole(obj) {
+          this.model.id = obj.id;
+          this.model.name = obj?.name;
+          this.model.permission_ids = obj?.permissions.map((item) => item.id);
+          this.$emit("updatingRole", true);
+      },
 
-        editTeamMember(obj) {
-            let id = obj.permissions.map((it) => it.id);
-            this.model2.email = obj.email;
-            this.model2.permission_ids = id;
-            this.$emit("updatingTeamMember", true);
-            console.log(obj);
-        },
+      itineneryDetails(obj) {
+          console.log(obj);
+          storeUtils
+              .fireAway()
+              .itineneryStore?.getItineraryRequestDetailsAction(obj.id);
+      },
 
-        deactivateTeamMember(obj) {
-            this.$emit("deactivatingTeamMember", {
-                openModal: true,
-                userId: obj.id,
-            });
-        },
+      editTeamMember(obj) {
+          let id = obj.permissions.map((it) => it.id);
+          this.model2.email = obj.email;
+          this.model2.permission_ids = id;
+          this.$emit("updatingTeamMember", true);
+          console.log(obj);
+      },
 
-        table_row_onclick_action(obj) {
-            console.log(obj);
-            if (this.getCurrentRoute.toLowerCase() === "travel agents") {
-                this.readAgent(obj);
-            }
-            if (this.getCurrentRoute.toLowerCase() === "bookings") {
+      deactivateTeamMember(obj) {
+          this.$emit("deactivatingTeamMember", {
+              openModal: true,
+              userId: obj.id,
+          });
+      },
 
-                storeUtils.fireAway().flight.handleGetFlightDetails(obj.reference)
-            }
+      table_row_onclick_action(obj) {
+          console.log(obj);
+          if (this.getCurrentRoute.toLowerCase() === "travel agents") {
+              this.readAgent(obj);
+          }
+          if (this.getCurrentRoute.toLowerCase() === "bookings") {
 
-            if (this.getCurrentRoute.toLowerCase() === "support") {
-                console.log(this.getCurrentRoute.toLowerCase());
-                this.itineneryDetails(obj);
-            }
-        },
+              storeUtils.fireAway().flight.handleGetFlightDetails(obj.reference)
+          }
 
-        confirmDeactiveAgent() {
-            this.$emit("agentDeactive", true);
-        },
+          if (this.getCurrentRoute.toLowerCase() === "support") {
+              console.log(this.getCurrentRoute.toLowerCase());
+              this.itineneryDetails(obj);
+          }
+      },
 
-        viewAgent(obj) {
-            this.$emit("emitviewAgent", { showing: true, obj: obj });
-        },
+      confirmDeactiveAgent() {
+          this.$emit("agentDeactive", true);
+      },
+
+      viewAgent(obj) {
+          this.$emit("emitviewAgent", { showing: true, obj: obj });
+      },
     },
 
     computed: {
@@ -656,6 +686,9 @@ export default {
             }
         },
 
+      getIsInviteLoading(){
+          return storeUtils.fireAway().auth.getInviteLoading
+      },
         getCurrentRoute() {
             return router.currentRoute.value.name;
         },
@@ -664,6 +697,15 @@ export default {
 </script>
 
 <style scoped>
+.table {
+  border-collapse: collapse;
+  //width: 100%;
+  /* margin: 0 auto; */
+  margin-top: 0.25rem;
+  margin-bottom: 3rem;
+  width: 100%;
+  overflow-x: hidden;
+}
 .empty_area {
     justify-content: center;
     align-items: center;
@@ -839,14 +881,7 @@ export default {
     gap: 0.625rem;
 }
 
-.table {
-    border-collapse: collapse;
-    //width: 100%;
-    /* margin: 0 auto; */
-    margin-bottom: 3rem;
-    width: 100%;
-    overflow-x: scroll;
-}
+
 
 .table-label {
     color: #1d1e2c;
@@ -930,9 +965,6 @@ export default {
     display: none;
 }
 
-.table {
-  width: 80rem;
-  overflow-x: scroll;
-  margin-top: 0.25rem;
-}
+
+
 </style>

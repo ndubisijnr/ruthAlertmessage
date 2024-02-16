@@ -57,7 +57,7 @@
                       fill="#9DA8B6" />
                   </svg>
                   <span class="stops">{{ i.outbound_stops === 0 ? 'Direct' :
-                    `${i.outbound_stops} - Stops`}}</span>
+                    `${i.outbound_stops} - Stop`}}</span>
                 </div>
                 <div>
                   <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
@@ -87,7 +87,7 @@
                       fill="#9DA8B6" />
                   </svg>
                   <span class="stops">{{ i.outbound_stops + i.inbound_stops === 0 ? 'Direct' :
-                    `${i.outbound_stops + i.inbound_stops}-Stops` }}</span>
+                    `${i.outbound_stops + i.inbound_stops}-Stop` }}</span>
                 </div>
                 <div>
                   <p class="time"> {{ convertTo12HourFormat(j.arrival_time) }}</p>
@@ -122,7 +122,7 @@
                         convertToWord(i.outbound[0]?.departure_time.split("T")[0]) }} from "{{
                         getCityByCityCode(i.outbound[0]?.airport_from).toUpperCase() }}" to
                       "{{ getCityByCityCode(i.outbound[i.outbound.length - 1]?.airport_to).toUpperCase() }}"</p>
-                    <p class="depart-date-info-stops">{{ i.outbound_stops }}-Stops</p>
+                    <p class="depart-date-info-stops">{{ i.outbound_stops }} - Stop</p>
                   </div>
                   <svg class="dropdown_icon" @click="isDepartureActive = !isDepartureActive" style="cursor: pointer;"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

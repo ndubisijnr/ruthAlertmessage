@@ -62,11 +62,13 @@ export default {
       if(this.favicon) this.model.favicon = this.favicon;
       if(this.getTemplateId) this.model.template_id = this.getTemplateId;
       if(this.site_title) this.model.site_title = this.site_title;
-      if(this.site_description) this.model.site_description = this.site_description;
+      if(this.site_description) this.model.description = this.site_description;
       storeUtils.fireAway().theme.saveCustomization(this.model).then(() => {
         this.model = {};
         this.favicon = null;
         this.logo = null;
+        this.site_description = null
+        this.site_title = null
         this.$emit('saveRequired', false)
       })
 
@@ -224,11 +226,11 @@ export default {
             <p class="upload_favicon">Site name for your business can be edited here.</p>
           </div>
           <div>
-            <on-boarding-input label="Site Title" @inputValue="value => site_title = value"></on-boarding-input>
+            <on-boarding-input label="Site Title" id="site_title" @inputValue="value => site_title = value"></on-boarding-input>
           </div>
 
           <div>
-            <on-boarding-input label="Site Description"  @inputValue="value => site_description = value" placeholder="This is a travel management business board."></on-boarding-input>
+            <on-boarding-input label="Site Description" id="site_description"  @inputValue="value => site_description = value" placeholder="This is a travel management business board."></on-boarding-input>
           </div>
         </div>
 

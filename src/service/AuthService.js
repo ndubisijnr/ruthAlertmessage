@@ -45,6 +45,10 @@ export default {
         return apiService.Client.post(`/api/${tenant_id}/auth/change_invited_password`, payload)
     },
 
+    resendInvite(tenant_id,user_id){
+        return apiService.Client.post(`/api/${tenant_id}/user/resend_invite/${user_id}`)
+    },
+
      changePassword(tenant_id,payload){
         return apiService.Client.post(`/api/${tenant_id}/auth/change_password`,payload)
     },

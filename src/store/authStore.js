@@ -13,7 +13,8 @@ export const useAuthStore = defineStore('authStore', {
         user: null,
         businessProfile: null,
         stage: 'email',
-        wasCustomization: false
+        wasCustomization: false,
+        inviteLoading:false
     }),
 
     getters: {
@@ -21,7 +22,8 @@ export const useAuthStore = defineStore('authStore', {
         getErrors: state => state.errors,
         User: state => state.user,
         getStage: state => state.stage,
-        getIfWasCustomization: state => state.wasCustomization
+        getIfWasCustomization: state => state.wasCustomization,
+        getInviteLoading:state => state.inviteLoading
 
     },
 
@@ -261,6 +263,23 @@ export const useAuthStore = defineStore('authStore', {
             }
             catch (err) {
                 this.loading = false
+                // catchErrorHandler(err)
+            }
+        },
+
+        async handleInvite(payload) {
+            try {
+                this.inviteLoading = true
+                const response = await AuthService.resendInvite(storeUtils.fireAway().global?.getTenant_id, payload)
+                let responseData = response.data
+
+                if (responseData.success) {
+                    this.inviteLoading = false
+                    RuthdoAlert({ title: responseData.data, icon: 'success' })
+                }
+            }
+            catch (err) {
+                this.inviteLoading = false
                 // catchErrorHandler(err)
             }
         },
