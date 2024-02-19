@@ -1,6 +1,7 @@
 <template>
   <permission-modal v-if="getIsUnauthorised"></permission-modal>
   <notification v-if="notification" @close="close"></notification>
+  <modal-loader v-if="logOut" message="signing out, see you soon."></modal-loader>
 
   <div v-if="getTenantLoaded" class="wrapper">
     <div class="inner-wrapper">
@@ -458,16 +459,18 @@ import { lightenColor } from "@/mixins/themeUtils";
 import PermissionModal from "@/components/modals/PermissionModal.vue";
 import SpinnerLoader from "../components/loaders/SpinnerLoader.vue";
 import Notification from "@/components/notification/index.vue";
+import ModalLoader from "@/components/loaders/ModalLoader.vue";
 
 export default {
   name: "Layout",
-  components: { NavBar, MobileBottomNav, PermissionModal, SpinnerLoader,Notification },
+  components: {ModalLoader, NavBar, MobileBottomNav, PermissionModal, SpinnerLoader,Notification },
   data() {
     return {
       getFirstLettersOfFirstAndLastName,
       showDropDown: false,
       lightenColor,
-      notification:false
+      notification:false,
+      logOut:false
     };
   },
   methods: {
@@ -479,8 +482,14 @@ export default {
     },
     async signOut() {
       await localStorage.clear();
-      await router.push({ name: "Logon" });
-      await location.reload()
+      this.logOut = true
+      setTimeout(() => {
+        this.logOut = false
+        location.reload()
+      },3000)
+
+      // await router.push({ name: "Logon" });
+
     },
     close(value){
       this.notification = value

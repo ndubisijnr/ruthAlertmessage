@@ -1956,7 +1956,11 @@ export default {
         (this.currentTab = this.getCurrentRouteParams),
           this.switchTab(this.getCurrentRouteParams);
       }, 500);
+    if(this.$router.currentRoute.value.query.team_hash === '#Teams'){
+      window.location.replace('/settings/#Teams')
+    }
     storeUtils.fireAway().global?.commitError(null);
+    console.log()
   },
 };
 </script>

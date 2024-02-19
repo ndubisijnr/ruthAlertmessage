@@ -3,6 +3,7 @@ import storeUtils from "@/utils/storeUtils";
 import spinnerLoader from "@/components/loaders/SpinnerLoader.vue";
 import {convertToWord, convertTo12HourFormat} from "@/mixins/flightUtil";
 import router from "@/router";
+import AuthRequest from "@/model/AuthRequest";
 
 export default {
   name: "index",
@@ -11,7 +12,8 @@ export default {
     return{
       activeNav:'all',
       convertToWord,
-      convertTo12HourFormat
+      convertTo12HourFormat,
+      notificationModel:AuthRequest.notification
     }
   },
 
@@ -20,12 +22,15 @@ export default {
       this.activeNav = value
       storeUtils.fireAway().global.getNotifications(type,status)
     },
-    notificationAction(action_type, action_id){
+    notificationAction(action_type, action_id,id){
       if(action_id !== "" && action_id !== null){
         //pass do nothing
       }else{
+        this.notificationModel.status = 'read'
+        this.notificationModel.notification_ids = id
+        storeUtils.fireAway().global.markNotificationsAsRead(this.notificationModel)
         if(action_type === 'ISSUED_TICKET') router.push({name:'Bookings'})
-        if(action_type === 'MEMBER_INVITED') router.push({path:'/settings/#Teams'})
+        if(action_type === 'MEMBER_INVITED') router.push({path:'/settings?', query:{team_hash:'#Teams'}})
       }
     },
     close(){
@@ -87,7 +92,7 @@ export default {
       </div>
       <div v-else>
         <div v-if="activeNav === 'all'" v-for="(i,index) in getNotifications" :key="index">
-            <div class="notification-item" @click="notificationAction(i.data.action_type, i.data.action_id)">
+            <div class="notification-item" @click="notificationAction(i.data.action_type, i.data.action_id, i.id)">
               <p class="notification-message">{{i.data.message}} <br /> <span class="created_at">{{convertToWord(i.created_at)}}, {{convertTo12HourFormat(i.created_at.split("T")[0])}}</span></p>
               <svg v-if="!i.read_at" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
                 <circle cx="4" cy="4" r="4" fill="#2C6CAC"/>

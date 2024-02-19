@@ -110,16 +110,15 @@ export const useGlobalStore = defineStore('globalStore', {
         },
 
         async markNotificationsAsRead(payload){
-            this.loading = true
             try{
                 const response =  await AuthService.setNotificationStatus(this.getTenant_id,payload)
                 let responseData = response.data
                 if(responseData.success){
-                    this.loading = false
+                    // standby
                 }
 
             }catch{
-                this.loading = false
+                // standby
             }
 
         },

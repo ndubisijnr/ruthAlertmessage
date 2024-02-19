@@ -218,8 +218,12 @@
                           <p class="value">{{ j.equipment_type }}</p>
                         </div>
                         <div class="inner-airline_details-item class-type">
-                          <p class="key">Class Type: </p>
+                          <p class="key">Cabin Type: </p>
                           <p class="value">{{ j.cabin_type }}</p>
+                        </div>
+                        <div class="inner-airline_details-item class-type">
+                          <p class="key">Booking Class: </p>
+                          <p class="value">{{ j.booking_class }}</p>
                         </div>
                       </div>
                     </div>
@@ -309,8 +313,12 @@
                           <p class="value">{{ j.equipment_type }}</p>
                         </div>
                         <div class="inner-airline_details-item class-type">
-                          <p class="key">Class Type: </p>
+                          <p class="key">Cabin Type: </p>
                           <p class="value">{{ j.cabin_type }}</p>
+                        </div>
+                        <div class="inner-airline_details-item class-type">
+                          <p class="key">Booking Class: </p>
+                          <p class="value">{{ j.booking_class }}</p>
                         </div>
                       </div>
                     </div>

@@ -1,4 +1,5 @@
 <template>
+  <modal-loader v-if="getLoading"  message="Searching flights..."></modal-loader>
   <layout v-slot:child-content>
     <div class="dashboard_wrapper">
       <div class="mb" v-if="getCurrentRoute === 'Dashboard'">
@@ -1032,6 +1033,7 @@ import DataPicker from "@/components/Inputs/custom-date-picker/DataPicker.vue";
 import SearchMultiCity from "../../components/bookings/SearchMultiCity.vue";
 import FlightRequest from "@/model/FlightRequest";
 import { RuthdoAlert } from "ruthly";
+import ModalLoader from "@/components/loaders/ModalLoader.vue";
 
 export default {
   name: "Dashboard",
@@ -1044,6 +1046,7 @@ export default {
     Layout,
     RouteNav,
     SearchMultiCity,
+    ModalLoader
   },
   data() {
     return {

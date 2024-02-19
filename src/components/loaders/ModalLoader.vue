@@ -1,10 +1,7 @@
 <template>
     <div class="modal-loader-wrapper">
       <div class="main-modal-loader">
-        <div>
-            <SpinnerLoader></SpinnerLoader>
-        </div>
-
+        <SpinnerLoader></SpinnerLoader>
         <p class="loading_info">{{message}}</p>
        
       </div>
@@ -39,12 +36,12 @@
   .loading_info{
     font-family: "Product Sans";
     font-size: 1rem;
+    text-align: center;
   }
   
   .main-modal-loader{
-    width: 10rem;
-    height: 10rem;
-    overflow: scroll;
+    width: 11rem;
+    height: 11rem;
     display: flex;
     align-items: center;
     justify-content: center;
