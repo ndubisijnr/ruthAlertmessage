@@ -63,6 +63,8 @@
                   <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                   <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                 </div>
+
+                <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
               </div>
             </div>
           </div>
@@ -485,4 +487,12 @@ export default {
 </script>
 <style scoped>
 @import "style.css";
+.class{
+  color: #444854;
+  font-family: "Product Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 114.286% */
+}
 </style>

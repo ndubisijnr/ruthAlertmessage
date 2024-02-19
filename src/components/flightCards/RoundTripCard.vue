@@ -60,6 +60,8 @@
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                         <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                     </div>
+                    <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
+
                   </div>
                 </div>
               </div>
@@ -87,6 +89,8 @@
                       <p class="time"> {{ convertTo12HourFormat(j.arrival_time) }}</p>
                       <p class="dest">{{ getCityByCityCode(j.airport_to) }} ({{ j.airport_to }})</p>
                   </div>
+                    <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
+
 
                   </div>
               </div>
@@ -118,6 +122,8 @@
                       <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                       <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                   </div>
+                    <span class="class">Class: {{i.inbound[0]?.booking_class}}</span>
+
                   </div>
               </div>
               </div>
@@ -146,6 +152,8 @@
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                         <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                     </div>
+                      <span class="class">Class: {{i.inbound[0]?.booking_class}}</span>
+
                     </div>
                 </div>
           </div>
@@ -658,6 +666,14 @@
     height: 2.75rem;
     transform: rotate(-90deg);
 
+  }
+  .class{
+    color: #444854;
+    font-family: "Product Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px; /* 114.286% */
   }
   .airline_info{
     display: flex;

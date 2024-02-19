@@ -460,6 +460,7 @@ import PermissionModal from "@/components/modals/PermissionModal.vue";
 import SpinnerLoader from "../components/loaders/SpinnerLoader.vue";
 import Notification from "@/components/notification/index.vue";
 import ModalLoader from "@/components/loaders/ModalLoader.vue";
+import defaultLogo from "@/assets/default_tab_logo.jpeg"
 
 export default {
   name: "Layout",
@@ -497,6 +498,20 @@ export default {
     closeMenu() {
       this.showDropDown = false;
     },
+
+    saveTitle(){
+      const favicon = document.getElementById("faviconIcon");
+      const title = document.getElementById("app_title");
+      const description_tag = document.getElementById('description_head')
+
+      if(favicon){
+        favicon.href = this.custom_theme?.logo  || this.getTenant.logo  || defaultLogo;
+        console.log(favicon)
+      }
+      title.textContent = this.custom_theme?.site_title ? this.custom_theme?.site_title : this.getTenant?.name;
+      description_tag.setAttribute('content', this.custom_theme?.description)
+
+    }
   },
   computed: {
     default_theme() {
@@ -518,8 +533,7 @@ export default {
 
     getBusinessProfile() {
       if (localStorage.businessProfile) {
-        const business = JSON.parse(localStorage?.businessProfile);
-        return business;
+        return JSON.parse(localStorage?.businessProfile);
       }
     },
 
@@ -563,19 +577,8 @@ export default {
       const res = await storeUtils.fireAway().global?.getTenant();
       if (res.length) {
         this.$emit("tenantIsReady", true);
-        storeUtils.fireAway().theme.getCustomization().then(() => {
-          const favicon = document.getElementById("faviconIcon");
-          const title = document.getElementById("app_title");
-          const description_tag = document.getElementById('description_head')
-
-          if (this.custom_theme){
-            favicon.href = this.custom_theme ? this.custom_theme.logo : this.getBusinessProfile.logo;
-            title.textContent = this.custom_theme.site_title;
-            description_tag.setAttribute('content', this.custom_theme.description)
-          }
-
-          console.log(favicon)
-        })
+        await storeUtils.fireAway().theme.getCustomization()
+        await this.saveTitle()
       } else {
         this.$router.push("/domain-error");
       }
@@ -586,21 +589,10 @@ export default {
   //
   // },
 
-  mounted() {
+  async mounted() {
     if(this.getTenantLoaded){
-      storeUtils.fireAway().theme.getCustomization().then(() => {
-        const favicon = document.getElementById("faviconIcon");
-        const title = document.getElementById("app_title");
-        const description_tag = document.getElementById('description_head')
-
-        if (this.custom_theme){
-          favicon.href = this.custom_theme ? this.custom_theme.logo : this.getBusinessProfile.logo;
-          title.textContent = this.custom_theme.site_title;
-          description_tag.setAttribute('content', this.custom_theme.description)
-        }
-
-        console.log(favicon)
-      })
+      await storeUtils.fireAway().theme.getCustomization()
+      await this.saveTitle()
     }
   },
 };

@@ -83,16 +83,23 @@
 
           <div class="tab-nav">
             <ul class="inner-tab-nav" :style="getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true' ? {} : { justifyContent: 'start' }">
-              <a :class="{ 'active': currentTab === 'Account' }" @click="activateTab('Account')" href="#Account">Account</a>
-              <template v-if="getUser?.account_type === 'super_admin' ||(getUser?.account_type === 'admin' && getBusinessProfile?.is_cac_verified === 'true' && getBusinessProfile?.is_id_verified === 'true')">
+              <template v-if="getUser?.account_type === 'super_admin' || getUser?.account_type === 'admin'">
+                <a :class="{ 'active': currentTab === 'Account' }" @click="activateTab('Account')" href="#Account">Account</a>
                 <a :class="{ 'active': currentTab === 'Domain' }" href="#Domain" @click="activateTab('Domain')">Domain</a>
                 <a :class="{ 'active': currentTab === 'Teams' }" @click="activateTab('Teams')" href="#Teams">Teams</a>
                 <a :class="{'active': currentTab === 'Notifications'}" href="#Notifications" @click="activateTab('Notifications')">Notifications</a>
                 <a :class="{'active': currentTab === 'Payment'}" href="#Payment" @click="activateTab('Payment')">Payment</a>
                 <a :class="{ 'active': currentTab === 'Markup' }" href="#Markup" @click="activateTab('Markup')">Markup</a>
                 <a :class="{'active': currentTab === 'office-id'}" href="#office-id" @click="activateTab('office-id')">Office ID</a>
+                <a :class="{'active': currentTab === 'Customization'}" href="#Customization" @click="activateTab('Customization'), (isEditing = true)">Customization</a>
+
               </template>
-              <a :class="{'active': currentTab === 'Customization'}" href="#Customization" @click="activateTab('Customization'), (isEditing = true)">Customization</a>
+              <template v-else>
+                <a :class="{ 'active': currentTab === 'Account' }" @click="activateTab('Account')" href="#Account">Account</a>
+                <a :class="{ 'active': currentTab === 'Teams' }" @click="activateTab('Teams')" href="#Teams">Teams</a>
+                <a :class="{'active': currentTab === 'Notifications'}" href="#Notifications" @click="activateTab('Notifications')">Notifications</a>
+                <a :class="{'active': currentTab === 'Customization'}" href="#Customization" @click="activateTab('Customization'), (isEditing = true)">Customization</a>
+              </template>
             </ul>
           </div>
         </div>
