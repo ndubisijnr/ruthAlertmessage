@@ -56,14 +56,18 @@ export const useTransactionStore = defineStore('transactionStore', {
             })
         },
 
-        handleGetUserTransaction(){
-            return TransactionService.getTransactions(storeUtils.fireAway().global?.getTenant_id).then(async response => {
+        handleGetUserTransaction(payload){
+            console.log(payload)
+            this.loading=true
+            return TransactionService.getTransactions(storeUtils.fireAway().global?.getTenant_id, payload).then(async response => {
                 let responseData = response.data
                 if(responseData.success){
+                    this.loading=false
                    this.transactions = responseData.data 
                     // do nothing
                 }
             }).catch(e => {
+                this.loading=false
                 catchErrorHandler(e)
             })
         },

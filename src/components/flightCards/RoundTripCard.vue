@@ -60,7 +60,12 @@
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                         <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                     </div>
-                    <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
+
+                    <div>
+                      <p class="class">Class: {{i.outbound[0]?.booking_class}}</p>
+
+                      <p class="class view_details">View Details</p>
+                    </div>
 
                   </div>
                 </div>
@@ -89,7 +94,13 @@
                       <p class="time"> {{ convertTo12HourFormat(j.arrival_time) }}</p>
                       <p class="dest">{{ getCityByCityCode(j.airport_to) }} ({{ j.airport_to }})</p>
                   </div>
-                    <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
+
+                    <div>
+                      <p class="class">Class: {{i.outbound[0]?.booking_class}}</p>
+
+                      <p class="class view_details">View Details</p>
+
+                    </div>
 
 
                   </div>
@@ -122,7 +133,10 @@
                       <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                       <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                   </div>
-                    <span class="class">Class: {{i.inbound[0]?.booking_class}}</span>
+                    <div>
+                      <span class="class">Class: {{i.inbound[0]?.booking_class}}</span>
+                      <p class="class view_details">View Details</p>
+                    </div>
 
                   </div>
               </div>
@@ -152,7 +166,10 @@
                         <p class="time"> {{ convertTo12HourFormat(x.arrival_time) }}</p>
                         <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                     </div>
-                      <span class="class">Class: {{i.inbound[0]?.booking_class}}</span>
+                      <div>
+                        <p class="class">Class: {{i.inbound[0]?.booking_class}}</p>
+                        <p class="class view_details">View Details</p>
+                      </div>
 
                     </div>
                 </div>
@@ -653,6 +670,11 @@
   background-color: #FFF;
   padding: 2rem;
 
+  }
+
+  .view_details{
+    cursor: pointer;
+    text-decoration: underline;
   }
   .layover{
     display: flex;

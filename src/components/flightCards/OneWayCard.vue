@@ -64,7 +64,11 @@
                   <p class="dest">{{ getCityByCityCode(x.airport_to) }} ({{ x.airport_to }})</p>
                 </div>
 
-                <span class="class">Class: {{i.outbound[0]?.booking_class}}</span>
+                <div>
+                  <p class="class">Class: {{i.outbound[0]?.booking_class}}</p>
+                  <p class="class view_details">View Details</p>
+                </div>
+
               </div>
             </div>
           </div>
@@ -494,5 +498,12 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: 16px; /* 114.286% */
+  text-align: center;
+  margin-bottom: .5rem;
+}
+
+.view_details{
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

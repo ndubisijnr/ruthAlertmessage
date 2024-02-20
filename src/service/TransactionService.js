@@ -7,8 +7,8 @@ export default {
     },
    
 
-    getTransactions(tenant_id) {
-        return apiService.Client.post(`/api/${tenant_id}/wallet/transactions`)
+    getTransactions(tenant_id, payload) {
+        return apiService.Client.post(`/api/${tenant_id}/wallet/transactions`, payload)
     },
 
     getATransactions(tenant_id, id) {

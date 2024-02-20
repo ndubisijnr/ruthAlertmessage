@@ -1,6 +1,7 @@
 <template>
   <WalletCreation v-if="isWallet && getUser.account_type === 'manger' && !getWallet?.wallet_number || setup" @cancel="close"></WalletCreation>
   <add-funds :isButtonRequired="false" @close="close" v-if="addFunds" :account_number="getWallet?.wallet_number" :wallet_name="getWallet?.wallet_name"></add-funds>
+  <filter-transactions-modal @close="close" v-if="filterTransaction"></filter-transactions-modal>
   <layout v-slot:child-content>
     <div class="overall">
       <div class="booking-wrapper">
@@ -55,7 +56,7 @@
                       </svg>
                       <input type="search" style="outline: none;border: none;width: 19.4rem" placeholder="Search by IDs, names etc"/>
                   </div>
-<!--                  <div class="filter">-->
+                  <div class="filter">
 <!--                    <div class="filter-div">-->
 <!--                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">-->
 <!--                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99999 12.8002L4.79999 9.6002H11.2L7.99999 12.8002ZM7.99999 3.2002L11.2 6.4002H4.79999L7.99999 3.2002Z" fill="#212B36"/>-->
@@ -63,8 +64,8 @@
 <!--                      <span class="filter-span">Sort By</span>-->
 <!--                    </div>-->
 <!--                    <on-boarding-button class="filter-btn" btn-width="6.37rem"  background="#EAF0F7" border="none"  color="#2C6CAC"  height="2.5rem" text-node="Export"></on-boarding-button>-->
-<!--                    <on-boarding-button class="filter-btn" btn-width="9.18rem" height="2.5rem" text-node="Filter Booking"></on-boarding-button>-->
-<!--                  </div>-->
+                    <on-boarding-button class="filter-btn" btn-width="auto" height="2.5rem" text-node="Filter Transactions" @click="filterTransaction=true"></on-boarding-button>
+                  </div>
               </div>
 
               <div style="margin-top: 3.5rem">
@@ -117,16 +118,18 @@ import BookingsCards from "../../components/bookings/BookingsCards.vue";
 import storeUtils from "../../utils/storeUtils";
 import WalletCreation from "@/components/modals/WalletCreation.vue";
 import AddFunds from "@/components/modals/AddFunds.vue";
+import FilterTransactionsModal from "@/components/modals/FilterTransactionsModal.vue";
 import router from "@/router";
 export default {
   name: "Index",
-  components:{Layout,OnBoardingButton,DomainTable, BookingsCardLoading,BookingsCards,WalletCreation,AddFunds},
+  components:{Layout,OnBoardingButton,DomainTable,FilterTransactionsModal, BookingsCardLoading,BookingsCards,WalletCreation,AddFunds},
   data(){
     return{
       isWallet:false,
       addFunds:false,
       pageMounted:false,
       setup:false,
+      filterTransaction:false,
       transactionFields:[
         {key:"", label:"Admin Name"},
         // {key:"contact_email", label:"Email"},
@@ -160,6 +163,7 @@ export default {
       this.isWallet = value
       this.addFunds = value
       this.setup = false
+      this.filterTransaction = value
     }
   },
 
