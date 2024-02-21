@@ -28,6 +28,7 @@ export default {
 
     resetModal(){
        document.getElementById("payment_type").value = 'debit';
+       document.getElementById("transactions_category").value = 'internal';
 
        this.reset = true
 
@@ -42,17 +43,16 @@ export default {
       // this.searchModal.payment_status
       if(!this.reset){
         const payment_type = document.getElementById("payment_type");
-        this.model.date = `${this.transFrom}-${this.transTo}`
+        const category_type = document.getElementById("transactions_category");
+        this.model.date = `${this.transFrom} - ${this.transTo}`
         this.model.type = payment_type.options[payment_type.selectedIndex].value
+        this.model.category = category_type.options[category_type.selectedIndex].value
       }
-
-      console.log(this.model)
-
 
       storeUtils.fireAway().transaction?.handleGetUserTransaction(this.model).then(() => {
         this.close()
         this.reset = false
-        console.log('clicked after')
+        delete this.model.category
       })
       
     },
@@ -100,6 +100,21 @@ export default {
                 <select id="payment_type" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
                   <option value="debit">Debit</option>
                   <option value="credit">Credit</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="filter_card">
+            <p class="text_1">By Internal/External Transactions</p>
+
+            <div style="border-radius: 0.75rem;border: 1px solid #E5E9F2;padding: 1.5rem;">
+              <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
+                <p>Category:</p>
+                <select id="transactions_category" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
+                  <option value="internal">Internal</option>
+                  <option value="external">External</option>
                 </select>
               </div>
             </div>
@@ -170,9 +185,8 @@ export default {
   height: auto;
   flex-shrink: 0;
   border-radius: 0.75rem;
-  background: #FFF;
   /* m4 */
-  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+  //box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   margin-bottom: 1.5rem;
 }
 .permission-type-p{

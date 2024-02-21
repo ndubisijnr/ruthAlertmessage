@@ -16,6 +16,7 @@ export default {
     resetModal(){
        document.getElementById("booking_status").value = 'issued';
        document.getElementById("payment_status").value = 'paid';
+       document.getElementById("booking_category").value = 'internal';
 
        this.reset = true
 
@@ -28,12 +29,15 @@ export default {
       if(!this.reset){
         const booking_status = document.getElementById("booking_status");
         const payment_status =  document.getElementById("payment_status");
+        const category =  document.getElementById("booking_category");
 
         const text1 = booking_status.options[booking_status.selectedIndex].value
         const text2 = payment_status.options[payment_status.selectedIndex].value
+        const text3 = category.options[category.selectedIndex].value
 
         this.searchModel.booking_status = text1
         this.searchModel.payment_status = text2
+        this.searchModel.category = text3
       }
 
 
@@ -91,6 +95,21 @@ export default {
                   <option value="paid">Paid</option>
                   <option value="unpaid">UnPaid</option>
 
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="filter_card">
+            <p class="text_1">By Internal/External Bookings</p>
+
+            <div style="border-radius: 0.75rem;border: 1px solid #E5E9F2;padding: 1.5rem;">
+              <div style="margin-bottom:1.5rem;display: flex;gap: 1.2rem;align-items: center">
+                <p>Category:</p>
+                <select id="booking_category" style="padding: 0.5625rem 1.25rem;border-radius: 0.25rem;border: 1px solid #E5E9F2;">
+                  <option value="internal">Internal</option>
+                  <option value="external">External</option>
                 </select>
               </div>
             </div>
@@ -162,9 +181,8 @@ export default {
   height: auto;
   flex-shrink: 0;
   border-radius: 0.75rem;
-  background: #FFF;
   /* m4 */
-  box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
+  //box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
   margin-bottom: 1.5rem;
 }
 .permission-type-p{
