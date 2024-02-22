@@ -115,7 +115,7 @@
                   </div>
                   <div class="actual-result-item-info">
                   <div>
-                      <p class="time"> {{ convertTo12HourFormat(i.inbound[0]?.arrival_time) }}</p>
+                      <p class="time"> {{ convertTo12HourFormat(i.inbound[0]?.departure_time) }}</p>
                       <p class="dest"> {{ getCityByCityCode(i.inbound[0]?.airport_from) }}
                       ({{ i.inbound[0]?.airport_from }})</p>
                   </div>

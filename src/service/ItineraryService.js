@@ -1,11 +1,15 @@
 import {apiService} from "@/service/BaseService";
 export default {
     getItineraryHistory(tenant_id){
-        return apiService.Client.get(`api/${tenant_id}/itinerary`)
+        return apiService.Client.get(`api/${tenant_id}/itinerary/`)
     },
 
-    submitRequest(tenant_id, payload){
-         return apiService.Client.post(`api/${tenant_id}/itinerary/request`, payload)
+    ItineraryHistory(tenant_id, id){
+        return apiService.Client.get(`/api/${tenant_id}/itinerary/history/${id}`)
+    },
+
+    submitRequest(tenant_id, id, payload){
+         return apiService.Client.post(`api/${tenant_id}/itinerary/request/${id}`, payload)
     },
 
     getItineraryRequest(tenant_id, itineraryType, status,page){

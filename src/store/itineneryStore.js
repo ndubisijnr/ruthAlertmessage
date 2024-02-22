@@ -12,19 +12,66 @@ export const useItineneryStore = defineStore('itineneryStore', {
         itineraryRequestDetails:null,
         itinerarySummary:null,
         itinerarySummaryLoading:false,
-        requestingDetailsLoading:false
+        requestingDetailsLoading:false,
+        loadingPnrHistory:false,
+        pnrHistory:[
+            {
+                "id": 1,
+                "user_type": "admin",
+                "activity_type": "comment",
+                "booking_id": "1",
+                "message": "",
+                "user":{
+                    "id": 1,
+                    "first_name": "",
+                    "surname": "",
+                },
+                "updated_at": "2024-01-08T16:04:02.000000Z",
+                "created_at": "2024-01-08T16:04:02.000000Z",
+            },
+            {
+                "id": 2,
+                "user_type": "manager",
+                "activity_type": "request",
+                "booking_id": "1",
+                "message": "requested to void a ticket",
+                "user":{
+                    "id": 2,
+                    "first_name": "",
+                    "surname": "",
+                },
+                "updated_at": "2024-01-08T16:04:02.000000Z",
+                "created_at": "2024-01-08T16:04:02.000000Z",
+            }],
+        currentPnrHistoryChatId:null,
+        openPnrHistoryModal:false,
+        pnrHistoryChat:null
     }),
 
     getters:{
         getLoading:state => state.loading,
+        getPnrHistoryChat:state => state.pnrHistoryChat,
         getLoadingSummary:state => state.summaryLoading,
         getItineraryRequest:state => state.itineraryRequest,
         getItineraryRequestDetails:state => localStorage.ItineraryRequestDetailsData ? JSON.parse(localStorage.ItineraryRequestDetailsData) : state.itineraryRequestDetails,
         getItinerarySummaryState:state => state.itinerarySummary,
         getRequestingDetailsLoading:state => state.requestingDetailsLoading,
+        getLoadingPnrHistory:state => state.loadingPnrHistory,
+        getPnrHistory:state => state.pnrHistory,
+        getCurrentPnrHistoryChatId:state => state.currentPnrHistoryChatId,
+        getOpenPnrHistoryModal:state => state.openPnrHistoryModal,
+
     },
     
     actions:{
+        updateCurrentPnrHistoryChatId(id){
+            this.currentPnrHistoryChatId = id
+        },
+
+        updateOpenPnrHistoryModal(value){
+            this.openPnrHistoryModal = value
+        },
+
        async getItinerarySummaryAction(status){
         this.summaryLoading = true
         try{
@@ -55,7 +102,6 @@ export const useItineneryStore = defineStore('itineneryStore', {
         }catch(errr){
             this.loading = false
         }
-     
        },
 
 
@@ -77,9 +123,9 @@ export const useItineneryStore = defineStore('itineneryStore', {
        async replyItineraryRequestAction(id, payload){
         this.loading = true
         try{
-            this.loading = false
             const response = await ItineraryService.replyItineraryRequestService(storeUtils.fireAway().global?.getTenant_id, id, payload)
             let responseData = response.data
+            this.loading = false
             if(responseData.success){
                 RuthdoAlert({title:responseData.data, icon:'success'})
             }
@@ -119,6 +165,22 @@ export const useItineneryStore = defineStore('itineneryStore', {
         }
        
        },
+
+       async getItineraryPnrHistory(id){
+        this.loadingPnrHistory = true
+        try{
+            const response = await ItineraryService.ItineraryHistory(storeUtils.fireAway().global?.getTenant_id, id)
+            let responseData = response.data
+            if(responseData.success){
+                this.loadingPnrHistory = false
+                // this.pnrHistory = responseData.data
+            }
+        }catch(err){
+            this.loadingPnrHistory = false
+        }
+
+       },
+
 
        
     },

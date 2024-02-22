@@ -41,7 +41,6 @@ export default {
     printAction() {
       storeUtils.fireAway().print?.commitPrintLoading(true, this.flightDetails);
       // Open a new tab or window
-
       // if(this.getTemplateId === 1) router.push({name:'Template1'})
       // if(this.getTemplateId === 2) router.push({name:'Template2'})
       // if(this.getTemplateId === 3) router.push({name:'Template3'})
@@ -59,21 +58,26 @@ export default {
       if (!this.flightDetails) return;
       return this.flightDetails?.passengers;
     },
+
     airlineDetails() {
       if (!this.flightDetails) return;
       return this.flightDetails;
     },
+
     getLoadingFlightDetails() {
       return storeUtils.fireAway().flight.getLoadingFlightDetails;
     },
+
     flightDetails() {
       return storeUtils.fireAway().flight.getFlightDetails;
     },
+
     getUser() {
       if (localStorage.user) {
         return JSON.parse(localStorage.user);
       }
     },
+
     getTemplateId() {
       if (storeUtils.fireAway().theme.custom_theme)
         return storeUtils.fireAway().theme.custom_theme.template_id;
@@ -219,6 +223,7 @@ export default {
           @openPrintModal="triggeredEvent"
           :get-booked-flight="airlineDetails"
           :id="flightDetails?.id"
+          :flight-id="$router?.currentRoute.value.params.id"
           :get-user="getFlights ? getFlights[0] : []"
         ></ItenaryDetailsComponent>
       </div>
