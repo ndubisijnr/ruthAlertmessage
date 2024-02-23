@@ -14,35 +14,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
         itinerarySummaryLoading:false,
         requestingDetailsLoading:false,
         loadingPnrHistory:false,
-        pnrHistory:[
-            {
-                "id": 1,
-                "user_type": "admin",
-                "activity_type": "comment",
-                "booking_id": "1",
-                "message": "",
-                "user":{
-                    "id": 1,
-                    "first_name": "",
-                    "surname": "",
-                },
-                "updated_at": "2024-01-08T16:04:02.000000Z",
-                "created_at": "2024-01-08T16:04:02.000000Z",
-            },
-            {
-                "id": 2,
-                "user_type": "manager",
-                "activity_type": "request",
-                "booking_id": "1",
-                "message": "requested to void a ticket",
-                "user":{
-                    "id": 2,
-                    "first_name": "",
-                    "surname": "",
-                },
-                "updated_at": "2024-01-08T16:04:02.000000Z",
-                "created_at": "2024-01-08T16:04:02.000000Z",
-            }],
+        pnrHistory:null,
         currentPnrHistoryChatId:null,
         openPnrHistoryModal:false,
         pnrHistoryChat:null
@@ -123,7 +95,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
        async replyItineraryRequestAction(id, payload){
         this.loading = true
         try{
-            const response = await ItineraryService.replyItineraryRequestService(storeUtils.fireAway().global?.getTenant_id, id, payload)
+            const response = await ItineraryService.submitChat(storeUtils.fireAway().global?.getTenant_id, id, payload)
             let responseData = response.data
             this.loading = false
             if(responseData.success){
@@ -173,7 +145,7 @@ export const useItineneryStore = defineStore('itineneryStore', {
             let responseData = response.data
             if(responseData.success){
                 this.loadingPnrHistory = false
-                // this.pnrHistory = responseData.data
+                this.pnrHistory = responseData.data
             }
         }catch(err){
             this.loadingPnrHistory = false

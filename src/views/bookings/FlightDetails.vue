@@ -223,7 +223,7 @@ export default {
           @openPrintModal="triggeredEvent"
           :get-booked-flight="airlineDetails"
           :id="flightDetails?.id"
-          :flight-id="$router?.currentRoute.value.params.id"
+          :flight-id="flightDetails?.id"
           :get-user="getFlights ? getFlights[0] : []"
         ></ItenaryDetailsComponent>
       </div>

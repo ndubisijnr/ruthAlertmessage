@@ -68,7 +68,6 @@
 
                 </div>
             </div>
-
             <div class="breaker"></div>
             <div>
                 <div class="fliter_header">
@@ -83,6 +82,33 @@
                     <input type="checkbox" @change="doFilter('flexibility', false)" />
                     <span class="item_text">Non Refundable</span>
                 </div>
+            </div>
+            <div class="breaker"></div>
+            <div>
+              <div class="fliter_header">
+                <p class="fliter">Baggage's</p>
+                <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
+              </div>
+              <div class="item_layout">
+                <input type="checkbox" @change="doFilter('baggage', '1 checkin allowance')" />
+                <span class="item_text">1 checkin allowance</span>
+              </div>
+              <div class="item_layout">
+              <input type="checkbox" @change="doFilter('baggage', '2 checkin allowance')" />
+              <span class="item_text">2 checkin allowance</span>
+            </div>
+            </div>
+            <div class="breaker"></div>
+            <div>
+              <div class="fliter_header">
+                {{getSearchParams}}
+                <p class="fliter">Office Id's</p>
+                <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
+              </div>
+              <div class="item_layout" v-for="i in getOfficeId()" :key="i">
+                <input type="checkbox" @change="doFilter('officeId', i)" />
+                <span class="item_text">{{ i }}</span>
+              </div>
             </div>
         </div>
 
@@ -161,6 +187,7 @@ export default {
                     }
                 }
             }
+
             searchForAirlineDetails(data);
 
 
@@ -170,6 +197,8 @@ export default {
             return results
 
         },
+
+
         filterByAmount() {
             const input = document.getElementById('filter_by_amount').value
             // const input2 = document.getElementById('filter_by_amount2').value
@@ -179,13 +208,20 @@ export default {
             document.getElementById('start_amount').textContent = input
             document.getElementById('end_amount').textContent = input.max
         },
-    
 
-    filterFlights(array, stopsFilter, airlineCodes, flexibility, prices) {
-            const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
-            const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
 
-            return array.filter(flight => {
+        filterFlights(array, ...args) {
+
+          let a = args[0]
+
+          console.log(a)
+
+
+
+          const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
+          const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+
+          return array.filter(flight => {
                // check if multicity
                 if(flight.routes){
                   console.log('flight =>', flight.routes)
@@ -212,209 +248,83 @@ export default {
                   return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
                 }
                 else{
-                  console.log('i am still entering here')
                   // Check outbound stops
-                  const meetsStopsCriteria =
-                      !stopsFilter.length ||
-                      (stopsFilter.includes(flight.outbound_stops) || (stopsFilter.includes(2) && flight.outbound_stops >= 2))
+                  const meetsStopsCriteria = !a.stops.length || (a.stops.includes(flight.outbound_stops) || (a.stops.includes(2) && flight.outbound_stops >= 2))
 
                   // Check operating airline
-                  const meetsAirlineCriteria =
-                      !airlineCodes.length ||
-                      (flight?.outbound?.length > 0 && airlineCodes.includes(flight?.outbound[0].operating_airline))
+                  const meetsAirlineCriteria = a.airlines.length ||  (flight?.outbound?.length > 0 && a.airlines.includes(flight?.outbound[0].operating_airline))
                   // (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
 
 
                   // Check flexibility
-                  const meetFlexibility =
-                      !flexibility.length || (flight.outbound.length > 0 && flexibility.includes(flight.outbound[0].refundable))
+                  const meetFlexibility = a.flexibility.length || (flight.outbound.length > 0 && a.flexibility.includes(flight.outbound[0].refundable))
+
+                  //check baggage
+                  const meetBaggage = a.baggage.length || (a.baggage.includes(flight?.outbound[0].baggage))
+
+                  // //check officeId
+                  // const meetOfficeId = (this.getSearchParams.officeId.includes(flight.office_id))
 
                   // // Check Prize
                   // const meetPrize =
                   // !prices || (prices >= minPrice && prices <= maxPrice)
 
                   // Return true only if both criteria are met
-                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility && meetBaggage;
                 }
 
             });
         },
 
+        getOfficeId(){
+          const data = this.getFlightResult
+          const office_id = []
+
+          for(let key in data){
+            if(!office_id.includes(data[key].office_id)){
+              office_id.push(data[key].office_id)
+            }
+
+          }
+          return office_id
+        },
+
+        getBaggage(){
+        const data = this.getFlightResult
+        const baggage = []
+
+        function recursiveFunc(data){
+          for (const key in data) {
+            if (typeof data[key] === 'object') {
+                if(key === 'outbound' || 'inbound'){
+                   baggage.push(data[key])
+                }
+
+              // if(key === 'baggage' && !baggage.includes(data[key])) {
+              //
+              //    recursiveFunc(data[key]);
+              // }
+              recursiveFunc(data[key])
+            }
+          }
+        }
+        recursiveFunc(data)
+        console.log(baggage)
+
+        return baggage
+      },
 
         doFilter(type, filterValue) {
           const data = this.getFlightResult
           storeUtils.fireAway().flight?.appendFilterType(type, filterValue)
 
-          console.log(type, filterValue)
+          this.fliterFlightResult =  this.filterFlights(data, this.getSearchParams)
 
-          this.fliterFlightResult = this.filterFlights(data, this.getSearchParams.stops, this.getSearchParams.airlines, this.getSearchParams.flexibility)
-
-          storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
+          // storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
 
         },
 
-        //  doFilter(type, filterValue) {
-        //   let data;
-        //   const flightToRemove = []
 
-        //   if(type === 'stops' && !this.stops.includes(filterValue)) this.stops.push(filterValue)
-        //   else this.stops = this.stops.filter((a) => {return a !== filterValue})
-
-        //   if (!this.searchParams.includes(type)) this.searchParams.push(type); // push flight code values;
-
-        //   data = this.searchParams.length > 1 ? this.getFilteredFlight : this.getFlightResult // checks if there is an active filter
-
-        //   if (type === 'airlines') {
-
-        //     if (!this.filterValue.includes(filterValue)) {
-        //       this.filterValue.push(filterValue); // push flight code values
-        //     } else {
-        //       this.fliterFlightResult = [];
-        //       this.filterValue = this.filterValue.filter(it => it !== filterValue);
-        //     }
-
-        //     if(this.filterValue.length === 0) this.searchParams = []
-
-
-        //     this.fliterFlightResult = data.filter(flight =>
-        //         this.filterValue.includes(flight.outbound[0]?.operating_airline)
-        //     );
-
-
-        //     // console.log(this.filterValue)
-        //     console.log(this.fliterFlightResult) // array
-
-
-        //   }
-
-        //   if (type === 'flexibility') {
-        //     this.fliterFlightResult = data.filter(it =>  {
-        //       if(it.outbound[0].refundable === filterValue) {
-        //         const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-        //         if (!isDuplicate) {
-        //           storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
-        //         } else {
-        //           console.log(this.getFilteredFlight);
-        //           flightToRemove.push(it)
-        //           this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-        //             return a.id !== it.id
-        //           })
-        //           storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-        //         }
-
-        //       }
-        //     });
-
-        //     console.log(this.fliterFlightResult) // array
-
-
-
-        //     // if (Array.isArray(data)) {
-        //     //       data.filter((it) => {
-        //     //           //check if airline is not already in array
-        //     //           if (it.outbound.find(it => it.refundable == filterValue) || it.inbound.find(it => it.refundable == filterValue)) {
-        //     //               const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-        //     //               console.log(it.outbound)
-        //     //               if (!isDuplicate) {
-        //     //                   storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-        //     //
-        //     //               } else {
-        //     //                   console.log(this.getFilteredFlight);
-        //     //
-        //     //                   flightToRemove.push(it)
-        //     //                   this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-        //     //                       return a.id !== it.id
-        //     //                   })
-        //     //                   storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-        //     //               }
-        //     //
-        //     //           }
-        //     //
-        //     //       })
-        //     //
-        //     //
-        //     //   }
-        //   }
-
-        //   if (type === 'stops') {
-
-        //       if(this.stops.length === 0) {
-        //         this.searchParams = this.searchParams.filter(it => {return it !== 'stops'})
-        //         this.fliterFlightResult = []
-        //         storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult);
-        //       }
-        //       else{
-        //         console.log(data)
-        //         this.fliterFlightResult = data.filter(it =>
-        //         this.stops.includes(it.outbound_stops))
-
-        //         console.log(this.fliterFlightResult)
-               
-        //       }
-
-
-
-        //       // if (Array.isArray(data)) {
-        //       //     data.find((it) => {
-        //       //         //more than 1 stops
-        //       //         if(it.outbound_stops == filterValue || it.outbound_stops > filterValue){
-        //       //             const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-        //       //             if (!isDuplicate) {
-        //       //                 storeUtils.fireAway().flight?.commitFilteredFlightResult(it)
-        //       //             } else {
-        //       //                 flightToRemove.push(it)
-        //       //                 this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-        //       //                     return a.id !== it.id
-        //       //                 })
-        //       //                 storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-        //       //
-        //       //             }
-        //       //         }
-        //       //
-        //       //     })
-        //       //
-        //       //
-        //       //
-        //       //
-        //       //
-        //       //     console.log(this.fliterFlightResult)
-        //       // }
-        //   }
-
-        //   if (type === 'price') {
-        //     const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
-        //     const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
-
-        //     console.log(minPrice, maxPrice)
-
-        //     if (Array.isArray(data)) {
-        //         data.filter((it) => {
-        //             const amount = it.amount;
-        //             console.log(amount)
-        //             if (amount >= minPrice && amount <= maxPrice) {
-        //                 const isDuplicate = this.getFilteredFlight.some(it_duplicate => it.id === it_duplicate.id)
-        //                 if(!isDuplicate){
-        //                     storeUtils.fireAway().flight?.commitFilteredFlightResult(it);
-        //                 }
-        //                 else{
-        //                     this.fliterFlightResult = this.getFilteredFlight.filter((a) => {
-        //                         return a.id !== it.id
-        //                     })
-        //                     storeUtils.fireAway().flight?.deleteFliteredFlightResult(this.fliterFlightResult)
-        //                 }
-        //             }
-        //         });
-
-        //         // Now, commit the filtered flight results, for example:
-
-        //     }
-        //   }
-
-
-        // },
-
-        //filterFlightsByAirlineCode
-       
         filterFlightsByAirlineCode(flights, airlineCodes) {
         if(Array.isArray(flights)){
           return flights.filter(flight => {
@@ -425,7 +335,7 @@ export default {
 
       },
 
-      gtpOwn(filterValue){
+        gtpOwn(filterValue){
           const originalFlights =[...this.getFlightResult];
 
           if(!this.filterValue.includes(filterValue)){

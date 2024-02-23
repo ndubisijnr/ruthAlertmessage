@@ -19,6 +19,7 @@ export default {
     async submitMessage(){
       await storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getCurrentPnrHistoryChatId,this.message)
       this.message.support_comment = null
+      await storeUtils.fireAway().itineneryStore.getItineraryPnrHistory(this.getCurrentPnrHistoryChatId)
     }
   },
   computed:{
@@ -29,13 +30,14 @@ export default {
     loading(){
       return storeUtils.fireAway().itineneryStore.getLoading
     },
+
+    getLoadingPnrHistory(){
+      return storeUtils.fireAway().itineneryStore.getLoadingPnrHistory
+    },
     getCurrentPnrHistoryChatId(){
       return storeUtils.fireAway().itineneryStore.getCurrentPnrHistoryChatId
     },
 
-    getPnrHistory(){
-      return storeUtils.fireAway().itineneryStore.getPnrHistory
-    }
   },
   mounted() {}
 }
@@ -51,28 +53,30 @@ export default {
       </div>
 
 
-      <div class="chat_area_messages">
-        <div class="chat">
-          <span>chat</span>
-          <div>
-            <p class="chat_message">Thank you. We would get back to you soonest.</p>
-            <span></span>
-          </div>
+      <div class="chat_area_messages" v-if="getPnr.data.length">
+          <p v-if="getLoadingPnrHistory">updating.....</p>
+          <div v-for="(i, index) in getPnr?.data" :key="index">
+            <div class="chat" v-if="i.data.message">
+              <span class="span_chat">{{i.activity_type}}</span>
+              <div>
+                <p class="chat_message">{{ i.data }}</p>
+                <span></span>
+              </div>
+            </div>
+
+<!--          <div class="notice_message_wrapper">-->
+<!--            <div class="notice_message">-->
+<!--              <p class="user">Theophilus Gad <span class="notice"> requested for this ticket to be Issued</span></p>-->
+<!--            </div>-->
+<!--          </div>-->
+
         </div>
-
-        {{getPnr}}
-
-
-        <div class="notice_message_wrapper">
-          <div class="notice_message">
-            <p class="user">Theophilus Gad <span class="notice"> requested for this ticket to be Issued</span></p>
-          </div>
-        </div>
-
-
 
       </div>
 
+      <div style="margin: 15rem 0;" v-else>
+        <p class="span_chat" style="font-size: 1rem;text-align: center">Couldn't fetch any data...</p>
+      </div>
 
       <div class="message_input">
         <input placeholder="Enter message" v-model="message.support_comment" class="main_input">
@@ -97,12 +101,41 @@ export default {
   justify-content: center;
 }
 
-.chat_message{
+.chat{
   display: flex;
-  width: 55.875rem;
-  padding: 0.25rem 0rem;
   align-items: center;
   gap: 1rem;
+}
+
+.span_chat{
+  color: #000;
+  font-family: "Product Sans";
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 200% */
+  text-transform: capitalize;
+}
+
+.chat_message{
+  display: flex;
+  width: 35rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-radius: 1.25rem 1.25rem 0rem 1.25rem;
+  background: #EAF0F7;
+  padding: 0.5rem 1.5rem;
+  color:  #9DA8B6;
+
+  /* Body/16px/Regular */
+  font-family: "Product Sans";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.75rem; /* 175% */
+
 }
 .message_input{
   width: 100%;

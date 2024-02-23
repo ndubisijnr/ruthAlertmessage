@@ -24,6 +24,10 @@ export default {
         return apiService.Client.patch(`api/${tenant_id}/itinerary/request/${id}`, payload)
     },
 
+    submitChat(tenant_id, booking_id, payload){
+        return apiService.Client.post(`/api/${tenant_id}/itinerary/chat/${booking_id}`, payload)
+    },
+
     getItineraryRequestDetails(tenant_id, id){
         return apiService.Client.get(`api/${tenant_id}/itinerary/request/${id}`)
     },

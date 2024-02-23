@@ -43,13 +43,15 @@ export const useFlightStore = defineStore('flightStore', {
             stops: [],
             airlines: [],
             flexibility: [],
-            prices: []
+            prices: [],
+            baggage:[],
+            officeId:[]
         },
     }),
 
     getters: {
         getSearchParams: state => state.searchParams,
-        getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length || state.searchParams.prices.length,
+        getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length || state.searchParams.prices.length || state.searchParams.baggage.length || state.searchParams.officeId.length,
         getTravellers: state => state.traveller,
         getQuery: state => state.query,
         getCheckout: state => state.checkout,
@@ -95,6 +97,12 @@ export const useFlightStore = defineStore('flightStore', {
                     break;
                 case 'flexibility':
                     !this.searchParams.flexibility.includes(value) ? this.searchParams.flexibility.push(value) : this.searchParams.flexibility = this.searchParams.flexibility.filter((a) => { return a !== value });
+                    break;
+                case 'baggage':
+                    !this.searchParams.baggage.includes(value) ? this.searchParams.baggage.push(value) : this.searchParams.baggage = this.searchParams.baggage.filter((a) => { return a !== value });
+                    break;
+                case 'officeId':
+                    !this.searchParams.officeId.includes(value) ? this.searchParams.officeId.push(value) : this.searchParams.officeId = this.searchParams.officeId.filter((a) => { return a !== value });
                     break;
                 default:
                     break;
