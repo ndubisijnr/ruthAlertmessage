@@ -101,7 +101,6 @@
             <div class="breaker"></div>
             <div>
               <div class="fliter_header">
-                {{getSearchParams}}
                 <p class="fliter">Office Id's</p>
                 <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
               </div>
@@ -227,18 +226,18 @@ export default {
                   console.log('flight =>', flight.routes)
                   // Check outbound stops
                   const meetsStopsCriteria =
-                      !stopsFilter.length ||
-                      (stopsFilter.includes(flight.total_segment_stops) || (stopsFilter.includes(2) && flight.total_segment_stops >= 2))
+                      !a.stops.length ||
+                      (a.stops.includes(flight.total_segment_stops) || (a.stops.includes(2) && flight.total_segment_stops >= 2))
 
                   // Check operating airline
                   const meetsAirlineCriteria =
-                      !airlineCodes.length ||
-                      (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
+                      !a.airlines.length ||
+                      (flight?.routes.length > 0 && a.airlines.includes(flight?.routes[0].segments[0].operating_airline));
 
 
                   // Check flexibility
                   const meetFlexibility =
-                      !flexibility.length || (flight.routes.length > 0 && flexibility.includes(flight.routes[0].segments[0].refundable))
+                      !a.flexibility.length || (flight.routes.length > 0 && a.flexibility.includes(flight.routes[0].segments[0].refundable))
 
                   // // Check Prize
                   // const meetPrize =
