@@ -53,7 +53,7 @@ export default {
       </div>
 
 
-      <div class="chat_area_messages" v-if="getPnr.data.length">
+      <div class="chat_area_messages" v-if="getPnr?.data.length">
           <p v-if="getLoadingPnrHistory">updating.....</p>
           <div v-for="(i, index) in getPnr?.data" :key="index">
             <div class="chat" v-if="i.data.message">
