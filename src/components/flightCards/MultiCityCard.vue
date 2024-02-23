@@ -141,8 +141,9 @@
       <div @click="showDetails(index)" class="actual-result">
         <div class="actual-result-item">
           <!--        <div class="best_offer" v-if="i.amount === sortByCheapest">Best Offer</div>-->
-          <div>
-            <div v-for="(j, itemindex) in i.routes" :key="itemindex">
+          <div style="display: flex;position: relative;align-items: center">
+            <div>
+              <div v-for="(j, itemindex) in i.routes" :key="itemindex" style="display: flex;position: relative">
               <section
                 style="height: 7.125rem; display: flex; align-items: center"
               >
@@ -203,6 +204,11 @@
                   </div>
                 </div>
               </section>
+            </div>
+            </div>
+            <div class="class">
+              Class: {{i.routes[0].segments[0].booking_class}}
+              <p class="view_details">View Details</p>
             </div>
           </div>
         </div>
@@ -613,6 +619,25 @@ export default {
   background-color: #fff;
   padding: 2rem;
 }
+
+.class{
+  color: #444854;
+  font-family: "Product Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 114.286% */
+  text-align: center;
+  margin-bottom: .5rem;
+  position: absolute;
+  right: -10rem;
+}
+
+.view_details{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .layover__wrapper__multicity {
   max-width: max-content;
   width: 100%;
