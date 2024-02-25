@@ -99,13 +99,13 @@
             </div>
             </div>
             <div class="breaker"></div>
-            <div>
+            <div v-if="!getFlightResult.routes">
               <div class="fliter_header">
                 <p class="fliter">Office Id's</p>
                 <!-- <p class="clear_all" @click="clear('flexibility', [])">Clear</p> -->
               </div>
               <div class="item_layout" v-for="i in getOfficeId()" :key="i">
-                <input type="checkbox" @change="doFilter('officeId', i)" />
+                <input type="checkbox" @change="doFilter('office', i)" />
                 <span class="item_text">{{ i }}</span>
               </div>
             </div>
@@ -129,10 +129,7 @@ export default {
             fliterFlightResult: [],
             formatAmount,
             min_input_value: 0,
-            max_input_value: 0,          
-            // filterValue:[],
-            // searchParams:[],
-            // stops: []
+            max_input_value: 0,
         }
     },
     methods: {
@@ -209,73 +206,77 @@ export default {
         },
 
 
-        filterFlights(array, ...args) {
-
-          let a = args[0]
-
-          console.log(a)
 
 
+      filterOfficeId(array, officeId, baggage){
 
-          const minPrice =this.min_input_value > 0 ? this.min_input_value : this.getInputRange[0];
-          const maxPrice =this.max_input_value > 0 ? this.max_input_value : this.getInputRange[this.getInputRange.length - 1];
+          return array.filter(it => {
+            if(it.routes){
+             return !baggage.length || baggage.includes(it?.routes[0].segments[0].baggage)
+            }
+            else {
+              const meetsOfficeId = !officeId.length || officeId.includes(it.office_id)
 
-          return array.filter(flight => {
-               // check if multicity
-                if(flight.routes){
-                  console.log('flight =>', flight.routes)
-                  // Check outbound stops
-                  const meetsStopsCriteria =
-                      !a.stops.length ||
-                      (a.stops.includes(flight.total_segment_stops) || (a.stops.includes(2) && flight.total_segment_stops >= 2))
+              const meetsBaggage = !baggage.length || baggage.includes(it?.outbound[0].baggage)
 
-                  // Check operating airline
-                  const meetsAirlineCriteria =
-                      !a.airlines.length ||
-                      (flight?.routes.length > 0 && a.airlines.includes(flight?.routes[0].segments[0].operating_airline));
+              return meetsOfficeId && meetsBaggage
+            }
 
+          })
 
-                  // Check flexibility
-                  const meetFlexibility =
-                      !a.flexibility.length || (flight.routes.length > 0 && a.flexibility.includes(flight.routes[0].segments[0].refundable))
+      },
 
-                  // // Check Prize
-                  // const meetPrize =
-                  // !prices || (prices >= minPrice && prices <= maxPrice)
+      filterFlights(array, stopsFilter, airlineCodes, flexibility) {
+        return array.filter(flight => {
+          // check if multicity
+          if(flight.routes){
+            console.log('flight =>', flight.routes)
+            // Check outbound stops
+            const meetsStopsCriteria =
+                !stopsFilter.length ||
+                (stopsFilter.includes(flight.total_segment_stops) || (stopsFilter.includes(2) && flight.total_segment_stops >= 2))
 
-                  // Return true only if both criteria are met
-                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
-                }
-                else{
-                  // Check outbound stops
-                  const meetsStopsCriteria = !a.stops.length || (a.stops.includes(flight.outbound_stops) || (a.stops.includes(2) && flight.outbound_stops >= 2))
-
-                  // Check operating airline
-                  const meetsAirlineCriteria = a.airlines.length ||  (flight?.outbound?.length > 0 && a.airlines.includes(flight?.outbound[0].operating_airline))
-                  // (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
+            // Check operating airline
+            const meetsAirlineCriteria =
+                !airlineCodes.length ||
+                (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
 
 
-                  // Check flexibility
-                  const meetFlexibility = a.flexibility.length || (flight.outbound.length > 0 && a.flexibility.includes(flight.outbound[0].refundable))
+            // Check flexibility
+            const meetFlexibility =
+                !flexibility.length || (flight.routes.length > 0 && flexibility.includes(flight.routes[0].segments[0].refundable))
 
-                  //check baggage
-                  const meetBaggage = a.baggage.length || (a.baggage.includes(flight?.outbound[0].baggage))
+            // // Check Prize
+            // const meetPrize =
+            // !prices || (prices >= minPrice && prices <= maxPrice)
 
-                  // //check officeId
-                  // const meetOfficeId = (this.getSearchParams.officeId.includes(flight.office_id))
+            // Return true only if both criteria are met
+            return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+          }
+          else{
+            console.log('i am still entering here')
+            // Check outbound stops
+            const meetsStopsCriteria =
+                !stopsFilter.length ||
+                (stopsFilter.includes(flight.outbound_stops) || (stopsFilter.includes(2) && flight.outbound_stops >= 2))
 
-                  // // Check Prize
-                  // const meetPrize =
-                  // !prices || (prices >= minPrice && prices <= maxPrice)
+            // Check operating airline
+            const meetsAirlineCriteria =
+                !airlineCodes.length ||
+                (flight?.outbound?.length > 0 && airlineCodes.includes(flight?.outbound[0].operating_airline))
+            // (flight?.routes.length > 0 && airlineCodes.includes(flight?.routes[0].segments[0].operating_airline));
 
-                  // Return true only if both criteria are met
-                  return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility && meetBaggage;
-                }
+            // Check flexibility
+            const meetFlexibility =
+                !flexibility.length || (flight.outbound.length > 0 && flexibility.includes(flight.outbound[0].refundable))
 
-            });
-        },
+            // Return true only if both criteria are met
+            return meetsStopsCriteria && meetsAirlineCriteria && meetFlexibility;
+          }
+        });
+      },
 
-        getOfficeId(){
+      getOfficeId(){
           const data = this.getFlightResult
           const office_id = []
 
@@ -317,9 +318,17 @@ export default {
           const data = this.getFlightResult
           storeUtils.fireAway().flight?.appendFilterType(type, filterValue)
 
-          this.fliterFlightResult =  this.filterFlights(data, this.getSearchParams)
+          console.log(this.getSearchParams)
 
-          // storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
+          if(type === 'office' || type === 'baggage'){
+            this.fliterFlightResult = this.filterOfficeId(data, this.getSearchParams.office, this.getSearchParams.baggage)
+          }else{
+            this.fliterFlightResult =  this.filterFlights(data, this.getSearchParams.stops, this.getSearchParams.airlines, this.getSearchParams.flexibility)
+
+          }
+
+
+          storeUtils.fireAway().flight?.commitFilteredFlightResult(this.fliterFlightResult)
 
         },
 

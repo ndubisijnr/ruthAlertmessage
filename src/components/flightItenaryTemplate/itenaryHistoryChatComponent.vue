@@ -2,6 +2,7 @@
 import storeUtils from "@/utils/storeUtils";
 import SpinnerLoader from "@/components/loaders/SpinnerLoader.vue";
 import ItineraryRequest from "@/model/ItineraryRequest";
+import { convertTo12HourFormat } from "../../mixins/flightUtil";
 
 export default {
   name: "itenaryHistoryChatComponent",
@@ -9,6 +10,7 @@ export default {
   data(){
     return{
       message:ItineraryRequest.support,
+      convertTo12HourFormat
     }
   },
   methods:{
@@ -18,7 +20,7 @@ export default {
 
     async submitMessage(){
       await storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getCurrentPnrHistoryChatId,this.message)
-      this.message.support_comment = null
+      this.message.message = null
       await storeUtils.fireAway().itineneryStore.getItineraryPnrHistory(this.getCurrentPnrHistoryChatId)
     }
   },
@@ -36,6 +38,11 @@ export default {
     },
     getCurrentPnrHistoryChatId(){
       return storeUtils.fireAway().itineneryStore.getCurrentPnrHistoryChatId
+    },
+    getUser() {
+      if (localStorage.user) {
+        return JSON.parse(localStorage.user);
+      }
     },
 
   },
@@ -55,23 +62,18 @@ export default {
 
       <div class="chat_area_messages" v-if="getPnr?.data.length">
           <p v-if="getLoadingPnrHistory">updating.....</p>
-          <div v-for="(i, index) in getPnr?.data" :key="index">
-            <div class="chat" v-if="i.data.message">
-              <span class="span_chat">{{i.activity_type}}</span>
-              <div>
-                <p class="chat_message">{{ i.data }}</p>
-                <span></span>
-              </div>
+        <div v-for="(i, index) in getPnr?.data" :key="index" :class="i.user.type === getUser.account_type ? 'move_right' : 'move_left'">
+          <div class="chat" v-if="i.data.message">
+            <span class="span_chat">{{i.activity_type}}</span>
+            <div>
+              <p class="chat_message">{{ i.data.message }}
+                  <span style="margin-top:2px;">{{ convertTo12HourFormat(i.created_at) }}</span>
+                </p>
             </div>
+            <!--              <span class="chat_profile">{{i.user.first_name[0]}} {{i.user.last_name[0]}}</span>-->
 
-<!--          <div class="notice_message_wrapper">-->
-<!--            <div class="notice_message">-->
-<!--              <p class="user">Theophilus Gad <span class="notice"> requested for this ticket to be Issued</span></p>-->
-<!--            </div>-->
-<!--          </div>-->
-
+          </div>
         </div>
-
       </div>
 
       <div style="margin: 15rem 0;" v-else>
@@ -79,7 +81,7 @@ export default {
       </div>
 
       <div class="message_input">
-        <input placeholder="Enter message" v-model="message.support_comment" class="main_input">
+        <input placeholder="Enter message" v-model="message.message" class="main_input">
         <button class="enter_send" @click="submitMessage">
           <spinner-loader v-if="loading"></spinner-loader>
           <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -105,6 +107,17 @@ export default {
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin: 1rem 0;
+}
+
+.move_right{
+  display: flex;
+  justify-content: end;
+}
+
+.move_left{
+  display: flex;
+  justify-content: start;
 }
 
 .span_chat{
@@ -116,10 +129,14 @@ export default {
   line-height: 1.5rem; /* 200% */
   text-transform: capitalize;
 }
+.chat_area_messages{
+  overflow-y: scroll;
+  height: 80%;
+}
 
 .chat_message{
   display: flex;
-  width: 35rem;
+  width: auto;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;

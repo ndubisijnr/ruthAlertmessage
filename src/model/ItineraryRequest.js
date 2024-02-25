@@ -7,7 +7,7 @@ class ItineraryRequest {
     }
 
     static support = {
-        support_comment: null
+        message: null
     }
 
 }

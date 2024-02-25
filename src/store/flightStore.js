@@ -45,13 +45,13 @@ export const useFlightStore = defineStore('flightStore', {
             flexibility: [],
             prices: [],
             baggage:[],
-            officeId:[]
+            office:[]
         },
     }),
 
     getters: {
         getSearchParams: state => state.searchParams,
-        getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length || state.searchParams.prices.length || state.searchParams.baggage.length || state.searchParams.officeId.length,
+        getHasSearchParams: state => state.searchParams.stops.length || state.searchParams.airlines.length || state.searchParams.flexibility.length  || state.searchParams.baggage.length || state.searchParams.office.length,
         getTravellers: state => state.traveller,
         getQuery: state => state.query,
         getCheckout: state => state.checkout,
@@ -66,7 +66,7 @@ export const useFlightStore = defineStore('flightStore', {
         getAirport: state => state.airports,
         getAirlines: state => state.airlines,
         getFlights: state => state.flightSearchPayload,
-        getSelectedFlight: () => { return localStorage?.selectedFlight ? JSON.parse(localStorage?.selectedFlight) : [] },
+        getSelectedFlight: state => state.selectedFlight,
         getSuccess: state => state.successMsg,
         getBookFlightDetails: state => state.bookedFlightDetails,
         getPaymentLoading: state => state.paymentLoading,
@@ -87,6 +87,8 @@ export const useFlightStore = defineStore('flightStore', {
         setStoreData({ name, data }) {
             this[name] = data
         },
+
+
         appendFilterType(type, value) {
             switch (type) {
                 case 'stops':
@@ -101,15 +103,14 @@ export const useFlightStore = defineStore('flightStore', {
                 case 'baggage':
                     !this.searchParams.baggage.includes(value) ? this.searchParams.baggage.push(value) : this.searchParams.baggage = this.searchParams.baggage.filter((a) => { return a !== value });
                     break;
-                case 'officeId':
-                    !this.searchParams.officeId.includes(value) ? this.searchParams.officeId.push(value) : this.searchParams.officeId = this.searchParams.officeId.filter((a) => { return a !== value });
+                case 'office':
+                    !this.searchParams.office.includes(value) ? this.searchParams.office.push(value) : this.searchParams.office = this.searchParams.office.filter((a) => { return a !== value });
                     break;
                 default:
                     break;
 
             }
         },
-
 
         async chargeWallet(payload) {
             this.loading = true
@@ -283,16 +284,32 @@ export const useFlightStore = defineStore('flightStore', {
                 let responseData = response.data
                 this.confirmingBookingLoading = false
                 if (responseData.success) {
-                    localStorage.selectedFlight = JSON.stringify(responseData.data)
+                    this.selectedFlight = responseData.data
                     const bookingprogressarray = JSON.parse(localStorage.progressNav)
                     bookingprogressarray.push('Flight Result')
                     localStorage.progressNav = JSON.stringify(bookingprogressarray)
                     localStorage.bookingStage = 'Traveller’s Info'
-                    window.location = `/dashboard/travellers_info/${user?.access_token?.slice(0, 20)}`
+                    window.location = `/dashboard/travellers_info/${user?.access_token?.slice(0, 20)}?id=${this.selectedFlight.id}`
                 }
             } catch (err) {
                 this.confirmingBookingLoading = false
                 catchErrorHandler(err)
+            }
+        },
+
+        async handleReConfirmBookingPrice(booking_id) {
+            this.confirmingBookingLoading = true
+            const user = JSON.parse(localStorage?.user)
+            try {
+                const response = await FlightService.confirmBookingPrice(storeUtils.fireAway().global?.getTenant_id, booking_id)
+                let responseData = response.data
+                this.confirmingBookingLoading = false
+                if (responseData.success) {
+                    this.selectedFlight = responseData.data
+                }
+            } catch (err) {
+                this.confirmingBookingLoading = false
+            
             }
         },
 

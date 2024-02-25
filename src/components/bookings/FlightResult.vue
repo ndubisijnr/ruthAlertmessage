@@ -1,4 +1,5 @@
 <template>
+
     <booking-index v-slot:booking_children>
         <div class="flight-result animate__animated animate__fadeIn">
             <div class="breaker1"></div>
@@ -47,9 +48,13 @@ export default {
         MultiCityCard,
     },
     data() {
-        return {};
+        return {
+            
+        };
     },
-    methods: {},
+    methods: {
+       
+    },
 
     computed: {
         sortByCheapest() {
@@ -73,6 +78,10 @@ export default {
             return router.currentRoute.value.name;
         },
 
+        getSelectedFlight(){
+            return storeUtils.fireAway().flight.getSelectedFlight
+        },
+
         getUser() {
             if (localStorage.user) {
                 return JSON.parse(localStorage.user);
@@ -84,6 +93,7 @@ export default {
         const audio = new Audio(Whoosh);
         audio.volume = 0.2;
         audio.play();
+        // storeUtils.fireAway().flight.handleConfirmBookingPrice(this.get.id)
 
         // storeUtils.fireAway().booking?.addToProgressNav('Search for Flight')
         //   storeUtils.fireAway().booking?.commitBookingStage('Flight Result')

@@ -1,5 +1,8 @@
 <template>
-  <booking-index v-slot:booking_children>
+  <FlightConfirmModal @close="close" v-if="getSelectedFlight?.price_change && !closed && !getConfirmingBookingLoading" :amount="getSelectedFlight?.amount"></FlightConfirmModal>
+  <ModalLoader v-if="getConfirmingBookingLoading" message="Confirming flight data.."></ModalLoader>
+
+  <booking-index v-slot:booking_children v-else>
     <div class="flight-result animate__animated animate__fadeIn">
       <!-- {{ getSelectedFlight }} -->
 
@@ -487,7 +490,7 @@
             </div>
             <div class="booking_summary_body">
               <!--              {{getSelectedFlight.routes[0].segments}}-->
-              <div class="airline_details" v-if="!getSelectedFlight.is_multicity">
+              <div class="airline_details" v-if="!getSelectedFlight?.is_multicity">
                 <img
                   :src="getSelectedFlight?.outbound[0]?.airline_details?.logo"
                   class="logo"
@@ -587,6 +590,9 @@ import OnBoardingInput from "../Inputs/OnBoardingInput.vue";
 import DataPicker from "../Inputs/custom-date-picker/DataPicker.vue";
 import FlightRequest from "../../model/FlightRequest";
 import countries from "@/mixins/countries";
+import FlightConfirmModal from "../modals/FlightConfirmModal.vue";
+import ModalLoader from "../loaders/ModalLoader.vue";
+
 import {
   formatAmount,
   getYYYYMMDDFormat,
@@ -596,11 +602,12 @@ import {
 } from "../../mixins/flightUtil";
 export default {
   name: "TravellerInfo",
-  components: { OnBoardingInput, BookingIndex, OnBoardingButton, DataPicker },
+  components: { OnBoardingInput, BookingIndex, OnBoardingButton, DataPicker ,FlightConfirmModal,ModalLoader},
   data() {
     return {
       showBookHold: false,
       countries,
+      closed:false,
       bookFlightModal: FlightRequest.bookFlight,
       phoneValidation: null,
       passportNumberValidation: null,
@@ -625,6 +632,9 @@ export default {
     };
   },
   methods: {
+     close(value){
+            this.closed = value
+        },
     addPassenger(value) {
       let value_;
       if (value.toLowerCase() === "held_infant") {
@@ -740,6 +750,11 @@ export default {
         return JSON.parse(localStorage.user);
       }
     },
+
+    getConfirmingBookingLoading(){
+      return storeUtils.fireAway().flight.getConfirmingBookingLoading
+    },
+
     getBusinessProfile() {
       if (localStorage.businessProfile) {
         const business = JSON.parse(localStorage?.businessProfile);
@@ -754,10 +769,31 @@ export default {
     getLoading() {
       return storeUtils.fireAway()?.flight?.getBookingLoading;
     },
+
+    getTenantLoaded() {
+      return storeUtils.fireAway().global.getTenantLoaded;
+    },
+    getCurrentRouteParams() {
+      return this.$router?.currentRoute?._value?.query.id;
+    },
+  },
+
+  watch:{
+    getTenantLoaded(a, b) {
+      if (a && !this.getSelectedFlight) {
+        storeUtils.fireAway().flight.handleReConfirmBookingPrice(this.getCurrentRouteParams).then(() => {
+        this.passengerList();
+        })
+      }
+    },
   },
 
   mounted() {
-    this.passengerList();
+    if(this.getTenantLoaded && !this.getSelectedFlight){
+      storeUtils.fireAway().flight.handleReConfirmBookingPrice(this.getCurrentRouteParams).then(() => {
+        this.passengerList();
+      })
+    }
   },
 };
 </script>
