@@ -8,20 +8,14 @@ const successImg = success
 
 const boxArray = []
 
+console.log(boxArray)
+
 
  export const RuthdoAlert = (...props) => {
 
         const removeElement = document.getElementById('alertMessage')
  
         const timeOut = props[0]?.timeout // auto modal dismissal timeout
-
-        // on click modal dismissal events
-        function clickToClose(){
-            removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-                setTimeout(() => {
-                removeElement.remove()
-            },1000)
-        }
 
 
         function autoDismissal(){
@@ -34,6 +28,20 @@ const boxArray = []
         setTimeout(() => {
             autoDismissal()
         },timeOut ? timeOut : 3000)
+
+         // on click modal dismissal events
+         function clickToClose(){
+            removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
+                setTimeout(() => {
+                removeElement.remove()
+            },1000)
+        }
+
+        document.getElementById('close').addEventListener('click', (e) => {
+            console.log(e, removeElement, boxArray)
+            clickToClose()
+            console.log(e, removeElement, boxArray)
+        })
 
         function addToBoxArray() {
 
@@ -84,7 +92,7 @@ const boxArray = []
             const elementClose = document.createElement('img')
             elementClose.setAttribute('src', cancelImg)
             elementClose.setAttribute('style', 'cursor:pointer')
-            elementClose.setAttribute('onclick', 'clickToClose()')
+            elementClose.setAttribute('id', 'close')
     
     
             const elementType = document.createElement('img')
@@ -96,11 +104,12 @@ const boxArray = []
             }
      
 
-        if(boxArray.length){
-            removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
+        if(boxArray.length > 0){
+            autoDismissal()
             boxArray = []
         }else{
             boxArray.push({})
+            console.log('push', boxArray)
             addToBoxArray()
         }
 
