@@ -126,7 +126,6 @@ export const RuthdoAlert = (...props) => {
         boxArray = []
         return;
     }else{
-        console.log('push', boxArray)
 
         const rootElement = document.getElementById('app')
         const element1 = document.createElement('div')
@@ -228,6 +227,7 @@ export const RuthdoAlert = (...props) => {
             
         boxArray.push(ruthlyChildcoverDiv)
         console.log('a modal was added', boxArray)
+        boxArray = []
     }
 
         
