@@ -62,7 +62,7 @@ console.log(boxArray)
             const elementClose = document.createElement('img')
             elementClose.setAttribute('src', cancelImg)
             elementClose.setAttribute('style', 'cursor:pointer')
-            elementClose.setAttribute('id', 'close')
+            elementClose.setAttribute('id', 'close_ruthly')
     
     
             const elementType = document.createElement('img')
@@ -82,7 +82,7 @@ console.log(boxArray)
                     },1000)
                 }
 
-                document.getElementById('close').addEventListener('click', (e) => {
+                document.getElementById('close_ruthly').addEventListener('click', (e) => {
                     console.log(e, removeElement, boxArray)
                     clickToClose()
                     console.log(e, removeElement, boxArray)
