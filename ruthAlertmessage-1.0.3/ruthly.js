@@ -13,42 +13,13 @@ console.log(boxArray)
 
  export const RuthdoAlert = (...props) => {
 
-        const removeElement = document.getElementById('alertMessage')
- 
-        const timeOut = props[0]?.timeout // auto modal dismissal timeout
-
-
-        function autoDismissal(){
-            removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-            setTimeout(() => {
-                removeElement.remove()
-            },1000)
-        }
-
-        setTimeout(() => {
-            autoDismissal()
-        },timeOut ? timeOut : 3000)
-
-         // on click modal dismissal events
-         function clickToClose(){
-            removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-                setTimeout(() => {
-                removeElement.remove()
-            },1000)
-        }
-
-        document.getElementById('close').addEventListener('click', (e) => {
-            console.log(e, removeElement, boxArray)
-            clickToClose()
-            console.log(e, removeElement, boxArray)
-        })
-
-        function addToBoxArray() {
-
             const element1 = document.createElement('div')
             const rootElement = document.getElementById('app')
             rootElement.append(element1)
-    
+
+            const removeElement = document.getElementById('alertMessage')
+ 
+            const timeOut = props[0]?.timeout // auto modal dismissal timeout    
     
             element1.setAttribute('id', 'alertMessage')
             element1.setAttribute('style',
@@ -100,18 +71,43 @@ console.log(boxArray)
             element2.append(elementType)
             element2.append(elementP)
             element2.append(elementClose)
-    
-            }
-     
 
-        if(boxArray.length > 0){
-            autoDismissal()
-            boxArray = []
-        }else{
-            boxArray.push({})
-            console.log('push', boxArray)
-            addToBoxArray()
-        }
+                // on click modal dismissal events
+                function clickToClose(){
+                    removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
+                        setTimeout(() => {
+                        removeElement.remove()
+                    },1000)
+                }
+
+                document.getElementById('close').addEventListener('click', (e) => {
+                    console.log(e, removeElement, boxArray)
+                    clickToClose()
+                    console.log(e, removeElement, boxArray)
+                })
+
+                function autoDismissal(){
+                    removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
+                    setTimeout(() => {
+                        removeElement.remove()
+                    },1000)
+                }
+
+                setTimeout(() => {
+                    autoDismissal()
+                },timeOut ? timeOut : 3000)
+        
+             
+    
+
+            if(boxArray.length > 0){
+                autoDismissal()
+                boxArray = []
+            }else{
+                boxArray.push({})
+                console.log('push', boxArray)
+                addToBoxArray()
+            }
 
 
 
