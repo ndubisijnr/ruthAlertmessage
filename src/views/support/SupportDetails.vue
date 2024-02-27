@@ -3,6 +3,7 @@ import Layout from "@/views/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
+import itenaryHistoryChatComponent from "../../components/flightItenaryTemplate/itenaryHistoryChatComponent.vue";
 import router from "@/router";
 import {
   formatAmount,
@@ -28,6 +29,7 @@ export default {
     FlightPayment,
     ItenaryDetailsComponent,
     PrintItenaryModal,
+    itenaryHistoryChatComponent
   },
   data() {
     return {
@@ -106,12 +108,24 @@ export default {
       if (this.getTemplateId === 2) router.push({ name: "Template2" });
       if (this.getTemplateId === 3) router.push({ name: "Template3" });
     },
+    async pnrHistory(){
+      await storeUtils.fireAway().itineneryStore.updateCurrentPnrHistoryChatId(this.getRequestDetails?.id)
+      await storeUtils.fireAway().itineneryStore.getItineraryPnrHistory(this.getCurrentPnrHistoryChatId)
+    },
   },
 
   computed: {
     default_theme() {
       return storeUtils.fireAway().theme.getDefault_theme;
     },
+
+    openHistyPrnChat(){
+      return storeUtils.fireAway().itineneryStore.getOpenPnrHistoryModal
+    },
+
+    getCurrentPnrHistoryChatId(){
+        return storeUtils.fireAway().itineneryStore.getCurrentPnrHistoryChatId
+      },
 
     custom_theme() {
       return storeUtils.fireAway().theme.custom_theme;
@@ -170,6 +184,8 @@ export default {
         .itineneryStore.getItineraryRequestDetailsAction(
           router?.currentRoute.value.params.id
         );
+    }else{
+      this.pnrHistory()
     }
   },
 };
@@ -218,6 +234,7 @@ export default {
             {{ getRequestDetails?.booking?.contact_last_name }}
           </p>
         </div>
+
 
         <div
           class="align-center"
@@ -629,9 +646,14 @@ export default {
                 disabled
               ></textarea>
             </div>
-          </div>
 
-          <div>
+
+          </div>
+          <itenary-history-chat-component :show_close_btn="false" style="position: relative;box-shadow: 0 0 0 0 !important;width: 100%;right: 0;" @close="close"></itenary-history-chat-component>
+
+
+
+          <!-- <div>
             <div>
               <p class="support_comment_p">Support Team Comments</p>
               <p class="additional_comment_p">
@@ -644,9 +666,9 @@ export default {
               v-model="itCommentModel.support_comment"
               :disabled="getRequestDetails?.booking.status === 'issued'"
             ></textarea>
-          </div>
+          </div> -->
 
-          <div
+          <!-- <div
             v-if="
               getRequestDetails?.booking.status !== 'issued' &&
               getUser?.account_type !== 'manager'
@@ -659,7 +681,7 @@ export default {
               text-node="Submit"
               @click="submitSupportAction"
             ></OnBoardingButton>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

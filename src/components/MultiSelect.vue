@@ -79,7 +79,7 @@
                   >
                 </div>
                 <div class="check_field d-flex flex-column">
-                  <template v-if="airlines.length">
+                  <template v-if="airlines?.length">
                     <label
                       v-for="(airL, index) in airlines"
                       class="d-flex align-center"

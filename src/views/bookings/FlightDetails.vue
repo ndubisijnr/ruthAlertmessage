@@ -3,6 +3,8 @@ import Layout from "@/views/Layout.vue";
 import OnBoardingButton from "@/components/Buttons/OnBoardingButton.vue";
 import FlightPayment from "@/components/bookings/FlightPayment.vue";
 import ItenaryDetailsComponent from "@/components/flightItenaryTemplate/ItenaryDetailsComponent.vue";
+import ItenaryHistoryChatComponent from "@/components/flightItenaryTemplate/itenaryHistoryChatComponent.vue";
+
 import router from "@/router";
 import {
   formatAmount,
@@ -24,6 +26,7 @@ export default {
     FlightPayment,
     ItenaryDetailsComponent,
     ModalLoader,
+    ItenaryHistoryChatComponent
   },
   props: ["booking_id", "contact_first_name", "contact_last_name", "contact_email"],
   data() {
@@ -47,6 +50,8 @@ export default {
     },
     close(value) {
       this.showPrintModal = value;
+      storeUtils.fireAway().itineneryStore.updateOpenPnrHistoryModal(value)
+
     },
     triggeredEvent(value) {
       this.showPrintModal = value;
@@ -77,6 +82,9 @@ export default {
         return JSON.parse(localStorage.user);
       }
     },
+    openHistyPrnChat(){
+      return storeUtils.fireAway().itineneryStore.getOpenPnrHistoryModal
+    },
 
     getTemplateId() {
       if (storeUtils.fireAway().theme.custom_theme)
@@ -98,6 +106,10 @@ export default {
     },
   },
 
+  beforeUnmount(){
+    storeUtils.fireAway().itineneryStore.updateOpenPnrHistoryModal(false)
+  },
+
   mounted() {
     if (this.getTenantLoaded && !this.flightDetails) {
       storeUtils
@@ -110,6 +122,8 @@ export default {
 
 <template>
   <modal-loader v-if="getLoadingFlightDetails" message="Loading Flight"></modal-loader>
+  <itenary-history-chat-component :show_close_btn="true" @close="close" v-if="openHistyPrnChat"></itenary-history-chat-component>
+
 
   <layout v-slot:child-content>
     <print-itenary-modal

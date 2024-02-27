@@ -7,10 +7,16 @@ import { convertTo12HourFormat } from "../../mixins/flightUtil";
 export default {
   name: "itenaryHistoryChatComponent",
   components:{SpinnerLoader},
+  props:['show_close_btn'],
   data(){
     return{
       message:ItineraryRequest.support,
-      convertTo12HourFormat
+      enterKeyClicked:false,
+      convertTo12HourFormat,
+      chatObj:{
+        data:{},
+        user:{}
+      }
     }
   },
   methods:{
@@ -18,15 +24,69 @@ export default {
       this.$emit('close', false)
     },
 
+    sendOnEnter(e){
+      if(e.key === 'Enter' && this.message.message) this.submitMessage();
+    },
+
     async submitMessage(){
+      const currentDate = new Date();
+      // Get the timestamp (number of milliseconds since January 1, 1970)
+      const timestamp = currentDate.getTime();
+
+      // Alternatively, you can use the Date.now() method which returns the current timestamp directly
+      const timestampNow = Date.now();
       await storeUtils.fireAway().itineneryStore.replyItineraryRequestAction(this.getCurrentPnrHistoryChatId,this.message)
+      this.chatObj.data.message = this.message?.message
+      this.chatObj.created_at = timestampNow
+      this.chatObj.activity_type = 'chat'
+      this.chatObj.user.type = this.getUser?.account_type
+      console.log(this.chatObj)
+      await storeUtils.fireAway().itineneryStore.updatePnrHistoryChatPreserve(this.chatObj)
       this.message.message = null
-      await storeUtils.fireAway().itineneryStore.getItineraryPnrHistory(this.getCurrentPnrHistoryChatId)
+    },
+    formatChatDate(dateString) {
+      const today = new Date().toDateString();
+      const yesterday = new Date(Date.now() - 86400000).toDateString(); // milliseconds in a day
+
+      if (dateString === today) {
+        return 'Today';
+      } else if (dateString === yesterday) {
+        return 'Yesterday';
+      } else {
+        return dateString;
+      }
     }
   },
   computed:{
+    groupedChatMessages() {
+      const groups = {};
+      this.getPnr?.data.forEach(message => {
+        // if (message.created_at === 'date') return;
+        const date = new Date(message.created_at).toDateString();
+        groups[date] = groups[date] || [];
+        groups[date].push(message);
+      });
+      return groups;
+    },
+
+    // groupedChatMessages() {
+    //   const groups = {};
+    //   Object.keys(this.getPnr?.data).forEach(date => {
+    //     groups[date] = date.map(message => {
+    //       return {
+    //         type: 'message',
+    //         data: { message: message.data.message } // Extract the message data
+    //       };
+    //     });
+    //   });
+    //   return groups;
+    // },
     getPnr(){
       return storeUtils.fireAway().itineneryStore.getPnrHistory
+    },
+
+    getPnrPreserved(){
+      return storeUtils.fireAway().itineneryStore.getPnrHistoryChatPreserve
     },
 
     loading(){
@@ -56,22 +116,28 @@ export default {
     <div class="chat_area">
       <div class="modal-header">
         <p class="pnrHistory">PNR History</p>
-        <img src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
+        <img v-if="show_close_btn" src="../../assets/cancle.svg"  @click="close" style="cursor: pointer"/>
       </div>
 
 
-      <div class="chat_area_messages" v-if="getPnr?.data.length">
-          <p v-if="getLoadingPnrHistory">updating.....</p>
-        <div v-for="(i, index) in getPnr?.data" :key="index" :class="i.user.type === getUser.account_type ? 'move_right' : 'move_left'">
-          <div class="chat" v-if="i.data.message">
-            <span class="span_chat">{{i.activity_type}}</span>
-            <div>
-              <p class="chat_message">{{ i.data.message }}
-                  <span style="margin-top:2px;">{{ convertTo12HourFormat(i.created_at) }}</span>
-                </p>
-            </div>
-            <!--              <span class="chat_profile">{{i.user.first_name[0]}} {{i.user.last_name[0]}}</span>-->
+      <div class="chat_area_messages" v-if="getPnr?.data?.length">
+        <p v-if="getLoadingPnrHistory">updating chats.....</p>
+        <div v-else v-for="(messages, date) in groupedChatMessages" :key="date">
+          <p class="chat_date">{{ formatChatDate(date) }}</p>
 
+          <!-- {{ groupedChatMessages }} -->
+
+          <div v-for="(i,index) in messages" :key="index" :class="i.user.type === getUser?.account_type ? 'move_right' : 'move_left'">
+            <div class="chat" v-if="i.data.message">
+              <span class="span_chat">{{i.activity_type}}</span>
+              <div>
+                <p class="chat_message">{{ i.data.message }}
+                    <span style="margin-top:2px;">{{ convertTo12HourFormat(i.created_at) }}</span>
+                  </p>
+              </div>
+              <!--              <span class="chat_profile">{{i.user.first_name[0]}} {{i.user.last_name[0]}}</span>-->
+
+            </div>
           </div>
         </div>
       </div>
@@ -80,8 +146,10 @@ export default {
         <p class="span_chat" style="font-size: 1rem;text-align: center">Couldn't fetch any data...</p>
       </div>
 
+
+
       <div class="message_input">
-        <input placeholder="Enter message" v-model="message.message" class="main_input">
+        <input placeholder="Enter message" v-model="message.message" class="main_input" id="main_input" @keyup="sendOnEnter">
         <button class="enter_send" @click="submitMessage">
           <spinner-loader v-if="loading"></spinner-loader>
           <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -108,6 +176,17 @@ export default {
   align-items: center;
   gap: 1rem;
   margin: 1rem 0;
+}
+.chat_date{
+  color: var(--Black-text-03, #444854);
+
+/* Body/16px/Regular */
+font-family: "Product Sans";
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.75rem; /* 175% */
+text-align: center;
 }
 
 .move_right{
@@ -263,7 +342,7 @@ export default {
   background: var(--Color, #FFF);
   margin: 2rem 0;
   box-shadow: 0px 6px 28px 0px rgba(21, 41, 82, 0.08);
-  //transform: scale(.9);
+  /*transform: scale(.9);*/
 
 }
 </style>

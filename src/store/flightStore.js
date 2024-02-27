@@ -18,7 +18,7 @@ export const useFlightStore = defineStore('flightStore', {
         flightDetails:null,
         errors: null,
         successMsg: null,
-        airlines: null,
+        airlines: [],
         flightSearchPayload: [],
         bookedFlightDetails: [],
         inbound: null,
@@ -155,6 +155,13 @@ export const useFlightStore = defineStore('flightStore', {
                 localStorage.airports = JSON.stringify(responseData)
             }).catch(e => {
                 catchErrorHandler(e)
+            })
+        },
+
+        handleGetAirlines() {
+            return FlightService.airlines(storeUtils.fireAway().global?.getTenant_id).then(async response => {
+                let responseData = response.data
+                this.airlines = responseData
             })
         },
 
@@ -420,9 +427,9 @@ export const useFlightStore = defineStore('flightStore', {
         }
     },
 
-    mutations: {
-        SET_MY_DATA(state, newValue) {
-            state.airlines = newValue;
-        },
-    },
+    // mutations: {
+    //     SET_MY_DATA(state, newValue) {
+    //         state.airlines = newValue;
+    //     },
+    // },
 })

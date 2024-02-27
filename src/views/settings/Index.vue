@@ -1299,6 +1299,7 @@
                   />
                 </div>
               </header>
+
               <div class="table-wrapper">
                 <domain-table
                   @editMarkup="$refs.markupBuilder.openModal($event)"
@@ -1546,7 +1547,7 @@ export default {
           break;
         case "Markup":
           storeUtils.fireAway().settings?.readMarkupSettings();
-          storeUtils.fireAway().settings?.getAirlines();
+          storeUtils.fireAway().flight?.handleGetAirlines();
           break;
         case "office-id":
           this.currentTab = "office-id";
@@ -1604,6 +1605,7 @@ export default {
         case "Markup":
           this.currentTab = "Markup";
           storeUtils.fireAway().settings?.readMarkupSettings();
+          storeUtils.fireAway().flight?.handleGetAirlines();
           break;
         case "office-id":
           this.currentTab = "office-id";

@@ -17,7 +17,8 @@ export const useItineneryStore = defineStore('itineneryStore', {
         pnrHistory:null,
         currentPnrHistoryChatId:null,
         openPnrHistoryModal:false,
-        pnrHistoryChat:null
+        pnrHistoryChat:null,
+        // pnrHistoryChatPreserve:[]
     }),
 
     getters:{
@@ -32,12 +33,18 @@ export const useItineneryStore = defineStore('itineneryStore', {
         getPnrHistory:state => state.pnrHistory,
         getCurrentPnrHistoryChatId:state => state.currentPnrHistoryChatId,
         getOpenPnrHistoryModal:state => state.openPnrHistoryModal,
+        // getPnrHistoryChatPreserve:state => state.pnrHistoryChatPreserve,
+
 
     },
     
     actions:{
         updateCurrentPnrHistoryChatId(id){
             this.currentPnrHistoryChatId = id
+        },
+
+        updatePnrHistoryChatPreserve(obj){
+            this.pnrHistory.data = [...this.pnrHistory.data, obj]
         },
 
         updateOpenPnrHistoryModal(value){

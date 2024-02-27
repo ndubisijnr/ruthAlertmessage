@@ -2,7 +2,6 @@
   <permission-modal v-if="getIsUnauthorised"></permission-modal>
   <notification v-if="notification" @close="close"></notification>
   <modal-loader v-if="logOut" message="signing out, see you soon."></modal-loader>
-  <itenary-history-chat-component @close="close" v-if="openHistyPrnChat"></itenary-history-chat-component>
 
   <div v-if="getTenantLoaded" class="wrapper">
     <div class="inner-wrapper">
@@ -462,12 +461,11 @@ import SpinnerLoader from "../components/loaders/SpinnerLoader.vue";
 import Notification from "@/components/notification/index.vue";
 import ModalLoader from "@/components/loaders/ModalLoader.vue";
 import defaultLogo from "@/assets/default_tab_logo.jpeg"
-import ItenaryHistoryChatComponent from "@/components/flightItenaryTemplate/itenaryHistoryChatComponent.vue";
 
 export default {
   name: "Layout",
   props:['id'],
-  components: {ModalLoader, NavBar, ItenaryHistoryChatComponent, MobileBottomNav, PermissionModal, SpinnerLoader,Notification },
+  components: {ModalLoader, NavBar, MobileBottomNav, PermissionModal, SpinnerLoader,Notification },
   data() {
     return {
       getFirstLettersOfFirstAndLastName,
@@ -497,7 +495,6 @@ export default {
     },
     close(value){
       this.notification = value
-      storeUtils.fireAway().itineneryStore.updateOpenPnrHistoryModal(value)
 
     },
     closeMenu() {
@@ -523,9 +520,7 @@ export default {
       return storeUtils.fireAway().theme.getDefault_theme;
     },
 
-    openHistyPrnChat(){
-      return storeUtils.fireAway().itineneryStore.getOpenPnrHistoryModal
-    },
+   
 
     loadingCus() {
       return storeUtils.fireAway().theme.getLoadingCustomization;
