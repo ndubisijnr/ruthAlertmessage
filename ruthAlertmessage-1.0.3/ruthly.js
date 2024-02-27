@@ -6,7 +6,7 @@ const cancelImg = cancel
 const errorImg = error
 const successImg = success
 
-const boxArray = []
+let boxArray = []
 
 console.log(boxArray)
 
