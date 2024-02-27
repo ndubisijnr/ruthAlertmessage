@@ -17,7 +17,6 @@ console.log(boxArray)
             const rootElement = document.getElementById('app')
             rootElement.append(element1)
 
-            const removeElement = document.getElementById('alertMessage')
  
             const timeOut = props[0]?.timeout // auto modal dismissal timeout    
     
@@ -72,6 +71,9 @@ console.log(boxArray)
             element2.append(elementP)
             element2.append(elementClose)
 
+            const removeElement = document.getElementById('alertMessage')
+
+
                 // on click modal dismissal events
                 function clickToClose(){
                     removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
@@ -103,6 +105,7 @@ console.log(boxArray)
             if(boxArray.length > 0){
                 autoDismissal()
                 boxArray = []
+                return; 
             }else{
                 boxArray.push({})
                 console.log('push', boxArray)
