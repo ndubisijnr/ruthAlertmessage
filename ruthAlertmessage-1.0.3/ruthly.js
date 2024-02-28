@@ -9,12 +9,12 @@ const successImg = success
 let ruthItemArray = []
 
 
-const ruthToastProps = {
-    title,
-    message,
-    timeout,
-    icon 
-}
+// const ruthToastProps = {
+//     title,
+//     message,
+//     timeout,
+//     icon 
+// }
 
 //  export const RuthdoAlert = (...props) => {
 
@@ -128,12 +128,14 @@ const ruthToastProps = {
 
 
 //point of entry
-export const RuthdoAlert = (ruthToastProps) => {
+export const RuthdoAlert = (...ruthToastProps) => {
+    const props = ruthToastProps[0]
 
 
     const alert = (el, ruthItems) => {
 
         ruthItems.forEach((element,index) => {
+        console.log(element)
 
         el.setAttribute('id', `${index}-alertMessage`)
 
@@ -169,12 +171,12 @@ export const RuthdoAlert = (ruthToastProps) => {
             'font-size: 18px;\n ' +
             'line-height: 23px;\n' +
             'letter-spacing: -0.01em;\n' +
-            `color: ${element?.icon === 'success' ? '#415251' : '#FFFFFF'};\n` +
+            `color: ${props?.icon === 'success' ? '#415251' : '#FFFFFF'};\n` +
             'width: 70%;\n' +
             'font-family: \'IBM Plex Sans\';\n' +
             'font-style: normal;')
     
-        elementP.textContent = element?.title
+        elementP.textContent = props?.title
     
         const elementClose = document.createElement('img')
         elementClose.setAttribute('src', cancelImg)
@@ -183,7 +185,7 @@ export const RuthdoAlert = (ruthToastProps) => {
     
     
         const elementType = document.createElement('img')
-        elementType.setAttribute( 'src', element?.icon === 'success' ? successImg : element?.icon === 'error' ? errorImg : null)
+        elementType.setAttribute( 'src', props?.icon === 'success' ? successImg : props?.icon === 'error' ? errorImg : null)
         element2.append(elementType)
         element2.append(elementP)
         element2.append(elementClose) 
@@ -199,7 +201,7 @@ export const RuthdoAlert = (ruthToastProps) => {
             },1000)
         }
 
-    document.getElementById(`${index}-close_ruthly`).addEventListener('click', (e) => {
+         document.getElementById(`${index}-close_ruthly`).addEventListener('click', (e) => {
             console.log(e, removeElement, boxArray)
             clickToClose()
             console.log(e, removeElement, boxArray)
@@ -215,7 +217,7 @@ export const RuthdoAlert = (ruthToastProps) => {
     
         setTimeout(() => {
             autoDismissal()
-        },element.timeout ? element.timeout : 3000)
+        },props.timeout ? props.timeout : 3000)
         
         
        });
