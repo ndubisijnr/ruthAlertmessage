@@ -223,8 +223,11 @@ export const RuthdoAlert = (...ruthToastProps) => {
         autoDismissal(); // Initiate auto-dismissal
     };
 
+    createAlert(element1.cloneNode(true), props, index);
+
+
     // Loop through ruthToastProps and create alert elements
-    ruthToastProps.forEach((props, index) => {
-        createAlert(element1.cloneNode(true), props, index);
-    });
+    // ruthToastProps.forEach((props, index) => {
+    //     createAlert(element1.cloneNode(true), props, index);
+    // });
 };
