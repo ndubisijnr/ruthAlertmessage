@@ -128,7 +128,7 @@ const ruthToastProps = {
 
 
 //point of entry
-export const ruth = (ruthToastProps) => {
+export const RuthdoAlert = (ruthToastProps) => {
 
 
     const alert = (el, ruthItems) => {
