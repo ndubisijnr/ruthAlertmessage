@@ -1,12 +1,10 @@
 
-# Ruthly
+# ruthly-vue
 
 A simple Alert message for simple web applications 
 
 Use Ruthly for success and error pop ups that suits your project. 
 
-made with ❤️
-And for someone never to be forgotten.
 
 
 

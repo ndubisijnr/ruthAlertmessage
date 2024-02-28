@@ -6,7 +6,15 @@ const cancelImg = cancel
 const errorImg = error
 const successImg = success
 
-let boxArray = []
+let ruthItemArray = []
+
+
+const ruthToastProps = {
+    title,
+    message,
+    timeout,
+    icon 
+}
 
 //  export const RuthdoAlert = (...props) => {
 
@@ -119,35 +127,17 @@ let boxArray = []
 // }
 
 
-export const RuthdoAlert = (...props) => {
-    if(boxArray.length > 0){
-        console.log('a modal is present', boxArray)
-        autoDismissal()
-        boxArray = []
-        return;
-    }else{
+//point of entry
+export const ruth = (ruthToastProps) => {
 
-        const rootElement = document.getElementById('app')
-        const element1 = document.createElement('div')
-        const ruthlyChildcoverDiv = document.createElement('div')
-        
-        rootElement.append(ruthlyChildcoverDiv)
 
-        ruthlyChildcoverDiv.appendChild(element1)
+    const alert = (el, ruthItems) => {
 
-        const timeOut = props[0]?.timeout; // auto modal dismissal timeout 
+        ruthItems.forEach((element,index) => {
 
-        ruthlyChildcoverDiv.setAttribute('style', 'width:362px;\n' +
-        'z-index: 999999999;\n' +
-        'position: fixed;\n' +
-        'top: 100px;\n' +
-        'right: 50px;\n' +
-        'display: flex;\n' +
-        'align-items: center;\n' +
-        'justify-content: center;\n')
+        el.setAttribute('id', `${index}-alertMessage`)
 
-        element1.setAttribute('id', `alertMessage`)
-        element1.setAttribute('style',
+        el.setAttribute('style',
             'width:362px;\n' +
             'min-height: 78px;\n' +
             'z-index: 999999;\n' +
@@ -163,72 +153,90 @@ export const RuthdoAlert = (...props) => {
             'transform-origin: 0 0;\n' +
             'zoom: 75%;\n' +
             'margin-bottom:15px;')
-        element1.setAttribute('class', 'animate__animated animate__fadeInRight')
+        el.setAttribute('class', 'animate__animated animate__fadeInRight')
         const element2 = document.createElement('div')
-        element1.appendChild(element2)
-
+        el.appendChild(element2)
+    
         element2.setAttribute('style',
             'display: flex;\n ' +
             'align-items: center;\n' +
             'justify-content: space-around;\n' +
             'width: 100%;\n' +
             'height: inherit;\n')
-
+    
         const  elementP = document.createElement('p')
         elementP.setAttribute('style',
             'font-size: 18px;\n ' +
             'line-height: 23px;\n' +
             'letter-spacing: -0.01em;\n' +
-            `color: ${props[0]?.icon === 'success' ? '#415251' : '#FFFFFF'};\n` +
+            `color: ${element?.icon === 'success' ? '#415251' : '#FFFFFF'};\n` +
             'width: 70%;\n' +
             'font-family: \'IBM Plex Sans\';\n' +
             'font-style: normal;')
-
-        elementP.textContent = props[0]?.title
-
+    
+        elementP.textContent = element?.title
+    
         const elementClose = document.createElement('img')
         elementClose.setAttribute('src', cancelImg)
         elementClose.setAttribute('style', 'cursor:pointer')
-        elementClose.setAttribute('id', `close_ruthly`)
-
-
+        elementClose.setAttribute('id', `${index}-close_ruthly`)
+    
+    
         const elementType = document.createElement('img')
-        elementType.setAttribute( 'src', props[0]?.icon === 'success' ? successImg : props[0]?.icon === 'error' ? errorImg : null)
+        elementType.setAttribute( 'src', element?.icon === 'success' ? successImg : element?.icon === 'error' ? errorImg : null)
         element2.append(elementType)
         element2.append(elementP)
-        element2.append(elementClose)
+        element2.append(elementClose) 
+        
+        const removeElement = document.getElementById(`${index}-alertMessage`)
 
-        const removeElement = document.getElementById(`alertMessage`)
 
         // on click modal dismissal events
         function clickToClose(){
             removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
-            setTimeout(() => {
+                setTimeout(() => {
                 removeElement.remove()
             },1000)
         }
 
-        document.getElementById(`close_ruthly`).addEventListener('click', (e) => {
+    document.getElementById(`${index}-close_ruthly`).addEventListener('click', (e) => {
             console.log(e, removeElement, boxArray)
-            clickToClose(removeElement) // Pass removeElement as an argument
+            clickToClose()
             console.log(e, removeElement, boxArray)
         })
-
+        
+        
         function autoDismissal(){
             removeElement.setAttribute('class', 'animate__animated animate__fadeOutRight')
             setTimeout(() => {
                 removeElement.remove()
             },1000)
         }
-
+    
         setTimeout(() => {
             autoDismissal()
-        },timeOut ? timeOut : 3000)
-            
-        boxArray.push(ruthlyChildcoverDiv)
-        console.log('a modal was added', boxArray)
-        boxArray = []
+        },element.timeout ? element.timeout : 3000)
+        
+        
+       });
+
+       return el
+        
     }
 
-        
+    const parent = document.getElementById('app')
+    const ruthlyChildcoverDiv = document.createElement('div')
+    parent.append(ruthlyChildcoverDiv)
+    ruthlyChildcoverDiv.setAttribute('style', 'width:362px;\n' +
+    'z-index: 999999999;\n' +
+    'position: fixed;\n' +
+    'top: 100px;\n' +
+    'right: 50px;\n' +
+    'display: flex;\n' +
+    'align-items: center;\n' +
+    'justify-content: center;\n')
+    // Create main element
+    const element1 = document.createElement('div') 
+    ruthItemArray.push(element1)
+    ruthlyChildcoverDiv.appendChild(alert(element1, ruthItemArray))
 }
