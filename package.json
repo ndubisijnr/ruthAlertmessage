@@ -2,7 +2,46 @@
   "name": "ruthly",
   "private": true,
   "version": "0.0.0",
+  "description": "Ruthly is a lightweight and customizable alert message library for web applications. It provides sleek and responsive success, error, warning, and info pop-ups with two distinct styles: FlyingBox and BossyBox. Designed for simplicity and flexibility, Ruthly works seamlessly with vanilla JavaScript, React, and Vue, making it an easy-to-integrate solution for user notifications. 🚀",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ndubisijnr/ruthAlertmessage"
+  },
+  "homepage": "https://github.com/ndubisijnr/ruthAlertmessage#readme",
+  "bugs": {
+    "url": "https://github.com/ndubisijnr/ruthAlertmessage/issues"
+  },
+  "main": "dist/index.js",
   "type": "module",
+  "author": "NdubuisiJNR",
+  "keywords": [
+    " Ruthly alerts",
+    "JavaScript notifications",
+    "Web alert system",
+    "Custom pop-up messages",
+    " Success and error alerts",
+    "Warning and info alerts",
+    " BossyBox notifications",
+    "FlyingBox alerts",
+    " Frontend alert library",
+    " React alert integration",
+    " Vue notification plugin",
+    "Simple alert messages",
+    " Toast notifications",
+    "User-friendly pop-ups",
+    "Lightweight alert system",
+    " Customizable web alerts",
+    " Interactive UI notifications",
+    "Modern notification library",
+    "JavaScript UI components",
+    " Open-source alert system"
+  ],
+  "contributors": [
+    {
+      "name": "NdubuisiJNR",
+      "url": "https://github.com/ndubisijnr"
+    }
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
