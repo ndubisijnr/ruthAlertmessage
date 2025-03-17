@@ -151,12 +151,6 @@ pre {
   overflow-x: auto;
 }
 
-.card {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
 
 button {
   padding: 10px 20px;
@@ -218,6 +212,12 @@ h2, h3 {
     gap: 10px;
     flex-wrap: wrap;
     margin-top: 10px;
+}
+
+@media (max-width:999px) {
+  .card{
+    flex-direction: column;
+  }
 }
 
 button {
