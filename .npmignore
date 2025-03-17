@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# Allow only the dist folder and package.json
+!dist/
+!package.json
+!README.md
+!LICENSE
